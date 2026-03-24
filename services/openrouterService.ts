@@ -46,7 +46,9 @@ const chatCompletion = async (
   }
 
   const data = await res.json();
-  return data.choices?.[0]?.message?.content || "{}";
+  // Qwen3 思考 token 清除
+  const raw = data.choices?.[0]?.message?.content || "{}";
+  return raw.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
 };
 
 const chatText = async (
@@ -74,7 +76,8 @@ const chatText = async (
   }
 
   const data = await res.json();
-  return data.choices?.[0]?.message?.content?.trim() || "";
+  const raw = data.choices?.[0]?.message?.content || "";
+  return raw.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
 };
 
 const RECIPE_JSON_SPEC = `請回傳嚴格符合以下格式的 JSON 陣列（不要有任何多餘文字）：
