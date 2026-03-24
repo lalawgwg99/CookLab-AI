@@ -5,8 +5,8 @@ import { z } from "zod";
 
 // OpenRouter API (OpenAI-compatible, free tier)
 const OPENROUTER_BASE = "https://openrouter.ai/api/v1";
-const FREE_MODEL = "deepseek/deepseek-chat:free"; // DeepSeek V3 - 免費且高品質
-const CHAT_MODEL = "deepseek/deepseek-chat:free";
+const FREE_MODEL = "qwen/qwen3-next-80b-a3b-instruct:free"; // Qwen3 80B - 阿里出品，中文最強
+const CHAT_MODEL = "qwen/qwen3-next-80b-a3b-instruct:free";
 
 const getHeaders = () => {
   const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
