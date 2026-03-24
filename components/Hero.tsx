@@ -1,21 +1,18 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import {
-  Search, Camera, X, Info, ChefHat,
-  Leaf, Zap, Activity, Heart, Coins, Coffee, Utensils,
-  Compass, Flame, Wine, Moon, Users, Briefcase, Dumbbell, Star,
-  Carrot, Waves, Tent, PartyPopper, Trees, Apple,
-  ArrowRight, ChevronDown, ChevronUp, TrendingUp, Globe, Clock, SlidersHorizontal, Lightbulb
+  Search, X, ChefHat,
+  Leaf, Zap, Activity, Heart, Utensils,
+  Flame, Users, Dumbbell, Star,
+  SlidersHorizontal, Lightbulb
 } from 'lucide-react';
-import { DietaryGoal, Cuisine, SearchState, MealOccasion, VisionMode } from '../types';
+import { DietaryGoal, Cuisine, SearchState, MealOccasion } from '../types';
 
 interface HeroProps {
   searchState: SearchState;
   setSearchState: React.Dispatch<React.SetStateAction<SearchState>>;
   onSearch: (pendingIngredient?: string) => void;
   isLoading: boolean;
-  onImageUpload: (file: File) => void;
-  onSelectMode?: (mode: VisionMode) => void;
 }
 
 
@@ -120,7 +117,7 @@ const CuisineConfig: Record<Exclude<Cuisine, Cuisine.ANY>, { label: string; icon
   [Cuisine.AMERICAN]: { label: '美式豪邁', icon: <Utensils size={14} /> }
 };
 
-export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearch, isLoading, onImageUpload, onSelectMode }) => {
+export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearch, isLoading }) => {
   const [inputValue, setInputValue] = useState('');
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
@@ -164,63 +161,7 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
   return (
     <div className="relative z-10 mx-auto max-w-5xl px-4">
 
-      {/* Vision Mode Buttons Section - Priority Level: Core (Top) */}
-      <div className="relative mb-12 animate-fadeInUp delay-100">
-        <div className="grid grid-cols-3 gap-3 md:flex md:flex-row md:justify-center md:gap-8">
-
-          {/* Chef Mode */}
-          <button
-            onClick={() => onSelectMode?.(VisionMode.FRIDGE_XRAY)}
-            className="group relative w-full md:w-64 h-auto p-3 md:p-6 bg-white rounded-2xl md:rounded-3xl shadow-sm hover:shadow-md md:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] md:hover:shadow-[0_20px_40px_-4px_rgba(0,0,0,0.1)] transition-all duration-300 flex flex-col items-center gap-2 md:gap-4 text-center cursor-pointer border border-stone-100 md:border-none active:scale-95 md:active:scale-100"
-          >
-            <div className="w-10 h-10 md:w-20 md:h-20 rounded-full bg-stone-900 text-white flex shrink-0 items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-md md:shadow-xl md:shadow-stone-900/10">
-              <div className="absolute inset-0 rounded-full border border-white/10"></div>
-              <Camera size={18} className="md:w-7 md:h-7" />
-            </div>
-            <div>
-              <h3 className="font-serif font-bold text-xs md:text-lg text-stone-900 mb-0.5 md:mb-1 group-hover:text-chef-gold transition-colors">廚神模式</h3>
-              <p className="text-[10px] md:text-xs text-stone-400 font-medium leading-tight">拍冰箱食材<br className="md:hidden" />變魔術</p>
-            </div>
-          </button>
-
-          {/* Diner Mode */}
-          <button
-            onClick={() => onSelectMode?.(VisionMode.TASTE_THIEF)}
-            className="group relative w-full md:w-64 h-auto p-3 md:p-6 bg-white rounded-2xl md:rounded-3xl shadow-sm hover:shadow-md md:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] md:hover:shadow-[0_20px_40px_-4px_rgba(0,0,0,0.1)] transition-all duration-300 flex flex-col items-center gap-2 md:gap-4 text-center cursor-pointer border border-stone-100 md:border-none active:scale-95 md:active:scale-100"
-          >
-            <div className="w-10 h-10 md:w-20 md:h-20 rounded-full bg-[#F9F9F7] text-stone-500 flex shrink-0 items-center justify-center group-hover:scale-105 md:group-hover:scale-110 transition-transform duration-300">
-              <ChefHat size={18} className="md:w-7 md:h-7" />
-            </div>
-            <div>
-              <h3 className="font-serif font-bold text-xs md:text-lg text-stone-900 mb-0.5 md:mb-1 group-hover:text-chef-gold transition-colors">食客模式</h3>
-              <p className="text-[10px] md:text-xs text-stone-400 font-medium leading-tight">拍菜單美食<br className="md:hidden" />解構靈魂</p>
-            </div>
-          </button>
-
-          {/* Nutritionist Mode */}
-          <button
-            onClick={() => onSelectMode?.(VisionMode.NUTRI_SCANNER)}
-            className="group relative w-full md:w-64 h-auto p-3 md:p-6 bg-white rounded-2xl md:rounded-3xl shadow-sm hover:shadow-md md:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] md:hover:shadow-[0_20px_40px_-4px_rgba(0,0,0,0.1)] transition-all duration-300 flex flex-col items-center gap-2 md:gap-4 text-center cursor-pointer border border-stone-100 md:border-none active:scale-95 md:active:scale-100"
-          >
-            <div className="w-10 h-10 md:w-20 md:h-20 rounded-full bg-[#F9F9F7] text-stone-500 flex shrink-0 items-center justify-center group-hover:scale-105 md:group-hover:scale-110 transition-transform duration-300">
-              <Activity size={18} className="md:w-7 md:h-7" />
-            </div>
-            <div>
-              <h3 className="font-serif font-bold text-xs md:text-lg text-stone-900 mb-0.5 md:mb-1 group-hover:text-chef-gold transition-colors">營養師模式</h3>
-              <p className="text-[10px] md:text-xs text-stone-400 font-medium leading-tight">拍食物分析<br className="md:hidden" />熱量營養</p>
-            </div>
-          </button>
-
-        </div>
-
-        {/* Helper Text */}
-        <p className="text-center text-xs text-stone-400 mt-6 tracking-widest uppercase font-bold">
-          <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-          AI 視覺辨識系統待命
-        </p>
-      </div>
-
-      {/* Search Section - Editorial Minimal Style (Secondary) */}
+      {/* Search Section */}
       <div className="relative mb-8">
         <div className="flex flex-row items-center gap-3 pb-4">
 
@@ -347,7 +288,6 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
       </div>
 
 
-      <input type="file" className="hidden" accept="image/*" onChange={(e) => e.target.files?.[0] && onImageUpload(e.target.files[0])} />
-    </div >
+    </div>
   );
 };
