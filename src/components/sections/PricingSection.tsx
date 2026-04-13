@@ -33,36 +33,49 @@ export function PricingSection({
         </div>
 
         <div className="pricing-grid">
-          {pricingPlans.map((plan) => (
-            <article
-              className={plan.featured ? "pricing-card pricing-card-featured" : "pricing-card"}
-              key={plan.id}
-            >
-              <div>
-                <p className="card-label">{plan.audience}</p>
-                <h3>{plan.name}</h3>
-                <div className="price-row">
-                  <strong>{plan.priceLabel}</strong>
-                  <span>{plan.billingNote}</span>
-                </div>
-                <p>{plan.description}</p>
-              </div>
+          {pricingPlans.map((plan) => {
+            const baseKey = `pricing.plans.${plan.id}`;
+            const audience = t(`${baseKey}.audience`, { defaultValue: plan.audience });
+            const name = t(`${baseKey}.name`, { defaultValue: plan.name });
+            const billingNote = t(`${baseKey}.billingNote`, { defaultValue: plan.billingNote });
+            const description = t(`${baseKey}.description`, { defaultValue: plan.description });
+            const cta = t(`${baseKey}.cta`, { defaultValue: plan.cta });
+            const features = t(`${baseKey}.features`, {
+              returnObjects: true,
+              defaultValue: plan.features,
+            }) as string[];
 
-              <ul className="feature-list">
-                {plan.features.map((feature) => (
-                  <li key={feature}>{feature}</li>
-                ))}
-              </ul>
-
-              <button
-                type="button"
-                className={plan.featured ? "button button-primary full-width" : "button button-secondary full-width"}
-                onClick={() => onCheckout(plan.checkoutKey)}
+            return (
+              <article
+                className={plan.featured ? "pricing-card pricing-card-featured" : "pricing-card"}
+                key={plan.id}
               >
-                {plan.cta}
-              </button>
-            </article>
-          ))}
+                <div>
+                  <p className="card-label">{audience}</p>
+                  <h3>{name}</h3>
+                  <div className="price-row">
+                    <strong>{plan.priceLabel}</strong>
+                    <span>{billingNote}</span>
+                  </div>
+                  <p>{description}</p>
+                </div>
+
+                <ul className="feature-list">
+                  {features.map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
+
+                <button
+                  type="button"
+                  className={plan.featured ? "button button-primary full-width" : "button button-secondary full-width"}
+                  onClick={() => onCheckout(plan.checkoutKey)}
+                >
+                  {cta}
+                </button>
+              </article>
+            );
+          })}
         </div>
 
         <div className="panel waitlist-panel">
