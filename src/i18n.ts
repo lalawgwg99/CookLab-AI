@@ -28,6 +28,7 @@ const resources = {
         bestNext: "Best next meal",
         bestNextFallbackTitle: "Add ingredients to start matching",
         bestNextFallbackDesc: "CookLab will rank meals after your fridge inventory is set.",
+        betaBanner: "Open beta: all plans are free right now.",
       },
       fridge: {
         kicker: "Fridge-first engine",
@@ -119,6 +120,7 @@ const resources = {
         confidence: "{{confidence}}% confidence",
         roadmapKicker: "Growth flywheel",
         roadmapTitle: "Content roadmap for SEO, social clips, and paid conversion.",
+        sampleData: "Sample data for demo",
       },
       auth: {
         kicker: "Authentication",
@@ -151,6 +153,7 @@ const resources = {
         waitlistSuccess: "Waitlist captured. Next step is checkout onboarding.",
         waitlistError: "Enter a valid email address.",
         checkoutError: "Could not start checkout. Verify Stripe backend configuration.",
+        betaFree: "Open beta: all plans are free, checkout disabled.",
         plans: {
           starter: {
             name: "Starter",
@@ -227,6 +230,7 @@ const resources = {
         bestNext: "下一道最值得做的菜",
         bestNextFallbackTitle: "先加入食材開始配對",
         bestNextFallbackDesc: "設定冰箱清單後，CookLab 會自動排名餐點。",
+        betaBanner: "公測中：目前全方案免費使用。",
       },
       fridge: {
         kicker: "冰箱優先引擎",
@@ -318,6 +322,7 @@ const resources = {
         confidence: "{{confidence}}% 信心",
         roadmapKicker: "成長飛輪",
         roadmapTitle: "SEO、短影音與轉換的內容路線圖。",
+        sampleData: "範例資料（Demo）",
       },
       auth: {
         kicker: "帳號系統",
@@ -347,6 +352,7 @@ const resources = {
         waitlistSuccess: "已加入 waitlist，下一步可進入付款流程。",
         waitlistError: "請輸入有效 Email。",
         checkoutError: "無法啟動付款流程，請檢查 Stripe 後端設定。",
+        betaFree: "公測期間全方案免費，已關閉結帳。",
         plans: {
           starter: {
             name: "Starter",

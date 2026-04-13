@@ -23,6 +23,7 @@ export function SupportSection({
           <div className="section-heading compact-heading">
             <p className="section-kicker">{t("support.kicker")}</p>
             <h2>{t("support.title")}</h2>
+            <span className="sample-chip">{t("support.sampleData")}</span>
           </div>
 
           <div className="rescue-list">
@@ -49,6 +50,7 @@ export function SupportSection({
             <div className="section-heading compact-heading">
               <p className="section-kicker">{t("support.reportKicker")}</p>
               <h2>{t("support.reportTitle")}</h2>
+              <span className="sample-chip">{t("support.sampleData")}</span>
             </div>
 
             <div className="report-list">
@@ -67,6 +69,7 @@ export function SupportSection({
             <div className="section-heading compact-heading">
               <p className="section-kicker">{t("support.roadmapKicker")}</p>
               <h2>{t("support.roadmapTitle")}</h2>
+              <span className="sample-chip">{t("support.sampleData")}</span>
             </div>
 
             <div className="content-roadmap">

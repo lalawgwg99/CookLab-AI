@@ -31,6 +31,7 @@ export function HeroSection({
           <h1>{t("hero.title")}</h1>
           <p className="hero-lead">{t("hero.lead")}</p>
           <p className="hero-positioning">{brandPositioning}</p>
+          <p className="hero-beta">{t("hero.betaBanner")}</p>
 
           <div className="hero-actions">
             <a className="button button-primary" href="#fridge">

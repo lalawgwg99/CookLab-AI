@@ -117,6 +117,16 @@ input[type="range"] {
   letter-spacing: 0.02em;
 }
 
+.beta-pill {
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: #a45a1a;
+  font-weight: 700;
+  font-size: 12px;
+  border: 1px solid rgba(240, 138, 36, 0.26);
+}
+
 .brand-orb {
   width: 14px;
   height: 14px;
@@ -242,6 +252,15 @@ input[type="range"] {
   border: 1px solid var(--line);
   font-weight: 600;
   color: #34433b;
+}
+
+.hero-beta {
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  color: #9a5414;
+  font-weight: 700;
+  border: 1px dashed rgba(240, 138, 36, 0.38);
 }
 
 .hero-actions,
@@ -787,6 +806,19 @@ input[type="range"] {
   grid-template-columns: 1fr 1fr;
 }
 
+.sample-chip {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(12, 27, 39, 0.06);
+  border: 1px dashed var(--line);
+  font-size: 12px;
+  font-weight: 700;
+  color: #3c4b57;
+}
+
 .support-column {
   display: grid;
   gap: 22px;
@@ -835,6 +867,16 @@ input[type="range"] {
 
 .pricing-heading h2 {
   max-width: 12ch;
+}
+
+.beta-note {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  color: #9a5414;
+  font-weight: 700;
+  border: 1px dashed rgba(240, 138, 36, 0.38);
 }
 
 .pricing-grid {
