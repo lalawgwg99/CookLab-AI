@@ -1,0 +1,9 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#FFFBF5" />
+  <rect x="80" y="70" width="1040" height="490" rx="40" fill="#FFFFFF" stroke="#EFE6DA" stroke-width="4" />
+  <text x="140" y="230" font-family="Noto Serif TC, serif" font-size="64" fill="#1A1818">CookLab AI</text>
+  <text x="140" y="320" font-family="Plus Jakarta Sans, sans-serif" font-size="32" fill="#6B6764">料理實驗室 × 台灣食材週期菜單</text>
+  <text x="140" y="400" font-family="Plus Jakarta Sans, sans-serif" font-size="24" fill="#8B5A2B">做菜，不再靠運氣</text>
+  <circle cx="1020" cy="200" r="70" fill="#C49A5A" />
+  <text x="980" y="215" font-family="Noto Serif TC, serif" font-size="42" fill="#FFFFFF">實驗</text>
+</svg>

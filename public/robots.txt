@@ -2,31 +2,18 @@ User-agent: *
 Allow: /
 Sitemap: https://cooklabai.com/sitemap.xml
 
-# SEO Crawlers
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-# GEO: AI 搜尋引擎爬蟲
+# AI Search Engines
 User-agent: GPTBot
 Allow: /
-
 User-agent: ChatGPT-User
 Allow: /
-
 User-agent: PerplexityBot
 Allow: /
-
 User-agent: ClaudeBot
 Allow: /
-
 User-agent: anthropic-ai
 Allow: /
-
 User-agent: Applebot
 Allow: /
-
 User-agent: meta-externalagent
 Allow: /
