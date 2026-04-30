@@ -55,7 +55,7 @@ export function FridgeSection({
               value={input}
               onChange={(event) => setInput(event.target.value)}
               placeholder={t("fridge.placeholder")}
-              aria-label="Add fridge item"
+              aria-label="Add food"
             />
             <button type="submit" className="button button-primary">
               {t("fridge.add")}
@@ -148,7 +148,7 @@ export function FridgeSection({
                 <h3>{menu.title}</h3>
                 <p>{menu.description}</p>
                 <div className="mini-stat-row">
-                  <span>fridge hits {menu.fridgeHits}</span>
+                  <span>{t("fridge.fitCount", { count: menu.fridgeHits })}</span>
                   <span>{menu.adjustedMinutes} min</span>
                   <span>{formatLocalCurrency(menu.adjustedCost, currencyLocale)}</span>
                   <span>{menu.adjustedProtein} g protein</span>

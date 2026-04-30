@@ -306,7 +306,7 @@ export default function App() {
             <span className="brand-orb" />
             <span>CookLab AI</span>
           </a>
-          <span className="beta-pill">Open beta · all plans free</span>
+          <span className="beta-pill">{t("common.betaFree")}</span>
           <nav className="nav-links">
             <a href="#fridge">{t("nav.fridge")}</a>
             <a href="#planner">{t("nav.planner")}</a>
@@ -348,12 +348,12 @@ export default function App() {
         <FridgeSection
           fridgeItems={normalizedProfile.fridgeItems}
           suggestions={[
-            "spinach",
-            "ground turkey",
-            "tofu",
-            "sweet potato",
+            "chicken breast",
+            "eggs",
             "greek yogurt",
-            "salmon",
+            "tofu",
+            "oats",
+            "rice",
           ]}
           topMatches={fridgeTopMatches}
           insights={fridgeInsights}

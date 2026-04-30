@@ -22,6 +22,13 @@ export function PricingSection({
   onCheckout,
 }: PricingSectionProps) {
   const { t } = useTranslation();
+  const handlePlanClick = (checkoutKey?: string): void => {
+    if (checkoutKey) {
+      onCheckout(checkoutKey);
+      return;
+    }
+    document.querySelector("#planner")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <section className="section pricing-section" id="pricing">
@@ -70,7 +77,7 @@ export function PricingSection({
                 <button
                   type="button"
                   className={plan.featured ? "button button-primary full-width" : "button button-secondary full-width"}
-                  onClick={() => onCheckout(plan.checkoutKey)}
+                  onClick={() => handlePlanClick(plan.checkoutKey)}
                 >
                   {cta}
                 </button>

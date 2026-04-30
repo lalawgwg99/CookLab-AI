@@ -14,12 +14,12 @@ import {
 } from "../types/cooklab";
 
 export const brandPositioning =
-  "CookLab AI turns what is already in your fridge into goal-based weekly meals people actually finish.";
+  "CookLab AI builds a weekly fat-loss or muscle-gain meal plan around your time, budget, protein target, and cooking level.";
 
 export const shortSlogans = [
-  "Cook from what you already have",
-  "Hit your goals without meal-plan burnout",
-  "Stop wasting food, time, and money",
+  "Weekly fitness meals without spreadsheet work",
+  "Protein, calories, budget, and shopping list in one place",
+  "Built for normal kitchens, not perfect routines",
 ];
 
 export const applianceOptions: Appliance[] = [
@@ -73,8 +73,8 @@ export const defaultProfile: UserProfile = {
 export const quickPresets: QuickPreset[] = [
   {
     id: "fat-loss-week",
-    label: "Fat-Loss Week",
-    description: "Lower calories, higher satiety, and simple repeats.",
+    label: "Fat Loss",
+    description: "High satiety meals, lower calories, simple repeats.",
     profile: {
       weeklyBudget: 850,
       maxCookMinutes: 28,
@@ -84,8 +84,8 @@ export const quickPresets: QuickPreset[] = [
   },
   {
     id: "protein-boost",
-    label: "Protein Boost",
-    description: "Prioritize lean protein in every meal slot.",
+    label: "Muscle Gain",
+    description: "More protein and meal prep structure for training days.",
     profile: {
       weeklyBudget: 980,
       maxCookMinutes: 35,
@@ -96,7 +96,7 @@ export const quickPresets: QuickPreset[] = [
   {
     id: "busy-week",
     label: "Busy Week",
-    description: "No dish over 20 minutes from pan to plate.",
+    description: "Fast meals that still hit protein targets.",
     profile: {
       weeklyBudget: 760,
       maxCookMinutes: 20,
@@ -106,13 +106,13 @@ export const quickPresets: QuickPreset[] = [
   },
   {
     id: "family-prep",
-    label: "Family Prep",
-    description: "Batch a base and remix it all week.",
+    label: "Budget Cut",
+    description: "Keep cost down while staying consistent.",
     profile: {
-      weeklyBudget: 1180,
-      maxCookMinutes: 45,
+      weeklyBudget: 760,
+      maxCookMinutes: 35,
       cookingDays: 5,
-      mainGoal: "Family Prep",
+      mainGoal: "Budget Smart",
     },
   },
 ];
@@ -120,8 +120,8 @@ export const quickPresets: QuickPreset[] = [
 export const menuItems: MenuItem[] = [
   {
     id: "protein-fried-rice",
-    title: "High-Protein Fridge Fried Rice",
-    description: "Uses leftover rice, eggs, and any lean protein in your fridge.",
+    title: "High-Protein Training Fried Rice",
+    description: "Uses rice, eggs, and lean protein for a fast post-workout meal.",
     baseServings: 2,
     baseCost: 170,
     marketCost: 248,
@@ -285,7 +285,7 @@ export const menuItems: MenuItem[] = [
   {
     id: "tofu-veggie-stirfry",
     title: "Crispy Tofu Veggie Stir-Fry",
-    description: "Fast vegetarian dinner that uses random fridge vegetables.",
+    description: "Fast vegetarian dinner for high-satiety training weeks.",
     baseServings: 2,
     baseCost: 165,
     marketCost: 242,
@@ -296,7 +296,7 @@ export const menuItems: MenuItem[] = [
     goalTags: ["Budget Smart", "Quick Meals", "Weight Loss"],
     seasonalFit: 86,
     stabilityScore: 89,
-    heroNote: "Great fallback recipe when your fridge has mixed produce.",
+    heroNote: "Great fallback recipe when you need a quick vegetarian protein meal.",
     leftoverPlan: "Turn leftovers into wraps or rice bowls next day.",
     ingredients: [
       { key: "tofu", name: "Firm tofu", amount: "1 block", section: "Protein", estimatedCost: 34, pantryEligible: false },
@@ -427,37 +427,37 @@ export const seasonalSignals: SeasonalSignal[] = [
 
 export const reports: Report[] = [
   {
-    title: "Air Fryer Chicken 180C vs 200C",
-    summary: "180C produces better consistency for most users and meal prep needs.",
+    title: "Chicken meal prep temperature test",
+    summary: "A lower air-fryer temperature keeps lean protein juicier for weekly prep.",
     confidence: 89,
-    keyFinding: "Moisture retention improved by 14% at 180C with similar total cook time.",
+    keyFinding: "Best default: 180C for 14 minutes, then rest before slicing.",
   },
   {
-    title: "Tofu Crispness: Cornstarch vs No Starch",
-    summary: "A light starch coat significantly reduces sticking and improves crunch.",
+    title: "Vegetarian protein texture test",
+    summary: "A light starch coat makes tofu easier to repeat without extra sauce calories.",
     confidence: 86,
-    keyFinding: "Burn risk drops when tofu is not moved during the first 90 seconds.",
+    keyFinding: "Press tofu first, coat lightly, then avoid moving it for 90 seconds.",
   },
   {
-    title: "Overnight Oats Ratio Test",
-    summary: "1:1 oats-to-yogurt ratio gives the best day-two texture and satiety.",
+    title: "High-protein breakfast satiety test",
+    summary: "A balanced oats-to-yogurt ratio holds texture and keeps breakfast prep simple.",
     confidence: 91,
-    keyFinding: "Higher yogurt ratios increased watery texture complaints by 22%.",
+    keyFinding: "Use a 1:1 oats-to-yogurt base and add fruit right before eating.",
   },
 ];
 
 export const weekOnePlan: ContentPlan[] = [
   {
-    title: "What Can I Cook With Chicken, Broccoli, and Rice?",
+    title: "7-day fat-loss meal plan under 30 minutes",
     outline: [
-      "Map one fridge set into 3 meal variants",
+      "Map one calorie target into 3 meal variants",
       "Compare cost vs takeout alternatives",
       "Add high-protein and low-calorie versions",
       "Publish with pantry substitution matrix",
     ],
   },
   {
-    title: "High-Protein Breakfast in 5 Minutes",
+    title: "High-protein breakfast plan for busy mornings",
     outline: [
       "Overnight oats formula baseline",
       "Yogurt and fruit ratio experiments",
@@ -466,16 +466,16 @@ export const weekOnePlan: ContentPlan[] = [
     ],
   },
   {
-    title: "One-Pan Budget Dinners Under $4 Per Serving",
+    title: "Budget muscle-gain dinners without takeout",
     outline: [
       "Ingredient-cost filters by region",
-      "Fridge-first selection logic",
+      "Goal-first selection logic",
       "No-waste leftovers strategy",
       "Upsell path into Pro planner",
     ],
   },
   {
-    title: "Air Fryer Meal Prep Blueprint",
+    title: "Air fryer meal prep for lean protein",
     outline: [
       "Temperature matrix for protein types",
       "Failure rescue steps by symptom",
@@ -484,9 +484,9 @@ export const weekOnePlan: ContentPlan[] = [
     ],
   },
   {
-    title: "Fridge Challenge: 7-Day No-Waste Week",
+    title: "Grocery list for a high-protein week",
     outline: [
-      "Daily fridge inventory check",
+      "Daily meal-plan check",
       "Priority score for expiring ingredients",
       "Quick meal conversion logic",
       "Community submission format",
@@ -501,9 +501,9 @@ export const pricingPlans: PricingPlan[] = [
     priceLabel: "$0",
     billingNote: "Free forever",
     audience: "For first-time users",
-    description: "Get fridge-to-recipe previews and basic weekly suggestions.",
+    description: "Get weekly fitness meal-plan previews and basic suggestions.",
     features: [
-      "3 fridge recipe suggestions per week",
+      "3 weekly meal-plan suggestions",
       "Basic goal filters",
       "Simple shopping estimate",
       "Access to free report highlights",
@@ -518,7 +518,7 @@ export const pricingPlans: PricingPlan[] = [
     audience: "For weekly meal planners",
     description: "Full planner with personalization, shopping automation, and rescue workflows.",
     features: [
-      "Unlimited fridge scans",
+      "Unlimited weekly plan generation",
       "Goal-based weekly planning",
       "Smart shopping list sync",
       "Failure rescue playbooks",

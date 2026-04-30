@@ -285,7 +285,7 @@ export function scoreMenus(menus: MenuItem[], profile: UserProfile): ScoredMenu[
 
       const why: string[] = [];
       if (fridgeHits >= 2) {
-        why.push(`uses ${fridgeHits} items already in your fridge`);
+        why.push(`uses ${fridgeHits} foods you listed`);
       }
       if (menu.goalTags.includes(profile.mainGoal)) {
         why.push(`aligned with your goal: ${profile.mainGoal}`);
