@@ -1,9 +1,16 @@
-<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="630" fill="#FFFBF5" />
-  <rect x="80" y="70" width="1040" height="490" rx="40" fill="#FFFFFF" stroke="#EFE6DA" stroke-width="4" />
-  <text x="140" y="230" font-family="Noto Serif TC, serif" font-size="64" fill="#1A1818">CookLab AI</text>
-  <text x="140" y="320" font-family="Plus Jakarta Sans, sans-serif" font-size="32" fill="#6B6764">料理實驗室 × 台灣食材週期菜單</text>
-  <text x="140" y="400" font-family="Plus Jakarta Sans, sans-serif" font-size="24" fill="#8B5A2B">做菜，不再靠運氣</text>
-  <circle cx="1020" cy="200" r="70" fill="#C49A5A" />
-  <text x="980" y="215" font-family="Noto Serif TC, serif" font-size="42" fill="#FFFFFF">實驗</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f7f4ef"/>
+  <circle cx="1035" cy="100" r="245" fill="#e7e0f3"/>
+  <circle cx="180" cy="600" r="210" fill="#f9dfdb"/>
+  <rect x="90" y="82" width="1020" height="466" rx="34" fill="#fffdfa" stroke="#e9e5e2" stroke-width="3"/>
+  <rect x="150" y="144" width="92" height="92" rx="26" fill="#7666b6"/>
+  <text x="196" y="207" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="46" fill="white">字</text>
+  <text x="274" y="180" font-family="sans-serif" font-weight="700" font-size="30" letter-spacing="5" fill="#26252b">字研所</text>
+  <text x="276" y="215" font-family="sans-serif" font-weight="700" font-size="16" letter-spacing="8" fill="#77737d">TEXT LAB</text>
+  <text x="150" y="340" font-family="sans-serif" font-weight="700" font-size="62" fill="#26252b">讓每一段文字，</text>
+  <text x="150" y="420" font-family="sans-serif" font-weight="700" font-size="62" fill="#7666b6">都剛剛好。</text>
+  <text x="150" y="486" font-family="sans-serif" font-size="25" fill="#77737d">特殊符號 · Emoji · 顏文字 · 特殊字體 · 社群排版</text>
+  <text x="950" y="205" font-family="sans-serif" font-size="72" fill="#b95d53">✦</text>
+  <text x="1020" y="285" font-family="sans-serif" font-size="66">☺</text>
+  <text x="895" y="390" font-family="sans-serif" font-size="58" fill="#725aa1">Aa</text>
 </svg>

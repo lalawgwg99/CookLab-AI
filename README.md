@@ -1,109 +1,22 @@
-# CookLab AI
+# 字研所 TextLab
 
-Global fridge-to-recipe SaaS foundation focused on low API cost:
-- Deterministic fridge matching and weekly scoring (no mandatory LLM calls)
-- Nutrition and protein estimation from local ingredient profiles
-- Waste-risk insights and recovery meal suggestions
-- Supabase auth (email/password)
-- Waitlist backend (Supabase table write)
-- Stripe checkout session backend
-- i18n (`en`, `zh-TW`)
+一個為繁體中文使用者設計的免費日常文字工具箱。
 
-## Tech
+## 第一批工具
 
-- Frontend: React + Vite + TypeScript
-- Auth: Supabase (`@supabase/supabase-js`)
-- Payments: Stripe (`stripe`)
-- i18n: `i18next` + `react-i18next`
-- Backend endpoints: `api/*` (serverless style, for Vercel-compatible deployments)
+- 特殊符號搜尋與一鍵複製
+- Emoji 分類、搜尋與最近使用
+- 顏文字搜尋與收藏
+- Unicode 特殊字體轉換
+- IG／Threads 排版與換行工具
+- 暱稱產生器
+- 空白文字產生與複製
 
-## Local setup
+所有文字處理皆在瀏覽器端完成，不需登入。
 
-1. Install dependencies
+## 開發
 
 ```bash
 npm install
-```
-
-2. Create env file
-
-```bash
-cp .env.example .env
-```
-
-3. Fill required values in `.env`
-
-- Client env (Vite):
-  - `VITE_SUPABASE_URL`
-  - `VITE_SUPABASE_ANON_KEY`
-- Server env:
-  - `SUPABASE_URL`
-  - `SUPABASE_SERVICE_ROLE_KEY`
-  - `STRIPE_SECRET_KEY`
-  - `STRIPE_PRICE_PRO_MONTHLY`
-  - `APP_URL`
-
-4. Start dev server
-
-```bash
 npm run dev
 ```
-
-5. Build
-
-```bash
-npm run build
-```
-
-## Required Supabase table
-
-Create table `waitlist_leads`:
-
-```sql
-create table if not exists public.waitlist_leads (
-  id bigint generated always as identity primary key,
-  email text not null unique,
-  locale text,
-  source text,
-  user_id uuid,
-  plan_id text,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
-);
-```
-
-Optional update trigger:
-
-```sql
-create or replace function public.set_updated_at()
-returns trigger as $$
-begin
-  new.updated_at = now();
-  return new;
-end;
-$$ language plpgsql;
-
-drop trigger if exists waitlist_leads_set_updated_at on public.waitlist_leads;
-create trigger waitlist_leads_set_updated_at
-before update on public.waitlist_leads
-for each row execute function public.set_updated_at();
-```
-
-## API routes
-
-- `POST /api/waitlist`
-  - body: `{ email, locale, source, userId, planId }`
-  - upserts into `waitlist_leads` by `email`
-
-- `POST /api/stripe/checkout`
-  - body: `{ checkoutKey, email, locale, userId }`
-  - supports `checkoutKey: "pro_monthly"`
-  - returns Stripe checkout `url`
-
-## Notes
-
-- Frontend auth requires `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY`.
-- Backend waitlist and checkout require server env values; missing values return explicit API errors.
-- Current checkout key map is in `api/stripe/checkout.ts`.
-- Currency rendering uses TWD as internal base and auto-displays USD for `en` locale.
-- Product core is intentionally deterministic-first to keep infrastructure margins healthy.
