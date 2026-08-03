@@ -1414,7 +1414,7 @@ function PosterTool({ copied, setCopied, language }: { copied: string; setCopied
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "nvidia/nemotron-3-super-120b-a12b:free",
+          model: "nvidia/nemotron-3-ultra-550b-a55b:free",
           messages: [
             {
               role: "system",
@@ -1520,7 +1520,7 @@ ${fetchedText}`
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "nvidia/nemotron-3-super-120b-a12b:free",
+          model: "nvidia/nemotron-3-ultra-550b-a55b:free",
           messages: [
             {
               role: "system",
@@ -1725,7 +1725,7 @@ High commercial quality, 8k resolution, photorealistic studio render.`;
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "nvidia/nemotron-3-super-120b-a12b:free",
+          model: "nvidia/nemotron-3-ultra-550b-a55b:free",
           messages: [
             {
               role: "system",
@@ -1780,258 +1780,6 @@ CTA 按鈕：${cta}
       setIsRating(false);
     }
   };
-
-function PosterVisualCard({
-  brandName,
-  product,
-  priceValue,
-  categoryTitle,
-  styleTitle,
-  colorTitle,
-  bgTitle,
-  layoutTitle,
-  priceStyleTitle,
-  offers,
-  features,
-  ctaText,
-  envText,
-  lightText,
-  logoPosText
-}: {
-  brandName: string;
-  product: string;
-  priceValue: string;
-  categoryTitle: string;
-  styleTitle: string;
-  colorTitle: string;
-  bgTitle: string;
-  layoutTitle: string;
-  priceStyleTitle: string;
-  offers: string[];
-  features: string[];
-  ctaText: string;
-  envText: string;
-  lightText: string;
-  logoPosText: string;
-}) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  const drawPoster = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const w = 1200;
-    const h = 675;
-    canvas.width = w;
-    canvas.height = h;
-
-    // 1. Background Fill
-    const isDark = colorTitle.includes("黑") || colorTitle.includes("灰") || styleTitle.includes("黑金") || styleTitle.includes("電競");
-    const bgGradient = ctx.createLinearGradient(0, 0, w, h);
-    if (isDark) {
-      bgGradient.addColorStop(0, "#1a1823");
-      bgGradient.addColorStop(0.5, "#121018");
-      bgGradient.addColorStop(1, "#09080c");
-    } else {
-      bgGradient.addColorStop(0, "#ffffff");
-      bgGradient.addColorStop(0.5, "#f8f6f2");
-      bgGradient.addColorStop(1, "#efebe4");
-    }
-    ctx.fillStyle = bgGradient;
-    ctx.fillRect(0, 0, w, h);
-
-    // 2. Light Beam Rays
-    ctx.save();
-    const rayGrad = ctx.createRadialGradient(w / 2, h / 2, 50, w / 2, h / 2, 600);
-    rayGrad.addColorStop(0, "rgba(255, 235, 190, 0.25)");
-    rayGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
-    ctx.fillStyle = rayGrad;
-    ctx.beginPath();
-    ctx.arc(w / 2, h / 2, 600, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-
-    // 3. Diagonal Golden Glow Lines
-    ctx.save();
-    ctx.strokeStyle = isDark ? "rgba(230, 195, 110, 0.3)" : "rgba(215, 175, 80, 0.25)";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(w * 0.1, h * 0.1);
-    ctx.quadraticCurveTo(w * 0.5, h * 0.4, w * 0.9, h * 0.2);
-    ctx.stroke();
-    ctx.restore();
-
-    // 4. Logo (Top Left)
-    ctx.save();
-    const displayBrand = brandName.trim() || "DAIKIN";
-    ctx.fillStyle = isDark ? "#ffffff" : "#1a1823";
-    ctx.font = "bold 32px sans-serif";
-    ctx.fillText("▲ " + displayBrand, 60, 75);
-    ctx.restore();
-
-    // 5. Product Title (Center Top)
-    ctx.save();
-    ctx.textAlign = "center";
-    ctx.fillStyle = isDark ? "#d0c8dc" : "#5a5464";
-    ctx.font = "bold 26px sans-serif";
-    ctx.fillText((displayBrand + " " + product).trim(), w / 2, 160);
-    ctx.restore();
-
-    // 6. Left Environment Box (e.g., Family / Atmosphere)
-    ctx.save();
-    ctx.fillStyle = isDark ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.7)";
-    ctx.strokeStyle = "rgba(0,0,0,0.08)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.roundRect(60, 240, 280, 220, 20);
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.font = "bold 20px sans-serif";
-    ctx.fillStyle = isDark ? "#e8e2f0" : "#2d2838";
-    ctx.fillText("🏡 溫馨家庭時光", 85, 285);
-
-    ctx.font = "14px sans-serif";
-    ctx.fillStyle = isDark ? "#a7a0b5" : "#6e687a";
-    ctx.fillText("極致靜音節能舒適首選", 85, 320);
-    ctx.fillText("全家人安心涼爽一整夏", 85, 345);
-    ctx.restore();
-
-    // 7. Center Product Visual (Air Conditioner / Appliance)
-    ctx.save();
-    const prdGrad = ctx.createLinearGradient(410, 240, 790, 390);
-    prdGrad.addColorStop(0, "#ffffff");
-    prdGrad.addColorStop(0.5, "#f0eef5");
-    prdGrad.addColorStop(1, "#dcd7e8");
-    ctx.fillStyle = prdGrad;
-    ctx.shadowColor = "rgba(0,0,0,0.18)";
-    ctx.shadowBlur = 30;
-    ctx.shadowOffsetY = 15;
-
-    ctx.beginPath();
-    ctx.roundRect(410, 240, 380, 150, 16);
-    ctx.fill();
-
-    // Gold accent trim line on AC
-    ctx.shadowColor = "transparent";
-    ctx.fillStyle = "#d4af37";
-    ctx.fillRect(410, 240, 380, 8);
-    ctx.fillRect(410, 375, 380, 5);
-
-    // Cool Air Blue Glow Rays
-    const airGrad = ctx.createLinearGradient(410, 390, 410, 500);
-    airGrad.addColorStop(0, "rgba(120, 200, 255, 0.45)");
-    airGrad.addColorStop(1, "rgba(120, 200, 255, 0)");
-    ctx.fillStyle = airGrad;
-    ctx.beginPath();
-    ctx.moveTo(430, 390);
-    ctx.lineTo(770, 390);
-    ctx.lineTo(820, 520);
-    ctx.lineTo(380, 520);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-
-    // 8. Right Price Tag (Golden Crown Badge)
-    ctx.save();
-    const displayPrice = priceValue.trim() || "NT$ 39,800";
-    ctx.fillStyle = "rgba(212, 175, 55, 0.15)";
-    ctx.beginPath();
-    ctx.arc(980, 330, 120, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Crown Icon & Price Box
-    ctx.fillStyle = "#d4af37";
-    ctx.font = "40px sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText("👑", 980, 260);
-
-    ctx.font = "bold 16px sans-serif";
-    ctx.fillStyle = isDark ? "#e8c566" : "#a88015";
-    ctx.fillText("特價", 980, 295);
-
-    ctx.font = "bold 34px sans-serif";
-    ctx.fillStyle = isDark ? "#ffffff" : "#1a1823";
-    ctx.fillText(displayPrice, 980, 340);
-
-    // Badges under price
-    const offerText = offers.length ? offers.join(", ") : "分期0利率, 政府補助折扣";
-    const featText = features.length ? features[0] : "高額回饋優惠";
-
-    ctx.font = "14px sans-serif";
-    ctx.fillStyle = isDark ? "#c2b8d5" : "#4a4258";
-    ctx.fillText(`【${offerText}】`, 980, 385);
-
-    ctx.font = "13px sans-serif";
-    ctx.fillStyle = "#d4af37";
-    ctx.fillText(`🎨 特色【${featText}】`, 980, 415);
-    ctx.restore();
-
-    // 9. Bottom Right CTA Button
-    ctx.save();
-    const displayCta = ctaText.trim() || "⏰ 限時搶購 ⏳";
-    ctx.fillStyle = "#16141d";
-    ctx.shadowColor = "rgba(0,0,0,0.3)";
-    ctx.shadowBlur = 15;
-    ctx.shadowOffsetY = 6;
-    ctx.beginPath();
-    ctx.roundRect(830, 475, 300, 60, 30);
-    ctx.fill();
-
-    ctx.shadowColor = "transparent";
-    ctx.strokeStyle = "#d4af37";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    ctx.font = "bold 20px sans-serif";
-    ctx.fillStyle = "#ffffff";
-    ctx.textAlign = "center";
-    ctx.fillText(displayCta, 980, 513);
-    ctx.restore();
-
-    // Footer brand credit
-    ctx.save();
-    ctx.font = "12px sans-serif";
-    ctx.fillStyle = isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)";
-    ctx.textAlign = "center";
-    ctx.fillText("字研所 TextLab AI 海報研究所 出品", w / 2, 640);
-    ctx.restore();
-  };
-
-  useEffect(() => {
-    drawPoster();
-  }, [brandName, product, priceValue, categoryTitle, styleTitle, colorTitle, bgTitle, layoutTitle, priceStyleTitle, offers, features, ctaText, envText, lightText, logoPosText]);
-
-  const downloadPosterImage = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const link = document.createElement("a");
-    link.download = `${brandName || "商業"}_${product || "海報"}.png`;
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  };
-
-  return (
-    <div className="input-card" style={{ marginBottom: "20px", border: "2px solid var(--purple)", background: "var(--paper)" }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
-        <strong style={{ fontSize: "15px", color: "var(--purple)", display: "flex", alignItems: "center", gap: "6px" }}>
-          <span>🖼️</span> 即時廣告海報視覺預覽 (即時繪製渲染)
-        </strong>
-        <span style={{ fontSize: "11px", color: "var(--muted)" }}>高畫質 1200×675 商業規格</span>
-      </div>
-
-      <div style={{ width: "100%", borderRadius: "14px", overflow: "hidden", border: "1px solid var(--line)", boxShadow: "0 8px 30px rgba(0,0,0,0.12)", marginBottom: "14px", background: "#000" }}>
-        <canvas ref={canvasRef} style={{ width: "100%", height: "auto", display: "block" }} />
-      </div>
-
-      <button className="primary-button wide" onClick={downloadPosterImage} style={{ background: "var(--purple-dark)" }}>
-        📥 一鍵下載高畫質 PNG 廣告海報圖片
-      </button>
-    </div>
-  );
-}
 
   return (
     <>
@@ -2583,25 +2331,6 @@ function PosterVisualCard({
           </div>
         </div>
       </div>
-
-      {/* 🖼️ 即時廣告海報視覺預覽卡片 */}
-      <PosterVisualCard
-        brandName={brandName}
-        product={product}
-        priceValue={priceValue}
-        categoryTitle={currentCat.title}
-        styleTitle={styleObj.title}
-        colorTitle={colorObj.title}
-        bgTitle={bgObj.title}
-        layoutTitle={layoutObj.title}
-        priceStyleTitle={priceStyle}
-        offers={offers}
-        features={features}
-        ctaText={cta}
-        envText={env}
-        lightText={light}
-        logoPosText={logoPos}
-      />
 
       {/* 🚀 Step 18: 一鍵生成 4 大 AI 模型 Prompt */}
       <div className="input-card" style={{ marginBottom: "20px" }}>
