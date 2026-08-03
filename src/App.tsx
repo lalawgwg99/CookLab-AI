@@ -1087,7 +1087,15 @@ ${idea.trim()}`
       const timestampSeed = Date.now();
       const variantIdx = timestampSeed % 3;
 
-      if (selectedTone === "cozy") {
+      if (selectedTone === "auto") {
+        const intros = ["✦ AI 智慧隨筆提案 ✦", "💬 社群話題靈感紀錄", "☁️ Daily Moments & Notes"];
+        const outros = [
+          "紀錄下這個美好的瞬間，分享當下的想法與視覺細節。✨\n\n─── ⋆⋅☆⋅⋆ ───\n#日常紀錄 #生活提案 #靈感隨筆 #Threads日常",
+          "把喜歡的瞬間定格，期待與更多同好一起交流想法 💬\n\n─── ♡ ───\n#觀點分享 #簡單生活 #日常美學 #心情日誌",
+          "原圖直出質感，把日子過成自己喜歡的模樣。🌸\n\n─── ⊹ ִ ֗ ☁️ ───\n#美學提案 #靈感集 #質感生活 #日常心情"
+        ];
+        result = `${intros[variantIdx]}\n\n${text}\n\n${outros[variantIdx]}`;
+      } else if (selectedTone === "cozy") {
         const intros = ["☁️  Slow living & daily notes", "✦ 今日生活微光筆記 ☁️", "🍃 Cozy Moments · 靜心隨筆"];
         const outros = [
           "喜歡這種不急不躁的節奏，把日常的微光收進日子裡。✨\n\n─── ⋆⋅☆⋅⋆ ───\n#日常碎片 #生活美學 #質感隨筆 #Threads日常",
