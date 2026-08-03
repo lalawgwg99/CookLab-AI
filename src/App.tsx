@@ -66,11 +66,14 @@ const symbolEnglish: Record<string, { name: string; short: string; description: 
 };
 
 const emojiEnglish: Record<string, string> = { popular: "Popular", faces: "Faces", gestures: "Gestures", hearts: "Hearts", people: "People", animals: "Animals", nature: "Nature", food: "Food", activities: "Activities", travel: "Travel", objects: "Objects", symbols: "Symbols", flags: "Flags" };
-const kaomojiEnglish: Record<string, string> = { 開心: "Happy", 害羞: "Shy", 難過: "Sad", 生氣: "Angry", 打招呼: "Greetings", 愛心: "Love" };
+const kaomojiEnglish: Record<string, string> = { 開心: "Happy", 害羞: "Shy", 難過: "Sad", 生氣: "Angry", 打招呼: "Greetings", 愛心: "Love", 無奈: "Helpless", 拜託: "Pray & Sorry", 得意: "Proud" };
 
 const kaomojiGroups = [
   { name: "開心", keywords: "開心 可愛 happy", items: ["(◕‿◕)", "(｡•̀ᴗ-)✧", "٩(ˊᗜˋ*)و", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧", "(๑˃ᴗ˂)ﻭ", "ヽ(•‿•)ノ"] },
   { name: "害羞", keywords: "害羞 shy", items: ["(⁄ ⁄•⁄ω⁄•⁄ ⁄)", "(〃ω〃)", "(⁄˃ᆺ˂)", "(„ಡωಡ„)", "(⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)", "(*ﾉωﾉ)"] },
+  { name: "無奈", keywords: "無奈 無語 helpless", items: ["(￣_￣)", "( -_・)", "(눈_눈)", "( •̀_•́ )", "(￣▽￣)", "(・_・;)"] },
+  { name: "拜託", keywords: "拜託 道歉 pray sorry", items: ["(つ﹏⊂)", "( ; ω ; )", "(>_<)", "(人 •͈ᴗ•͈)", "(🙇‍♂️)", "(｡•́︿•̀｡)"] },
+  { name: "得意", keywords: "得意 傲嬌 proud", items: ["(¬‿¬)", "( 𠁆 ‿ 𠁆 )", "(๑•̀ㅂ•́)و", "(⌐■_■)", "(•̀ᴗ•́)و", "(°∀°)"] },
   { name: "難過", keywords: "難過 哭 sad cry", items: ["(╥﹏╥)", "(｡•́︿•̀｡)", "(っ˘̩╭╮˘̩)っ", "(ಥ﹏ಥ)", "(ノ_<。)", "(｡╯︵╰｡)"] },
   { name: "生氣", keywords: "生氣 angry", items: ["(╬ Ò﹏Ó)", "(¬_¬)", "(＃`Д´)", "ヽ( `д´*)ノ", "(•̀⤙•́)", "(눈_눈)"] },
   { name: "打招呼", keywords: "打招呼 hello bye", items: ["ヾ(＾-＾)ノ", "( ´ ▽ ` )ﾉ", "ヾ(☆▽☆)", "(｡･ω･)ﾉﾞ", "(￣▽￣)ノ", "ヾ(•ω•`)o"] },
@@ -100,9 +103,14 @@ const fontVariants = (text: string) => [
   { name: "粗斜體", value: toRange(text, 0x1d468, 0x1d482, 0x1d7ce) },
   { name: "無襯線", value: toRange(text, 0x1d5a0, 0x1d5ba, 0x1d7e2) },
   { name: "無襯線粗體", value: toRange(text, 0x1d5d4, 0x1d5ee, 0x1d7ec) },
+  { name: "哥德體", value: toRange(text, 0x1d504, 0x1d51e) },
+  { name: "雙線空心體", value: toRange(text, 0x1d538, 0x1d552, 0x1d7d8) },
+  { name: "手寫花體", value: toRange(text, 0x1d49c, 0x1d4b6) },
   { name: "等寬字", value: toRange(text, 0x1d670, 0x1d68a, 0x1d7f6) },
   { name: "全形", value: Array.from(text).map((c) => c === " " ? "　" : c.charCodeAt(0) >= 33 && c.charCodeAt(0) <= 126 ? String.fromCharCode(c.charCodeAt(0) + 0xfee0) : c).join("") },
   { name: "圓圈", value: Array.from(text.toUpperCase()).map((c) => /[A-Z]/.test(c) ? String.fromCodePoint(0x24b6 + c.charCodeAt(0) - 65) : c).join("") },
+  { name: "黑底圓圈", value: Array.from(text.toUpperCase()).map((c) => /[A-Z]/.test(c) ? String.fromCodePoint(0x1f150 + c.charCodeAt(0) - 65) : c).join("") },
+  { name: "刪除線", value: Array.from(text).map((c) => c + "\u0336").join("") },
 ];
 
 function copyText(value: string, onCopied: (value: string) => void) {
@@ -269,9 +277,66 @@ function EmojiTool({ copied, setCopied, language }: { copied: string; setCopied:
 function KaomojiTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
   const [query, setQuery] = useState("");
   const [favorites, setFavorites] = useState<string[]>(() => JSON.parse(localStorage.getItem("textlab.kaomojiFavorites") || "[]"));
+  
+  const [leftArm, setLeftArm] = useState("(");
+  const [eyes, setEyes] = useState("•̀_•́");
+  const [rightArm, setRightArm] = useState(")");
+
+  const armsLeftOptions = ["(", "( ฅ", "٩(", "ʕ", "(๑", "(｡", "(⁄ ⁄", "ヽ("];
+  const eyesOptions = ["◕‿◕", "•̀_•́", "🥺", "•̀⤙•́", "•́︿•̀", "눈_눈", "¬_¬", "´•ω•", "≧◡≦", "> ▽ <"];
+  const armsRightOptions = [")", "ฅ )", ")و", "ʔ", "๑)", "｡)", "⁄ ⁄)", ")ノ"];
+
+  const builtKaomoji = `${leftArm}${eyes}${rightArm}`;
+
   const groups = kaomojiGroups.map((group) => ({ ...group, items: group.items.filter((item) => !query || item.includes(query) || group.name.includes(query) || group.keywords.includes(query)) })).filter((g) => g.items.length);
   const toggleFavorite = (item: string) => { const next = favorites.includes(item) ? favorites.filter((x) => x !== item) : [...favorites, item]; setFavorites(next); localStorage.setItem("textlab.kaomojiFavorites", JSON.stringify(next)); };
-  return <><ToolIntro tool={tools[2]} language={language} /><SearchInput value={query} onChange={setQuery} placeholder={t(language, "搜尋顏文字，例如：開心、害羞、生氣…", "Search kaomoji: happy, shy, angry…")} />
+
+  return <><ToolIntro tool={tools[2]} language={language} />
+
+    {!query && (
+      <section className="input-card" style={{ marginBottom: "24px" }}>
+        <div className="field-label">
+          <strong style={{ fontSize: "14px", color: "var(--purple)" }}>{t(language, "🎨 顏文字 DIY 客製化組裝器", "🎨 Kaomoji DIY Builder")}</strong>
+          <span>{t(language, "自由組合獨一無二的顏文字", "Combine custom kaomoji parts")}</span>
+        </div>
+        
+        <div style={{ padding: "16px", borderRadius: "12px", background: "var(--canvas)", border: "1px dashed var(--line)", textAlign: "center", margin: "10px 0 16px" }}>
+          <span style={{ fontSize: "28px", fontWeight: 700, color: "var(--ink)", display: "block", marginBottom: "8px" }}>{builtKaomoji}</span>
+          <button className="primary-button" onClick={() => copyText(builtKaomoji, setCopied)}>
+            {copied === builtKaomoji ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製此組裝顏文字", "Copy custom kaomoji")}
+          </button>
+        </div>
+
+        <div style={{ display: "grid", gap: "10px", fontSize: "12px" }}>
+          <div>
+            <span style={{ color: "var(--muted)", fontWeight: 650, display: "block", marginBottom: "4px" }}>{t(language, "左手 / 臉框：", "Left Arm / Frame:")}</span>
+            <div style={{ display: "flex", gap: "6px", overflowX: "auto", paddingBottom: "4px" }}>
+              {armsLeftOptions.map((opt) => (
+                <button key={opt} onClick={() => setLeftArm(opt)} style={{ padding: "4px 8px", borderRadius: "6px", border: "1px solid var(--line)", background: leftArm === opt ? "var(--purple)" : "var(--paper)", color: leftArm === opt ? "#fff" : "var(--ink)", cursor: "pointer" }}>{opt}</button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <span style={{ color: "var(--muted)", fontWeight: 650, display: "block", marginBottom: "4px" }}>{t(language, "表情 / 眼睛：", "Eyes / Expressions:")}</span>
+            <div style={{ display: "flex", gap: "6px", overflowX: "auto", paddingBottom: "4px" }}>
+              {eyesOptions.map((opt) => (
+                <button key={opt} onClick={() => setEyes(opt)} style={{ padding: "4px 8px", borderRadius: "6px", border: "1px solid var(--line)", background: eyes === opt ? "var(--purple)" : "var(--paper)", color: eyes === opt ? "#fff" : "var(--ink)", cursor: "pointer" }}>{opt}</button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <span style={{ color: "var(--muted)", fontWeight: 650, display: "block", marginBottom: "4px" }}>{t(language, "右手 / 結尾：", "Right Arm / Frame:")}</span>
+            <div style={{ display: "flex", gap: "6px", overflowX: "auto", paddingBottom: "4px" }}>
+              {armsRightOptions.map((opt) => (
+                <button key={opt} onClick={() => setRightArm(opt)} style={{ padding: "4px 8px", borderRadius: "6px", border: "1px solid var(--line)", background: rightArm === opt ? "var(--purple)" : "var(--paper)", color: rightArm === opt ? "#fff" : "var(--ink)", cursor: "pointer" }}>{opt}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <SearchInput value={query} onChange={setQuery} placeholder={t(language, "搜尋顏文字，例如：開心、害羞、無奈、拜託…", "Search kaomoji: happy, shy, helpless, pray…")} />
     {!!favorites.length && <section className="compact-section"><h2>{t(language, "我的收藏", "Favorites")}</h2><div className="kaomoji-grid">{favorites.map((item) => <KaomojiCard key={item} item={item} favorite copied={copied === item} language={language} onCopy={() => copyText(item, setCopied)} onFavorite={() => toggleFavorite(item)} />)}</div></section>}
     {groups.map((group) => <section className="compact-section" key={group.name}><h2>{t(language, group.name, kaomojiEnglish[group.name])}</h2><div className="kaomoji-grid">{group.items.map((item) => <KaomojiCard key={item} item={item} favorite={favorites.includes(item)} copied={copied === item} language={language} onCopy={() => copyText(item, setCopied)} onFavorite={() => toggleFavorite(item)} />)}</div></section>)}</>;
 }
@@ -282,9 +347,69 @@ function KaomojiCard({ item, favorite, copied, language, onCopy, onFavorite }: {
 
 function FontsTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
   const [text, setText] = useState("hello studio");
-  const fontNames: Record<string, string> = { 粗體: "Bold", 斜體: "Italic", 粗斜體: "Bold Italic", 無襯線: "Sans Serif", 無襯線粗體: "Sans Bold", 等寬字: "Monospace", 全形: "Fullwidth", 圓圈: "Circled" };
-  return <><ToolIntro tool={tools[3]} language={language} /><div className="input-card"><div className="field-label"><label htmlFor="font-input">{t(language, "輸入英文或數字", "Enter English letters or numbers")}</label><span>{text.length}/80</span></div><input id="font-input" className="large-input" maxLength={80} value={text} onChange={(e) => setText(e.target.value)} placeholder="Type something…" /></div>
-    <div className="result-header"><h2>{t(language, "轉換結果", "Converted styles")}</h2><span>{t(language, "點擊任一款複製", "Click any style to copy")}</span></div><div className="font-results">{fontVariants(text || "Preview").map((item) => <button key={item.name} onClick={() => copyText(item.value, setCopied)}><span className="result-name">{t(language, item.name, fontNames[item.name])}</span><strong>{item.value}</strong><span className="copy-mark">{copied === item.value ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製", "Copy")}</span></button>)}</div></>;
+  const [wrapper, setWrapper] = useState<"none" | "sparkle" | "bracket" | "flower" | "soft">("none");
+
+  const fontNames: Record<string, string> = { 粗體: "Bold", 斜體: "Italic", 粗斜體: "Bold Italic", 無襯線: "Sans Serif", 無襯線粗體: "Sans Bold", 哥德體: "Gothic", 雙線空心體: "Double Struck", 手寫花體: "Script", 等寬字: "Monospace", 全形: "Fullwidth", 圓圈: "Circled", 黑底圓圈: "Black Circled", 刪除線: "Strikethrough" };
+
+  const applyWrapper = (val: string) => {
+    if (wrapper === "sparkle") return `✨ ${val} ✨`;
+    if (wrapper === "bracket") return `[ ${val} ]`;
+    if (wrapper === "flower") return `✿ ${val} ✿`;
+    if (wrapper === "soft") return `୨୧ ${val} ୨୧`;
+    return val;
+  };
+
+  return <><ToolIntro tool={tools[3]} language={language} />
+    <div className="input-card">
+      <div className="field-label"><label htmlFor="font-input">{t(language, "輸入英文或數字", "Enter English letters or numbers")}</label><span>{text.length}/80</span></div>
+      <input id="font-input" className="large-input" maxLength={80} value={text} onChange={(e) => setText(e.target.value)} placeholder="Type something…" />
+      
+      <div style={{ marginTop: "14px", display: "flex", flexWrap: "wrap", gap: "10px", alignItems: "center" }}>
+        <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--muted)" }}>{t(language, "氣氛包裝框：", "Decorations:")}</span>
+        {[
+          { id: "none", label: "無" },
+          { id: "sparkle", label: "✨ ✨" },
+          { id: "bracket", label: "[ ]" },
+          { id: "flower", label: "✿ ✿" },
+          { id: "soft", label: "୨୧ ୨୧" },
+        ].map((item) => (
+          <button
+            key={item.id}
+            onClick={() => setWrapper(item.id as any)}
+            style={{ border: "1px solid var(--line)", background: wrapper === item.id ? "var(--purple)" : "var(--canvas)", color: wrapper === item.id ? "#fff" : "var(--ink)", borderRadius: "6px", padding: "4px 8px", fontSize: "11px", cursor: "pointer" }}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+      <div style={{ marginTop: "10px", display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
+        <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--muted)" }}>{t(language, "快速靈感：", "IG Bio Presets:")}</span>
+        {["Coffee & Life ☕️", "Product Designer ✨", "Taipei, TW 📍", "Minimalist ☁️"].map((preset) => (
+          <button
+            key={preset}
+            onClick={() => setText(preset)}
+            style={{ border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--purple)", borderRadius: "6px", padding: "3px 8px", fontSize: "10px", cursor: "pointer" }}
+          >
+            + {preset}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div className="result-header"><h2>{t(language, "轉換結果", "Converted styles")}</h2><span>{t(language, "點擊任一款複製", "Click any style to copy")}</span></div>
+    <div className="font-results">
+      {fontVariants(text || "Preview").map((item) => {
+        const finalVal = applyWrapper(item.value);
+        return (
+          <button key={item.name} onClick={() => copyText(finalVal, setCopied)}>
+            <span className="result-name">{t(language, item.name, fontNames[item.name] || item.name)}</span>
+            <strong>{finalVal}</strong>
+            <span className="copy-mark">{copied === finalVal ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製", "Copy")}</span>
+          </button>
+        );
+      })}
+    </div>
+  </>;
 }
 
 function LayoutTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
