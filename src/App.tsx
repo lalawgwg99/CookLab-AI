@@ -1025,19 +1025,33 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
                   <img src={photoUrl} alt="Photo preview" style={{ width: "72px", height: "72px", borderRadius: "10px", objectFit: "cover", border: "1px solid var(--line)" }} />
                   <div style={{ flex: 1 }}>
                     <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "4px" }}>
-                      {t(language, "照片主題標籤：", "Photo theme tag:")}
+                      {t(language, "照片主題標籤 (可自由自訂輸入)：", "Photo theme tag (Customizable):")}
                     </span>
-                    <select
+                    <input
                       value={photoTag}
                       onChange={(e) => setPhotoTag(e.target.value)}
-                      style={{ padding: "6px 10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", fontSize: "12px", width: "100%" }}
-                    >
-                      <option value="探店咖啡 ☕️">探店咖啡 ☕️</option>
-                      <option value="旅遊風景 🌊">旅遊風景 🌊</option>
-                      <option value="穿搭 OOTD 👗">穿搭 OOTD 👗</option>
-                      <option value="美食記錄 🍜">美食記錄 🍜</option>
-                      <option value="萌寵日常 🐾">萌寵日常 🐾</option>
-                    </select>
+                      placeholder={t(language, "例如：大安區老宅 ☕️、秘境海灘 🌊…", "e.g. Secret Beach 🌊, Vintage Cafe ☕️…")}
+                      style={{ padding: "6px 10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", fontSize: "12px", width: "100%", marginBottom: "6px", outline: "none" }}
+                    />
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+                      {["探店咖啡 ☕️", "旅遊風景 🌊", "穿搭 OOTD 👗", "美食記錄 🍜", "萌寵日常 🐾", "露營野餐 ⛺️", "展覽藝術 🎨", "好物開箱 📦"].map((presetTag) => (
+                        <button
+                          key={presetTag}
+                          onClick={() => setPhotoTag(presetTag)}
+                          style={{
+                            border: "1px solid var(--line)",
+                            background: photoTag === presetTag ? "var(--purple)" : "var(--paper)",
+                            color: photoTag === presetTag ? "#fff" : "var(--muted)",
+                            borderRadius: "6px",
+                            padding: "3px 7px",
+                            fontSize: "10px",
+                            cursor: "pointer"
+                          }}
+                        >
+                          {presetTag}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                   <button onClick={() => setPhotoUrl(null)} style={{ border: 0, background: "transparent", color: "var(--subtle)", fontSize: "18px", cursor: "pointer", padding: "4px" }}>×</button>
                 </div>
