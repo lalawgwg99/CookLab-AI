@@ -989,7 +989,7 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
   ];
 
   const BUILTIN_KEY = atob("c2stb3ItdjEtODY4YzYxZTI3MTgwOWFlMzg2NmZlMTZmNWY0M2MwMmIyNWM3Mjg2Y2NkZTY1YzVlNDhiODdiMWNhMGY1ZDhmOA==");
-  const MODEL_ID = "nvidia/nemotron-3-super-120b-a12b:free";
+  const MODEL_ID = "nvidia/nemotron-3-ultra-550b-a55b:free";
 
   const [selectedTone, setSelectedTone] = useState("auto");
   const [idea, setIdea] = useState("今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書");
