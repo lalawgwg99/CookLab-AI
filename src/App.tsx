@@ -951,12 +951,90 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
   const [output, setOutput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
 
+  const analyzeImageAndSuggestText = (filename: string, imgDataUrl: string) => {
+    const name = filename.toLowerCase();
+    
+    // 1. 檔名特徵分析 (Filename Vision Heuristics)
+    if (name.includes("fan") || name.includes("風扇") || name.includes("扇") || name.includes("air") || name.includes("cooler")) {
+      setPhotoTag("極簡風扇 / 涼爽家電 🍃");
+      setIdea("質感風扇開箱！風力很柔和安靜，外型極簡好看，夏天居家必備 🍃");
+      return;
+    }
+    if (name.includes("coffee") || name.includes("cafe") || name.includes("咖啡") || name.includes("latte") || name.includes("tea")) {
+      setPhotoTag("探店咖啡 ☕️");
+      setIdea("今天去特色咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書 ☕️");
+      return;
+    }
+    if (name.includes("cat") || name.includes("dog") || name.includes("pet") || name.includes("貓") || name.includes("狗")) {
+      setPhotoTag("萌寵日常 🐾");
+      setIdea("家裡的毛小孩今天太可愛了，忍不住拍了好幾張寫真 🐾");
+      return;
+    }
+    if (name.includes("food") || name.includes("meal") || name.includes("dinner") || name.includes("美食") || name.includes("麵") || name.includes("飯")) {
+      setPhotoTag("美食記錄 🍜");
+      setIdea("這家私房料理真的令人驚艷！口感層次豐富，下次一定會再回訪 🍜");
+      return;
+    }
+    if (name.includes("ootd") || name.includes("dress") || name.includes("shirt") || name.includes("穿搭") || name.includes("clothes")) {
+      setPhotoTag("穿搭 OOTD 👗");
+      setIdea("今日簡約風格穿搭分享！剪裁很俐落，穿起來舒適又有質感 👗");
+      return;
+    }
+    if (name.includes("travel") || name.includes("sea") || name.includes("beach") || name.includes("mountain") || name.includes("風景") || name.includes("海")) {
+      setPhotoTag("旅遊風景 🌊");
+      setIdea("走走停停的微旅行，看著這片美好的風景，心情瞬間被治癒了 🌊");
+      return;
+    }
+
+    // 2. 本機 Canvas 色彩光影分析 (Color & Aspect Vision Analysis)
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = imgDataUrl;
+    img.onload = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = 40;
+        canvas.height = 40;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+        ctx.drawImage(img, 0, 0, 40, 40);
+        const data = ctx.getImageData(0, 0, 40, 40).data;
+        let rSum = 0, gSum = 0, bSum = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          rSum += data[i];
+          gSum += data[i + 1];
+          bSum += data[i + 2];
+        }
+        const pixelCount = data.length / 4;
+        const avgR = rSum / pixelCount;
+        const avgG = gSum / pixelCount;
+        const avgB = bSum / pixelCount;
+
+        if (avgR > 200 && avgG > 200 && avgB > 200) {
+          setPhotoTag("極簡家電 / 好物 🍃");
+          setIdea("質感家電好物分享！簡約白色系設計，擺在房間裡非常療癒 🍃");
+        } else if (avgR > avgB + 20 && avgG > avgB + 20) {
+          setPhotoTag("質感空間 ☕️");
+          setIdea("發現了一處氛圍感滿分的木質空間，光影特別溫柔 ☕️");
+        } else if (avgB > avgR + 15 && avgB > avgG + 15) {
+          setPhotoTag("清涼風尚 🌊");
+          setIdea("清爽的色調讓人心情特別放鬆，記錄這個美好的時刻 🌊");
+        } else {
+          setPhotoTag("質感好物提案 ✨");
+          setIdea("分享今日紀錄的視覺好物，細節滿分，質感非常到位 ✨");
+        }
+      } catch {}
+    };
+  };
+
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
-        setPhotoUrl(event.target?.result as string);
+        const dataUrl = event.target?.result as string;
+        setPhotoUrl(dataUrl);
+        analyzeImageAndSuggestText(file.name, dataUrl);
       };
       reader.readAsDataURL(file);
     }
