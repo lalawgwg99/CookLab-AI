@@ -926,8 +926,8 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
       id: "auto",
       name: "🤖 AI 智慧自動匹配 (推薦)",
       nameEn: "AI Smart Match",
-      hint: "AI 自動深度分析主題，智慧選定最佳平台體裁、格式排版與 Hashtags",
-      promptSpec: "請對使用者輸入的主題進行深度意圖分析（判定是產品開箱、探店日誌、職場心得、日常生活吐嘈、促銷團購或爆款討論），自動選擇最能極致發揮該主題優勢的社群平台體裁（IG 美學圖文 / Threads 爆款討論 / 小紅書種草提案 / LINE 社群特惠 / 職人觀點覆盤），並為其自動配上最適切的標題句型、精準 Emoji 與熱門黑標籤。"
+      hint: "AI 自動深度分析主題，智慧選定 IG / FB / Threads / LINE / 小紅書最適體裁與排版",
+      promptSpec: "請對使用者輸入的主題進行深度意圖分析（判定是產品開箱、探店日誌、FB粉專觀點、職場心得、日常生活吐嘈、促銷團購或爆款討論），自動選擇最適合的社群平台體裁（IG 美學圖文 / FB 品牌粉專文 / Threads 爆款討論 / 小紅書種草提案 / LINE 社群特惠 / 職人觀點覆盤），並為其自動配上最適切的標題句型、精準 Emoji 與熱門黑標籤。"
     },
     {
       id: "cozy",
