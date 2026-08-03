@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 
-type ToolId = "symbols" | "emoji" | "kaomoji" | "fonts" | "layout" | "nickname" | "blank" | "bio" | "hashtags";
+type ToolId = "symbols" | "emoji" | "kaomoji" | "fonts" | "layout" | "nickname" | "blank" | "bio" | "hashtags" | "ai";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -32,9 +32,10 @@ type Tool = {
 };
 
 const tools: Tool[] = [
+  { id: "ai", name: "AI 發文助手", nameEn: "AI Post Assistant", short: "一鍵生成 Threads／IG 貼文", shortEn: "Generate viral social posts", icon: "🪄", tone: "lilac", badge: "AI" },
   { id: "layout", name: "社群排版", nameEn: "Social Formatter", short: "IG／Threads 換行", shortEn: "Instagram / Threads spacing", icon: "¶", tone: "blue", badge: "熱門" },
-  { id: "bio", name: "個人檔案 Bio", nameEn: "Bio Studio", short: "IG / Threads 簡介佈置", shortEn: "Instagram & Threads Profile", icon: "📇", tone: "pink", badge: "NEW" },
-  { id: "hashtags", name: "熱門標籤", nameEn: "Hashtags", short: "Threads / IG 導流標籤", shortEn: "Trending Hashtag Bundles", icon: "#", tone: "mint", badge: "NEW" },
+  { id: "bio", name: "個人檔案 Bio", nameEn: "Bio Studio", short: "IG / Threads 簡介佈置", shortEn: "Instagram & Threads Profile", icon: "📇", tone: "pink" },
+  { id: "hashtags", name: "熱門標籤", nameEn: "Hashtags", short: "Threads / IG 導流標籤", shortEn: "Trending Hashtag Bundles", icon: "#", tone: "mint" },
   { id: "symbols", name: "特殊符號", nameEn: "Symbols", short: "搜尋與一鍵複製", shortEn: "Search and copy", icon: "✦", tone: "coral" },
   { id: "emoji", name: "Emoji", nameEn: "Emoji", short: "分類、搜尋、最近使用", shortEn: "Browse, search and recents", icon: "☺", tone: "yellow" },
   { id: "kaomoji", name: "顏文字", nameEn: "Kaomoji", short: "搜尋與收藏", shortEn: "Search and favorites", icon: "◡̈", tone: "lilac" },
@@ -924,6 +925,144 @@ function HashtagTool({ copied, setCopied, language }: { copied: string; setCopie
   );
 }
 
+function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const tones = [
+    { id: "cozy", name: "☁️ 文青質感", nameEn: "Cozy & Aesthetic", hint: "適合 IG 日常、咖啡探店、生活紀錄" },
+    { id: "threads", name: "💬 Threads 觀點", nameEn: "Viral Threads Take", hint: "適合 Threads 爆款短評、思考討論" },
+    { id: "redbook", name: "✨ 小紅書種草", nameEn: "Redbook Lifestyle", hint: "適合 探店提案、質感好物推薦" },
+    { id: "pro", name: "💡 職人專業", nameEn: "Professional", hint: "適合 設計師心得、工作經驗分享" },
+    { id: "humor", name: "🫠 幽默社畜", nameEn: "Humorous Casual", hint: "適合 週五下班、生活吐嘈日記" }
+  ];
+
+  const presets = [
+    { title: "古宅咖啡廳探店", idea: "今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書" },
+    { title: "Threads 思考紀錄", idea: "最近發現把心態放慢之後，工作效率反而變高了，想聊聊這個體悟" },
+    { title: "週五下班心境", idea: "終於週五了！今天下班只想吃火鍋，順便把積累一整週的壓力釋放" },
+    { title: "好物提案推薦", idea: "推薦一款用了一個月的極簡護手霜，味道很療癒，包裝也非常好看" }
+  ];
+
+  const [selectedTone, setSelectedTone] = useState("cozy");
+  const [idea, setIdea] = useState("今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書");
+  const [output, setOutput] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const generatePost = () => {
+    if (!idea.trim()) return;
+    setIsGenerating(true);
+    setTimeout(() => {
+      let result = "";
+      const text = idea.trim();
+      if (selectedTone === "cozy") {
+        result = `☁️  Slow living & daily notes\n\n${text}\n\n喜歡這種不急不躁的節奏，把日常的微光收進日子裡。✨\n\n─── ⋆⋅☆⋅⋆ ───\n#日常碎片 #生活美學 #咖啡日誌 #Threads日常`;
+      } else if (selectedTone === "threads") {
+        result = `『 關於最近的一個小思考 』\n\n${text}\n\n💬 大家的想法也是這樣嗎？歡迎留言一起討論 👇🏼\n\n#Threads創作者 #思考紀錄 #觀點分享 #個人成長`;
+      } else if (selectedTone === "redbook") {
+        result = `✦ 氛圍感生活提案 ✦\n\n${text}\n\n▪ 質感細節：滿分 💯\n▪ 推薦指數：★★★★★\n\n‧̍̊·̊⌖ 收藏這份美好提案 ‧̍̊·̊⌖\n#小紅書文案 #氛圍感 #質感生活 #靈感集`;
+      } else if (selectedTone === "pro") {
+        result = `💡 職人筆記｜Insight & Growth\n\n${text}\n\n01 / 保持專注\n02 / 覆盤與修正\n\n希望這段體驗對你也有幫助 ✦\n\n#職人觀點 #設計思考 #工作心得 #經驗分享`;
+      } else {
+        result = `🫠 今日社畜心理狀態\n\n${text}\n\n禮貌微笑，平安下班。🏃‍♂️💨💼🍻\n\n#社畜日常 #優雅崩潰 #週五救星 #日常開心`;
+      }
+      setOutput(result);
+      setIsGenerating(false);
+    }, 300);
+  };
+
+  useEffect(() => {
+    generatePost();
+  }, [selectedTone]);
+
+  return (
+    <>
+      <ToolIntro tool={tools.find((t) => t.id === "ai")!} language={language} />
+
+      {/* 靈感輸入卡片 */}
+      <div className="input-card" style={{ marginBottom: "20px" }}>
+        <div className="field-label">
+          <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
+            {t(language, "1. 選擇發文語氣風格", "1. Select Vibe Tone")}
+          </strong>
+        </div>
+
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "16px" }}>
+          {tones.map((tItem) => (
+            <button
+              key={tItem.id}
+              onClick={() => setSelectedTone(tItem.id)}
+              style={{
+                border: "1px solid var(--line)",
+                background: selectedTone === tItem.id ? "var(--purple)" : "var(--paper)",
+                color: selectedTone === tItem.id ? "#fff" : "var(--ink)",
+                borderRadius: "10px",
+                padding: "8px 12px",
+                fontSize: "12px",
+                fontWeight: 600,
+                cursor: "pointer"
+              }}
+            >
+              {t(language, tItem.name, tItem.nameEn)}
+            </button>
+          ))}
+        </div>
+
+        <div className="field-label">
+          <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
+            {t(language, "2. 輸入想法或隨手紀錄", "2. Type your idea or draft")}
+          </strong>
+          <span>{idea.length} {t(language, "字", "chars")}</span>
+        </div>
+
+        <textarea
+          value={idea}
+          onChange={(e) => setIdea(e.target.value)}
+          placeholder={t(language, "例如：今天去了哪裡、看到了什麼、或是想聊聊的心情…", "e.g. Where you went today, what you saw, or a thought you want to share…")}
+          rows={3}
+          style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", lineHeight: 1.5, resize: "vertical", outline: "none", marginBottom: "12px" }}
+        />
+
+        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "14px" }}>
+          <span style={{ fontSize: "11px", color: "var(--muted)", width: "100%", fontWeight: 650 }}>
+            {t(language, "💡 點選快速範例試用：", "💡 Try a sample idea:")}
+          </span>
+          {presets.map((p) => (
+            <button
+              key={p.title}
+              onClick={() => { setIdea(p.idea); }}
+              style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--muted)", borderRadius: "8px", padding: "5px 9px", fontSize: "11px", cursor: "pointer" }}
+            >
+              {p.title}
+            </button>
+          ))}
+        </div>
+
+        <button className="primary-button wide" onClick={generatePost} disabled={isGenerating}>
+          {isGenerating ? t(language, "✨ AI 思考生成中…", "✨ AI Thinking…") : t(language, "🪄 一鍵生成 AI 社群貼文", "🪄 Generate AI Social Post")}
+        </button>
+      </div>
+
+      {/* 生成結果卡片 */}
+      {!!output && (
+        <div className="input-card">
+          <div className="field-label">
+            <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
+              {t(language, "✨ AI 美學貼文產出 (即可複製或貼至社群排版)", "✨ Generated Aesthetic Post")}
+            </strong>
+            <span>{output.length} {t(language, "字", "chars")}</span>
+          </div>
+
+          <div style={{ padding: "16px", borderRadius: "12px", background: "var(--canvas)", border: "1px dashed var(--line)", fontSize: "14px", color: "var(--ink)", whiteSpace: "pre-wrap", lineHeight: 1.7, marginBottom: "14px" }}>
+            {output}
+          </div>
+
+          <button className="primary-button wide" onClick={() => copyText(output, setCopied)}>
+            {copied === output ? t(language, "貼文已複製 ✓", "Post Copied ✓") : t(language, "一鍵複製完整貼文", "Copy Full Post")}
+          </button>
+        </div>
+      )}
+    </>
+  );
+}
+
 function EmptyState({ text }: { text: string }) { return <div className="empty-state"><span>⌕</span><p>{text}</p></div>; }
 
 function GuideModal({ language, onClose, onSelectTool }: { language: Language; onClose: () => void; onSelectTool: (id: ToolId) => void }) {
@@ -1025,6 +1164,7 @@ export default function App() {
       <aside className="sidebar"><p className="sidebar-label">{t(language, "文字工具箱", "TEXT TOOLBOX")}</p><div className="tool-nav">{tools.map((tool) => <button key={tool.id} className={active === tool.id ? "active" : ""} onClick={() => selectTool(tool.id)}><span className={`tool-icon ${tool.tone}`}>{tool.icon}</span><span><strong>{t(language, tool.name, tool.nameEn)}</strong><small>{t(language, tool.short, tool.shortEn)}</small></span>{tool.badge && <em>{t(language, tool.badge, "HOT")}</em>}</button>)}</div><div className="sidebar-note"><span>✦</span><p><strong>{t(language, "你的文字，只留在這裡", "Your text stays here")}</strong><br />{t(language, "所有轉換都在瀏覽器完成，我們不會儲存內容。", "Everything runs in your browser. We never store your content.")}</p></div></aside>
       <main className="workspace"><div className="mobile-tool-picker"><span>{t(language, "目前工具", "CURRENT TOOL")}</span><select value={active} onChange={(e) => selectTool(e.target.value as ToolId)}>{tools.map((tool) => <option value={tool.id} key={tool.id}>{t(language, tool.name, tool.nameEn)}｜{t(language, tool.short, tool.shortEn)}</option>)}</select></div>
         <div className="tool-surface">
+          {active === "ai" && <AIPostTool {...toolProps} />}
           {active === "symbols" && <SymbolsTool {...toolProps} />}
           {active === "emoji" && <EmojiTool {...toolProps} />}
           {active === "kaomoji" && <KaomojiTool {...toolProps} />}
