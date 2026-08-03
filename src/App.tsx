@@ -1,9 +1,24 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 
 type ToolId = "symbols" | "emoji" | "kaomoji" | "fonts" | "layout" | "nickname" | "blank";
 type Language = "zh-TW" | "en";
+type ThemeMode = "system" | "light" | "dark";
+
+const emojiCombos = [
+  { title: "優雅崩潰", titleEn: "Elegant Collapse", sequence: "🫠☕️✨" },
+  { title: "社畜下班", titleEn: "Off Work", sequence: "🏃‍♂️💨💼🍻" },
+  { title: "陰陽怪氣", titleEn: "Sarcastic", sequence: "🤌☺️💅" },
+  { title: "派對慶祝", titleEn: "Party Time", sequence: "🎉🥂✨🥳" },
+  { title: "被可愛到", titleEn: "So Cute", sequence: "🥺🐾💖" },
+  { title: "靈魂抽離", titleEn: "Soul Left", sequence: "🫥👻💨" },
+  { title: "薪水小偷", titleEn: "Slacker", sequence: "👀🤫💻🍵" },
+  { title: "禮貌微笑", titleEn: "Polite Smile", sequence: "🙃👍" },
+  { title: "美妙下午", titleEn: "Teatime", sequence: "🌸☕️🍰" },
+  { title: "放鬆夜晚", titleEn: "Cozy Night", sequence: "🌧️☕️📖" }
+];
+
 
 type Tool = {
   id: ToolId;
@@ -120,7 +135,18 @@ function ToolIntro({ tool, language }: { tool: Tool; language: Language }) {
 }
 
 function SearchInput({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder: string }) {
-  return <label className="search-box"><span>⌕</span><input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} /><kbd>⌘ K</kbd></label>;
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+  return <label className="search-box"><span>⌕</span><input ref={inputRef} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} /><kbd>⌘ K</kbd></label>;
 }
 
 function SymbolTiles({ items, favorites, copied, onCopy, onFavorite }: { items: string[]; favorites: string[]; copied: string; onCopy: (item: string) => void; onFavorite: (item: string) => void }) {
@@ -204,6 +230,37 @@ function EmojiTool({ copied, setCopied, language }: { copied: string; setCopied:
   const choose = (emoji: string) => { copyText(emoji, setCopied); const next = [emoji, ...recent.filter((x) => x !== emoji)].slice(0, 12); setRecent(next); localStorage.setItem("textlab.recentEmoji", JSON.stringify(next)); };
   return <><ToolIntro tool={tools[1]} language={language} /><div className="emoji-summary"><strong>{allEmoji.length}</strong><span>Emoji</span><i>·</i><strong>{emojiCategories.length}</strong><span>{t(language, "個分類", "categories")}</span></div><SearchInput value={query} onChange={setQuery} placeholder={t(language, "搜尋 Emoji，例如：感動、咖啡、台灣、完成…", "Search emoji: touched, coffee, Taiwan, done…")} />
     {!!recent.length && !query && <section className="compact-section"><div className="section-title-row"><h2>{t(language, "最近使用", "Recently used")}</h2><button className="text-button" onClick={() => { setRecent([]); localStorage.removeItem("textlab.recentEmoji"); }}>{t(language, "清除", "Clear")}</button></div><div className="emoji-grid recent-grid">{recent.map((emoji) => <button key={emoji} onClick={() => choose(emoji)}>{emoji}</button>)}</div></section>}
+    {!query && category === "popular" && (
+      <section className="compact-section">
+        <div className="section-title-row">
+          <h2>{t(language, "✨ 精選情境組合包", "✨ Mood & Scene Combos")}</h2>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))", gap: "8px", marginTop: "10px" }}>
+          {emojiCombos.map((combo) => (
+            <button
+              key={combo.title}
+              onClick={() => copyText(combo.sequence, setCopied)}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: "10px 8px",
+                border: "1px solid var(--line)",
+                borderRadius: "12px",
+                background: "var(--paper)",
+                cursor: "pointer",
+                transition: "0.15s ease"
+              }}
+            >
+              <span style={{ fontSize: "20px", marginBottom: "4px" }}>{combo.sequence}</span>
+              <span style={{ fontSize: "11px", color: "var(--muted)", fontWeight: 650 }}>
+                {t(language, combo.title, combo.titleEn)}
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+    )}
     <div className="emoji-category-tabs">{emojiCategories.map((item) => <button className={category === item.id && !query ? "active" : ""} key={item.id} onClick={() => { setCategory(item.id); setQuery(""); }}><span>{item.icon}</span>{t(language, item.name, emojiEnglish[item.id])}<small>{item.items.length}</small></button>)}</div>
     <div className="emoji-result-row"><strong>{query ? t(language, `搜尋「${query}」`, `Search: “${query}”`) : t(language, activeCategory.name, emojiEnglish[activeCategory.id])}</strong><span>{source.length} {t(language, "個結果", "results")}</span></div>
     <div className="emoji-grid large-grid">{source.map((emoji) => <button key={emoji} onClick={() => choose(emoji)} aria-label={`${t(language, "複製", "Copy")} ${emoji}`}>{emoji}<small>{copied === emoji ? "✓" : ""}</small></button>)}</div>{!source.length && <EmptyState text={t(language, "找不到這個 Emoji，試試其他中文或英文關鍵字。", "No matching emoji. Try another English or Chinese keyword.")} />}</>;
@@ -322,6 +379,24 @@ export default function App() {
     if (saved === "zh-TW" || saved === "en") return saved;
     return navigator.languages.some((item) => item.toLowerCase().startsWith("zh")) ? "zh-TW" : "en";
   });
+  const [theme, setTheme] = useState<ThemeMode>(() => {
+    const saved = localStorage.getItem("textlab.theme") as ThemeMode | null;
+    return saved || "system";
+  });
+  const toggleTheme = () => {
+    const next: ThemeMode = theme === "system" ? "dark" : theme === "dark" ? "light" : "system";
+    setTheme(next);
+    localStorage.setItem("textlab.theme", next);
+  };
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else if (theme === "light") {
+      document.documentElement.setAttribute("data-theme", "light");
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+    }
+  }, [theme]);
   const current = tools.find((tool) => tool.id === active) || tools[0];
   const selectTool = (id: ToolId) => { setActive(id); window.location.hash = id; window.scrollTo({ top: 0, behavior: "smooth" }); };
   const changeLanguage = (next: Language) => {
@@ -350,7 +425,7 @@ export default function App() {
   }, [guideOpen]);
   const toolProps = { copied, setCopied, language };
   return <div className="app-shell">
-    <header className="topbar"><a className="brand" href="#symbols" onClick={() => selectTool("symbols")}><span className="brand-mark">字</span><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button onClick={() => selectTool("symbols")}>{t(language, "特殊符號", "Symbols")}</button><button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><span className="free-pill">{t(language, "完全免費", "100% free")}</span><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
+    <header className="topbar"><a className="brand" href="#symbols" onClick={() => selectTool("symbols")}><span className="brand-mark">字</span><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button onClick={() => selectTool("symbols")}>{t(language, "特殊符號", "Symbols")}</button><button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>{theme === "dark" ? "🌙 深色" : theme === "light" ? "☀️ 淺色" : "🌗 自動"}</button><span className="free-pill">{t(language, "完全免費", "100% free")}</span><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
     <div className="layout">
       <aside className="sidebar"><p className="sidebar-label">{t(language, "文字工具箱", "TEXT TOOLBOX")}</p><div className="tool-nav">{tools.map((tool) => <button key={tool.id} className={active === tool.id ? "active" : ""} onClick={() => selectTool(tool.id)}><span className={`tool-icon ${tool.tone}`}>{tool.icon}</span><span><strong>{t(language, tool.name, tool.nameEn)}</strong><small>{t(language, tool.short, tool.shortEn)}</small></span>{tool.badge && <em>{t(language, tool.badge, "HOT")}</em>}</button>)}</div><div className="sidebar-note"><span>✦</span><p><strong>{t(language, "你的文字，只留在這裡", "Your text stays here")}</strong><br />{t(language, "所有轉換都在瀏覽器完成，我們不會儲存內容。", "Everything runs in your browser. We never store your content.")}</p></div></aside>
       <main className="workspace"><div className="mobile-tool-picker"><span>{t(language, "目前工具", "CURRENT TOOL")}</span><select value={active} onChange={(e) => selectTool(e.target.value as ToolId)}>{tools.map((tool) => <option value={tool.id} key={tool.id}>{t(language, tool.name, tool.nameEn)}｜{t(language, tool.short, tool.shortEn)}</option>)}</select></div>

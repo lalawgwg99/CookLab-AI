@@ -27,7 +27,12 @@
     <meta name="twitter:description" content="特殊符號、Emoji、顏文字、特殊字體與社群排版，一站完成。" />
     <meta name="twitter:image" content="https://cooklabai.com/og-image.svg" />
 
-    <meta name="theme-color" content="#7666b6" />
+    <meta name="theme-color" content="#7666b6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a171f" media="(prefers-color-scheme: dark)" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -62,5 +67,12 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js").catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>
