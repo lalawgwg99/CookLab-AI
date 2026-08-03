@@ -727,7 +727,6 @@ function BioTool({ copied, setCopied, language }: { copied: string; setCopied: (
           </div>
         </div>
 
-        {/* 欄位輸入 */}
         <div style={{ display: "grid", gap: "10px", marginBottom: "14px" }}>
           <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t(language, "1. 姓名 / 稱呼 (例：An ✦)", "1. Name (e.g. An ✦)")} style={{ padding: "10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", fontSize: "13px" }} />
           <input value={tagline} onChange={(e) => setTagline(e.target.value)} placeholder={t(language, "2. 身份 / 定位 (例：☁️ Slow living)", "2. Role (e.g. ☁️ Slow living)")} style={{ padding: "10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", fontSize: "13px" }} />
@@ -739,7 +738,6 @@ function BioTool({ copied, setCopied, language }: { copied: string; setCopied: (
           {copied === builtBio ? t(language, "Bio 已複製 ✓", "Bio Copied ✓") : t(language, "複製 Bio 個人簡介", "Copy Bio Text")}
         </button>
 
-        {/* 快速套用範本 */}
         <div style={{ marginTop: "20px" }}>
           <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--muted)", display: "block", marginBottom: "8px" }}>
             {t(language, "💡 熱門風格範本（點擊一鍵套用）：", "💡 Popular Bio Templates:")}
@@ -835,7 +833,6 @@ function HashtagTool({ copied, setCopied, language }: { copied: string; setCopie
     <>
       <ToolIntro tool={tools.find((t) => t.id === "hashtags")!} language={language} />
 
-      {/* 自訂標籤產生器 */}
       <div className="input-card" style={{ marginBottom: "20px" }}>
         <div className="field-label">
           <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
@@ -861,7 +858,6 @@ function HashtagTool({ copied, setCopied, language }: { copied: string; setCopie
         )}
       </div>
 
-      {/* 我的標籤暫存區 */}
       {!!selectedTags.length && (
         <div style={{ padding: "14px 16px", borderRadius: "12px", background: "var(--purple-soft)", border: "1px solid var(--line)", marginBottom: "20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
@@ -881,7 +877,6 @@ function HashtagTool({ copied, setCopied, language }: { copied: string; setCopie
         </div>
       )}
 
-      {/* 熱門主題組合包 */}
       <div className="section-title-row" style={{ marginBottom: "14px" }}>
         <h2>{t(language, "🔥 精選 Threads & IG 熱門標籤包", "🔥 Trending Hashtag Bundles")}</h2>
         <span style={{ color: "var(--subtle)", fontSize: "10px" }}>{t(language, "點擊單個複製或點選組合", "Click tag to copy or build bundle")}</span>
@@ -937,216 +932,250 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
   ];
 
   const presets = [
-    { title: "LINE 團購甜點優惠", idea: "這款隱藏版生乳捲超好吃！這次開團限量 50 組，社友團購價下殺 75 折" },
-    { title: "服飾限時促銷", idea: "韓國連線極簡風外套，現貨倒數 10 件，今天下單輸入優惠碼再折 100" },
+    { title: "風扇商品開團", idea: "質感極簡風扇限時開團！雙重涼感極致靜音，原價 $1580 限時優惠折 $200" },
     { title: "古宅咖啡廳探店", idea: "今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書" },
-    { title: "Threads 思考紀錄", idea: "最近發現把心態放慢之後，工作效率反而變高了，想聊聊這個體悟" }
+    { title: "Threads 思考紀錄", idea: "最近發現把心態放慢之後，工作效率反而變高了，想聊聊這個體悟" },
+    { title: "社畜下班吐嘈", idea: "改完第 5 版草稿，終於可以下班去吃麻辣鍋放空了" }
   ];
 
-  const [mode, setMode] = useState<"text" | "photo">("text");
+  const DEFAULT_OPENROUTER_KEY = import.meta.env.VITE_OPENROUTER_KEY || "";
+
+  const openRouterModels = [
+    { id: "nvidia/nemotron-3-super-120b-a12b:free", name: "🎁 NVIDIA Nemotron 3 Super 120B (:free 免費)" },
+    { id: "meta-llama/llama-3.3-70b-instruct:free", name: "🎁 Meta Llama 3.3 70B (:free 免費)" },
+    { id: "deepseek/deepseek-r1:free", name: "🎁 DeepSeek R1 (:free 免費)" },
+    { id: "google/gemini-2.0-flash-lite-preview-02-05:free", name: "🎁 Google Gemini 2.0 Flash Lite (:free 免費)" },
+    { id: "qwen/qwen-2.5-72b-instruct:free", name: "🎁 Qwen 2.5 72B (:free 免費)" },
+    { id: "openai/gpt-4o-mini", name: "💳 OpenAI GPT-4o mini (需 OpenRouter 儲值)" },
+    { id: "anthropic/claude-3.5-haiku", name: "💳 Claude 3.5 Haiku (需 OpenRouter 儲值)" }
+  ];
+
   const [selectedTone, setSelectedTone] = useState("cozy");
   const [idea, setIdea] = useState("今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書");
-  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
-  const [photoTag, setPhotoTag] = useState("探店咖啡 ☕️");
   const [output, setOutput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const analyzeImageAndSuggestText = (filename: string, imgDataUrl: string) => {
-    const name = filename.toLowerCase();
-    
-    // 1. 檔名特徵分析 (Filename Vision Heuristics)
-    if (name.includes("fan") || name.includes("風扇") || name.includes("扇") || name.includes("air") || name.includes("cooler")) {
-      setPhotoTag("極簡風扇 / 涼爽家電 🍃");
-      setIdea("質感風扇開箱！風力很柔和安靜，外型極簡好看，夏天居家必備 🍃");
-      return;
-    }
-    if (name.includes("coffee") || name.includes("cafe") || name.includes("咖啡") || name.includes("latte") || name.includes("tea")) {
-      setPhotoTag("探店咖啡 ☕️");
-      setIdea("今天去特色咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書 ☕️");
-      return;
-    }
-    if (name.includes("cat") || name.includes("dog") || name.includes("pet") || name.includes("貓") || name.includes("狗")) {
-      setPhotoTag("萌寵日常 🐾");
-      setIdea("家裡的毛小孩今天太可愛了，忍不住拍了好幾張寫真 🐾");
-      return;
-    }
-    if (name.includes("food") || name.includes("meal") || name.includes("dinner") || name.includes("美食") || name.includes("麵") || name.includes("飯")) {
-      setPhotoTag("美食記錄 🍜");
-      setIdea("這家私房料理真的令人驚艷！口感層次豐富，下次一定會再回訪 🍜");
-      return;
-    }
-    if (name.includes("ootd") || name.includes("dress") || name.includes("shirt") || name.includes("穿搭") || name.includes("clothes")) {
-      setPhotoTag("穿搭 OOTD 👗");
-      setIdea("今日簡約風格穿搭分享！剪裁很俐落，穿起來舒適又有質感 👗");
-      return;
-    }
-    if (name.includes("travel") || name.includes("sea") || name.includes("beach") || name.includes("mountain") || name.includes("風景") || name.includes("海")) {
-      setPhotoTag("旅遊風景 🌊");
-      setIdea("走走停停的微旅行，看著這片美好的風景，心情瞬間被治癒了 🌊");
-      return;
-    }
+  // OpenRouter Settings
+  const [apiKey, setApiKey] = useState(() => localStorage.getItem("textlab.openrouter_key") || DEFAULT_OPENROUTER_KEY);
+  const [model, setModel] = useState(() => localStorage.getItem("textlab.openrouter_model") || "nvidia/nemotron-3-super-120b-a12b:free");
+  const [showSettings, setShowSettings] = useState(false);
+  const [showKey, setShowKey] = useState(false);
 
-    // 2. 本機 Canvas 色彩光影分析 (Color & Aspect Vision Analysis)
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = imgDataUrl;
-    img.onload = () => {
-      try {
-        const canvas = document.createElement("canvas");
-        canvas.width = 40;
-        canvas.height = 40;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-        ctx.drawImage(img, 0, 0, 40, 40);
-        const data = ctx.getImageData(0, 0, 40, 40).data;
-        let rSum = 0, gSum = 0, bSum = 0;
-        for (let i = 0; i < data.length; i += 4) {
-          rSum += data[i];
-          gSum += data[i + 1];
-          bSum += data[i + 2];
-        }
-        const pixelCount = data.length / 4;
-        const avgR = rSum / pixelCount;
-        const avgG = gSum / pixelCount;
-        const avgB = bSum / pixelCount;
-
-        if (avgR > 200 && avgG > 200 && avgB > 200) {
-          setPhotoTag("極簡家電 / 好物 🍃");
-          setIdea("質感家電好物分享！簡約白色系設計，擺在房間裡非常療癒 🍃");
-        } else if (avgR > avgB + 20 && avgG > avgB + 20) {
-          setPhotoTag("質感空間 ☕️");
-          setIdea("發現了一處氛圍感滿分的木質空間，光影特別溫柔 ☕️");
-        } else if (avgB > avgR + 15 && avgB > avgG + 15) {
-          setPhotoTag("清涼風尚 🌊");
-          setIdea("清爽的色調讓人心情特別放鬆，記錄這個美好的時刻 🌊");
-        } else {
-          setPhotoTag("質感好物提案 ✨");
-          setIdea("分享今日紀錄的視覺好物，細節滿分，質感非常到位 ✨");
-        }
-      } catch {}
-    };
+  const handleApiKeyChange = (val: string) => {
+    setApiKey(val);
+    localStorage.setItem("textlab.openrouter_key", val.trim());
   };
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const dataUrl = event.target?.result as string;
-        setPhotoUrl(dataUrl);
-        analyzeImageAndSuggestText(file.name, dataUrl);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleModelChange = (val: string) => {
+    setModel(val);
+    localStorage.setItem("textlab.openrouter_model", val);
   };
 
-  const generatePost = () => {
-    if (!idea.trim() && !photoUrl) return;
+  const currentTone = tones.find((t) => t.id === selectedTone) || tones[0];
+
+  const generatePost = async () => {
+    if (!idea.trim()) return;
     setIsGenerating(true);
+    setErrorMessage("");
+
+    const key = apiKey.trim() || DEFAULT_OPENROUTER_KEY;
+
+    if (key) {
+      try {
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${key}`,
+            "HTTP-Referer": window.location.origin,
+            "X-Title": "字研所 TextLab",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: [
+              {
+                role: "system",
+                content: `你是一位精通台灣社群（IG、Threads、LINE 團購、小紅書、職人專欄）的頂級 AI 採編與文案專家。
+請根據使用者的【發文風格語氣】與【核心想法/主題】，撰寫極具吸引力、排版清晰、善用適量 Emoji 與熱門黑標籤 (Hashtag) 的社群貼文。
+規範：
+1. 一律使用繁體中文 (台灣用語與流行社群用語)。
+2. 請呈現自然流暢、符合選擇語氣的社群文風。
+3. 直接輸出完整貼文內容，不要包含額外的解說或 \`\`\` 程式碼標記。`
+              },
+              {
+                role: "user",
+                content: `發文風格語氣：${currentTone.name} (${currentTone.hint})
+貼文主題與內容想法：${idea.trim()}`
+              }
+            ]
+          })
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData?.error?.message || `API 回應錯誤 (${response.status})`);
+        }
+
+        const data = await response.json();
+        const content = data.choices?.[0]?.message?.content;
+        if (content) {
+          setOutput(content.trim());
+          setIsGenerating(false);
+          return;
+        } else {
+          throw new Error("API 未返回有效內容");
+        }
+      } catch (err: any) {
+        console.warn("OpenRouter API Error, falling back to smart generator:", err);
+        setErrorMessage(`⚠️ OpenRouter 呼叫失敗 (${err?.message || "請檢查 Key 或網路"})，已自動切換至備用引擎。`);
+      }
+    }
+
+    // Fallback: Smart local generator
     setTimeout(() => {
       let result = "";
       const text = idea.trim() || "紀錄這份當下的美好。";
-      const photoHeader = (mode === "photo" && photoUrl) ? `📷 [照片主題：${photoTag}]\n` : "";
+      const timestampSeed = Date.now();
+      const variantIdx = timestampSeed % 3;
 
       if (selectedTone === "cozy") {
-        result = `${photoHeader}☁️  Slow living & daily notes\n\n${text}\n\n喜歡這種不急不躁的節奏，把日常的微光收進日子裡。✨\n\n─── ⋆⋅☆⋅⋆ ───\n#日常碎片 #生活美學 #咖啡日誌 #Threads日常`;
+        const intros = ["☁️  Slow living & daily notes", "✦ 今日生活微光筆記 ☁️", "🍃 Cozy Moments · 靜心隨筆"];
+        const outros = [
+          "喜歡這種不急不躁的節奏，把日常的微光收進日子裡。✨\n\n─── ⋆⋅☆⋅⋆ ───\n#日常碎片 #生活美學 #質感隨筆 #Threads日常",
+          "在忙碌的日常裡，留給自己一段清空大腦的時光。☕️\n\n─── ♡ ───\n#生活美學 #靜心時刻 #質感生活 #日常紀錄",
+          "把喜歡的瞬間定格，這就是生活最溫柔的模樣。🌸\n\n─── ⊹ ִ ֗ ☁️ ───\n#簡單生活 #溫柔文案 #微光日子 #日常心情"
+        ];
+        result = `${intros[variantIdx]}\n\n${text}\n\n${outros[variantIdx]}`;
       } else if (selectedTone === "threads") {
-        result = `${photoHeader}『 關於最近的一個小思考 』\n\n${text}\n\n💬 大家的看法呢？歡迎留言分享你的視角 👇🏼\n\n#Threads創作者 #思考紀錄 #觀點分享 #生活視角`;
+        const intros = ["『 關於最近的一個小思考 』", "💬 Threads 爆款觀察：一個很有感的體悟", "✦ 聊天時間｜最近的這件事"];
+        const outros = [
+          "💬 大家的看法呢？歡迎留言分享你的視角 👇🏼\n\n#Threads創作者 #思考紀錄 #觀點分享 #生活視角",
+          "你也是這樣想的嗎？點個追蹤一起交流思考 💬\n\n#Threads熱門 #觀點紀錄 #個人成長 #創作者日常",
+          "如果也有同感，歡迎按讚收藏或轉發給朋友聊聊 👇🏼\n\n#思考碎片 #共鳴文案 #日常交流 #Threads靈感"
+        ];
+        result = `${intros[variantIdx]}\n\n${text}\n\n${outros[variantIdx]}`;
       } else if (selectedTone === "line") {
-        result = `${photoHeader}🔥【LINE 社群限定｜社友獨享優惠】\n\n${text}\n\n📢 團購好康重點：\n▪ 限量庫存：搶完即止 ⚡️\n▪ 社群專屬價：輸入優惠碼即享折扣\n\n👇🏼 點擊下方連結立即下單預購：\nhttps://line.me/R/ti/p/@example\n\n💬 有任何問題，歡迎隨時在群裡發問！`;
+        const intros = ["🔥【LINE 社群限定｜社友獨享優惠】", "⚡️【LINE 群組特惠告急｜限時開團】", "📢【社群好友專屬】限時限量爆款提案"];
+        const outros = [
+          "📢 團購好康重點：\n▪ 限量庫存：搶完即止 ⚡️\n▪ 社群專屬價：輸入優惠碼即享折扣\n\n👇🏼 點擊下方連結立即下單預購：\nhttps://line.me/R/ti/p/@example\n\n💬 有任何問題，歡迎隨時在群裡發問！",
+          "⚡️ 優惠倒數：\n▪ 獨家下殺折價優惠中\n▪ 滿額再享免運直送\n\n👉🏼 入手連結：https://line.me/R/ti/p/@example\n\n快分享給身邊需要的朋友～",
+          "🛍️ 限時專屬福袋：\n▪ 今日結帳加碼贈送精美好禮\n▪ 限量 30 組售完不補\n\n👇🏼 點擊下方傳送門下單：\nhttps://line.me/R/ti/p/@example"
+        ];
+        result = `${intros[variantIdx]}\n\n${text}\n\n${outros[variantIdx]}`;
       } else if (selectedTone === "sales") {
-        result = `${photoHeader}🛒【爆款限定促銷｜限時下殺】\n\n${text}\n\n✨ 為什麼大家都在搶？\n▪ 必買理由 01：CP 值極高，口碑一致好評\n▪ 必買理由 02：限時特惠價，錯過不再有\n\n⏰ 現貨數量有限，搶完不補！\n👉🏼 點擊連結立即搶購：https://store.example.com\n\n#爆款推薦 #限時優惠 #必買好物 #搶購倒數`;
+        const intros = ["🛒【爆款限定促銷｜限時下殺】", "⚡️【現貨倒數】錯過不再補的熱門好物", "🛍️【限時特惠】這款真的必須入手！"];
+        const outros = [
+          "✨ 為什麼大家都在搶？\n▪ 必買理由 01：CP 值極高，口碑一致好評\n▪ 必買理由 02：限時特惠價，錯過不再有\n\n⏰ 現貨數量有限，搶完不補！\n👉🏼 點擊連結立即搶購：https://store.example.com\n\n#爆款推薦 #限時優惠 #必買好物 #搶購倒數",
+          "🔥 入手三大理由：\n▪ 品質質感滿分，用過就回不去\n▪ 今日下單享限定專屬折扣\n\n⏰ 倒數結帳中，限量現貨搶購！\n👉🏼 賣場連結：https://store.example.com\n\n#熱銷推薦 #促銷導購 #質感選物 #現貨不用等",
+          "💯 網友一致口碑推薦：\n▪ 實品比照片更有質感\n▪ 限時特惠即將結束\n\n👇🏼 點擊這裡帶回家：https://store.example.com\n\n#好物推薦 #熱銷爆款 #折扣進行中 #限時搶購"
+        ];
+        result = `${intros[variantIdx]}\n\n${text}\n\n${outros[variantIdx]}`;
       } else if (selectedTone === "redbook") {
-        result = `${photoHeader}✦ 氛圍感生活提案 ✦\n\n${text}\n\n▪ 視覺氛圍：滿分 💯\n▪ 出片指數：★★★★★\n\n‧̍̊·̊⌖ 收藏這份美好提案 ‧̍̊·̊⌖\n#小紅書文案 #氛圍感 #質感生活 #靈感集`;
+        const intros = ["✦ 氛圍感生活提案 ✦", "✨ 小紅書熱門種草提案", "‧̍̊·̊⌖ 出片率 100% 的美學紀錄"];
+        const outros = [
+          "▪ 視覺氛圍：滿分 💯\n▪ 出片指數：★★★★★\n\n‧̍̊·̊⌖ 收藏這份美好提案 ‧̍̊·̊⌖\n#小紅書文案 #氛圍感 #質感生活 #靈感集",
+          "▪ 推薦指數：★★★★★\n▪ 質感細節：超級到位\n\n✦ 點讚收藏不迷路 ✦\n#種草日記 #氛圍感滿分 #美學提案 #極簡生活",
+          "▪ 視覺風格：溫柔質感\n▪ 必買出片靈感收錄\n\n♡ 喜歡別忘了點個讚唷 ♡\n#原圖直出 #質感視覺 #靈感隨筆 #小紅書熱門"
+        ];
+        result = `${intros[variantIdx]}\n\n${text}\n\n${outros[variantIdx]}`;
       } else if (selectedTone === "pro") {
-        result = `${photoHeader}💡 職人筆記｜Insight & Growth\n\n${text}\n\n01 / 保持專注\n02 / 覆盤與修正\n\n希望這段體驗對你也有幫助 ✦\n\n#職人觀點 #設計思考 #工作心得 #經驗分享`;
+        const intros = ["💡 職人筆記｜Insight & Growth", "✦ 專業觀點覆盤｜Design & Thought", "⚙️ 工作經驗談｜高效運作的核心"];
+        const outros = [
+          "01 / 保持專注\n02 / 覆盤與修正\n\n希望這段體驗對你也有幫助 ✦\n\n#職人觀點 #設計思考 #工作心得 #經驗分享",
+          "01 / 清晰定義問題\n02 / 持續疊代優化\n\n歡迎同行朋友留言討論交流 💡\n\n#專業心得 #職涯成長 #邏輯思考 #工作筆記",
+          "01 / 簡化繁瑣流程\n02 / 專注核心價值\n\n希望這篇分享能給你帶來一些靈感 ✦\n\n#知識分享 #職人思維 #經驗覆盤 #專業輸出"
+        ];
+        result = `${intros[variantIdx]}\n\n${text}\n\n${outros[variantIdx]}`;
       } else {
-        result = `${photoHeader}🫠 今日社畜心理狀態\n\n${text}\n\n禮貌微笑，平安下班。🏃‍♂️💨💼🍻\n\n#社畜日常 #優雅崩潰 #週五救星 #日常開心`;
+        const intros = ["🫠 今日社畜心理狀態", "💨 社畜下班後的微醺日記", "☕️ 平安下班的生存指南"];
+        const outros = [
+          "禮貌微笑，平安下班。🏃‍♂️💨💼🍻\n\n#社畜日常 #優雅崩潰 #週五救星 #日常開心",
+          "改完第 5 版草稿，終於可以下班吃大餐了！🫠\n\n#下班快樂 #社畜日常 #優雅崩潰 #薪水小偷",
+          "將工作留在公司，下班時間屬於自己！☕️\n\n#平安下班 #社畜日常 #續命咖啡 #心情紀錄"
+        ];
+        result = `${intros[variantIdx]}\n\n${text}\n\n${outros[variantIdx]}`;
       }
       setOutput(result);
       setIsGenerating(false);
-    }, 300);
+    }, 400);
   };
-
-  useEffect(() => {
-    generatePost();
-  }, [selectedTone, photoUrl, photoTag, mode]);
 
   return (
     <>
       <ToolIntro tool={tools.find((t) => t.id === "ai")!} language={language} />
 
-      {/* 分頁 Segments (極速文字模式 / 照片美學預覽模式) */}
-      <div className="category-tabs" style={{ marginBottom: "16px" }}>
-        <button className={mode === "text" ? "active" : ""} onClick={() => setMode("text")}>
-          ⚡️ {t(language, "極速文字生成 (推薦)", "Text Mode (Recommended)")}
-        </button>
-        <button className={mode === "photo" ? "active" : ""} onClick={() => setMode("photo")}>
-          📷 {t(language, "照片圖文美學", "Photo Mode")}
-        </button>
+      {/* OpenRouter API 設定區塊 */}
+      <div className="input-card" style={{ marginBottom: "16px", padding: "14px 16px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }} onClick={() => setShowSettings(!showSettings)}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontSize: "16px" }}>⚡️</span>
+            <div>
+              <strong style={{ fontSize: "13px", color: "var(--ink)", display: "block" }}>
+                OpenRouter AI 設定 {apiKey ? "🟢 (已串接 API Key)" : "⚪️ (點此展開設定)"}
+              </strong>
+              <span style={{ fontSize: "11px", color: "var(--muted)" }}>
+                {apiKey ? `使用模型：${model}` : "輸入 API Key 解鎖 Gemini / Llama / DeepSeek 真 AI 直連"}
+              </span>
+            </div>
+          </div>
+          <button type="button" style={{ border: 0, background: "transparent", color: "var(--purple)", fontSize: "12px", cursor: "pointer", fontWeight: 600 }}>
+            {showSettings ? "收合 ▲" : "設定 ▼"}
+          </button>
+        </div>
+
+        {showSettings && (
+          <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid var(--line)", display: "flex", flexDirection: "column", gap: "10px" }}>
+            <div>
+              <label style={{ fontSize: "12px", fontWeight: 650, color: "var(--ink)", display: "block", marginBottom: "4px" }}>
+                OpenRouter API Key:
+              </label>
+              <div style={{ display: "flex", gap: "6px" }}>
+                <input
+                  type={showKey ? "text" : "password"}
+                  value={apiKey}
+                  onChange={(e) => handleApiKeyChange(e.target.value)}
+                  placeholder="sk-or-v1-..."
+                  style={{ flex: 1, padding: "8px 10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", outline: "none" }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowKey(!showKey)}
+                  style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--muted)", borderRadius: "8px", padding: "0 10px", fontSize: "12px", cursor: "pointer" }}
+                >
+                  {showKey ? "隱藏" : "顯示"}
+                </button>
+              </div>
+              <small style={{ fontSize: "10px", color: "var(--muted)", marginTop: "4px", display: "block" }}>
+                金鑰僅儲存在您的本機瀏覽器 (localStorage)，安全不外洩。可在 <a href="https://openrouter.ai/keys" target="_blank" rel="noreferrer" style={{ color: "var(--purple)" }}>OpenRouter.ai</a> 免費申請。
+              </small>
+            </div>
+
+            <div>
+              <label style={{ fontSize: "12px", fontWeight: 650, color: "var(--ink)", display: "block", marginBottom: "4px" }}>
+                選擇 AI 模型 (Model):
+              </label>
+              <select
+                value={model}
+                onChange={(e) => handleModelChange(e.target.value)}
+                style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", outline: "none" }}
+              >
+                {openRouterModels.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.name} ({m.id})
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* 靈感與照片輸入卡片 */}
+      {/* 貼文發想卡片 */}
       <div className="input-card" style={{ marginBottom: "20px" }}>
-        {/* 照片模式可上傳預覽 */}
-        {mode === "photo" && (
-          <>
-            <div className="field-label" style={{ marginBottom: "8px" }}>
-              <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
-                {t(language, "📷 上傳 / 拍照照片預覽（本機極速處理）", "📷 Upload Photo (Local Processing)")}
-              </strong>
-            </div>
-
-            <div style={{ padding: "14px", borderRadius: "12px", background: "var(--canvas)", border: "1px solid var(--line)", marginBottom: "16px" }}>
-              {photoUrl ? (
-                <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-                  <img src={photoUrl} alt="Photo preview" style={{ width: "72px", height: "72px", borderRadius: "10px", objectFit: "cover", border: "1px solid var(--line)" }} />
-                  <div style={{ flex: 1 }}>
-                    <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "4px" }}>
-                      {t(language, "照片主題標籤 (可自由自訂輸入)：", "Photo theme tag (Customizable):")}
-                    </span>
-                    <input
-                      value={photoTag}
-                      onChange={(e) => setPhotoTag(e.target.value)}
-                      placeholder={t(language, "例如：大安區老宅 ☕️、秘境海灘 🌊…", "e.g. Secret Beach 🌊, Vintage Cafe ☕️…")}
-                      style={{ padding: "6px 10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", fontSize: "12px", width: "100%", marginBottom: "6px", outline: "none" }}
-                    />
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
-                      {["探店咖啡 ☕️", "旅遊風景 🌊", "穿搭 OOTD 👗", "美食記錄 🍜", "萌寵日常 🐾", "露營野餐 ⛺️", "展覽藝術 🎨", "好物開箱 📦"].map((presetTag) => (
-                        <button
-                          key={presetTag}
-                          onClick={() => setPhotoTag(presetTag)}
-                          style={{
-                            border: "1px solid var(--line)",
-                            background: photoTag === presetTag ? "var(--purple)" : "var(--paper)",
-                            color: photoTag === presetTag ? "#fff" : "var(--muted)",
-                            borderRadius: "6px",
-                            padding: "3px 7px",
-                            fontSize: "10px",
-                            cursor: "pointer"
-                          }}
-                        >
-                          {presetTag}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <button onClick={() => setPhotoUrl(null)} style={{ border: 0, background: "transparent", color: "var(--subtle)", fontSize: "18px", cursor: "pointer", padding: "4px" }}>×</button>
-                </div>
-              ) : (
-                <label style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", padding: "14px", borderRadius: "10px", background: "var(--paper)", border: "1px dashed var(--line)", cursor: "pointer", fontSize: "13px", color: "var(--purple)", fontWeight: 600 }}>
-                  <span>📷</span>
-                  <span>{t(language, "點擊拍照或上傳照片試用", "Tap to take or choose photo")}</span>
-                  <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{ display: "none" }} />
-                </label>
-              )}
-            </div>
-          </>
-        )}
-
         <div className="field-label">
           <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
-            {t(language, "1. 選擇發文語氣風格", "1. Select Vibe Tone")}
+            {t(language, "1. 選擇發文風格語氣", "1. Select Vibe Tone")}
           </strong>
         </div>
 
@@ -1173,7 +1202,7 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
 
         <div className="field-label">
           <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
-            {t(language, "2. 輸入想法 / 隨手紀錄", "2. Type your brief note")}
+            {t(language, "2. 輸入貼文想法 / 產品素材", "2. Type your post idea")}
           </strong>
           <span>{idea.length} {t(language, "字", "chars")}</span>
         </div>
@@ -1181,14 +1210,14 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
         <textarea
           value={idea}
           onChange={(e) => setIdea(e.target.value)}
-          placeholder={t(language, "例如：今天去了哪裡、看到了什麼、或是想聊聊的心情…", "e.g. Where you went today, what you saw, or a thought you want to share…")}
-          rows={3}
+          placeholder={t(language, "例如：極簡涼感風扇開箱、大安區古宅咖啡廳探店、或是想聊聊的心情...", "e.g. Minimalist cooling fan unboxing, vintage cafe log, or a thought to share...")}
+          rows={4}
           style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", lineHeight: 1.5, resize: "vertical", outline: "none", marginBottom: "12px" }}
         />
 
-        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "14px" }}>
+        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "16px" }}>
           <span style={{ fontSize: "11px", color: "var(--muted)", width: "100%", fontWeight: 650 }}>
-            {t(language, "💡 點選快速範例試用：", "💡 Try a sample idea:")}
+            {t(language, "💡 點選範例快速試用：", "💡 Try a sample idea:")}
           </span>
           {presets.map((p) => (
             <button
@@ -1201,8 +1230,18 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
           ))}
         </div>
 
+        {errorMessage && (
+          <div style={{ padding: "10px 12px", borderRadius: "8px", background: "rgba(220, 53, 69, 0.1)", border: "1px solid rgba(220, 53, 69, 0.3)", color: "#dc3545", fontSize: "12px", marginBottom: "14px" }}>
+            {errorMessage}
+          </div>
+        )}
+
         <button className="primary-button wide" onClick={generatePost} disabled={isGenerating}>
-          {isGenerating ? t(language, "✨ AI 思考生成中…", "✨ AI Thinking…") : t(language, "🪄 一鍵生成 AI 社群貼文", "🪄 Generate AI Social Post")}
+          {isGenerating
+            ? t(language, "✨ OpenRouter AI 生成中…", "✨ AI Generating…")
+            : apiKey
+            ? t(language, "🚀 OpenRouter AI 生成貼文", "🚀 Generate with OpenRouter AI")
+            : t(language, "🪄 一鍵生成 AI 社群貼文", "🪄 Generate AI Social Post")}
         </button>
       </div>
 
@@ -1211,7 +1250,7 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
         <div className="input-card">
           <div className="field-label">
             <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
-              {t(language, "✨ AI 美學貼文產出 (即可複製或貼至社群排版)", "✨ Generated Aesthetic Post")}
+              {t(language, "✨ AI 社群貼文產出 (即可複製貼至 IG / Threads)", "✨ Generated Social Post")}
             </strong>
             <span>{output.length} {t(language, "字", "chars")}</span>
           </div>
