@@ -1621,65 +1621,90 @@ ${fetchedText}`
     }
   };
 
+  // Helper to clean UI emojis from prompt text
+  const cleanText = (str: string) => str.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{2B50}]|[\u{2934}-\u{2935}]|[\u{25AA}-\u{25FE}]|[\u{1F100}-\u{1F1FF}]|[\u{E000}-\u{F8FF}]/gu, "").trim();
+
   // Generate Prompt text per model
   const prompts = useMemo(() => {
     const offerStr = offers.length ? offers.join(", ") : "Special Offer";
     const featStr = features.length ? features.join(", ") : "High Specs";
     const modStr = modifier ? `, ${modifier}` : "";
-    const brandStr = brandName.trim() ? `, Brand/Store Logo: "${brandName.trim()}"` : "";
-    const priceDisplayStr = priceValue.trim() ? `, price tag displaying "${priceValue.trim()}"` : "";
+    const cleanFont = cleanText(font);
+    const cleanPos = cleanText(position);
+    const cleanPriceStyle = cleanText(priceStyle);
+    const cleanCta = cleanText(cta);
+    const cleanEnv = cleanText(env);
+    const cleanLight = cleanText(light);
+    const cleanLogoPos = cleanText(logoPos);
+    const cleanDensity = cleanText(density);
+    const cleanColor = cleanText(colorObj.title);
+    const cleanBg = cleanText(bgObj.title);
+    const cleanLayout = cleanText(layoutObj.title);
 
-    const mj = `Commercial advertising poster for ${currentCat.title} (${product})${brandName.trim() ? ` by ${brandName.trim()}` : ""}, ${styleObj.spec}, ${colorObj.spec}, ${bgObj.spec}, ${layoutObj.spec}, product placed at ${position}, featuring price tag styled as ${priceStyle}${priceDisplayStr}, promotional badges: [${offerStr}], key features: [${featStr}], call-to-action button saying "${cta}", ${env}, ${light}${brandStr} at ${logoPos}, visual density: ${density}${modStr} --ar ${aspectRatio} --v 6.0 --style raw`;
+    const mj = `Commercial advertising poster for ${currentCat.title} ("${product}")${brandName.trim() ? ` by ${brandName.trim()}` : ""}, ${styleObj.spec}, ${colorObj.spec}, ${bgObj.spec}, ${layoutObj.spec}, typography font style: ${cleanFont}, hero product placed at ${cleanPos}, featuring price tag styled as ${cleanPriceStyle}${priceValue.trim() ? ` displaying price "${priceValue.trim()}"` : ""}, promotional badges: [${offerStr}], key features: [${featStr}], call-to-action button saying "${cleanCta}", ambient setting: ${cleanEnv}, lighting: ${cleanLight}${brandName.trim() ? `, Brand Logo "${brandName.trim()}"` : ""} placed at ${cleanLogoPos}, visual density: ${cleanDensity}${modStr} --ar ${aspectRatio} --v 6.0 --style raw`;
 
-    const chatgpt = `Create a professional commercial advertising poster for ${currentCat.title} showcasing "${product}".
-- Target Specs: ${platform}
+    const chatgpt = `Create a professional commercial advertising poster for ${currentCat.title} featuring "${product}".
+- Target Platform & Aspect Ratio: ${platform} (--ar ${aspectRatio})
 ${brandName.trim() ? `- Brand / Store Name: "${brandName.trim()}"` : ""}
-- Visual Style: ${styleObj.title} (${styleObj.spec})
-- Color Palette & Lighting: ${colorObj.title}, ${light}
-- Background & Setting: ${bgObj.title}, set in ${env}
-- Layout & Composition: ${layoutObj.title}, hero product placed at ${position}
-- Marketing Badges: Promotional offers (${offerStr}), Product Features (${featStr})
-- Price Display: Styled as ${priceStyle} ${priceValue.trim() ? `showing exact price "${priceValue.trim()}"` : ""}
-- Call-to-action: Prominent CTA button with text "${cta}"
-- Logo Placement: ${logoPos} ${brandName.trim() ? `("${brandName.trim()}")` : ""}
-- Density & Feel: ${density}${modStr}
+${priceValue.trim() ? `- Display Price Amount: "${priceValue.trim()}"` : ""}
+- Visual Style & Mood: ${styleObj.title} (${styleObj.spec})
+- Color Palette & Lighting: ${cleanColor} (${colorObj.spec}), ${cleanLight}
+- Background & Setting: ${cleanBg} (${bgObj.spec}) set in ${cleanEnv}
+- Layout & Composition: ${cleanLayout} (${layoutObj.spec}), subject placed at ${cleanPos}
+- Typography & Font Style: ${cleanFont}
+- Price Badge Design: ${cleanPriceStyle} ${priceValue.trim() ? `showing text "${priceValue.trim()}"` : ""}
+- Marketing Callouts: Offers (${offerStr}), Key Features (${featStr})
+- Call-To-Action (CTA): Prominent button labeled "${cleanCta}"
+- Brand Logo Anchor: ${cleanLogoPos} ${brandName.trim() ? `(Logo: "${brandName.trim()}")` : ""}
+- Information Density & Feel: ${cleanDensity}${modStr}
 High commercial quality, 8k resolution, photorealistic studio render.`;
 
-    const gemini = `【商業海報設計 Prompt - Gemini AI 版】
-■ 產品與平台：${currentCat.title}（${product}）${brandName.trim() ? `｜ 品牌名稱：${brandName.trim()}` : ""}｜ 發布規格：${platform}
-■ 視覺風格：${styleObj.title}
-■ 主色調與光影：${colorObj.title}，光影採 ${light}
-■ 背景與情境：${bgObj.title}，融入 ${env} 情境
-■ 排版構圖：${layoutObj.title}，商品擺放於 ${position}
-■ 價格標籤與金額：金額顯示【${priceValue.trim() || "限定優惠價"}】（樣式：${priceStyle}）
-■ 促銷與賣點標章：優惠【${offerStr}】、賣點【${featStr}】
-■ 行動呼籲 (CTA)：強效按鈕「${cta}」
-■ 品牌 Logo 與密度：品牌 Logo【${brandName.trim() || "官方Logo"}】置於 ${logoPos}，海報密度採 ${density}${modStr}`;
+    const gemini = `【商業海報設計 Prompt - Gemini AI 完整專業版】
+■ 專案與品項：${brandName.trim() ? `【${brandName.trim()}】` : ""}${currentCat.title}（${product}）
+■ 標示售價與金額：${priceValue.trim() ? `【${priceValue.trim()}】` : "未特別限定（以促銷標籤為主）"}
+■ 發布平台與尺寸：${platform}（比例：${aspectRatio}）
+■ 視覺風格定義：${styleObj.title}（${styleObj.spec}）
+■ 色調與打光攝影：${cleanColor}（${colorObj.spec}），採 ${cleanLight} 商業棚拍打光
+■ 背景與氛圍情境：${cleanBg}（${bgObj.spec}），融入 ${cleanEnv} 商業情境
+■ 排版構圖與視角：${cleanLayout}（${layoutObj.spec}），主商品放置於 ${cleanPos}
+■ 字體視覺風格：${cleanFont}
+■ 價格標籤設計：${cleanPriceStyle} ${priceValue.trim() ? `（標示金額：${priceValue.trim()}）` : ""}
+■ 促銷與賣點標章：優惠標籤【${offerStr}】｜ 產品賣點【${featStr}】
+■ 行動呼籲按鈕 (CTA)：「${cleanCta}」
+■ 品牌 Logo 與佈局：品牌 Logo ${brandName.trim() ? `「${brandName.trim()}」` : ""}置於 ${cleanLogoPos}
+■ 視覺密度與修飾：海報密度採 ${cleanDensity}${modStr ? `，修飾風格：${modStr}` : ""}`;
 
-    const claude = `Art Director Brief for Commercial Poster Design:
+    const claude = `Art Director Master Brief for Commercial Poster Design:
 
-Project: ${currentCat.title} - ${product} ${brandName.trim() ? `[Brand: ${brandName.trim()}]` : ""}
-Target Specs: ${platform}
+1. Project & Brand Details:
+   - Industry Category: ${currentCat.title}
+   - Hero Subject / Product: "${product}"
+   ${brandName.trim() ? `- Brand Identity: "${brandName.trim()}"` : ""}
+   ${priceValue.trim() ? `- Display Price: "${priceValue.trim()}"` : ""}
+   - Target Platform Specs: ${platform} (--ar ${aspectRatio})
 
-1. Visual Identity & Mood:
+2. Art Direction & Visual Identity:
    - Style Direction: ${styleObj.title} (${styleObj.spec})
-   - Color Scheme: ${colorObj.spec}
-   - Lighting & Ambience: ${light} within ${env}
+   - Color Scheme: ${cleanColor} (${colorObj.spec})
+   - Background Atmosphere: ${cleanBg} (${bgObj.spec})
+   - Environment Context: ${cleanEnv}
+   - Lighting Setup: ${cleanLight}
 
-2. Art Direction & Framing:
-   - Composition Focus: ${layoutObj.title}
-   - Subject Placement: ${position}
-   - Logo Anchor: ${logoPos} ${brandName.trim() ? `(Brand Logo: "${brandName.trim()}")` : ""}
+3. Composition & Layout:
+   - Focal Layout: ${cleanLayout} (${layoutObj.spec})
+   - Subject Position: ${cleanPos}
+   - Typography & Font Style: ${cleanFont}
+   - Brand Logo Anchor: ${cleanLogoPos} ${brandName.trim() ? `("${brandName.trim()}")` : ""}
 
-3. Marketing Highlights:
-   - Price Styling: ${priceStyle} ${priceValue.trim() ? `(Display Amount: "${priceValue.trim()}")` : ""}
-   - Offer Badges: ${offerStr}
-   - Product Feature Callouts: ${featStr}
-   - Primary CTA: "${cta}"
-   - Overall Visual Density: ${density}${modStr}`;
+4. Marketing Highlights:
+   - Price Badge Styling: ${cleanPriceStyle} ${priceValue.trim() ? `(Amount: "${priceValue.trim()}")` : ""}
+   - Offer Badges: [${offerStr}]
+   - Feature Highlights: [${featStr}]
+   - Primary Call-To-Action: "${cleanCta}"
+   - Visual Density Level: ${cleanDensity}${modStr}`;
 
     return { midjourney: mj, chatgpt, gemini, claude };
-  }, [selectedCatId, product, brandName, priceValue, platform, styleObj, colorObj, bgObj, layoutObj, position, priceStyle, offers, features, cta, env, light, logoPos, density, modifier, aspectRatio]);
+  }, [selectedCatId, product, brandName, priceValue, platform, styleObj, colorObj, bgObj, layoutObj, font, position, priceStyle, offers, features, cta, env, light, logoPos, density, modifier, aspectRatio]);
 
   const currentPromptText = prompts[activeModel];
 
