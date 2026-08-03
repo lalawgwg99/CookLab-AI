@@ -943,25 +943,40 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
 
   const [selectedTone, setSelectedTone] = useState("cozy");
   const [idea, setIdea] = useState("今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書");
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [photoTag, setPhotoTag] = useState("探店咖啡 ☕️");
   const [output, setOutput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
 
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setPhotoUrl(event.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const generatePost = () => {
-    if (!idea.trim()) return;
+    if (!idea.trim() && !photoUrl) return;
     setIsGenerating(true);
     setTimeout(() => {
       let result = "";
-      const text = idea.trim();
+      const text = idea.trim() || "紀錄這份當下的美好。";
+      const photoHeader = photoUrl ? `📷 [照片主題：${photoTag}]\n` : "";
+
       if (selectedTone === "cozy") {
-        result = `☁️  Slow living & daily notes\n\n${text}\n\n喜歡這種不急不躁的節奏，把日常的微光收進日子裡。✨\n\n─── ⋆⋅☆⋅⋆ ───\n#日常碎片 #生活美學 #咖啡日誌 #Threads日常`;
+        result = `${photoHeader}☁️  Slow living & daily notes\n\n${text}\n\n喜歡這種不急不躁的節奏，把日常的微光收進鏡頭裡。✨\n\n─── ⋆⋅☆⋅⋆ ───\n#日常碎片 #生活美學 #相機先食 #Threads日常`;
       } else if (selectedTone === "threads") {
-        result = `『 關於最近的一個小思考 』\n\n${text}\n\n💬 大家的想法也是這樣嗎？歡迎留言一起討論 👇🏼\n\n#Threads創作者 #思考紀錄 #觀點分享 #個人成長`;
+        result = `${photoHeader}『 關於這張照片的一點想法 』\n\n${text}\n\n💬 大家的看法呢？歡迎留言分享你的視角 👇🏼\n\n#Threads創作者 #照片故事 #觀點分享 #生活視角`;
       } else if (selectedTone === "redbook") {
-        result = `✦ 氛圍感生活提案 ✦\n\n${text}\n\n▪ 質感細節：滿分 💯\n▪ 推薦指數：★★★★★\n\n‧̍̊·̊⌖ 收藏這份美好提案 ‧̍̊·̊⌖\n#小紅書文案 #氛圍感 #質感生活 #靈感集`;
+        result = `${photoHeader}✦ 氛圍感生活提案 ✦\n\n${text}\n\n▪ 視覺氛圍：滿分 💯\n▪ 出片指數：★★★★★\n\n‧̍̊·̊⌖ 畫面收錄完成 ‧̍̊·̊⌖\n#小紅書文案 #氛圍感 #質感生活 #原圖直出`;
       } else if (selectedTone === "pro") {
-        result = `💡 職人筆記｜Insight & Growth\n\n${text}\n\n01 / 保持專注\n02 / 覆盤與修正\n\n希望這段體驗對你也有幫助 ✦\n\n#職人觀點 #設計思考 #工作心得 #經驗分享`;
+        result = `${photoHeader}💡 視覺紀錄｜Insight & Aesthetic\n\n${text}\n\n01 / 光影細節\n02 / 畫面構圖\n\n希望這張照片與文字也能給你一點靈感 ✦\n\n#職人觀點 #設計美學 #生活紀錄 #靈感捕捉`;
       } else {
-        result = `🫠 今日社畜心理狀態\n\n${text}\n\n禮貌微笑，平安下班。🏃‍♂️💨💼🍻\n\n#社畜日常 #優雅崩潰 #週五救星 #日常開心`;
+        result = `${photoHeader}🫠 圖文不符的社畜真相\n\n${text}\n\n照片看起來很悠閒，其實剛改完第 5 版草稿。🏃‍♂️💨💼🍻\n\n#社畜日常 #圖文不符 #優雅崩潰 #週五救星`;
       }
       setOutput(result);
       setIsGenerating(false);
@@ -970,14 +985,52 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
 
   useEffect(() => {
     generatePost();
-  }, [selectedTone]);
+  }, [selectedTone, photoUrl, photoTag]);
 
   return (
     <>
       <ToolIntro tool={tools.find((t) => t.id === "ai")!} language={language} />
 
-      {/* 靈感輸入卡片 */}
+      {/* 靈感與照片輸入卡片 */}
       <div className="input-card" style={{ marginBottom: "20px" }}>
+        {/* 照片上傳 / 拍照靈感區 */}
+        <div className="field-label" style={{ marginBottom: "8px" }}>
+          <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
+            {t(language, "📷 上傳 / 拍照照片靈感（可選）", "📷 Upload / Take Photo (Optional)")}
+          </strong>
+        </div>
+
+        <div style={{ padding: "14px", borderRadius: "12px", background: "var(--canvas)", border: "1px solid var(--line)", marginBottom: "16px" }}>
+          {photoUrl ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+              <img src={photoUrl} alt="Photo preview" style={{ width: "72px", height: "72px", borderRadius: "10px", objectFit: "cover", border: "1px solid var(--line)" }} />
+              <div style={{ flex: 1 }}>
+                <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "4px" }}>
+                  {t(language, "照片主題標籤：", "Photo theme tag:")}
+                </span>
+                <select
+                  value={photoTag}
+                  onChange={(e) => setPhotoTag(e.target.value)}
+                  style={{ padding: "6px 10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", fontSize: "12px", width: "100%" }}
+                >
+                  <option value="探店咖啡 ☕️">探店咖啡 ☕️</option>
+                  <option value="旅遊風景 🌊">旅遊風景 🌊</option>
+                  <option value="穿搭 OOTD 👗">穿搭 OOTD 👗</option>
+                  <option value="美食記錄 🍜">美食記錄 🍜</option>
+                  <option value="萌寵日常 🐾">萌寵日常 🐾</option>
+                </select>
+              </div>
+              <button onClick={() => setPhotoUrl(null)} style={{ border: 0, background: "transparent", color: "var(--subtle)", fontSize: "18px", cursor: "pointer", padding: "4px" }}>×</button>
+            </div>
+          ) : (
+            <label style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", padding: "14px", borderRadius: "10px", background: "var(--paper)", border: "1px dashed var(--line)", cursor: "pointer", fontSize: "13px", color: "var(--purple)", fontWeight: 600 }}>
+              <span>📷</span>
+              <span>{t(language, "點擊拍照或上傳照片試用", "Tap to take or choose photo")}</span>
+              <input type="file" accept="image/*" capture="environment" onChange={handlePhotoUpload} style={{ display: "none" }} />
+            </label>
+          )}
+        </div>
+
         <div className="field-label">
           <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
             {t(language, "1. 選擇發文語氣風格", "1. Select Vibe Tone")}
@@ -1007,7 +1060,7 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
 
         <div className="field-label">
           <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
-            {t(language, "2. 輸入想法或隨手紀錄", "2. Type your idea or draft")}
+            {t(language, "2. 輸入簡單說明 / 想法紀錄", "2. Type your brief note")}
           </strong>
           <span>{idea.length} {t(language, "字", "chars")}</span>
         </div>
@@ -1036,7 +1089,7 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
         </div>
 
         <button className="primary-button wide" onClick={generatePost} disabled={isGenerating}>
-          {isGenerating ? t(language, "✨ AI 思考生成中…", "✨ AI Thinking…") : t(language, "🪄 一鍵生成 AI 社群貼文", "🪄 Generate AI Social Post")}
+          {isGenerating ? t(language, "✨ AI 分析照片與文字中…", "✨ AI Analyzing Photo & Text…") : t(language, "🪄 一鍵生成 AI 社群圖文貼文", "🪄 Generate Photo Social Post")}
         </button>
       </div>
 
