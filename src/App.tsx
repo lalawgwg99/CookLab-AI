@@ -297,9 +297,23 @@ function BlankTool({ copied, setCopied, language }: { copied: string; setCopied:
 
 function EmptyState({ text }: { text: string }) { return <div className="empty-state"><span>⌕</span><p>{text}</p></div>; }
 
+function GuideModal({ language, onClose, onSelectTool }: { language: Language; onClose: () => void; onSelectTool: (id: ToolId) => void }) {
+  return <div className="guide-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+    <section className="guide-modal" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+      <button className="guide-close" onClick={onClose} aria-label={t(language, "關閉使用指南", "Close guide")}>×</button>
+      <div className="guide-hero"><span className="tool-icon lilac">?</span><div><span className="section-kicker">QUICK START</span><h2 id="guide-title">{t(language, "第一次使用？30 秒快速上手", "New here? Get started in 30 seconds")}</h2><p>{t(language, "所有工具都不需登入，選擇、編輯、複製三步就能完成。", "No sign-up required. Choose a tool, edit your content, then copy the result.")}</p></div></div>
+      <div className="guide-steps"><article><span>1</span><div><strong>{t(language, "選擇工具", "Choose a tool")}</strong><p>{t(language, "從符號、Emoji、排版或其他工具開始。", "Start with symbols, emoji, formatting or any other tool.")}</p></div></article><article><span>2</span><div><strong>{t(language, "搜尋或輸入", "Search or type")}</strong><p>{t(language, "輸入關鍵字，或直接修改範本文字。", "Enter a keyword or edit one of the ready-made templates.")}</p></div></article><article><span>3</span><div><strong>{t(language, "一鍵複製", "Copy in one click")}</strong><p>{t(language, "看到完成提示後，到 IG、Threads 或其他平台貼上。", "When you see the confirmation, paste into Instagram, Threads or anywhere else.")}</p></div></article></div>
+      <div className="guide-section-title"><div><span className="section-kicker">TOOLS</span><h3>{t(language, "你想做什麼？", "What would you like to do?")}</h3></div><span>{t(language, "點選後直接開啟", "Opens instantly")}</span></div>
+      <div className="guide-tools">{tools.map((tool) => <button key={tool.id} onClick={() => onSelectTool(tool.id)}><span className={`tool-icon ${tool.tone}`}>{tool.icon}</span><span><strong>{t(language, tool.name, tool.nameEn)}</strong><small>{t(language, tool.short, tool.shortEn)}</small></span><i>→</i></button>)}</div>
+      <div className="guide-bottom"><div className="guide-privacy"><span>✦</span><div><strong>{t(language, "內容只留在你的裝置", "Your content stays on your device")}</strong><p>{t(language, "文字轉換都在瀏覽器完成，不會上傳或儲存。只有最近使用與收藏會保存在目前瀏覽器。", "Text is processed locally and never uploaded. Only recents and favorites are stored in this browser.")}</p></div></div><div className="guide-faq"><strong>{t(language, "常見問題", "Quick answers")}</strong><p><span>{t(language, "複製後沒反應？", "Copy not working?")}</span>{t(language, "確認瀏覽器已允許剪貼簿權限，或改用其他瀏覽器。", "Allow clipboard access or try another browser.")}</p><p><span>{t(language, "哪些平台能用？", "Where can I use it?")}</span>{t(language, "大多數支援 Unicode 的社群、文件與遊戲都能使用。", "Most social apps, documents and games that support Unicode.")}</p></div></div>
+    </section>
+  </div>;
+}
+
 export default function App() {
   const [active, setActive] = useState<ToolId>(() => (window.location.hash.replace("#", "").split("/")[0] as ToolId) || "symbols");
   const [copied, setCopied] = useState("");
+  const [guideOpen, setGuideOpen] = useState(false);
   const [language, setLanguage] = useState<Language>(() => {
     const requested = new URLSearchParams(window.location.search).get("lang");
     if (requested === "en") return "en";
@@ -327,9 +341,16 @@ export default function App() {
       document.querySelector('meta[name="description"]')?.setAttribute("content", t(language, `${current.name}線上工具：${current.short}，免費使用、不需登入，所有處理都在瀏覽器完成。`, `${current.nameEn}: ${current.shortEn}. Free, no sign-up, and everything runs in your browser.`));
     }
   }, [current, language]);
+  useEffect(() => {
+    if (!guideOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setGuideOpen(false); };
+    document.addEventListener("keydown", closeOnEscape);
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", closeOnEscape); document.body.style.overflow = ""; };
+  }, [guideOpen]);
   const toolProps = { copied, setCopied, language };
   return <div className="app-shell">
-    <header className="topbar"><a className="brand" href="#symbols" onClick={() => selectTool("symbols")}><span className="brand-mark">字</span><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button onClick={() => selectTool("symbols")}>{t(language, "所有工具", "All tools")}</button><a href="#about">{t(language, "關於", "About")}</a><span className="free-pill">{t(language, "完全免費", "100% free")}</span><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
+    <header className="topbar"><a className="brand" href="#symbols" onClick={() => selectTool("symbols")}><span className="brand-mark">字</span><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button onClick={() => selectTool("symbols")}>{t(language, "特殊符號", "Symbols")}</button><button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><span className="free-pill">{t(language, "完全免費", "100% free")}</span><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
     <div className="layout">
       <aside className="sidebar"><p className="sidebar-label">{t(language, "文字工具箱", "TEXT TOOLBOX")}</p><div className="tool-nav">{tools.map((tool) => <button key={tool.id} className={active === tool.id ? "active" : ""} onClick={() => selectTool(tool.id)}><span className={`tool-icon ${tool.tone}`}>{tool.icon}</span><span><strong>{t(language, tool.name, tool.nameEn)}</strong><small>{t(language, tool.short, tool.shortEn)}</small></span>{tool.badge && <em>{t(language, tool.badge, "HOT")}</em>}</button>)}</div><div className="sidebar-note"><span>✦</span><p><strong>{t(language, "你的文字，只留在這裡", "Your text stays here")}</strong><br />{t(language, "所有轉換都在瀏覽器完成，我們不會儲存內容。", "Everything runs in your browser. We never store your content.")}</p></div></aside>
       <main className="workspace"><div className="mobile-tool-picker"><span>{t(language, "目前工具", "CURRENT TOOL")}</span><select value={active} onChange={(e) => selectTool(e.target.value as ToolId)}>{tools.map((tool) => <option value={tool.id} key={tool.id}>{t(language, tool.name, tool.nameEn)}｜{t(language, tool.short, tool.shortEn)}</option>)}</select></div>
@@ -342,9 +363,10 @@ export default function App() {
           {active === "nickname" && <NicknameTool {...toolProps} />}
           {active === "blank" && <BlankTool {...toolProps} />}
         </div>
-        <footer id="about"><span>{t(language, "字研所", "TEXTLAB")} TEXT LAB</span><p>{t(language, "讓每一段文字，都剛剛好。", "Make every word feel just right.")}</p><small>© 2026 · Made for everyday expression</small></footer>
+        <footer><span>{t(language, "字研所", "TEXTLAB")} TEXT LAB</span><p>{t(language, "讓每一段文字，都剛剛好。", "Make every word feel just right.")}</p><small>© 2026 · Made for everyday expression</small></footer>
       </main>
     </div>
+    {guideOpen && <GuideModal language={language} onClose={() => setGuideOpen(false)} onSelectTool={(id) => { selectTool(id); setGuideOpen(false); }} />}
     {!!copied && <div className="toast" role="status"><span>✓</span> {t(language, "已複製到剪貼簿", "Copied to clipboard")}</div>}
   </div>;
 }
