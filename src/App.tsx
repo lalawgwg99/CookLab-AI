@@ -921,7 +921,7 @@ function HashtagTool({ copied, setCopied, language }: { copied: string; setCopie
   );
 }
 
-function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+function AIPostTool({ copied, setCopied, language, selectTool }: { copied: string; setCopied: (v: string) => void; language: Language; selectTool?: (id: ToolId) => void }) {
   const tones = [
     {
       id: "auto",
@@ -994,6 +994,70 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
   const [selectedTone, setSelectedTone] = useState("auto");
   const [idea, setIdea] = useState("今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書");
   const [output, setOutput] = useState("");
+  const [isTransferring, setIsTransferring] = useState(false);
+
+  const handleTransferToPoster = async () => {
+    if (!output.trim() || isTransferring) return;
+    setIsTransferring(true);
+
+    try {
+      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${BUILTIN_KEY}`,
+          "HTTP-Referer": window.location.origin,
+          "X-Title": "TextLab AI",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "nvidia/nemotron-3-ultra-550b-a55b:free",
+          messages: [
+            {
+              role: "system",
+              content: "你是一位頂級商業海報企劃總監。請分析以下這段社群文案，自動為其精準解析品牌、產品名稱、售價、優惠與賣點，並填寫海報企劃選單參數。\n\n請嚴格只回傳 JSON 格式（不要包含任何 Markdown 標記或文字）：\n{\n  \"catId\": \"3c\", // 判定適合的海報分類，必須是以下其中之一: \"3c\", \"food\", \"auto\", \"fashion\", \"people\", \"event\", \"biz\", \"general\"\n  \"brandName\": \"品牌名稱\", // 若文案中無品牌字眼則回傳空字串\n  \"product\": \"精準商品名稱\", // 必須提取出最核心的產品或服務主詞\n  \"priceValue\": \"NT$ 售價\", // 提取價格(若有)，例如 \"NT$ 1,580\" 或 \"特惠價 $99\"，若無則回傳空字串\n  \"cta\": \"🛒 立即下單搶購\", // 選擇或寫一個最契合的 CTA 號召\n  \"offers\": [\"優惠1\", \"優惠2\"], // 提取 1-3 個促銷優惠或折扣點\n  \"features\": [\"賣點1\", \"賣點2\"] // 提取 1-3 個產品特色或規格賣點\n}"
+            },
+            {
+              role: "user",
+              content: `社群文案內容：\n${output}`
+            }
+          ]
+        })
+      });
+
+      if (!res.ok) throw new Error("AI 解析異常");
+      const data = await res.json();
+      const contentRes = data.choices?.[0]?.message?.content || "";
+      const ticks = String.fromCharCode(96, 96, 96);
+      const cleaned = contentRes.split(ticks + "json").join("").split(ticks).join("").trim();
+      const parsed = JSON.parse(cleaned);
+
+      // Save to localStorage so PosterTool picks it up on mount
+      localStorage.setItem("textlab.transferredPosterState", JSON.stringify(parsed));
+      
+      // Navigate to poster tab
+      if (selectTool) {
+        selectTool("poster");
+      }
+    } catch (err) {
+      console.error("Transfer error:", err);
+      // Fallback
+      const fallbackState = {
+        catId: "general",
+        brandName: "",
+        product: idea.substring(0, 15),
+        priceValue: "",
+        cta: "🛒 立即搶購",
+        offers: ["熱銷推薦"],
+        features: ["質感呈現"]
+      };
+      localStorage.setItem("textlab.transferredPosterState", JSON.stringify(fallbackState));
+      if (selectTool) {
+        selectTool("poster");
+      }
+    } finally {
+      setIsTransferring(false);
+    }
+  };
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [lastRequestKey, setLastRequestKey] = useState("");
@@ -1255,6 +1319,34 @@ ${idea.trim()}`
           <button className="primary-button wide" onClick={() => copyText(output, setCopied)}>
             {copied === output ? t(language, "貼文已複製 ✓", "Post Copied ✓") : t(language, "一鍵複製完整貼文", "Copy Full Post")}
           </button>
+
+          <div style={{
+            marginTop: "16px",
+            padding: "14px",
+            borderRadius: "12px",
+            border: "1.5px solid var(--purple)",
+            background: "var(--paper)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            textAlign: "left"
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ fontSize: "18px" }}>🎨</span>
+              <strong style={{ fontSize: "13px", color: "var(--purple-dark)" }}>一鍵將此貼文設計為商業海報</strong>
+            </div>
+            <p style={{ fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.5 }}>
+              AI 將自動分析本篇貼文內容，提取品牌名稱、產品詞、價格與賣點，並自動切換填入海報企劃面板！
+            </p>
+            <button
+              onClick={handleTransferToPoster}
+              disabled={isTransferring}
+              className="primary-button wide"
+              style={{ background: "linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%)" }}
+            >
+              {isTransferring ? "✨ AI 正在解析貼文並企劃海報中..." : "🪄 一鍵分析貼文 ➔ 自動設計海報"}
+            </button>
+          </div>
         </div>
       )}
     </>
@@ -1321,6 +1413,26 @@ function PosterTool({ copied, setCopied, language }: { copied: string; setCopied
   const densities = ["☁️ 極簡極度留白", "📄 標準商業海報", "🛍️ 資訊豐富賣場風", "⚡ 爆款強壓 DM 風"];
 
   const [selectedCatId, setSelectedCatId] = useState("3c");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("textlab.transferredPosterState");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        localStorage.removeItem("textlab.transferredPosterState"); // clean up
+        
+        if (parsed.catId) setSelectedCatId(parsed.catId);
+        if (parsed.product) setProduct(parsed.product);
+        if (parsed.brandName) setBrandName(parsed.brandName);
+        if (parsed.priceValue) setPriceValue(parsed.priceValue);
+        if (parsed.cta) setCta(parsed.cta);
+        if (Array.isArray(parsed.offers) && parsed.offers.length) setOffers(parsed.offers);
+        if (Array.isArray(parsed.features) && parsed.features.length) setFeatures(parsed.features);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
   const currentCat = categories.find((c) => c.id === selectedCatId) || categories[0];
 
   const [platform, setPlatform] = useState(platforms[0]);
@@ -1938,9 +2050,22 @@ CTA 按鈕：${cta}
               <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
                 Step 1. 發布平台與尺寸
               </label>
-              <select value={platform} onChange={(e) => { const v = e.target.value; setPlatform(v); if (platformArMap[v]) setAspectRatio(platformArMap[v]); }} style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
-                {platforms.map((p) => <option key={p} value={p}>{p}</option>)}
-              </select>
+              <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                <select value={platform} onChange={(e) => { const v = e.target.value; setPlatform(v); if (platformArMap[v]) setAspectRatio(platformArMap[v]); }} style={{ flex: 1, padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
+                  {platforms.map((p) => <option key={p} value={p}>{p}</option>)}
+                </select>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "42px", height: "42px", border: "1px solid var(--line)", borderRadius: "8px", background: "var(--canvas)", flexShrink: 0 }} title={`目前比例: ${aspectRatio}`}>
+                  <div style={{
+                    width: aspectRatio === "16:9" ? "28px" : aspectRatio === "9:16" ? "12px" : aspectRatio === "4:5" ? "18px" : "20px",
+                    height: aspectRatio === "16:9" ? "16px" : aspectRatio === "9:16" ? "22px" : aspectRatio === "4:5" ? "22px" : "20px",
+                    border: "2px solid var(--purple)",
+                    borderRadius: "3px",
+                    background: "var(--purple-soft)",
+                    transition: "all 0.2s ease"
+                  }} />
+                  <span style={{ fontSize: "8px", color: "var(--purple)", marginTop: "2px", fontWeight: "bold" }}>{aspectRatio}</span>
+                </div>
+              </div>
             </div>
             <div>
               <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
@@ -1961,13 +2086,15 @@ CTA 按鈕：${cta}
             <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
               Step 2. 自訂商品 / 服務 / 主題名稱
             </label>
-            <input
-              type="text"
-              value={product}
-              onChange={(e) => setProduct(e.target.value)}
-              placeholder="可自由輸入任何商品或服務，例如：Dyson極靜風扇、抹茶提拉米蘇、特斯拉Model 3..."
-              style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--purple)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", outline: "none", marginBottom: "8px" }}
-            />
+            <div className={(isFetchingUrl || isAiPlanning) ? "loading-shimmer" : ""}>
+              <input
+                type="text"
+                value={product}
+                onChange={(e) => setProduct(e.target.value)}
+                placeholder="可自由輸入任何商品或服務，例如：Dyson極靜風扇、抹茶提拉米蘇、特斯拉Model 3..."
+                style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--purple)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", outline: "none", marginBottom: "8px" }}
+              />
+            </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", alignItems: "center" }}>
               <span style={{ fontSize: "11px", color: "var(--muted)", fontWeight: 650 }}>💡 快速點選預設：</span>
               {currentCat.subProducts.map((sp) => (
@@ -1997,7 +2124,7 @@ CTA 按鈕：${cta}
           <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
             Step 3. 海報視覺風格
           </label>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }} className={(isFetchingUrl || isAiPlanning) ? "loading-shimmer" : ""}>
             {styles.map((s) => (
               <button
                 key={s.title}
@@ -2024,7 +2151,7 @@ CTA 按鈕：${cta}
           <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
             Step 4. 主色調視覺
           </label>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }} className={(isFetchingUrl || isAiPlanning) ? "loading-shimmer" : ""}>
             {colors.map((c) => (
               <button
                 key={c.title}
@@ -2050,7 +2177,7 @@ CTA 按鈕：${cta}
           <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
             Step 5. 背景視覺質感
           </label>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }} className={(isFetchingUrl || isAiPlanning) ? "loading-shimmer" : ""}>
             {bgs.map((b) => (
               <button
                 key={b.title}
@@ -2467,6 +2594,31 @@ CTA 按鈕：${cta}
             {isRating ? "✨ 評分中…" : "📊 Step 20. AI 診斷評分"}
           </button>
         </div>
+
+        {/* 💡 如何使用複製的 Prompt 3-step Midjourney tutorial */}
+        <div style={{
+          marginTop: "16px",
+          padding: "12px 14px",
+          borderRadius: "10px",
+          background: "var(--canvas)",
+          border: "1px solid var(--line)",
+          display: "flex",
+          gap: "10px",
+          alignItems: "flex-start",
+          textAlign: "left"
+        }}>
+          <span style={{ fontSize: "18px", marginTop: "2px" }}>💡</span>
+          <div>
+            <strong style={{ fontSize: "12px", color: "var(--purple-dark)", display: "block", marginBottom: "4px" }}>
+              如何使用複製的 Prompt 生成廣告海報？
+            </strong>
+            <ol style={{ margin: 0, paddingLeft: "16px", fontSize: "11px", color: "var(--muted)", lineHeight: 1.6 }}>
+              <li>點擊上方複製按鈕，複製您的專業廣告 {activeModel.toUpperCase()} Prompt。</li>
+              <li>開啟 <a href="https://discord.com/invite/midjourney" target="_blank" rel="noopener noreferrer" style={{ color: "var(--purple)", textDecoration: "underline", fontWeight: 600 }}>Midjourney Discord</a> (或 ChatGPT / Gemini 視窗)。</li>
+              <li>在輸入框中打上 <code>/imagine prompt</code> 後貼上您複製的字句，按下發送即可生成高質感宣傳海報！</li>
+            </ol>
+          </div>
+        </div>
       </div>
 
       {/* 📊 Step 20: AI 診斷評分結果面板 */}
@@ -2534,12 +2686,25 @@ CTA 按鈕：${cta}
               <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--ink)", display: "block", marginBottom: "4px" }}>
                 海報比例 (Aspect Ratio --ar):
               </label>
-              <select value={aspectRatio} onChange={(e) => setAspectRatio(e.target.value)} style={{ width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
-                <option value="1:1">1:1 正方形 (IG/FB)</option>
-                <option value="4:5">4:5 直式滿版 (IG Feed)</option>
-                <option value="9:16">9:16 直式限動 (Story/Reels)</option>
-                <option value="16:9">16:9 橫幅 Banner</option>
-              </select>
+              <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                <select value={aspectRatio} onChange={(e) => setAspectRatio(e.target.value)} style={{ flex: 1, padding: "8px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
+                  <option value="1:1">1:1 正方形 (IG/FB)</option>
+                  <option value="4:5">4:5 直式滿版 (IG Feed)</option>
+                  <option value="9:16">9:16 直式限動 (Story/Reels)</option>
+                  <option value="16:9">16:9 橫幅 Banner</option>
+                </select>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "42px", height: "42px", border: "1px solid var(--line)", borderRadius: "8px", background: "var(--canvas)", flexShrink: 0 }} title={`目前比例: ${aspectRatio}`}>
+                  <div style={{
+                    width: aspectRatio === "16:9" ? "28px" : aspectRatio === "9:16" ? "12px" : aspectRatio === "4:5" ? "18px" : "20px",
+                    height: aspectRatio === "16:9" ? "16px" : aspectRatio === "9:16" ? "22px" : aspectRatio === "4:5" ? "22px" : "20px",
+                    border: "2px solid var(--purple)",
+                    borderRadius: "3px",
+                    background: "var(--purple-soft)",
+                    transition: "all 0.2s ease"
+                  }} />
+                  <span style={{ fontSize: "8px", color: "var(--purple)", marginTop: "2px", fontWeight: "bold" }}>{aspectRatio}</span>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -2655,7 +2820,7 @@ export default function App() {
       <main className="workspace"><div className="mobile-tool-picker"><span>{t(language, "目前工具", "CURRENT TOOL")}</span><select value={active} onChange={(e) => selectTool(e.target.value as ToolId)}>{tools.map((tool) => <option value={tool.id} key={tool.id}>{t(language, tool.name, tool.nameEn)}｜{t(language, tool.short, tool.shortEn)}</option>)}</select></div>
         <div className="tool-surface">
           {active === "poster" && <PosterTool {...toolProps} />}
-          {active === "ai" && <AIPostTool {...toolProps} />}
+          {active === "ai" && <AIPostTool {...toolProps} selectTool={selectTool} />}
           {active === "symbols" && <SymbolsTool {...toolProps} />}
           {active === "emoji" && <EmojiTool {...toolProps} />}
           {active === "kaomoji" && <KaomojiTool {...toolProps} />}
