@@ -186,6 +186,31 @@ function SymbolsTool({ copied, setCopied, language }: { copied: string; setCopie
   const [recent, setRecent] = useState<string[]>(() => JSON.parse(localStorage.getItem("textlab.recentSymbols") || "[]"));
   const [favorites, setFavorites] = useState<string[]>(() => JSON.parse(localStorage.getItem("textlab.favoriteSymbols") || "[]"));
   const [selected, setSelected] = useState("");
+  
+  const [frameTitle, setFrameTitle] = useState("MY DAILY LOG");
+  const [framePattern, setFramePattern] = useState("sparkle");
+
+  const framePatterns = [
+    { id: "sparkle", name: "星閃雙邊", left: "✦ ─── ", right: " ─── ✦" },
+    { id: "heart", name: "愛心對稱", left: "♡ ┈┈ ", right: " ┈┈ ♡" },
+    { id: "bow", name: "日系蝴蝶結", left: "౨ৎ  ", right: "  ౨ৎ" },
+    { id: "star", name: "璀璨星光", left: "⋆⋅☆⋅⋆  ", right: "  ⋆⋅☆⋅⋆" },
+    { id: "quote", name: "角括號", left: "『 ", right: " 』" },
+    { id: "wave", name: "波浪紋", left: "〰︎ ", right: " 〰︎" }
+  ];
+
+  const aestheticLines = [
+    "─── ⋆⋅☆⋅⋆ ───",
+    "┊ ┊ ┊ ┊ ┊",
+    "──────────",
+    "‧̍̊·̊⌖˚.💬.˚⌖·̊̍̊‧",
+    "·˚ ༘♡",
+    "⊹ ִ ֗ ☁️"
+  ];
+
+  const selectedPattern = framePatterns.find(p => p.id === framePattern) || framePatterns[0];
+  const builtFrame = `${selectedPattern.left}${frameTitle}${selectedPattern.right}`;
+
   const groups = symbolGroups.map((group) => ({
     ...group,
     items: group.items.filter((item) => !query || item.includes(query) || group.name.includes(query) || group.keywords.toLowerCase().includes(query.trim().toLowerCase())),
@@ -222,6 +247,53 @@ function SymbolsTool({ copied, setCopied, language }: { copied: string; setCopie
 
   return <><ToolIntro tool={tools[0]} language={language} />
     <div className="symbol-summary"><div><strong>{totalSymbolCount}</strong><span>{t(language, "個精選符號", "curated symbols")}</span></div><div><strong>{symbolGroups.length}</strong><span>{t(language, "個實用分類", "useful categories")}</span></div><p>{t(language, "從愛心、箭頭到數學與語言符號，都能快速找到並直接複製。", "Find hearts, arrows, math, language symbols and more—then copy in one click.")}</p></div>
+    
+    {!query && category === "all" && (
+      <section className="input-card" style={{ marginBottom: "20px" }}>
+        <div className="field-label">
+          <strong style={{ fontSize: "14px", color: "var(--purple)" }}>{t(language, "✨ 符號標題對稱框 Studio", "✨ Symmetrical Symbol Frame Studio")}</strong>
+          <span>{t(language, "輸入文字，自動生成質感標題框", "Generate aesthetic symbol frames")}</span>
+        </div>
+        <input
+          value={frameTitle}
+          onChange={(e) => setFrameTitle(e.target.value)}
+          placeholder="Enter text..."
+          style={{ width: "100%", padding: "10px 14px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "14px", outline: "none", marginBottom: "10px" }}
+        />
+        <div style={{ display: "flex", gap: "6px", overflowX: "auto", paddingBottom: "6px" }}>
+          {framePatterns.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => setFramePattern(p.id)}
+              style={{ padding: "5px 10px", borderRadius: "8px", border: "1px solid var(--line)", background: framePattern === p.id ? "var(--purple)" : "var(--paper)", color: framePattern === p.id ? "#fff" : "var(--ink)", fontSize: "11px", cursor: "pointer", whiteSpace: "nowrap" }}
+            >
+              {p.name}
+            </button>
+          ))}
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "12px", padding: "12px 16px", borderRadius: "10px", background: "var(--canvas)", border: "1px dashed var(--line)" }}>
+          <strong style={{ fontSize: "15px", color: "var(--ink)" }}>{builtFrame}</strong>
+          <button className="primary-button" onClick={() => copyText(builtFrame, setCopied)}>
+            {copied === builtFrame ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製標題框", "Copy Frame")}
+          </button>
+        </div>
+
+        {/* Aesthetic Lines */}
+        <div style={{ marginTop: "14px", display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
+          <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--muted)" }}>{t(language, "質感劃線串：", "Aesthetic Lines:")}</span>
+          {aestheticLines.map((line) => (
+            <button
+              key={line}
+              onClick={() => copyText(line, setCopied)}
+              style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--purple)", borderRadius: "8px", padding: "3px 9px", fontSize: "11px", cursor: "pointer" }}
+            >
+              {line}
+            </button>
+          ))}
+        </div>
+      </section>
+    )}
+
     <SearchInput value={query} onChange={setQuery} placeholder={t(language, "搜尋符號，例如：愛心、星星、打勾、數學…", "Search symbols: heart, star, check, math…")} />
     <div className="symbol-category-nav" aria-label={t(language, "符號分類", "Symbol categories")}><button className={category === "all" && !query ? "active" : ""} onClick={() => setCategory("all")}>{t(language, "全部", "All")}</button>{symbolGroups.map((group) => <button className={category === group.id && !query ? "active" : ""} key={group.id} onClick={() => setCategory(group.id)}>{t(language, group.shortName, symbolEnglish[group.id].short)}<small>{group.items.length}</small></button>)}</div>
     <div className="helper-row"><span>{query ? t(language, `搜尋「${query}」`, `Search: “${query}”`) : activeGroup ? t(language, activeGroup.description, symbolEnglish[activeGroup.id].description) : t(language, "點一下複製，按愛心加入收藏", "Click to copy, or tap the heart to save")}</span><span>{resultCount} {t(language, "個結果", "results")}</span></div>
