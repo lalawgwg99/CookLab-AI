@@ -929,16 +929,18 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
   const tones = [
     { id: "cozy", name: "☁️ 文青質感", nameEn: "Cozy & Aesthetic", hint: "適合 IG 日常、咖啡探店、生活紀錄" },
     { id: "threads", name: "💬 Threads 觀點", nameEn: "Viral Threads Take", hint: "適合 Threads 爆款短評、思考討論" },
+    { id: "line", name: "📢 LINE 社群團購", nameEn: "LINE Deal Push", hint: "適合 LINE 群組社群推播、團購優惠" },
+    { id: "sales", name: "🛍️ 商品促銷導購", nameEn: "Sales & Promotion", hint: "適合 電商促銷、引爆購買慾望" },
     { id: "redbook", name: "✨ 小紅書種草", nameEn: "Redbook Lifestyle", hint: "適合 探店提案、質感好物推薦" },
     { id: "pro", name: "💡 職人專業", nameEn: "Professional", hint: "適合 設計師心得、工作經驗分享" },
     { id: "humor", name: "🫠 幽默社畜", nameEn: "Humorous Casual", hint: "適合 週五下班、生活吐嘈日記" }
   ];
 
   const presets = [
+    { title: "LINE 團購甜點優惠", idea: "這款隱藏版生乳捲超好吃！這次開團限量 50 組，社友團購價下殺 75 折" },
+    { title: "服飾限時促銷", idea: "韓國連線極簡風外套，現貨倒數 10 件，今天下單輸入優惠碼再折 100" },
     { title: "古宅咖啡廳探店", idea: "今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書" },
-    { title: "Threads 思考紀錄", idea: "最近發現把心態放慢之後，工作效率反而變高了，想聊聊這個體悟" },
-    { title: "週五下班心境", idea: "終於週五了！今天下班只想吃火鍋，順便把積累一整週的壓力釋放" },
-    { title: "好物提案推薦", idea: "推薦一款用了一個月的極簡護手霜，味道很療癒，包裝也非常好看" }
+    { title: "Threads 思考紀錄", idea: "最近發現把心態放慢之後，工作效率反而變高了，想聊聊這個體悟" }
   ];
 
   const [mode, setMode] = useState<"text" | "photo">("text");
@@ -972,6 +974,10 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
         result = `${photoHeader}☁️  Slow living & daily notes\n\n${text}\n\n喜歡這種不急不躁的節奏，把日常的微光收進日子裡。✨\n\n─── ⋆⋅☆⋅⋆ ───\n#日常碎片 #生活美學 #咖啡日誌 #Threads日常`;
       } else if (selectedTone === "threads") {
         result = `${photoHeader}『 關於最近的一個小思考 』\n\n${text}\n\n💬 大家的看法呢？歡迎留言分享你的視角 👇🏼\n\n#Threads創作者 #思考紀錄 #觀點分享 #生活視角`;
+      } else if (selectedTone === "line") {
+        result = `${photoHeader}🔥【LINE 社群限定｜社友獨享優惠】\n\n${text}\n\n📢 團購好康重點：\n▪ 限量庫存：搶完即止 ⚡️\n▪ 社群專屬價：輸入優惠碼即享折扣\n\n👇🏼 點擊下方連結立即下單預購：\nhttps://line.me/R/ti/p/@example\n\n💬 有任何問題，歡迎隨時在群裡發問！`;
+      } else if (selectedTone === "sales") {
+        result = `${photoHeader}🛒【爆款限定促銷｜限時下殺】\n\n${text}\n\n✨ 為什麼大家都在搶？\n▪ 必買理由 01：CP 值極高，口碑一致好評\n▪ 必買理由 02：限時特惠價，錯過不再有\n\n⏰ 現貨數量有限，搶完不補！\n👉🏼 點擊連結立即搶購：https://store.example.com\n\n#爆款推薦 #限時優惠 #必買好物 #搶購倒數`;
       } else if (selectedTone === "redbook") {
         result = `${photoHeader}✦ 氛圍感生活提案 ✦\n\n${text}\n\n▪ 視覺氛圍：滿分 💯\n▪ 出片指數：★★★★★\n\n‧̍̊·̊⌖ 收藏這份美好提案 ‧̍̊·̊⌖\n#小紅書文案 #氛圍感 #質感生活 #靈感集`;
       } else if (selectedTone === "pro") {
