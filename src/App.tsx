@@ -32,15 +32,15 @@ type Tool = {
 };
 
 const tools: Tool[] = [
-  { id: "symbols", name: "特殊符號", nameEn: "Symbols", short: "搜尋與一鍵複製", shortEn: "Search and copy", icon: "✦", tone: "coral", badge: "熱門" },
+  { id: "layout", name: "社群排版", nameEn: "Social Formatter", short: "IG／Threads 換行", shortEn: "Instagram / Threads spacing", icon: "¶", tone: "blue", badge: "熱門" },
+  { id: "bio", name: "個人檔案 Bio", nameEn: "Bio Studio", short: "IG / Threads 簡介佈置", shortEn: "Instagram & Threads Profile", icon: "📇", tone: "pink", badge: "NEW" },
+  { id: "hashtags", name: "熱門標籤", nameEn: "Hashtags", short: "Threads / IG 導流標籤", shortEn: "Trending Hashtag Bundles", icon: "#", tone: "mint", badge: "NEW" },
+  { id: "symbols", name: "特殊符號", nameEn: "Symbols", short: "搜尋與一鍵複製", shortEn: "Search and copy", icon: "✦", tone: "coral" },
   { id: "emoji", name: "Emoji", nameEn: "Emoji", short: "分類、搜尋、最近使用", shortEn: "Browse, search and recents", icon: "☺", tone: "yellow" },
   { id: "kaomoji", name: "顏文字", nameEn: "Kaomoji", short: "搜尋與收藏", shortEn: "Search and favorites", icon: "◡̈", tone: "lilac" },
   { id: "fonts", name: "特殊字體", nameEn: "Fancy Text", short: "Unicode 字體轉換", shortEn: "Unicode font converter", icon: "Aa", tone: "mint" },
-  { id: "layout", name: "社群排版", nameEn: "Social Formatter", short: "IG／Threads 換行", shortEn: "Instagram / Threads spacing", icon: "¶", tone: "blue" },
   { id: "nickname", name: "暱稱產生器", nameEn: "Nickname Generator", short: "快速找到你的風格", shortEn: "Find your online style", icon: "@", tone: "pink" },
   { id: "blank", name: "空白文字", nameEn: "Invisible Text", short: "產生與複製", shortEn: "Generate and copy", icon: "□", tone: "sand" },
-  { id: "bio", name: "個人檔案 Bio", nameEn: "Bio Studio", short: "IG / Threads 簡介佈置", shortEn: "Instagram & Threads Profile", icon: "📇", tone: "pink" },
-  { id: "hashtags", name: "熱門標籤", nameEn: "Hashtags", short: "Threads / IG 導流標籤", shortEn: "Trending Hashtag Bundles", icon: "#", tone: "mint", badge: "NEW" },
 ];
 
 const t = (language: Language, zh: string, en: string) => language === "zh-TW" ? zh : en;
@@ -249,7 +249,7 @@ function SymbolsTool({ copied, setCopied, language }: { copied: string; setCopie
     localStorage.setItem("textlab.favoriteSymbols", JSON.stringify(next));
   };
 
-  return <><ToolIntro tool={tools[0]} language={language} />
+  return <><ToolIntro tool={tools.find((t) => t.id === "symbols")!} language={language} />
     <div className="symbol-summary"><div><strong>{totalSymbolCount}</strong><span>{t(language, "個精選符號", "curated symbols")}</span></div><div><strong>{symbolGroups.length}</strong><span>{t(language, "個實用分類", "useful categories")}</span></div><p>{t(language, "從愛心、箭頭到數學與語言符號，都能快速找到並直接複製。", "Find hearts, arrows, math, language symbols and more—then copy in one click.")}</p></div>
     
     {!query && category === "all" && (
@@ -323,7 +323,7 @@ function EmojiTool({ copied, setCopied, language }: { copied: string; setCopied:
     return emoji.includes(query) || (emojiAliases[emoji] || "").toLowerCase().includes(normalizedQuery) || categoryNames.includes(normalizedQuery);
   }) : activeCategory.items;
   const choose = (emoji: string) => { copyText(emoji, setCopied); const next = [emoji, ...recent.filter((x) => x !== emoji)].slice(0, 12); setRecent(next); localStorage.setItem("textlab.recentEmoji", JSON.stringify(next)); };
-  return <><ToolIntro tool={tools[1]} language={language} /><div className="emoji-summary"><strong>{allEmoji.length}</strong><span>Emoji</span><i>·</i><strong>{emojiCategories.length}</strong><span>{t(language, "個分類", "categories")}</span></div><SearchInput value={query} onChange={setQuery} placeholder={t(language, "搜尋 Emoji，例如：感動、咖啡、台灣、完成…", "Search emoji: touched, coffee, Taiwan, done…")} />
+  return <><ToolIntro tool={tools.find((t) => t.id === "emoji")!} language={language} /><div className="emoji-summary"><strong>{allEmoji.length}</strong><span>Emoji</span><i>·</i><strong>{emojiCategories.length}</strong><span>{t(language, "個分類", "categories")}</span></div><SearchInput value={query} onChange={setQuery} placeholder={t(language, "搜尋 Emoji，例如：感動、咖啡、台灣、完成…", "Search emoji: touched, coffee, Taiwan, done…")} />
     {!!recent.length && !query && <section className="compact-section"><div className="section-title-row"><h2>{t(language, "最近使用", "Recently used")}</h2><button className="text-button" onClick={() => { setRecent([]); localStorage.removeItem("textlab.recentEmoji"); }}>{t(language, "清除", "Clear")}</button></div><div className="emoji-grid recent-grid">{recent.map((emoji) => <button key={emoji} onClick={() => choose(emoji)}>{emoji}</button>)}</div></section>}
     {!query && category === "popular" && (
       <section className="compact-section">
@@ -378,7 +378,7 @@ function KaomojiTool({ copied, setCopied, language }: { copied: string; setCopie
   const groups = kaomojiGroups.map((group) => ({ ...group, items: group.items.filter((item) => !query || item.includes(query) || group.name.includes(query) || group.keywords.includes(query)) })).filter((g) => g.items.length);
   const toggleFavorite = (item: string) => { const next = favorites.includes(item) ? favorites.filter((x) => x !== item) : [...favorites, item]; setFavorites(next); localStorage.setItem("textlab.kaomojiFavorites", JSON.stringify(next)); };
 
-  return <><ToolIntro tool={tools[2]} language={language} />
+  return <><ToolIntro tool={tools.find((t) => t.id === "kaomoji")!} language={language} />
 
     {!query && (
       <section className="input-card" style={{ marginBottom: "24px" }}>
@@ -449,7 +449,7 @@ function FontsTool({ copied, setCopied, language }: { copied: string; setCopied:
     return val;
   };
 
-  return <><ToolIntro tool={tools[3]} language={language} />
+  return <><ToolIntro tool={tools.find((t) => t.id === "fonts")!} language={language} />
     <div className="input-card">
       <div className="field-label"><label htmlFor="font-input">{t(language, "輸入英文或數字", "Enter English letters or numbers")}</label><span>{text.length}/80</span></div>
       <input id="font-input" className="large-input" maxLength={80} value={text} onChange={(e) => setText(e.target.value)} placeholder="Type something…" />
@@ -559,7 +559,7 @@ function LayoutTool({ copied, setCopied, language }: { copied: string; setCopied
     setText((prev) => (prev ? `${prev}\n\n${tag}` : tag));
   };
 
-  return <><ToolIntro tool={tools[4]} language={language} />
+  return <><ToolIntro tool={tools.find((t) => t.id === "layout")!} language={language} />
     <section className="layout-templates"><div className="section-title-row"><div><span className="section-kicker">START WITH A TEMPLATE</span><h2>{t(language, "選一個排版範本", "Choose a formatting template")}</h2></div><span>{t(language, "選擇後仍可自由修改", "You can edit it after selecting")}</span></div><div>{templates.map((template) => <button key={template.id} onClick={() => setText(t(language, template.text, template.textEn))}><span>{template.icon}</span><strong>{t(language, template.name, template.nameEn)}</strong></button>)}</div></section>
     
     <div className="layout-controls">
@@ -632,7 +632,7 @@ function NicknameTool({ copied, setCopied, language }: { copied: string; setCopi
     return Array.from({ length: 8 }, (_, i) => `${decor[i % 4]}${adjectives[(i + offset) % adjectives.length]}${i % 2 ? base : nouns[(i + offset) % nouns.length]}${decor[(i + 1) % 4]}`);
   }, [language, seed, style, round]);
   const styleNames: Record<string, string> = { 日系清新: "Japanese", 可愛甜系: "Cute", 極簡質感: "Minimal" };
-  return <><ToolIntro tool={tools[5]} language={language} /><div className="generator-card"><label>{t(language, "放入一個名字或關鍵字", "Enter a name or keyword")}<input value={seed} maxLength={12} onChange={(e) => setSeed(e.target.value)} placeholder={t(language, "例如：小安、咖啡、旅行", "e.g. Mia, coffee, travel")} /></label><label>{t(language, "想要的風格", "Choose a style")}<div className="category-tabs left-tabs">{["日系清新", "可愛甜系", "極簡質感"].map((name) => <button key={name} className={style === name ? "active" : ""} onClick={() => setStyle(name)}>{t(language, name, styleNames[name])}</button>)}</div></label><button className="primary-button" onClick={() => setRound((x) => x + 1)}>↻ {t(language, "再產生一組", "Generate more")}</button></div><div className="nickname-grid">{results.map((name) => <button key={name} onClick={() => copyText(name, setCopied)}><strong>{name}</strong><span>{copied === name ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製", "Copy")}</span></button>)}</div></>;
+  return <><ToolIntro tool={tools.find((t) => t.id === "nickname")!} language={language} /><div className="generator-card"><label>{t(language, "放入一個名字或關鍵字", "Enter a name or keyword")}<input value={seed} maxLength={12} onChange={(e) => setSeed(e.target.value)} placeholder={t(language, "例如：小安、咖啡、旅行", "e.g. Mia, coffee, travel")} /></label><label>{t(language, "想要的風格", "Choose a style")}<div className="category-tabs left-tabs">{["日系清新", "可愛甜系", "極簡質感"].map((name) => <button key={name} className={style === name ? "active" : ""} onClick={() => setStyle(name)}>{t(language, name, styleNames[name])}</button>)}</div></label><button className="primary-button" onClick={() => setRound((x) => x + 1)}>↻ {t(language, "再產生一組", "Generate more")}</button></div><div className="nickname-grid">{results.map((name) => <button key={name} onClick={() => copyText(name, setCopied)}><strong>{name}</strong><span>{copied === name ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製", "Copy")}</span></button>)}</div></>;
 }
 
 function BlankTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
@@ -646,7 +646,7 @@ function BlankTool({ copied, setCopied, language }: { copied: string; setCopied:
   const [testText, setTestText] = useState("");
   const selectedType = blankTypes.find((item) => item.id === type) || blankTypes[0];
   const blank = selectedType.value.repeat(count);
-  return <><ToolIntro tool={tools[6]} language={language} />
+  return <><ToolIntro tool={tools.find((t) => t.id === "blank")!} language={language} />
     <section className="blank-explainer"><span className="explainer-icon">?</span><div><h2>{t(language, "空白文字是什麼？", "What is invisible text?")}</h2><p>{t(language, "一般空格常被 IG、遊戲或聊天平台刪除；空白文字其實是「看不見的 Unicode 字元」，平台會把它當成真正的文字，所以可以建立空白名稱、空白行或隱形分隔。", "Platforms often remove regular spaces. Invisible text uses real Unicode characters that have no visible shape, so they can create blank names, empty lines or hidden separators.")}</p></div></section>
     <div className="blank-use-cases"><article><span>01</span><strong>{t(language, "IG 精選名稱", "Instagram highlight names")}</strong><p>{t(language, "讓精選動態只顯示封面，不顯示文字。", "Show only the cover without a visible label.")}</p></article><article><span>02</span><strong>{t(language, "遊戲空白暱稱", "Blank game names")}</strong><p>{t(language, "建立看起來沒有文字的名稱或加入隱形間距。", "Create a name that appears empty or add hidden spacing.")}</p></article><article><span>03</span><strong>{t(language, "社群空白行", "Blank lines in posts")}</strong><p>{t(language, "避免平台自動吃掉貼文中的段落空行。", "Keep paragraph spacing when platforms remove empty lines.")}</p></article></div>
     <div className="blank-workbench"><div className="blank-main"><div className="blank-type-list"><span className="field-title">1. {t(language, "選擇空白類型", "Choose a blank type")}</span>{blankTypes.map((item) => <button className={type === item.id ? "active" : ""} key={item.id} onClick={() => setType(item.id)}><span className="blank-swatch">{item.value}</span><span><strong>{t(language, item.name, item.nameEn)}</strong><small>{item.code} · {t(language, `適合 ${item.best}`, `Best for ${item.bestEn}`)}</small></span><i>{type === item.id ? "✓" : ""}</i></button>)}</div><div className="blank-count"><span className="field-title">2. {t(language, "選擇長度", "Choose a length")}</span><div className="blank-presets">{[1, 3, 5, 10].map((value) => <button className={count === value ? "active" : ""} key={value} onClick={() => setCount(value)}>{value} {t(language, "個", "chars")}</button>)}</div><div className="stepper"><button onClick={() => setCount(Math.max(1, count - 1))}>−</button><strong>{count}</strong><button onClick={() => setCount(Math.min(30, count + 1))}>＋</button></div></div><button className="primary-button wide" onClick={() => copyText(blank, setCopied)}>{copied === blank ? t(language, "空白文字已複製 ✓", "Invisible text copied ✓") : t(language, `複製 ${count} 個${selectedType.name}`, `Copy ${count} ${selectedType.nameEn}`)}</button></div>
@@ -700,7 +700,7 @@ function BioTool({ copied, setCopied, language }: { copied: string; setCopied: (
 
   return (
     <>
-      <ToolIntro tool={tools[7]} language={language} />
+      <ToolIntro tool={tools.find((t) => t.id === "bio")!} language={language} />
 
       <div className="input-card" style={{ marginBottom: "20px" }}>
         <div className="field-label">
@@ -832,7 +832,7 @@ function HashtagTool({ copied, setCopied, language }: { copied: string; setCopie
 
   return (
     <>
-      <ToolIntro tool={tools[8]} language={language} />
+      <ToolIntro tool={tools.find((t) => t.id === "hashtags")!} language={language} />
 
       {/* 自訂標籤產生器 */}
       <div className="input-card" style={{ marginBottom: "20px" }}>
