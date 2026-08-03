@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="#7666b6" />
+  <text x="64" y="84" text-anchor="middle" font-family="'Noto Sans TC', system-ui, sans-serif" font-weight="900" font-size="64" fill="#ffffff">字</text>
+  <path d="M 96 24 Q 96 32 104 32 Q 96 32 96 40 Q 96 32 88 32 Q 96 32 96 24 Z" fill="#ffd778" />
+</svg>
