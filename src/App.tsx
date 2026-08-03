@@ -1350,10 +1350,32 @@ function PosterTool({ copied, setCopied, language }: { copied: string; setCopied
   const [isRating, setIsRating] = useState(false);
   const [ratingErr, setRatingErr] = useState("");
 
+  // 自訂品牌的名稱與價格顯示
+  const [brandName, setBrandName] = useState("");
+  const [priceValue, setPriceValue] = useState("NT$ 1,580");
+  const [customOfferInput, setCustomOfferInput] = useState("");
+  const [customFeatureInput, setCustomFeatureInput] = useState("");
+
   // AI 智慧全自動企劃 State
   const [userIdea, setUserIdea] = useState("極簡靜音涼感風扇特惠下殺，限時享分期0利率與免運優惠");
   const [isAiPlanning, setIsAiPlanning] = useState(false);
   const [aiPlanErr, setAiPlanErr] = useState("");
+
+  const addCustomOffer = () => {
+    if (!customOfferInput.trim()) return;
+    if (!offers.includes(customOfferInput.trim())) {
+      setOffers([...offers, customOfferInput.trim()]);
+    }
+    setCustomOfferInput("");
+  };
+
+  const addCustomFeature = () => {
+    if (!customFeatureInput.trim()) return;
+    if (!features.includes(customFeatureInput.trim())) {
+      setFeatures([...features, customFeatureInput.trim()]);
+    }
+    setCustomFeatureInput("");
+  };
 
   const runAiAutoPlan = async () => {
     if (!userIdea.trim() || isAiPlanning) return;
@@ -1686,23 +1708,64 @@ CTA 按鈕：${cta}
       {/* 📋 Step 1~16 視覺化點選控制面板 */}
       <div className="input-card" style={{ marginBottom: "20px" }}>
         
-        {/* Step 1 & 2 */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
-          <div>
-            <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-              Step 1. 發布平台與尺寸
-            </label>
-            <select value={platform} onChange={(e) => setPlatform(e.target.value)} style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
-              {platforms.map((p) => <option key={p} value={p}>{p}</option>)}
-            </select>
+        {/* Step 1 & Step 2 */}
+        <div style={{ marginBottom: "16px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "12px" }}>
+            <div>
+              <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
+                Step 1. 發布平台與尺寸
+              </label>
+              <select value={platform} onChange={(e) => setPlatform(e.target.value)} style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
+                {platforms.map((p) => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </div>
+            <div>
+              <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
+                自訂品牌 / 店家名稱 (選填)
+              </label>
+              <input
+                type="text"
+                value={brandName}
+                onChange={(e) => setBrandName(e.target.value)}
+                placeholder="例如：Dyson、字研所、小美咖啡館..."
+                style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", outline: "none" }}
+              />
+            </div>
           </div>
-          <div>
+
+          {/* Step 2 自訂商品/主題名稱 */}
+          <div style={{ marginBottom: "8px" }}>
             <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-              Step 2. 細分主題品項
+              Step 2. 自訂商品 / 服務 / 主題名稱
             </label>
-            <select value={product} onChange={(e) => setProduct(e.target.value)} style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
-              {currentCat.subProducts.map((sp) => <option key={sp} value={sp}>{sp}</option>)}
-            </select>
+            <input
+              type="text"
+              value={product}
+              onChange={(e) => setProduct(e.target.value)}
+              placeholder="可自由輸入任何商品或服務，例如：Dyson極靜風扇、抹茶提拉米蘇、特斯拉Model 3..."
+              style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--purple)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", outline: "none", marginBottom: "8px" }}
+            />
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", alignItems: "center" }}>
+              <span style={{ fontSize: "11px", color: "var(--muted)", fontWeight: 650 }}>💡 快速點選預設：</span>
+              {currentCat.subProducts.map((sp) => (
+                <button
+                  key={sp}
+                  type="button"
+                  onClick={() => setProduct(sp)}
+                  style={{
+                    border: product === sp ? "1px solid var(--purple)" : "1px solid var(--line)",
+                    background: product === sp ? "var(--purple-soft)" : "var(--paper)",
+                    color: product === sp ? "var(--purple-dark)" : "var(--muted)",
+                    borderRadius: "8px",
+                    padding: "4px 8px",
+                    fontSize: "11px",
+                    cursor: "pointer"
+                  }}
+                >
+                  {sp}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -1806,10 +1869,10 @@ CTA 按鈕：${cta}
         </div>
 
         {/* Step 8 & 9 */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px", marginBottom: "16px" }}>
           <div>
             <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-              Step 8. 商品主圖位置
+              Step 8. 商品位置
             </label>
             <select value={position} onChange={(e) => setPosition(e.target.value)} style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
               {positions.map((p) => <option key={p} value={p}>{p}</option>)}
@@ -1823,13 +1886,46 @@ CTA 按鈕：${cta}
               {priceStyles.map((ps) => <option key={ps} value={ps}>{ps}</option>)}
             </select>
           </div>
+          <div>
+            <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
+              標示金額 / 售價 (選填)
+            </label>
+            <input
+              type="text"
+              value={priceValue}
+              onChange={(e) => setPriceValue(e.target.value)}
+              placeholder="例如：NT$ 1,580, 特惠價$99"
+              style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", outline: "none" }}
+            />
+          </div>
         </div>
 
-        {/* Step 10: 優惠標章 (多選) */}
+        {/* Step 10: 優惠標章 (多選 + 自訂新增) */}
         <div style={{ marginBottom: "16px" }}>
-          <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-            Step 10. 優惠促銷標章 (可複選)
-          </label>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+            <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)" }}>
+              Step 10. 優惠促銷標章 (可複選或自訂輸入)
+            </label>
+          </div>
+
+          <div style={{ display: "flex", gap: "6px", marginBottom: "8px" }}>
+            <input
+              type="text"
+              value={customOfferInput}
+              onChange={(e) => setCustomOfferInput(e.target.value)}
+              placeholder="自訂優惠，例如：全館滿千折百、開學季85折..."
+              style={{ flex: 1, padding: "7px 10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", outline: "none" }}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomOffer(); } }}
+            />
+            <button
+              type="button"
+              onClick={addCustomOffer}
+              style={{ border: "1px solid var(--purple)", background: "var(--purple-soft)", color: "var(--purple-dark)", borderRadius: "8px", padding: "0 12px", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
+            >
+              ＋新增標章
+            </button>
+          </div>
+
           <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
             {offerList.map((off) => {
               const active = offers.includes(off);
@@ -1852,14 +1948,53 @@ CTA 按鈕：${cta}
                 </button>
               );
             })}
+            {offers.filter(o => !offerList.includes(o)).map((customOff) => (
+              <button
+                key={customOff}
+                onClick={() => toggleOffer(customOff)}
+                style={{
+                  border: "1px solid var(--purple)",
+                  background: "var(--purple-soft)",
+                  color: "var(--purple-dark)",
+                  borderRadius: "8px",
+                  padding: "5px 9px",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  cursor: "pointer"
+                }}
+              >
+                ☑ {customOff} (自訂)
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Step 11: 產品功能標章 (根據大分類動態切換) */}
+        {/* Step 11: 產品功能標章 (根據大分類 + 自訂新增) */}
         <div style={{ marginBottom: "16px" }}>
-          <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-            Step 11. 【{currentCat.title}】專屬功能賣點標章 (可複選)
-          </label>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+            <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)" }}>
+              Step 11. 【{currentCat.title}】賣點標章 (可複選或自訂輸入)
+            </label>
+          </div>
+
+          <div style={{ display: "flex", gap: "6px", marginBottom: "8px" }}>
+            <input
+              type="text"
+              value={customFeatureInput}
+              onChange={(e) => setCustomFeatureInput(e.target.value)}
+              placeholder="自訂賣點，例如：日本抗皺專利、極速快充30分..."
+              style={{ flex: 1, padding: "7px 10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", outline: "none" }}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomFeature(); } }}
+            />
+            <button
+              type="button"
+              onClick={addCustomFeature}
+              style={{ border: "1px solid var(--purple)", background: "var(--purple-soft)", color: "var(--purple-dark)", borderRadius: "8px", padding: "0 12px", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
+            >
+              ＋新增賣點
+            </button>
+          </div>
+
           <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
             {currentCat.features.map((feat) => {
               const active = features.includes(feat);
@@ -1882,6 +2017,24 @@ CTA 按鈕：${cta}
                 </button>
               );
             })}
+            {features.filter(f => !currentCat.features.includes(f)).map((customFeat) => (
+              <button
+                key={customFeat}
+                onClick={() => toggleFeature(customFeat)}
+                style={{
+                  border: "1px solid var(--purple)",
+                  background: "var(--purple-soft)",
+                  color: "var(--purple-dark)",
+                  borderRadius: "8px",
+                  padding: "5px 9px",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  cursor: "pointer"
+                }}
+              >
+                ☑ {customFeat} (自訂)
+              </button>
+            ))}
           </div>
         </div>
 
