@@ -2235,27 +2235,51 @@ CTA 按鈕：${cta}
           </div>
         </div>
 
-        {/* Step 12 ~ 16 */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "12px" }}>
-          <div>
-            <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-              Step 12. 行動呼籲 (CTA)
-            </label>
-            <select value={cta} onChange={(e) => setCta(e.target.value)} style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
-              {ctas.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
-          </div>
-          <div>
-            <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-              Step 13. 氛圍情境
-            </label>
-            <select value={env} onChange={(e) => setEnv(e.target.value)} style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
-              {environments.map((ev) => <option key={ev} value={ev}>{ev}</option>)}
-            </select>
+        {/* Step 12 自訂行動呼籲 (CTA) */}
+        <div style={{ marginBottom: "16px" }}>
+          <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
+            Step 12. 行動呼籲按鈕文案 CTA (可自由輸入或點選熱門推薦)
+          </label>
+          <input
+            type="text"
+            value={cta}
+            onChange={(e) => setCta(e.target.value)}
+            placeholder="輸入任何您的自訂 CTA 號召，例如：前往蝦皮領折價券、私訊小編領取試用包..."
+            style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--purple)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", outline: "none", marginBottom: "8px" }}
+          />
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", alignItems: "center" }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", fontWeight: 650 }}>💡 常用 CTA 預設：</span>
+            {ctas.map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => setCta(c)}
+                style={{
+                  border: cta === c ? "1px solid var(--purple)" : "1px solid var(--line)",
+                  background: cta === c ? "var(--purple-soft)" : "var(--paper)",
+                  color: cta === c ? "var(--purple-dark)" : "var(--muted)",
+                  borderRadius: "8px",
+                  padding: "4px 8px",
+                  fontSize: "11px",
+                  cursor: "pointer"
+                }}
+              >
+                {c}
+              </button>
+            ))}
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
+        {/* Step 13 ~ 16 */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "12px" }}>
+          <div>
+            <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "4px" }}>
+              Step 13. 氛圍情境
+            </label>
+            <select value={env} onChange={(e) => setEnv(e.target.value)} style={{ width: "100%", padding: "8px 8px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "11px" }}>
+              {environments.map((ev) => <option key={ev} value={ev}>{ev}</option>)}
+            </select>
+          </div>
           <div>
             <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "4px" }}>
               Step 14. 打光攝影
