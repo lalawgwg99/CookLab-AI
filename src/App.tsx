@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 
-type ToolId = "symbols" | "emoji" | "kaomoji" | "fonts" | "layout" | "nickname" | "blank";
+type ToolId = "symbols" | "emoji" | "kaomoji" | "fonts" | "layout" | "nickname" | "blank" | "bio";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -39,6 +39,7 @@ const tools: Tool[] = [
   { id: "layout", name: "社群排版", nameEn: "Social Formatter", short: "IG／Threads 換行", shortEn: "Instagram / Threads spacing", icon: "¶", tone: "blue" },
   { id: "nickname", name: "暱稱產生器", nameEn: "Nickname Generator", short: "快速找到你的風格", shortEn: "Find your online style", icon: "@", tone: "pink" },
   { id: "blank", name: "空白文字", nameEn: "Invisible Text", short: "產生與複製", shortEn: "Generate and copy", icon: "□", tone: "sand" },
+  { id: "bio", name: "個人檔案 Bio", nameEn: "Bio Studio", short: "IG / Threads 簡介佈置", shortEn: "Instagram & Threads Profile", icon: "📇", tone: "pink", badge: "NEW" },
 ];
 
 const t = (language: Language, zh: string, en: string) => language === "zh-TW" ? zh : en;
@@ -652,6 +653,113 @@ function BlankTool({ copied, setCopied, language }: { copied: string; setCopied:
     <section className="blank-tester"><div><span className="section-kicker">PASTE TEST</span><h2>{t(language, "貼上測試區", "Paste test")}</h2><p>{t(language, "複製後貼到下方，游標有移動就代表空白字元存在。", "Paste below. If the cursor moves, the invisible characters are there.")}</p></div><input value={testText} onChange={(event) => setTestText(event.target.value)} placeholder={t(language, "在這裡貼上空白文字測試…", "Paste invisible text here to test…")} /><span>{Array.from(testText).length} {t(language, "個字元", "characters")}</span></section></>;
 }
 
+function BioTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const bioTemplates = [
+    {
+      name: "極簡質感",
+      nameEn: "Minimalist",
+      lines: ["An ✦", "☁️ Slow living & coffee", "📍 Taipei, TW", "👇🏼 Daily notes & thoughts"]
+    },
+    {
+      name: "創作者 / 設計師",
+      nameEn: "Creator / Designer",
+      lines: ["[ Mia · 米亞 ]", "🎨 Digital Product Designer", "✨ Making ideas happen", "✉️ Hello@studio.com"]
+    },
+    {
+      name: "美食 & 咖啡日誌",
+      nameEn: "Food & Coffee",
+      lines: ["‧̍̊·̊⌖ 台北美食日誌", "🍜 Food, coffee & cozy spots", "📷 Shot on iPhone 15 Pro", "👇🏼 最新食記文章"]
+    },
+    {
+      name: "軟萌日系",
+      nameEn: "Kawaii & Soft",
+      lines: ["౨ৎ  小安  ౨ৎ", "✿ 捕捉生活中喜歡的微光", "🧸 Threads 每日更新", "🎀 歡迎按讚與追蹤"]
+    },
+    {
+      name: "Threads 思考紀錄",
+      nameEn: "Threads Thoughts",
+      lines: ["『 紀錄思考與日常 』", "✦ 聊設計、科技與生活", "💬 歡迎留言交流與追蹤", "👇🏼 點擊下方連結"]
+    }
+  ];
+
+  const [name, setName] = useState("An ✦");
+  const [tagline, setTagline] = useState("☁️ Slow living & coffee");
+  const [location, setLocation] = useState("📍 Taipei, TW");
+  const [cta, setCta] = useState("👇🏼 Daily notes & thoughts");
+
+  const builtBio = `${name}\n${tagline}\n${location}\n${cta}`;
+  const totalLength = builtBio.length;
+
+  const applyPreset = (lines: string[]) => {
+    setName(lines[0] || "");
+    setTagline(lines[1] || "");
+    setLocation(lines[2] || "");
+    setCta(lines[3] || "");
+  };
+
+  return (
+    <>
+      <ToolIntro tool={tools[7]} language={language} />
+
+      <div className="input-card" style={{ marginBottom: "20px" }}>
+        <div className="field-label">
+          <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
+            {t(language, "✨ IG & Threads 個人檔案 Bio 產生器", "✨ IG & Threads Bio Studio")}
+          </strong>
+          <span>{totalLength}/150 {t(language, "字", "chars")}</span>
+        </div>
+
+        {/* 即時手機卡片 Preview */}
+        <div style={{ padding: "18px", borderRadius: "14px", background: "var(--canvas)", border: "1px solid var(--line)", marginBottom: "16px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+            <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: "var(--purple-soft)", color: "var(--purple)", display: "grid", placeItems: "center", fontSize: "20px", fontWeight: 700 }}>
+              ✦
+            </div>
+            <div>
+              <strong style={{ fontSize: "14px", color: "var(--ink)", display: "block" }}>{name || "Your Name"}</strong>
+              <small style={{ color: "var(--muted)", fontSize: "11px" }}>@profile_preview</small>
+            </div>
+          </div>
+          <div style={{ fontSize: "13px", color: "var(--ink)", whiteSpace: "pre-wrap", lineHeight: 1.6, padding: "10px 12px", background: "var(--paper)", borderRadius: "10px", border: "1px dashed var(--line)" }}>
+            {builtBio}
+          </div>
+        </div>
+
+        {/* 欄位輸入 */}
+        <div style={{ display: "grid", gap: "10px", marginBottom: "14px" }}>
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t(language, "1. 姓名 / 稱呼 (例：An ✦)", "1. Name (e.g. An ✦)")} style={{ padding: "10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", fontSize: "13px" }} />
+          <input value={tagline} onChange={(e) => setTagline(e.target.value)} placeholder={t(language, "2. 身份 / 定位 (例：☁️ Slow living)", "2. Role (e.g. ☁️ Slow living)")} style={{ padding: "10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", fontSize: "13px" }} />
+          <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder={t(language, "3. 城市 / 標籤 (例：📍 Taipei, TW)", "3. Location (e.g. 📍 Taipei, TW)")} style={{ padding: "10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", fontSize: "13px" }} />
+          <input value={cta} onChange={(e) => setCta(e.target.value)} placeholder={t(language, "4. 行動呼籲 / 連結提示 (例：👇🏼 Read more)", "4. Call to Action (e.g. 👇🏼 Read more)")} style={{ padding: "10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", fontSize: "13px" }} />
+        </div>
+
+        <button className="primary-button wide" onClick={() => copyText(builtBio, setCopied)}>
+          {copied === builtBio ? t(language, "Bio 已複製 ✓", "Bio Copied ✓") : t(language, "複製 Bio 個人簡介", "Copy Bio Text")}
+        </button>
+
+        {/* 快速套用範本 */}
+        <div style={{ marginTop: "20px" }}>
+          <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--muted)", display: "block", marginBottom: "8px" }}>
+            {t(language, "💡 熱門風格範本（點擊一鍵套用）：", "💡 Popular Bio Templates:")}
+          </span>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "8px" }}>
+            {bioTemplates.map((item) => (
+              <button
+                key={item.name}
+                onClick={() => applyPreset(item.lines)}
+                style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "10px", padding: "8px 10px", textAlign: "left", cursor: "pointer", fontSize: "11px" }}
+              >
+                <strong style={{ display: "block", color: "var(--purple)", marginBottom: "3px" }}>{t(language, item.name, item.nameEn)}</strong>
+                <small style={{ color: "var(--muted)", fontSize: "9px" }}>{item.lines[0]}</small>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 function EmptyState({ text }: { text: string }) { return <div className="empty-state"><span>⌕</span><p>{text}</p></div>; }
 
 function GuideModal({ language, onClose, onSelectTool }: { language: Language; onClose: () => void; onSelectTool: (id: ToolId) => void }) {
@@ -760,6 +868,7 @@ export default function App() {
           {active === "layout" && <LayoutTool {...toolProps} />}
           {active === "nickname" && <NicknameTool {...toolProps} />}
           {active === "blank" && <BlankTool {...toolProps} />}
+          {active === "bio" && <BioTool {...toolProps} />}
         </div>
         <footer><span>{t(language, "字研所", "TEXTLAB")} TEXT LAB</span><p>{t(language, "讓每一段文字，都剛剛好。", "Make every word feel just right.")}</p><small>© 2026 · Made for everyday expression</small></footer>
       </main>
