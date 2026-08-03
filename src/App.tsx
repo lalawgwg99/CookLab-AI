@@ -1626,35 +1626,39 @@ ${fetchedText}`
     const offerStr = offers.length ? offers.join(", ") : "Special Offer";
     const featStr = features.length ? features.join(", ") : "High Specs";
     const modStr = modifier ? `, ${modifier}` : "";
+    const brandStr = brandName.trim() ? `, Brand/Store Logo: "${brandName.trim()}"` : "";
+    const priceDisplayStr = priceValue.trim() ? `, price tag displaying "${priceValue.trim()}"` : "";
 
-    const mj = `Commercial advertising poster for ${currentCat.title} (${product}), ${styleObj.spec}, ${colorObj.spec}, ${bgObj.spec}, ${layoutObj.spec}, product placed at ${position}, featuring price tag styled as ${priceStyle}, promotional badges: [${offerStr}], key features: [${featStr}], call-to-action button saying "${cta}", ${env}, ${light}, brand logo at ${logoPos}, visual density: ${density}${modStr} --ar ${aspectRatio} --v 6.0 --style raw`;
+    const mj = `Commercial advertising poster for ${currentCat.title} (${product})${brandName.trim() ? ` by ${brandName.trim()}` : ""}, ${styleObj.spec}, ${colorObj.spec}, ${bgObj.spec}, ${layoutObj.spec}, product placed at ${position}, featuring price tag styled as ${priceStyle}${priceDisplayStr}, promotional badges: [${offerStr}], key features: [${featStr}], call-to-action button saying "${cta}", ${env}, ${light}${brandStr} at ${logoPos}, visual density: ${density}${modStr} --ar ${aspectRatio} --v 6.0 --style raw`;
 
     const chatgpt = `Create a professional commercial advertising poster for ${currentCat.title} showcasing "${product}".
 - Target Specs: ${platform}
+${brandName.trim() ? `- Brand / Store Name: "${brandName.trim()}"` : ""}
 - Visual Style: ${styleObj.title} (${styleObj.spec})
 - Color Palette & Lighting: ${colorObj.title}, ${light}
 - Background & Setting: ${bgObj.title}, set in ${env}
 - Layout & Composition: ${layoutObj.title}, hero product placed at ${position}
 - Marketing Badges: Promotional offers (${offerStr}), Product Features (${featStr})
-- Price Display: Styled as ${priceStyle}
+- Price Display: Styled as ${priceStyle} ${priceValue.trim() ? `showing exact price "${priceValue.trim()}"` : ""}
 - Call-to-action: Prominent CTA button with text "${cta}"
-- Logo Placement: ${logoPos}
+- Logo Placement: ${logoPos} ${brandName.trim() ? `("${brandName.trim()}")` : ""}
 - Density & Feel: ${density}${modStr}
 High commercial quality, 8k resolution, photorealistic studio render.`;
 
     const gemini = `【商業海報設計 Prompt - Gemini AI 版】
-■ 產品與平台：${currentCat.title}（${product}）｜ 發布規格：${platform}
+■ 產品與平台：${currentCat.title}（${product}）${brandName.trim() ? `｜ 品牌名稱：${brandName.trim()}` : ""}｜ 發布規格：${platform}
 ■ 視覺風格：${styleObj.title}
 ■ 主色調與光影：${colorObj.title}，光影採 ${light}
 ■ 背景與情境：${bgObj.title}，融入 ${env} 情境
 ■ 排版構圖：${layoutObj.title}，商品擺放於 ${position}
-■ 價格與標章：價格標籤採用 ${priceStyle}，包含優惠【${offerStr}】與特色【${featStr}】
+■ 價格標籤與金額：金額顯示【${priceValue.trim() || "限定優惠價"}】（樣式：${priceStyle}）
+■ 促銷與賣點標章：優惠【${offerStr}】、賣點【${featStr}】
 ■ 行動呼籲 (CTA)：強效按鈕「${cta}」
-■ 品牌與密度：品牌 Logo 於 ${logoPos}，海報密度採 ${density}${modStr}`;
+■ 品牌 Logo 與密度：品牌 Logo【${brandName.trim() || "官方Logo"}】置於 ${logoPos}，海報密度採 ${density}${modStr}`;
 
     const claude = `Art Director Brief for Commercial Poster Design:
 
-Project: ${currentCat.title} - ${product}
+Project: ${currentCat.title} - ${product} ${brandName.trim() ? `[Brand: ${brandName.trim()}]` : ""}
 Target Specs: ${platform}
 
 1. Visual Identity & Mood:
@@ -1665,17 +1669,17 @@ Target Specs: ${platform}
 2. Art Direction & Framing:
    - Composition Focus: ${layoutObj.title}
    - Subject Placement: ${position}
-   - Logo Anchor: ${logoPos}
+   - Logo Anchor: ${logoPos} ${brandName.trim() ? `(Brand Logo: "${brandName.trim()}")` : ""}
 
 3. Marketing Highlights:
-   - Price Styling: ${priceStyle}
+   - Price Styling: ${priceStyle} ${priceValue.trim() ? `(Display Amount: "${priceValue.trim()}")` : ""}
    - Offer Badges: ${offerStr}
    - Product Feature Callouts: ${featStr}
    - Primary CTA: "${cta}"
    - Overall Visual Density: ${density}${modStr}`;
 
     return { midjourney: mj, chatgpt, gemini, claude };
-  }, [selectedCatId, product, platform, styleObj, colorObj, bgObj, layoutObj, position, priceStyle, offers, features, cta, env, light, logoPos, density, modifier, aspectRatio]);
+  }, [selectedCatId, product, brandName, priceValue, platform, styleObj, colorObj, bgObj, layoutObj, position, priceStyle, offers, features, cta, env, light, logoPos, density, modifier, aspectRatio]);
 
   const currentPromptText = prompts[activeModel];
 
@@ -1719,6 +1723,8 @@ Target Specs: ${platform}
             {
               role: "user",
               content: `海報規劃主題：${currentCat.title} (${product})
+品牌名稱：${brandName.trim() || "未填寫"}
+標示售價：${priceValue.trim() || "未填寫"}
 視覺風格：${styleObj.title}
 主色調：${colorObj.title}
 構圖：${layoutObj.title}
