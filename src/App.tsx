@@ -2787,9 +2787,25 @@ export default function App() {
     const canonical = document.querySelector('link[rel="canonical"]');
     canonical?.setAttribute("href", language === "en" ? "https://cooklabai.com/?lang=en" : "https://cooklabai.com/?lang=zh-TW");
     document.querySelector('meta[property="og:locale"]')?.setAttribute("content", language === "en" ? "en_US" : "zh_TW");
+    
+    let titleStr = `${t(language, current.name, current.nameEn)}｜TextLab AI`;
+    let descStr = t(language, `${current.name}線上工具：${current.short}，免費使用、不需登入。`, `${current.nameEn}: ${current.shortEn}. Free, no sign-up.`);
+
+    if (current.id === "poster") {
+      titleStr = t(language, "AI 廣告研究所｜免寫 Prompt 一鍵生成商業海報 (Midjourney / ChatGPT)｜字研所 TextLab", "AI Commercial Poster Studio | Visual Ad Prompt Generator | TextLab");
+      descStr = t(language, "不需英文或複雜提示詞！30 秒透過點選自動產生 Midjourney、ChatGPT (DALL-E 3)、Gemini 專業商業海報 Prompt，支援網址解析與 AI 廣告評分。", "Create professional Midjourney & DALL-E 3 poster prompts without writing text. 100% free visual ad generator.");
+    } else if (current.id === "ai") {
+      titleStr = t(language, "AI 社群貼文助手｜Threads / IG / FB 爆款文案一鍵生成｜字研所 TextLab", "AI Social Post Assistant | Viral IG & Threads Creator | TextLab");
+      descStr = t(language, "專為台灣社群生態設計的 AI 發文助手，支援 IG 圖文、FB 粉專文、Threads 爆款討論、LINE 團購推播與小紅書種草提案。", "AI copywriter for Instagram, Threads, Facebook & LINE. Generate viral Taiwanese social posts instantly.");
+    }
+
     if (current.id !== "symbols") {
-      document.title = `${t(language, current.name, current.nameEn)}｜TextLab`;
-      document.querySelector('meta[name="description"]')?.setAttribute("content", t(language, `${current.name}線上工具：${current.short}，免費使用、不需登入，所有處理都在瀏覽器完成。`, `${current.nameEn}: ${current.shortEn}. Free, no sign-up, and everything runs in your browser.`));
+      document.title = titleStr;
+      document.querySelector('meta[name="description"]')?.setAttribute("content", descStr);
+      document.querySelector('meta[property="og:title"]')?.setAttribute("content", titleStr);
+      document.querySelector('meta[property="og:description"]')?.setAttribute("content", descStr);
+      document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", titleStr);
+      document.querySelector('meta[name="twitter:description"]')?.setAttribute("content", descStr);
     }
   }, [current, language]);
   useEffect(() => {
