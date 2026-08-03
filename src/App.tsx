@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 
 type ToolId = "symbols" | "emoji" | "kaomoji" | "fonts" | "layout" | "nickname" | "blank";
 
@@ -19,14 +20,6 @@ const tools: Tool[] = [
   { id: "layout", name: "社群排版", short: "IG／Threads 換行", icon: "¶", tone: "blue" },
   { id: "nickname", name: "暱稱產生器", short: "快速找到你的風格", icon: "@", tone: "pink" },
   { id: "blank", name: "空白文字", short: "產生與複製", icon: "□", tone: "sand" },
-];
-
-const symbolGroups = [
-  { name: "星星與閃光", keywords: "星星 閃光 sparkle star", items: ["✦", "✧", "★", "☆", "⋆", "⭑", "⭒", "✩", "✪", "✫", "✬", "✭", "✮", "✯", "✰", "⁂", "❈", "❉", "❋"] },
-  { name: "愛心", keywords: "愛心 喜歡 heart love", items: ["♡", "♥", "❤", "❥", "❣", "ღ", "ෆ", "ᰔ", "ᥫ᭡", "დ", "❦", "❧"] },
-  { name: "箭頭", keywords: "箭頭 方向 arrow", items: ["→", "←", "↑", "↓", "↔", "↕", "↗", "↘", "➜", "➝", "➤", "➳", "➵", "➸", "➺", "➼", "⇢", "⇠"] },
-  { name: "括號與線條", keywords: "括號 框 線 裝飾 bracket line", items: ["【", "】", "〔", "〕", "〈", "〉", "《", "》", "「", "」", "『", "』", "﹏", "＿", "─", "━", "┈", "┊"] },
-  { name: "音樂與日常", keywords: "音樂 天氣 花 日常 music flower", items: ["♪", "♫", "♬", "♩", "☀", "☁", "☂", "☾", "☽", "❀", "✿", "❁", "☕", "⌂", "∞", "°"] },
 ];
 
 const emojiGroups: Record<string, string[]> = {
@@ -111,12 +104,69 @@ function SearchInput({ value, onChange, placeholder }: { value: string; onChange
   return <label className="search-box"><span>⌕</span><input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} /><kbd>⌘ K</kbd></label>;
 }
 
+function SymbolTiles({ items, favorites, copied, onCopy, onFavorite }: { items: string[]; favorites: string[]; copied: string; onCopy: (item: string) => void; onFavorite: (item: string) => void }) {
+  return <div className="symbol-grid">{items.map((item) => <div className="symbol-card" key={item}>
+    <button className="symbol-cell" onClick={() => onCopy(item)} aria-label={`複製 ${item}`}><span>{item}</span><small>{copied === item ? "已複製" : "COPY"}</small></button>
+    <button className={`symbol-favorite ${favorites.includes(item) ? "saved" : ""}`} onClick={() => onFavorite(item)} aria-label={`${favorites.includes(item) ? "取消收藏" : "收藏"} ${item}`}>{favorites.includes(item) ? "♥" : "♡"}</button>
+  </div>)}</div>;
+}
+
+function symbolCodePoints(value: string) {
+  return Array.from(value).map((char) => `U+${char.codePointAt(0)?.toString(16).toUpperCase().padStart(4, "0")}`).join(" · ");
+}
+
 function SymbolsTool({ copied, setCopied }: { copied: string; setCopied: (v: string) => void }) {
   const [query, setQuery] = useState("");
-  const groups = symbolGroups.map((group) => ({ ...group, items: group.items.filter((item) => !query || item.includes(query) || group.name.includes(query) || group.keywords.toLowerCase().includes(query.toLowerCase())) })).filter((g) => g.items.length);
-  return <><ToolIntro tool={tools[0]} /><SearchInput value={query} onChange={setQuery} placeholder="搜尋符號，例如：愛心、星星、箭頭…" />
-    <div className="helper-row"><span>點一下就複製</span><span>{groups.reduce((n, g) => n + g.items.length, 0)} 個結果</span></div>
-    <div className="symbol-sections">{groups.map((group) => <section className="symbol-section" key={group.name}><h2>{group.name}</h2><div className="symbol-grid">{group.items.map((item) => <button className="symbol-cell" key={item} onClick={() => copyText(item, setCopied)} aria-label={`複製 ${item}`}><span>{item}</span><small>{copied === item ? "已複製" : "COPY"}</small></button>)}</div></section>)}</div>
+  const initialCategory = window.location.hash.split("/")[1] || "all";
+  const [category, setCategoryState] = useState(symbolGroups.some((group) => group.id === initialCategory) ? initialCategory : "all");
+  const [recent, setRecent] = useState<string[]>(() => JSON.parse(localStorage.getItem("textlab.recentSymbols") || "[]"));
+  const [favorites, setFavorites] = useState<string[]>(() => JSON.parse(localStorage.getItem("textlab.favoriteSymbols") || "[]"));
+  const [selected, setSelected] = useState("");
+  const groups = symbolGroups.map((group) => ({
+    ...group,
+    items: group.items.filter((item) => !query || item.includes(query) || group.name.includes(query) || group.keywords.toLowerCase().includes(query.trim().toLowerCase())),
+  })).filter((group) => group.items.length && (query || category === "all" || group.id === category));
+  const resultCount = groups.reduce((total, group) => total + group.items.length, 0);
+  const selectedGroup = symbolGroups.find((group) => group.items.includes(selected));
+  const activeGroup = symbolGroups.find((group) => group.id === category);
+
+  useEffect(() => {
+    document.title = activeGroup ? `${activeGroup.name}｜字研所 TextLab` : "特殊符號大全｜字研所 TextLab";
+    const description = activeGroup?.description || `收錄 ${totalSymbolCount} 個特殊符號，支援分類搜尋、最近使用、收藏與一鍵複製。`;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", description);
+  }, [activeGroup]);
+
+  const setCategory = (id: string) => {
+    setCategoryState(id);
+    setQuery("");
+    window.history.replaceState(null, "", id === "all" ? "#symbols" : `#symbols/${id}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const choose = (item: string) => {
+    copyText(item, setCopied);
+    setSelected(item);
+    const next = [item, ...recent.filter((value) => value !== item)].slice(0, 20);
+    setRecent(next);
+    localStorage.setItem("textlab.recentSymbols", JSON.stringify(next));
+  };
+  const toggleFavorite = (item: string) => {
+    const next = favorites.includes(item) ? favorites.filter((value) => value !== item) : [item, ...favorites];
+    setFavorites(next);
+    localStorage.setItem("textlab.favoriteSymbols", JSON.stringify(next));
+  };
+
+  return <><ToolIntro tool={tools[0]} />
+    <div className="symbol-summary"><div><strong>{totalSymbolCount}</strong><span>個精選符號</span></div><div><strong>{symbolGroups.length}</strong><span>個實用分類</span></div><p>從愛心、箭頭到數學與語言符號，都能快速找到並直接複製。</p></div>
+    <SearchInput value={query} onChange={setQuery} placeholder="搜尋符號，例如：愛心、星星、打勾、數學…" />
+    <div className="symbol-category-nav" aria-label="符號分類"><button className={category === "all" && !query ? "active" : ""} onClick={() => setCategory("all")}>全部</button>{symbolGroups.map((group) => <button className={category === group.id && !query ? "active" : ""} key={group.id} onClick={() => setCategory(group.id)}>{group.shortName}<small>{group.items.length}</small></button>)}</div>
+    <div className="helper-row"><span>{query ? `搜尋「${query}」` : activeGroup?.description || "點一下複製，按愛心加入收藏"}</span><span>{resultCount} 個結果</span></div>
+    {!query && category === "all" && <div className="personal-symbols">
+      {!!recent.length && <section className="symbol-section"><div className="section-title-row"><div><span className="section-kicker">YOUR HISTORY</span><h2>最近使用</h2></div><button className="text-button" onClick={() => { setRecent([]); localStorage.removeItem("textlab.recentSymbols"); }}>清除</button></div><SymbolTiles items={recent} favorites={favorites} copied={copied} onCopy={choose} onFavorite={toggleFavorite} /></section>}
+      {!!favorites.length && <section className="symbol-section"><div className="section-title-row"><div><span className="section-kicker">SAVED</span><h2>我的收藏</h2></div></div><SymbolTiles items={favorites} favorites={favorites} copied={copied} onCopy={choose} onFavorite={toggleFavorite} /></section>}
+      <section className="symbol-section"><div className="section-title-row"><div><span className="section-kicker">QUICK PICKS</span><h2>熱門符號</h2></div></div><SymbolTiles items={popularSymbols} favorites={favorites} copied={copied} onCopy={choose} onFavorite={toggleFavorite} /></section>
+    </div>}
+    <div className="symbol-sections">{groups.map((group) => <section className="symbol-section" id={`symbol-${group.id}`} key={group.id}><div className="section-title-row symbol-title"><div><span className="section-kicker">{group.items.length} SYMBOLS</span><h2>{group.name}</h2><p>{group.description}</p></div><button className="share-category" onClick={() => copyText(`${window.location.origin}${window.location.pathname}#symbols/${group.id}`, setCopied)}>⌁ 複製分類連結</button></div><SymbolTiles items={group.items} favorites={favorites} copied={copied} onCopy={choose} onFavorite={toggleFavorite} /></section>)}</div>
+    {!!selected && <aside className="symbol-detail" aria-label="已選符號資訊"><div className="selected-symbol">{selected}</div><div><span className="section-kicker">SYMBOL INFO</span><strong>{selectedGroup?.name || "特殊符號"}</strong><code>{symbolCodePoints(selected)}</code></div><button onClick={() => choose(selected)}>再次複製</button><button className={favorites.includes(selected) ? "saved" : ""} onClick={() => toggleFavorite(selected)}>{favorites.includes(selected) ? "♥ 已收藏" : "♡ 收藏"}</button><button className="detail-close" onClick={() => setSelected("")} aria-label="關閉符號資訊">×</button></aside>}
     {!groups.length && <EmptyState text="找不到這個符號，換個關鍵字試試看。" />}</>;
 }
 
@@ -185,11 +235,16 @@ function BlankTool({ copied, setCopied }: { copied: string; setCopied: (v: strin
 function EmptyState({ text }: { text: string }) { return <div className="empty-state"><span>⌕</span><p>{text}</p></div>; }
 
 export default function App() {
-  const [active, setActive] = useState<ToolId>(() => (window.location.hash.replace("#", "") as ToolId) || "symbols");
+  const [active, setActive] = useState<ToolId>(() => (window.location.hash.replace("#", "").split("/")[0] as ToolId) || "symbols");
   const [copied, setCopied] = useState("");
   const current = tools.find((tool) => tool.id === active) || tools[0];
   const selectTool = (id: ToolId) => { setActive(id); window.location.hash = id; window.scrollTo({ top: 0, behavior: "smooth" }); };
-  useEffect(() => { document.title = `${current.name}｜字研所 TextLab`; }, [current.name]);
+  useEffect(() => {
+    if (current.id !== "symbols") {
+      document.title = `${current.name}｜字研所 TextLab`;
+      document.querySelector('meta[name="description"]')?.setAttribute("content", `${current.name}線上工具：${current.short}，免費使用、不需登入，所有處理都在瀏覽器完成。`);
+    }
+  }, [current]);
   const toolProps = { copied, setCopied };
   return <div className="app-shell">
     <header className="topbar"><a className="brand" href="#symbols" onClick={() => selectTool("symbols")}><span className="brand-mark">字</span><span><strong>字研所</strong><small>TEXT LAB</small></span></a><nav><button onClick={() => selectTool("symbols")}>所有工具</button><a href="#about">關於</a><span className="free-pill">完全免費</span></nav></header>
