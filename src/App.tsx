@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 
-type ToolId = "symbols" | "emoji" | "kaomoji" | "fonts" | "layout" | "nickname" | "blank" | "bio";
+type ToolId = "symbols" | "emoji" | "kaomoji" | "fonts" | "layout" | "nickname" | "blank" | "bio" | "hashtags";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -39,7 +39,8 @@ const tools: Tool[] = [
   { id: "layout", name: "社群排版", nameEn: "Social Formatter", short: "IG／Threads 換行", shortEn: "Instagram / Threads spacing", icon: "¶", tone: "blue" },
   { id: "nickname", name: "暱稱產生器", nameEn: "Nickname Generator", short: "快速找到你的風格", shortEn: "Find your online style", icon: "@", tone: "pink" },
   { id: "blank", name: "空白文字", nameEn: "Invisible Text", short: "產生與複製", shortEn: "Generate and copy", icon: "□", tone: "sand" },
-  { id: "bio", name: "個人檔案 Bio", nameEn: "Bio Studio", short: "IG / Threads 簡介佈置", shortEn: "Instagram & Threads Profile", icon: "📇", tone: "pink", badge: "NEW" },
+  { id: "bio", name: "個人檔案 Bio", nameEn: "Bio Studio", short: "IG / Threads 簡介佈置", shortEn: "Instagram & Threads Profile", icon: "📇", tone: "pink" },
+  { id: "hashtags", name: "熱門標籤", nameEn: "Hashtags", short: "Threads / IG 導流標籤", shortEn: "Trending Hashtag Bundles", icon: "#", tone: "mint", badge: "NEW" },
 ];
 
 const t = (language: Language, zh: string, en: string) => language === "zh-TW" ? zh : en;
@@ -760,6 +761,169 @@ function BioTool({ copied, setCopied, language }: { copied: string; setCopied: (
   );
 }
 
+function HashtagTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const hashtagBundles = [
+    {
+      title: "日常紀錄",
+      titleEn: "Daily Life",
+      category: "daily",
+      tags: ["#日常", "#日常紀錄", "#生活碎片", "#生活美學", "#Threads日常"]
+    },
+    {
+      title: "咖啡 & 探店",
+      titleEn: "Coffee & Cafe",
+      category: "cafe",
+      tags: ["#台北咖啡廳", "#咖啡廳探店", "#下午茶", "#CoffeePorn", "#CafeHopping"]
+    },
+    {
+      title: "穿搭 & OOTD",
+      titleEn: "Fashion & OOTD",
+      category: "fashion",
+      tags: ["#今日穿搭", "#OOTD", "#穿搭分享", "#極簡穿搭", "#Outfitoftheday"]
+    },
+    {
+      title: "Threads 創作者",
+      titleEn: "Threads Creator",
+      category: "creator",
+      tags: ["#Threads創作者", "#思考紀錄", "#觀點分享", "#個人成長", "#設計師日常"]
+    },
+    {
+      title: "小紅書氛圍感",
+      titleEn: "Aesthetic Redbook",
+      category: "aesthetic",
+      tags: ["#小紅書文案", "#氛圍感", "#質感生活", "#靈感集", "#美學提案"]
+    },
+    {
+      title: "美食日記",
+      titleEn: "Foodie Notes",
+      category: "food",
+      tags: ["#美食日記", "#台北美食", "#吃貨日常", "#Foodie", "#FoodPorn"]
+    },
+    {
+      title: "旅行記錄",
+      titleEn: "Travel Diary",
+      category: "travel",
+      tags: ["#旅行日記", "#城市散步", "#旅遊攝影", "#TravelGram", "#Explore"]
+    },
+    {
+      title: "溫柔金句",
+      titleEn: "Mood & Quotes",
+      category: "mood",
+      tags: ["#微甜短句", "#治癒系", "#溫柔文字", "#情緒碎片", "#靜心"]
+    }
+  ];
+
+  const [customInput, setCustomInput] = useState("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const generatedTags = customInput.trim()
+    ? customInput.split(/\s+/).map((word) => word.startsWith("#") ? word : `#${word}`)
+    : [];
+
+  const toggleSelectTag = (tag: string) => {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(selectedTags.filter((t) => t !== tag));
+    } else {
+      setSelectedTags([...selectedTags, tag]);
+    }
+  };
+
+  const selectedText = selectedTags.join(" ");
+
+  return (
+    <>
+      <ToolIntro tool={tools[8]} language={language} />
+
+      {/* 自訂標籤產生器 */}
+      <div className="input-card" style={{ marginBottom: "20px" }}>
+        <div className="field-label">
+          <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
+            {t(language, "✨ 自訂 Hashtag 組合器", "✨ Custom Hashtag Builder")}
+          </strong>
+          <span>{t(language, "輸入關鍵字，自動加 # 號", "Type keywords to add #")}</span>
+        </div>
+
+        <input
+          value={customInput}
+          onChange={(e) => setCustomInput(e.target.value)}
+          placeholder={t(language, "輸入關鍵字，用空格隔開（例：咖啡 台北 下午茶）", "Enter keywords separated by spaces (e.g. coffee Taipei cafe)")}
+          style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "14px", outline: "none", marginBottom: "10px" }}
+        />
+
+        {!!generatedTags.length && (
+          <div style={{ padding: "12px", borderRadius: "10px", background: "var(--paper)", border: "1px dashed var(--line)", marginBottom: "12px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <strong style={{ fontSize: "13px", color: "var(--purple)" }}>{generatedTags.join(" ")}</strong>
+            <button className="primary-button" onClick={() => copyText(generatedTags.join(" "), setCopied)}>
+              {copied === generatedTags.join(" ") ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製標籤", "Copy Tags")}
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* 我的標籤暫存區 */}
+      {!!selectedTags.length && (
+        <div style={{ padding: "14px 16px", borderRadius: "12px", background: "var(--purple-soft)", border: "1px solid var(--line)", marginBottom: "20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <span style={{ fontSize: "11px", color: "var(--purple)", fontWeight: 700, display: "block", marginBottom: "4px" }}>
+              {t(language, `已點選 ${selectedTags.length} 個標籤：`, `Selected ${selectedTags.length} tags:`)}
+            </span>
+            <strong style={{ fontSize: "13px", color: "var(--ink)" }}>{selectedText}</strong>
+          </div>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <button className="primary-button" onClick={() => copyText(selectedText, setCopied)}>
+              {copied === selectedText ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製合集", "Copy Selected")}
+            </button>
+            <button onClick={() => setSelectedTags([])} style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--muted)", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer" }}>
+              {t(language, "清除", "Clear")}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 熱門主題組合包 */}
+      <div className="section-title-row" style={{ marginBottom: "14px" }}>
+        <h2>{t(language, "🔥 精選 Threads & IG 熱門標籤包", "🔥 Trending Hashtag Bundles")}</h2>
+        <span style={{ color: "var(--subtle)", fontSize: "10px" }}>{t(language, "點擊單個複製或點選組合", "Click tag to copy or build bundle")}</span>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "14px" }}>
+        {hashtagBundles.map((bundle) => {
+          const bundleText = bundle.tags.join(" ");
+          return (
+            <div key={bundle.title} style={{ border: "1px solid var(--line)", borderRadius: "14px", background: "var(--paper)", padding: "16px", display: "grid", gap: "10px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <strong style={{ fontSize: "13px", color: "var(--purple)" }}>{t(language, bundle.title, bundle.titleEn)}</strong>
+                <button className="text-button" onClick={() => copyText(bundleText, setCopied)}>
+                  {copied === bundleText ? t(language, "整包已複製 ✓", "Bundle Copied ✓") : t(language, "複製整包", "Copy Bundle")}
+                </button>
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                {bundle.tags.map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => toggleSelectTag(tag)}
+                    style={{
+                      border: "1px solid var(--line)",
+                      background: selectedTags.includes(tag) ? "var(--purple)" : "var(--canvas)",
+                      color: selectedTags.includes(tag) ? "#fff" : "var(--ink)",
+                      borderRadius: "8px",
+                      padding: "5px 9px",
+                      fontSize: "11px",
+                      cursor: "pointer"
+                    }}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
 function EmptyState({ text }: { text: string }) { return <div className="empty-state"><span>⌕</span><p>{text}</p></div>; }
 
 function GuideModal({ language, onClose, onSelectTool }: { language: Language; onClose: () => void; onSelectTool: (id: ToolId) => void }) {
@@ -869,6 +1033,7 @@ export default function App() {
           {active === "nickname" && <NicknameTool {...toolProps} />}
           {active === "blank" && <BlankTool {...toolProps} />}
           {active === "bio" && <BioTool {...toolProps} />}
+          {active === "hashtags" && <HashtagTool {...toolProps} />}
         </div>
         <footer><span>{t(language, "字研所", "TEXTLAB")} TEXT LAB</span><p>{t(language, "讓每一段文字，都剛剛好。", "Make every word feel just right.")}</p><small>© 2026 · Made for everyday expression</small></footer>
       </main>
