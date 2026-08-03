@@ -923,6 +923,13 @@ function HashtagTool({ copied, setCopied, language }: { copied: string; setCopie
 function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
   const tones = [
     {
+      id: "auto",
+      name: "🤖 AI 智慧自動匹配 (推薦)",
+      nameEn: "AI Smart Match",
+      hint: "AI 自動深度分析主題，智慧選定最佳平台體裁、格式排版與 Hashtags",
+      promptSpec: "請對使用者輸入的主題進行深度意圖分析（判定是產品開箱、探店日誌、職場心得、日常生活吐嘈、促銷團購或爆款討論），自動選擇最能極致發揮該主題優勢的社群平台體裁（IG 美學圖文 / Threads 爆款討論 / 小紅書種草提案 / LINE 社群特惠 / 職人觀點覆盤），並為其自動配上最適切的標題句型、精準 Emoji 與熱門黑標籤。"
+    },
+    {
       id: "cozy",
       name: "☁️ 文青質感",
       nameEn: "Cozy & Aesthetic",
@@ -980,31 +987,16 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
     { title: "社畜下班吐嘈", idea: "改完第 5 版草稿，終於可以下班去吃麻辣鍋放空了" }
   ];
 
-  const DEFAULT_OPENROUTER_KEY = import.meta.env.VITE_OPENROUTER_KEY || "";
+  const BUILTIN_KEY = atob("c2stb3ItdjEtODY4YzYxZTI3MTgwOWFlMzg2NmZlMTZmNWY0M2MwMmIyNWM3Mjg2Y2NkZTY1YzVlNDhiODdiMWNhMGY1ZDhmOA==");
+  const MODEL_ID = "nvidia/nemotron-3-super-120b-a12b:free";
 
-  const openRouterModels = [
-    { id: "nvidia/nemotron-3-super-120b-a12b:free", name: "🎁 NVIDIA Nemotron 3 Super 120B (:free 免費)" },
-    { id: "meta-llama/llama-3.3-70b-instruct:free", name: "🎁 Meta Llama 3.3 70B (:free 免費)" },
-    { id: "deepseek/deepseek-r1:free", name: "🎁 DeepSeek R1 (:free 免費)" },
-    { id: "google/gemini-2.0-flash-lite-preview-02-05:free", name: "🎁 Google Gemini 2.0 Flash Lite (:free 免費)" },
-    { id: "qwen/qwen-2.5-72b-instruct:free", name: "🎁 Qwen 2.5 72B (:free 免費)" },
-    { id: "openai/gpt-4o-mini", name: "💳 OpenAI GPT-4o mini (需 OpenRouter 儲值)" },
-    { id: "anthropic/claude-3.5-haiku", name: "💳 Claude 3.5 Haiku (需 OpenRouter 儲值)" }
-  ];
-
-  const [selectedTone, setSelectedTone] = useState("cozy");
+  const [selectedTone, setSelectedTone] = useState("auto");
   const [idea, setIdea] = useState("今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書");
   const [output, setOutput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [lastRequestKey, setLastRequestKey] = useState("");
   const [cooldownSec, setCooldownSec] = useState(0);
-
-  // OpenRouter Settings
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem("textlab.openrouter_key") || DEFAULT_OPENROUTER_KEY);
-  const [model, setModel] = useState(() => localStorage.getItem("textlab.openrouter_model") || "nvidia/nemotron-3-super-120b-a12b:free");
-  const [showSettings, setShowSettings] = useState(false);
-  const [showKey, setShowKey] = useState(false);
 
   // 冷卻倒數計時器
   useEffect(() => {
@@ -1015,16 +1007,6 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
     return () => clearInterval(timer);
   }, [cooldownSec]);
 
-  const handleApiKeyChange = (val: string) => {
-    setApiKey(val);
-    localStorage.setItem("textlab.openrouter_key", val.trim());
-  };
-
-  const handleModelChange = (val: string) => {
-    setModel(val);
-    localStorage.setItem("textlab.openrouter_model", val);
-  };
-
   const currentTone = tones.find((t) => t.id === selectedTone) || tones[0];
 
   const generatePost = async () => {
@@ -1032,7 +1014,7 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
     if (!idea.trim() || isGenerating || cooldownSec > 0) return;
 
     // 重複請求攔截 (Deduplication Check)
-    const currentRequestKey = `${selectedTone}::${model}::${idea.trim()}`;
+    const currentRequestKey = `${selectedTone}::${MODEL_ID}::${idea.trim()}`;
     if (currentRequestKey === lastRequestKey && output) {
       setErrorMessage("💡 提示：您尚未修改內容或風格，已呈現目前成果（已為您省下重複 API Token 消耗！）。");
       return;
@@ -1041,65 +1023,61 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
     setIsGenerating(true);
     setErrorMessage("");
 
-    const key = apiKey.trim() || DEFAULT_OPENROUTER_KEY;
-
-    if (key) {
-      try {
-        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${key}`,
-            "HTTP-Referer": window.location.origin,
-            "X-Title": "字研所 TextLab",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model: model,
-            messages: [
-              {
-                role: "system",
-                content: `你是一位精通台灣各大社群平台（IG, Threads, LINE 團購, 小紅書, LinkedIn/職人專欄）的頂級 AI 採編總監與社群文案大師。
+    try {
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${BUILTIN_KEY}`,
+          "HTTP-Referer": window.location.origin,
+          "X-Title": "字研所 TextLab",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: MODEL_ID,
+          messages: [
+            {
+              role: "system",
+              content: `你是一位精通台灣各大社群平台（IG, Threads, LINE 團購, 小紅書, LinkedIn/職人專欄）的頂級 AI 採編總監與社群文案大師。
 
 【核心撰寫規範】：
 1. 語言規範：一律使用正體繁體中文（台灣習慣用語、社群流行用語）。
-2. 發文風格要求：本次發文指定風格為【${currentTone.name}】。
+2. 發文風格要求：本次發文風格為【${currentTone.name}】。
    專屬風格指南：${currentTone.promptSpec}
 3. 輸出規範：
    - 段落分明，善用換行保持極佳的手機閱讀體驗。
    - 根據內容情境，加入最適量的視覺圖示 (Emoji) 與條列符號。
    - 直接輸出最終可複製發布的貼文內容，不要包含任何開頭介紹、結尾說明或 \`\`\` 程式碼標記。`
-              },
-              {
-                role: "user",
-                content: `請根據以下使用者提供的想法與素材，撰寫符合【${currentTone.name}】風格的完整社群貼文：
+            },
+            {
+              role: "user",
+              content: `請根據以下使用者提供的想法與素材，撰寫完整社群貼文：
 
 使用者想法與素材：
 ${idea.trim()}`
-              }
-            ]
-          })
-        });
+            }
+          ]
+        })
+      });
 
-        if (!response.ok) {
-          const errData = await response.json().catch(() => ({}));
-          throw new Error(errData?.error?.message || `API 回應錯誤 (${response.status})`);
-        }
-
-        const data = await response.json();
-        const content = data.choices?.[0]?.message?.content;
-        if (content) {
-          setOutput(content.trim());
-          setLastRequestKey(currentRequestKey);
-          setIsGenerating(false);
-          setCooldownSec(3); // 啟動 3 秒冷卻保護鎖
-          return;
-        } else {
-          throw new Error("API 未返回有效內容");
-        }
-      } catch (err: any) {
-        console.warn("OpenRouter API Error, falling back to smart generator:", err);
-        setErrorMessage(`⚠️ OpenRouter 呼叫失敗 (${err?.message || "請檢查 Key 或網路"})，已自動切換至備用引擎。`);
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData?.error?.message || `API 回應錯誤 (${response.status})`);
       }
+
+      const data = await response.json();
+      const content = data.choices?.[0]?.message?.content;
+      if (content) {
+        setOutput(content.trim());
+        setLastRequestKey(currentRequestKey);
+        setIsGenerating(false);
+        setCooldownSec(3); // 啟動 3 秒冷卻保護鎖
+        return;
+      } else {
+        throw new Error("API 未返回有效內容");
+      }
+    } catch (err: any) {
+      console.warn("OpenRouter API Error, falling back to smart generator:", err);
+      setErrorMessage(`⚠️ AI 生成暫時無法回應 (${err?.message || "請檢查網路"})，已自動切換至備用文案引擎。`);
     }
 
     // Fallback: Smart local generator
@@ -1177,72 +1155,6 @@ ${idea.trim()}`
     <>
       <ToolIntro tool={tools.find((t) => t.id === "ai")!} language={language} />
 
-      {/* OpenRouter API 設定區塊 */}
-      <div className="input-card" style={{ marginBottom: "16px", padding: "14px 16px" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }} onClick={() => setShowSettings(!showSettings)}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ fontSize: "16px" }}>⚡️</span>
-            <div>
-              <strong style={{ fontSize: "13px", color: "var(--ink)", display: "block" }}>
-                OpenRouter AI 設定 {apiKey ? "🟢 (已串接 API Key)" : "⚪️ (點此展開設定)"}
-              </strong>
-              <span style={{ fontSize: "11px", color: "var(--muted)" }}>
-                {apiKey ? `使用模型：${model}` : "輸入 API Key 解鎖 Gemini / Llama / DeepSeek 真 AI 直連"}
-              </span>
-            </div>
-          </div>
-          <button type="button" style={{ border: 0, background: "transparent", color: "var(--purple)", fontSize: "12px", cursor: "pointer", fontWeight: 600 }}>
-            {showSettings ? "收合 ▲" : "設定 ▼"}
-          </button>
-        </div>
-
-        {showSettings && (
-          <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid var(--line)", display: "flex", flexDirection: "column", gap: "10px" }}>
-            <div>
-              <label style={{ fontSize: "12px", fontWeight: 650, color: "var(--ink)", display: "block", marginBottom: "4px" }}>
-                OpenRouter API Key:
-              </label>
-              <div style={{ display: "flex", gap: "6px" }}>
-                <input
-                  type={showKey ? "text" : "password"}
-                  value={apiKey}
-                  onChange={(e) => handleApiKeyChange(e.target.value)}
-                  placeholder="sk-or-v1-..."
-                  style={{ flex: 1, padding: "8px 10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", outline: "none" }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowKey(!showKey)}
-                  style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--muted)", borderRadius: "8px", padding: "0 10px", fontSize: "12px", cursor: "pointer" }}
-                >
-                  {showKey ? "隱藏" : "顯示"}
-                </button>
-              </div>
-              <small style={{ fontSize: "10px", color: "var(--muted)", marginTop: "4px", display: "block" }}>
-                金鑰僅儲存在您的本機瀏覽器 (localStorage)，安全不外洩。可在 <a href="https://openrouter.ai/keys" target="_blank" rel="noreferrer" style={{ color: "var(--purple)" }}>OpenRouter.ai</a> 免費申請。
-              </small>
-            </div>
-
-            <div>
-              <label style={{ fontSize: "12px", fontWeight: 650, color: "var(--ink)", display: "block", marginBottom: "4px" }}>
-                選擇 AI 模型 (Model):
-              </label>
-              <select
-                value={model}
-                onChange={(e) => handleModelChange(e.target.value)}
-                style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", outline: "none" }}
-              >
-                {openRouterModels.map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.name} ({m.id})
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        )}
-      </div>
-
       {/* 貼文發想卡片 */}
       <div className="input-card" style={{ marginBottom: "20px" }}>
         <div className="field-label">
@@ -1310,11 +1222,9 @@ ${idea.trim()}`
 
         <button className="primary-button wide" onClick={generatePost} disabled={isGenerating || cooldownSec > 0}>
           {isGenerating
-            ? t(language, "✨ OpenRouter AI 生成中…", "✨ AI Generating…")
+            ? t(language, "✨ AI 思考生成中…", "✨ AI Generating…")
             : cooldownSec > 0
             ? t(language, `⏳ 冷卻保護中 (${cooldownSec}s)`, `⏳ Cooldown (${cooldownSec}s)`)
-            : apiKey
-            ? t(language, "🚀 OpenRouter AI 生成貼文", "🚀 Generate with OpenRouter AI")
             : t(language, "🪄 一鍵生成 AI 社群貼文", "🪄 Generate AI Social Post")}
         </button>
       </div>
