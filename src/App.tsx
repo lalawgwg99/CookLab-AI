@@ -271,9 +271,9 @@ function SymbolsTool({ copied, setCopied, language }: { copied: string; setCopie
             </button>
           ))}
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "12px", padding: "12px 16px", borderRadius: "10px", background: "var(--canvas)", border: "1px dashed var(--line)" }}>
-          <strong style={{ fontSize: "15px", color: "var(--ink)" }}>{builtFrame}</strong>
-          <button className="primary-button" onClick={() => copyText(builtFrame, setCopied)}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "12px", padding: "12px 14px", borderRadius: "10px", background: "var(--canvas)", border: "1px dashed var(--line)" }}>
+          <strong style={{ fontSize: "15px", color: "var(--ink)", wordBreak: "break-all", textAlign: "center", minHeight: "24px", display: "grid", placeItems: "center" }}>{builtFrame}</strong>
+          <button className="primary-button" style={{ width: "100%" }} onClick={() => copyText(builtFrame, setCopied)}>
             {copied === builtFrame ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製標題框", "Copy Frame")}
           </button>
         </div>
