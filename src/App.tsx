@@ -110,7 +110,9 @@ const fontVariants = (text: string) => [
   { name: "全形", value: Array.from(text).map((c) => c === " " ? "　" : c.charCodeAt(0) >= 33 && c.charCodeAt(0) <= 126 ? String.fromCharCode(c.charCodeAt(0) + 0xfee0) : c).join("") },
   { name: "圓圈", value: Array.from(text.toUpperCase()).map((c) => /[A-Z]/.test(c) ? String.fromCodePoint(0x24b6 + c.charCodeAt(0) - 65) : c).join("") },
   { name: "黑底圓圈", value: Array.from(text.toUpperCase()).map((c) => /[A-Z]/.test(c) ? String.fromCodePoint(0x1f150 + c.charCodeAt(0) - 65) : c).join("") },
+  { name: "方框", value: Array.from(text.toUpperCase()).map((c) => /[A-Z]/.test(c) ? String.fromCodePoint(0x1f130 + c.charCodeAt(0) - 65) : c).join("") },
   { name: "刪除線", value: Array.from(text).map((c) => c + "\u0336").join("") },
+  { name: "底線", value: Array.from(text).map((c) => c + "\u0332").join("") },
 ];
 
 function addGlobalHistory(item: string) {
@@ -430,15 +432,18 @@ function KaomojiCard({ item, favorite, copied, language, onCopy, onFavorite }: {
 
 function FontsTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
   const [text, setText] = useState("hello studio");
-  const [wrapper, setWrapper] = useState<"none" | "sparkle" | "bracket" | "flower" | "soft">("none");
+  const [wrapper, setWrapper] = useState<"none" | "sparkle" | "bracket" | "flower" | "soft" | "star" | "book" | "wave">("none");
 
-  const fontNames: Record<string, string> = { 粗體: "Bold", 斜體: "Italic", 粗斜體: "Bold Italic", 無襯線: "Sans Serif", 無襯線粗體: "Sans Bold", 哥德體: "Gothic", 雙線空心體: "Double Struck", 手寫花體: "Script", 等寬字: "Monospace", 全形: "Fullwidth", 圓圈: "Circled", 黑底圓圈: "Black Circled", 刪除線: "Strikethrough" };
+  const fontNames: Record<string, string> = { 粗體: "Bold", 斜體: "Italic", 粗斜體: "Bold Italic", 無襯線: "Sans Serif", 無襯線粗體: "Sans Bold", 哥德體: "Gothic", 雙線空心體: "Double Struck", 手寫花體: "Script", 等寬字: "Monospace", 全形: "Fullwidth", 圓圈: "Circled", 黑底圓圈: "Black Circled", 方框: "Squared", 刪除線: "Strikethrough", 底線: "Underlined" };
 
   const applyWrapper = (val: string) => {
     if (wrapper === "sparkle") return `✨ ${val} ✨`;
     if (wrapper === "bracket") return `[ ${val} ]`;
     if (wrapper === "flower") return `✿ ${val} ✿`;
     if (wrapper === "soft") return `୨୧ ${val} ୨୧`;
+    if (wrapper === "star") return `✦ ${val} ✦`;
+    if (wrapper === "book") return `《 ${val} 》`;
+    if (wrapper === "wave") return `〰︎ ${val} 〰︎`;
     return val;
   };
 
@@ -447,7 +452,7 @@ function FontsTool({ copied, setCopied, language }: { copied: string; setCopied:
       <div className="field-label"><label htmlFor="font-input">{t(language, "輸入英文或數字", "Enter English letters or numbers")}</label><span>{text.length}/80</span></div>
       <input id="font-input" className="large-input" maxLength={80} value={text} onChange={(e) => setText(e.target.value)} placeholder="Type something…" />
       
-      <div style={{ marginTop: "14px", display: "flex", flexWrap: "wrap", gap: "10px", alignItems: "center" }}>
+      <div style={{ marginTop: "14px", display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
         <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--muted)" }}>{t(language, "氣氛包裝框：", "Decorations:")}</span>
         {[
           { id: "none", label: "無" },
@@ -455,6 +460,9 @@ function FontsTool({ copied, setCopied, language }: { copied: string; setCopied:
           { id: "bracket", label: "[ ]" },
           { id: "flower", label: "✿ ✿" },
           { id: "soft", label: "୨୧ ୨୧" },
+          { id: "star", label: "✦ ✦" },
+          { id: "book", label: "《 》" },
+          { id: "wave", label: "〰︎ 〰︎" },
         ].map((item) => (
           <button
             key={item.id}
@@ -465,9 +473,9 @@ function FontsTool({ copied, setCopied, language }: { copied: string; setCopied:
           </button>
         ))}
       </div>
-      <div style={{ marginTop: "10px", display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
+      <div style={{ marginTop: "10px", display: "flex", flexWrap: "wrap", gap: "6px", alignItems: "center" }}>
         <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--muted)" }}>{t(language, "快速靈感：", "IG Bio Presets:")}</span>
-        {["Coffee & Life ☕️", "Product Designer ✨", "Taipei, TW 📍", "Minimalist ☁️"].map((preset) => (
+        {["Coffee & Life ☕️", "Product Designer ✨", "Taipei, TW 📍", "Minimalist ☁️", "Foodie & Travel 🍜", "OOTD Inspiration ✦"].map((preset) => (
           <button
             key={preset}
             onClick={() => setText(preset)}
