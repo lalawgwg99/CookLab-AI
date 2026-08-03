@@ -955,12 +955,23 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
   const [output, setOutput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [lastRequestKey, setLastRequestKey] = useState("");
+  const [cooldownSec, setCooldownSec] = useState(0);
 
   // OpenRouter Settings
   const [apiKey, setApiKey] = useState(() => localStorage.getItem("textlab.openrouter_key") || DEFAULT_OPENROUTER_KEY);
   const [model, setModel] = useState(() => localStorage.getItem("textlab.openrouter_model") || "nvidia/nemotron-3-super-120b-a12b:free");
   const [showSettings, setShowSettings] = useState(false);
   const [showKey, setShowKey] = useState(false);
+
+  // 冷卻倒數計時器
+  useEffect(() => {
+    if (cooldownSec <= 0) return;
+    const timer = setInterval(() => {
+      setCooldownSec((prev) => (prev <= 1 ? 0 : prev - 1));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [cooldownSec]);
 
   const handleApiKeyChange = (val: string) => {
     setApiKey(val);
@@ -975,7 +986,16 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
   const currentTone = tones.find((t) => t.id === selectedTone) || tones[0];
 
   const generatePost = async () => {
-    if (!idea.trim()) return;
+    // 防連點與防空內容鎖定 (Anti-double click & cooldown guard)
+    if (!idea.trim() || isGenerating || cooldownSec > 0) return;
+
+    // 重複請求攔截 (Deduplication Check)
+    const currentRequestKey = `${selectedTone}::${model}::${idea.trim()}`;
+    if (currentRequestKey === lastRequestKey && output) {
+      setErrorMessage("💡 提示：您尚未修改內容或風格，已呈現目前成果（已為您省下重複 API Token 消耗！）。");
+      return;
+    }
+
     setIsGenerating(true);
     setErrorMessage("");
 
@@ -1021,7 +1041,9 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
         const content = data.choices?.[0]?.message?.content;
         if (content) {
           setOutput(content.trim());
+          setLastRequestKey(currentRequestKey);
           setIsGenerating(false);
+          setCooldownSec(3); // 啟動 3 秒冷卻保護鎖
           return;
         } else {
           throw new Error("API 未返回有效內容");
@@ -1097,7 +1119,9 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
         result = `${intros[variantIdx]}\n\n${text}\n\n${outros[variantIdx]}`;
       }
       setOutput(result);
+      setLastRequestKey(currentRequestKey);
       setIsGenerating(false);
+      setCooldownSec(3); // 啟動 3 秒冷卻保護鎖
     }, 400);
   };
 
@@ -1236,9 +1260,11 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
           </div>
         )}
 
-        <button className="primary-button wide" onClick={generatePost} disabled={isGenerating}>
+        <button className="primary-button wide" onClick={generatePost} disabled={isGenerating || cooldownSec > 0}>
           {isGenerating
             ? t(language, "✨ OpenRouter AI 生成中…", "✨ AI Generating…")
+            : cooldownSec > 0
+            ? t(language, `⏳ 冷卻保護中 (${cooldownSec}s)`, `⏳ Cooldown (${cooldownSec}s)`)
             : apiKey
             ? t(language, "🚀 OpenRouter AI 生成貼文", "🚀 Generate with OpenRouter AI")
             : t(language, "🪄 一鍵生成 AI 社群貼文", "🪄 Generate AI Social Post")}
