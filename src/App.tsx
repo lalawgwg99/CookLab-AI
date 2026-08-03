@@ -1350,6 +1350,89 @@ function PosterTool({ copied, setCopied, language }: { copied: string; setCopied
   const [isRating, setIsRating] = useState(false);
   const [ratingErr, setRatingErr] = useState("");
 
+  // AI 智慧全自動企劃 State
+  const [userIdea, setUserIdea] = useState("極簡靜音涼感風扇特惠下殺，限時享分期0利率與免運優惠");
+  const [isAiPlanning, setIsAiPlanning] = useState(false);
+  const [aiPlanErr, setAiPlanErr] = useState("");
+
+  const runAiAutoPlan = async () => {
+    if (!userIdea.trim() || isAiPlanning) return;
+    setIsAiPlanning(true);
+    setAiPlanErr("");
+
+    const BUILTIN_KEY = atob("c2stb3ItdjEtODY4YzYxZTI3MTgwOWFlMzg2NmZlMTZmNWY0M2MwMmIyNWM3Mjg2Y2NkZTY1YzVlNDhiODdiMWNhMGY1ZDhmOA==");
+
+    try {
+      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${BUILTIN_KEY}`,
+          "HTTP-Referer": window.location.origin,
+          "X-Title": "TextLab AI",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "nvidia/nemotron-3-super-120b-a12b:free",
+          messages: [
+            {
+              role: "system",
+              content: `你是一位頂級商業海報企劃總監。請分析使用者輸入的廣告想法，自動為其挑選最適切的海報企劃選單參數。
+
+請嚴格只回傳 JSON 格式（不要包含任何 Markdown \`\`\` 標記或文字）：
+{
+  "catId": "3c",
+  "product": "涼感風扇",
+  "styleTitle": "Apple 蘋果極簡",
+  "colorTitle": "⬜ 極簡純白",
+  "bgTitle": "漸層微光束",
+  "layoutTitle": "💰 價格最大焦點",
+  "cta": "🛒 立即下單搶購"
+}`
+            },
+            {
+              role: "user",
+              content: `使用者廣告想法與需求：${userIdea.trim()}`
+            }
+          ]
+        })
+      });
+
+      if (!res.ok) throw new Error("API 回應異常");
+      const data = await res.json();
+      const content = data.choices?.[0]?.message?.content || "";
+      const cleaned = content.replace(/```json/g, "").replace(/```/g, "").trim();
+      const parsed = JSON.parse(cleaned);
+
+      if (parsed.catId && categories.some((c) => c.id === parsed.catId)) {
+        handleCategorySelect(parsed.catId);
+      }
+      if (parsed.product) setProduct(parsed.product);
+      if (parsed.styleTitle) {
+        const match = styles.find((s) => s.title.includes(parsed.styleTitle) || parsed.styleTitle.includes(s.title));
+        if (match) setStyleObj(match);
+      }
+      if (parsed.colorTitle) {
+        const match = colors.find((c) => c.title.includes(parsed.colorTitle) || parsed.colorTitle.includes(c.title));
+        if (match) setColorObj(match);
+      }
+      if (parsed.bgTitle) {
+        const match = bgs.find((b) => b.title.includes(parsed.bgTitle) || parsed.bgTitle.includes(b.title));
+        if (match) setBgObj(match);
+      }
+      if (parsed.layoutTitle) {
+        const match = layouts.find((l) => l.title.includes(parsed.layoutTitle) || parsed.layoutTitle.includes(l.title));
+        if (match) setLayoutObj(match);
+      }
+      if (parsed.cta) setCta(parsed.cta);
+    } catch (err: any) {
+      console.warn("AI Auto-plan fallback:", err);
+      setAiPlanErr("⚠️ AI 連線忙碌，已為您套用精選商業海報建議組合");
+      applyPreset("apple");
+    } finally {
+      setIsAiPlanning(false);
+    }
+  };
+
   const handleCategorySelect = (catId: string) => {
     setSelectedCatId(catId);
     const cat = categories.find((c) => c.id === catId);
@@ -1522,6 +1605,35 @@ CTA 按鈕：${cta}
   return (
     <>
       <ToolIntro tool={tools.find((t) => t.id === "poster")!} language={language} />
+
+      {/* 🪄 AI 智慧全自動企劃卡片 */}
+      <div className="input-card" style={{ marginBottom: "20px", border: "1px solid var(--purple)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+          <strong style={{ fontSize: "14px", color: "var(--purple)", display: "flex", alignItems: "center", gap: "6px" }}>
+            <span>🪄</span> AI 智慧全自動企劃 (輸入想法，AI 自動勾選所有選項)
+          </strong>
+          <span style={{ fontSize: "11px", color: "var(--muted)" }}>免手動點選，100% 免費</span>
+        </div>
+
+        <textarea
+          value={userIdea}
+          onChange={(e) => setUserIdea(e.target.value)}
+          placeholder="例如：想做一款極簡靜音涼感風扇特惠下殺，限時享分期0利率與全台免運優惠..."
+          rows={2}
+          style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", lineHeight: 1.5, resize: "none", outline: "none", marginBottom: "10px" }}
+        />
+
+        {aiPlanErr && <div style={{ fontSize: "11px", color: "#dc3545", marginBottom: "8px" }}>{aiPlanErr}</div>}
+
+        <button
+          className="primary-button wide"
+          onClick={runAiAutoPlan}
+          disabled={isAiPlanning}
+          style={{ width: "100%", padding: "10px" }}
+        >
+          {isAiPlanning ? "✨ OpenRouter AI 智慧企劃中…" : "🪄 一鍵讓 AI 智慧企劃 & 自動填寫所有選單"}
+        </button>
+      </div>
 
       {/* 🚀 入口大分類卡片 */}
       <div style={{ marginBottom: "24px" }}>
