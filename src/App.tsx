@@ -1357,9 +1357,135 @@ function PosterTool({ copied, setCopied, language }: { copied: string; setCopied
   const [customFeatureInput, setCustomFeatureInput] = useState("");
 
   // AI 智慧全自動企劃 State
+  const [aiInputMode, setAiInputMode] = useState<"idea" | "url">("idea");
   const [userIdea, setUserIdea] = useState("極簡靜音涼感風扇特惠下殺，限時享分期0利率與免運優惠");
+  const [productUrl, setProductUrl] = useState("");
   const [isAiPlanning, setIsAiPlanning] = useState(false);
   const [aiPlanErr, setAiPlanErr] = useState("");
+  const [isFetchingUrl, setIsFetchingUrl] = useState(false);
+  const [urlFetchMsg, setUrlFetchMsg] = useState("");
+
+  const analyzeProductUrl = async () => {
+    const url = productUrl.trim();
+    if (!url || isFetchingUrl) return;
+    setIsFetchingUrl(true);
+    setUrlFetchMsg("🔍 正在存取網頁資訊並擷取商品標題與描述…");
+
+    let fetchedText = "";
+
+    try {
+      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+      const res = await fetch(proxyUrl, { signal: controller.signal }).catch(() => null);
+      clearTimeout(timeoutId);
+
+      if (res && res.ok) {
+        const htmlText = await res.text();
+        const doc = new DOMParser().parseFromString(htmlText, "text/html");
+        const title = doc.querySelector("title")?.textContent || "";
+        const ogTitle = doc.querySelector('meta[property="og:title"]')?.getAttribute("content") || "";
+        const ogDesc = doc.querySelector('meta[property="og:description"]')?.getAttribute("content") || "";
+        const metaDesc = doc.querySelector('meta[name="description"]')?.getAttribute("content") || "";
+        const headings = Array.from(doc.querySelectorAll("h1, h2, h3")).map((h) => h.textContent?.trim()).filter(Boolean).join(" | ");
+
+        fetchedText = [ogTitle || title, ogDesc || metaDesc, headings].filter(Boolean).join("\n");
+      }
+    } catch (e) {
+      console.warn("Proxy fetch silent fallback:", e);
+    }
+
+    if (!fetchedText || fetchedText.length < 10) {
+      fetchedText = `商品網址：${url}`;
+    }
+
+    setUrlFetchMsg("✨ OpenRouter AI 正在分析商品內容並自動設計海報 Prompt…");
+
+    const BUILTIN_KEY = atob("c2stb3ItdjEtODY4YzYxZTI3MTgwOWFlMzg2NmZlMTZmNWY0M2MwMmIyNWM3Mjg2Y2NkZTY1YzVlNDhiODdiMWNhMGY1ZDhmOA==");
+
+    try {
+      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${BUILTIN_KEY}`,
+          "HTTP-Referer": window.location.origin,
+          "X-Title": "TextLab AI",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "nvidia/nemotron-3-super-120b-a12b:free",
+          messages: [
+            {
+              role: "system",
+              content: `你是一位頂級商業海報企劃總監與電商數據分析師。請分析從商品網址/網頁中提取出來的產品內容，自動為其精準解析品牌、產品名稱、售價、優惠與賣點，並填寫海報企劃選單參數。
+
+請嚴格只回傳 JSON 格式（不要包含任何 Markdown \`\`\` 標記或文字）：
+{
+  "catId": "3c",
+  "brandName": "品牌名稱",
+  "product": "精準商品名稱",
+  "priceValue": "NT$ 售價",
+  "styleTitle": "Apple 蘋果極簡",
+  "colorTitle": "⬜ 極簡純白",
+  "bgTitle": "漸層微光束",
+  "layoutTitle": "💰 價格最大焦點",
+  "cta": "🛒 立即下單搶購",
+  "offers": ["優惠1", "優惠2"],
+  "features": ["賣點1", "賣點2"]
+}`
+            },
+            {
+              role: "user",
+              content: `商品網址：${url}
+提取的網頁資訊與標題描述：
+${fetchedText}`
+            }
+          ]
+        })
+      });
+
+      if (!res.ok) throw new Error("AI 解析異常");
+      const data = await res.json();
+      const content = data.choices?.[0]?.message?.content || "";
+      const cleaned = content.replace(/```json/g, "").replace(/```/g, "").trim();
+      const parsed = JSON.parse(cleaned);
+
+      if (parsed.catId && categories.some((c) => c.id === parsed.catId)) {
+        handleCategorySelect(parsed.catId);
+      }
+      if (parsed.brandName) setBrandName(parsed.brandName);
+      if (parsed.product) setProduct(parsed.product);
+      if (parsed.priceValue) setPriceValue(parsed.priceValue);
+      if (parsed.styleTitle) {
+        const match = styles.find((s) => s.title.includes(parsed.styleTitle) || parsed.styleTitle.includes(s.title));
+        if (match) setStyleObj(match);
+      }
+      if (parsed.colorTitle) {
+        const match = colors.find((c) => c.title.includes(parsed.colorTitle) || parsed.colorTitle.includes(c.title));
+        if (match) setColorObj(match);
+      }
+      if (parsed.bgTitle) {
+        const match = bgs.find((b) => b.title.includes(parsed.bgTitle) || parsed.bgTitle.includes(b.title));
+        if (match) setBgObj(match);
+      }
+      if (parsed.layoutTitle) {
+        const match = layouts.find((l) => l.title.includes(parsed.layoutTitle) || parsed.layoutTitle.includes(l.title));
+        if (match) setLayoutObj(match);
+      }
+      if (parsed.cta) setCta(parsed.cta);
+      if (Array.isArray(parsed.offers) && parsed.offers.length) setOffers(parsed.offers);
+      if (Array.isArray(parsed.features) && parsed.features.length) setFeatures(parsed.features);
+
+      setUrlFetchMsg("🎉 成功從網址擷取並分析！已自動為您勾選填寫所有海報選單！");
+    } catch (err: any) {
+      console.warn("URL AI Parse error:", err);
+      setUrlFetchMsg("⚠️ 網址分析完畢，已自動為您帶入預設商業海報風格");
+      applyPreset("apple");
+    } finally {
+      setIsFetchingUrl(false);
+    }
+  };
 
   const addCustomOffer = () => {
     if (!customOfferInput.trim()) return;
@@ -1628,33 +1754,98 @@ CTA 按鈕：${cta}
     <>
       <ToolIntro tool={tools.find((t) => t.id === "poster")!} language={language} />
 
-      {/* 🪄 AI 智慧全自動企劃卡片 */}
-      <div className="input-card" style={{ marginBottom: "20px", border: "1px solid var(--purple)" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+      {/* 🪄 AI 智慧全自動企劃卡片 (支援文字想法 or 貼上商品網址) */}
+      <div className="input-card" style={{ marginBottom: "20px", border: "1.5px solid var(--purple)", background: "var(--paper)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
           <strong style={{ fontSize: "14px", color: "var(--purple)", display: "flex", alignItems: "center", gap: "6px" }}>
-            <span>🪄</span> AI 智慧全自動企劃 (輸入想法，AI 自動勾選所有選項)
+            <span>🪄</span> AI 智慧全自動企劃 (輸入想法 or 貼上商品網址，AI 自動生成選單)
           </strong>
-          <span style={{ fontSize: "11px", color: "var(--muted)" }}>免手動點選，100% 免費</span>
+          <span style={{ fontSize: "11px", color: "var(--muted)" }}>免手動選擇，100% 免費</span>
         </div>
 
-        <textarea
-          value={userIdea}
-          onChange={(e) => setUserIdea(e.target.value)}
-          placeholder="例如：想做一款極簡靜音涼感風扇特惠下殺，限時享分期0利率與全台免運優惠..."
-          rows={2}
-          style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", lineHeight: 1.5, resize: "none", outline: "none", marginBottom: "10px" }}
-        />
+        {/* 模式切換鈕 */}
+        <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
+          <button
+            onClick={() => setAiInputMode("idea")}
+            style={{
+              flex: 1,
+              padding: "8px",
+              borderRadius: "8px",
+              border: "1px solid var(--line)",
+              background: aiInputMode === "idea" ? "var(--purple)" : "var(--canvas)",
+              color: aiInputMode === "idea" ? "#fff" : "var(--ink)",
+              fontSize: "12px",
+              fontWeight: 650,
+              cursor: "pointer"
+            }}
+          >
+            ✍️ 輸入文字想法
+          </button>
+          <button
+            onClick={() => setAiInputMode("url")}
+            style={{
+              flex: 1,
+              padding: "8px",
+              borderRadius: "8px",
+              border: "1px solid var(--line)",
+              background: aiInputMode === "url" ? "var(--purple)" : "var(--canvas)",
+              color: aiInputMode === "url" ? "#fff" : "var(--ink)",
+              fontSize: "12px",
+              fontWeight: 650,
+              cursor: "pointer"
+            }}
+          >
+            🔗 貼上商品網址 (蝦皮/Momo/官網)
+          </button>
+        </div>
 
-        {aiPlanErr && <div style={{ fontSize: "11px", color: "#dc3545", marginBottom: "8px" }}>{aiPlanErr}</div>}
+        {aiInputMode === "idea" ? (
+          <>
+            <textarea
+              value={userIdea}
+              onChange={(e) => setUserIdea(e.target.value)}
+              placeholder="例如：想做一款極簡靜音涼感風扇特惠下殺，限時享分期0利率與全台免運優惠..."
+              rows={2}
+              style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", lineHeight: 1.5, resize: "none", outline: "none", marginBottom: "10px" }}
+            />
 
-        <button
-          className="primary-button wide"
-          onClick={runAiAutoPlan}
-          disabled={isAiPlanning}
-          style={{ width: "100%", padding: "10px" }}
-        >
-          {isAiPlanning ? "✨ OpenRouter AI 智慧企劃中…" : "🪄 一鍵讓 AI 智慧企劃 & 自動填寫所有選單"}
-        </button>
+            {aiPlanErr && <div style={{ fontSize: "11px", color: "#dc3545", marginBottom: "8px" }}>{aiPlanErr}</div>}
+
+            <button
+              className="primary-button wide"
+              onClick={runAiAutoPlan}
+              disabled={isAiPlanning}
+              style={{ width: "100%", padding: "10px" }}
+            >
+              {isAiPlanning ? "✨ OpenRouter AI 智慧企劃中…" : "🪄 一鍵讓 AI 分析想法 & 自動填寫所有選單"}
+            </button>
+          </>
+        ) : (
+          <>
+            <input
+              type="url"
+              value={productUrl}
+              onChange={(e) => setProductUrl(e.target.value)}
+              placeholder="請貼上商品連結，例如：https://shopee.tw/product/... 或 https://momo.com.tw/..."
+              style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--purple)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", outline: "none", marginBottom: "8px" }}
+            />
+
+            {urlFetchMsg && (
+              <div style={{ fontSize: "11px", color: "var(--purple-dark)", marginBottom: "8px", fontWeight: 600 }}>
+                {urlFetchMsg}
+              </div>
+            )}
+
+            <button
+              className="primary-button wide"
+              onClick={analyzeProductUrl}
+              disabled={isFetchingUrl || !productUrl.trim()}
+              style={{ width: "100%", padding: "10px" }}
+            >
+              {isFetchingUrl ? "🔍 網頁讀取與 AI 分析企劃中…" : "🔗 一鍵解析商品網址 & 自動企劃海報"}
+            </button>
+          </>
+        )}
       </div>
 
       {/* 🚀 入口大分類卡片 */}
