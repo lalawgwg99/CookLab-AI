@@ -922,13 +922,55 @@ function HashtagTool({ copied, setCopied, language }: { copied: string; setCopie
 
 function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
   const tones = [
-    { id: "cozy", name: "☁️ 文青質感", nameEn: "Cozy & Aesthetic", hint: "適合 IG 日常、咖啡探店、生活紀錄" },
-    { id: "threads", name: "💬 Threads 觀點", nameEn: "Viral Threads Take", hint: "適合 Threads 爆款短評、思考討論" },
-    { id: "line", name: "📢 LINE 社群團購", nameEn: "LINE Deal Push", hint: "適合 LINE 群組社群推播、團購優惠" },
-    { id: "sales", name: "🛍️ 商品促銷導購", nameEn: "Sales & Promotion", hint: "適合 電商促銷、引爆購買慾望" },
-    { id: "redbook", name: "✨ 小紅書種草", nameEn: "Redbook Lifestyle", hint: "適合 探店提案、質感好物推薦" },
-    { id: "pro", name: "💡 職人專業", nameEn: "Professional", hint: "適合 設計師心得、工作經驗分享" },
-    { id: "humor", name: "🫠 幽默社畜", nameEn: "Humorous Casual", hint: "適合 週五下班、生活吐嘈日記" }
+    {
+      id: "cozy",
+      name: "☁️ 文青質感",
+      nameEn: "Cozy & Aesthetic",
+      hint: "適合 IG 日常、咖啡探店、生活紀錄",
+      promptSpec: "文風溫柔感性、語氣舒緩不急躁。善用換行與精緻簡約的排版分隔線（如 ─── ⋆⋅☆⋅⋆ ───），搭配柔和 Emoji，並於末尾加上 3~5 個生活美學相關黑標籤 (#日常碎片 #生活美學 #質感隨筆)。"
+    },
+    {
+      id: "threads",
+      name: "💬 Threads 觀點",
+      nameEn: "Viral Threads Take",
+      hint: "適合 Threads 爆款短評、思考討論",
+      promptSpec: "Threads 爆款體裁。開頭用引人好奇的破題金句（例如『 關於最近的一個小思考 』），中間分段簡潔明快，結尾拋出引發留言討論的問題或觀點，並加上 3~5 個 Threads 流行標籤 (#Threads創作者 #觀點紀錄 #思考碎片)。"
+    },
+    {
+      id: "line",
+      name: "📢 LINE 社群團購",
+      nameEn: "LINE Deal Push",
+      hint: "適合 LINE 群組社群推播、團購優惠",
+      promptSpec: "LINE 社群/群組限定團購推播風格。開頭用火熱開團標題（如 🔥【LINE 社群限定｜獨享優惠】），列出清晰的好康重點條列（▪ 限量庫存、▪ 社群專屬價），附上下單預購連結範本（https://line.me/R/ti/p/@example），語氣親切熱情。"
+    },
+    {
+      id: "sales",
+      name: "🛍️ 商品促銷導購",
+      nameEn: "Sales & Promotion",
+      hint: "適合 電商促銷、引爆購買慾望",
+      promptSpec: "強導購電商風格。標題爆款搶眼（如 🛒【爆款限定促銷｜限時下殺】），強調產品三大必買理由與強烈誘因，製造倒數限量緊張感，末尾附上賣場購買連結（https://store.example.com），黑標籤包含促銷關鍵字 (#爆款推薦 #限時優惠 #搶購倒數)。"
+    },
+    {
+      id: "redbook",
+      name: "✨ 小紅書種草",
+      nameEn: "Redbook Lifestyle",
+      hint: "適合 探店提案、質感好物推薦",
+      promptSpec: "小紅書爆款種草體裁。標題帶有氛圍感（如 ✦ 氛圍感生活提案 ✦），內文包含評分指標（▪ 視覺氛圍：滿分 💯、▪ 出片指數：★★★★★），文字滿滿細節感與儀式感，結尾提醒點讚收藏，附上小紅書熱門標籤 (#小紅書文案 #氛圍感滿分 #種草日記)。"
+    },
+    {
+      id: "pro",
+      name: "💡 職人專業",
+      nameEn: "Professional",
+      hint: "適合 設計師心得、工作經驗分享",
+      promptSpec: "專業職人觀點覆盤。開頭標示專業主題（如 💡 職人筆記｜Insight & Growth），內文條理分明、邏輯清晰，總結 2~3 點工作心法或覆盤結論（01 / 保持專注、02 / 持續疊代），語氣專業嚴謹且謙遜，標籤包含 (#職人觀點 #設計思考 #經驗覆盤)。"
+    },
+    {
+      id: "humor",
+      name: "🫠 幽默社畜",
+      nameEn: "Humorous Casual",
+      hint: "適合 週五下班、生活吐嘈日記",
+      promptSpec: "充滿生活共鳴感與微幽默自嘲，開頭如 🫠 今日社畜心理狀態，結尾用語氣放鬆的下班儀式感金句與經典 Emoji（🏃‍♂️💨💼🍻），標籤包含 (#社畜日常 #優雅崩潰 #週五救星)。"
+    }
   ];
 
   const presets = [
@@ -1016,17 +1058,23 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
             messages: [
               {
                 role: "system",
-                content: `你是一位精通台灣社群（IG、Threads、LINE 團購、小紅書、職人專欄）的頂級 AI 採編與文案專家。
-請根據使用者的【發文風格語氣】與【核心想法/主題】，撰寫極具吸引力、排版清晰、善用適量 Emoji 與熱門黑標籤 (Hashtag) 的社群貼文。
-規範：
-1. 一律使用繁體中文 (台灣用語與流行社群用語)。
-2. 請呈現自然流暢、符合選擇語氣的社群文風。
-3. 直接輸出完整貼文內容，不要包含額外的解說或 \`\`\` 程式碼標記。`
+                content: `你是一位精通台灣各大社群平台（IG, Threads, LINE 團購, 小紅書, LinkedIn/職人專欄）的頂級 AI 採編總監與社群文案大師。
+
+【核心撰寫規範】：
+1. 語言規範：一律使用正體繁體中文（台灣習慣用語、社群流行用語）。
+2. 發文風格要求：本次發文指定風格為【${currentTone.name}】。
+   專屬風格指南：${currentTone.promptSpec}
+3. 輸出規範：
+   - 段落分明，善用換行保持極佳的手機閱讀體驗。
+   - 根據內容情境，加入最適量的視覺圖示 (Emoji) 與條列符號。
+   - 直接輸出最終可複製發布的貼文內容，不要包含任何開頭介紹、結尾說明或 \`\`\` 程式碼標記。`
               },
               {
                 role: "user",
-                content: `發文風格語氣：${currentTone.name} (${currentTone.hint})
-貼文主題與內容想法：${idea.trim()}`
+                content: `請根據以下使用者提供的想法與素材，撰寫符合【${currentTone.name}】風格的完整社群貼文：
+
+使用者想法與素材：
+${idea.trim()}`
               }
             ]
           })
