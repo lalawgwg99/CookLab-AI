@@ -1263,17 +1263,18 @@ ${idea.trim()}`
 
 function PosterTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
   const categories = [
-    { id: "3c", icon: "🏠", title: "3C 家電海報", desc: "冷氣、電視、冰箱、洗衣機、手機、電腦", subProducts: ["冷氣", "電視", "冰箱", "洗衣機", "吸塵器", "手機", "電腦", "智慧手錶"], features: ["R32變頻", "1級節能", "智慧靜音", "Wi-Fi控溫", "HEPA濾網", "雙重除濕", "超長續航", "極致防塵"] },
-    { id: "food", icon: "🍔", title: "美食餐飲海報", desc: "飲料、甜點、火鍋、燒肉、餐館、咖啡廳", subProducts: ["手搖飲料", "精緻甜點", "麻辣火鍋", "日式燒肉", "早午餐", "義式咖啡", "便當外帶"], features: ["嚴選天然食材", "現點現做", "職人手作", "外送熱壓配送", "無添加防腐劑", "獨家秘製醬汁", "限時限量", "產地直送"] },
-    { id: "auto", icon: "🚗", title: "汽車房產海報", desc: "新車上市、中古車、豪宅建案、租屋", subProducts: ["新車上市", "認證中古車", "奢華豪宅", "捷運精品宅", "商辦租售", "重機跑車"], features: ["零頭款輕鬆入主", "原廠認證中古車", "絕版特惠價", "捷運站旁3分鐘", "頂級智慧保全", "超大棟距視野", "尊榮露台", "低公設比"] },
-    { id: "fashion", icon: "🛍️", title: "電商服飾海報", desc: "男裝女裝、鞋包配件、美妝保養", subProducts: ["女裝服飾", "男裝潮流", "精品包款", "運動跑鞋", "美妝保養", "飾品配件"], features: ["親膚透氣素材", "專利抗皺美型", "日本限量進口", "網紅口碑推薦", "水感保濕修護", "修身顯瘦剪裁", "多色可選", "免運直送"] },
-    { id: "people", icon: "👤", title: "人物寫真海報", desc: "個人形象照、講師簡介、網紅推薦", subProducts: ["個人形象照", "專業講師", "網紅推薦", "企業高階", "職人名片", "藝術寫真"], features: ["實戰經驗豐富", "知名品牌指定", "百萬觀看創作者", "頂級攝影團隊", "個人特質定製", "專屬風格打造"] },
-    { id: "event", icon: "🎉", title: "活動慶典海報", desc: "開幕慶、週年慶、音樂祭、講座", subProducts: ["新店開幕慶", "品牌週年慶", "音樂祭特輯", "專業講座", "快閃店登場", "年終特賣"], features: ["免費入場體驗", "席次有限預約制", "憑票兌換精美好禮", "現場限量贈品", "獨家大咖嘉賓", "抽獎大送禮"] },
-    { id: "biz", icon: "💼", title: "商業企業海報", desc: "金融理財、信用卡、企業徵才", subProducts: ["金融理財", "專屬信用卡", "企業徵才", "法律諮詢", "資產配置", "B2B 服務"], features: ["高額回饋優惠", "專屬VIP貴賓禮", "彈性高薪福利", "國際級認證團隊", "一對一專業諮詢", "快速核貸通路"] },
-    { id: "general", icon: "✨", title: "萬用品牌海報", desc: "自訂主題、通用品牌質感宣傳", subProducts: ["品牌形象", "新品宣傳", "限時折扣", "概念產品", "企業 ESG", "VIP 尊榮"], features: ["品質嚴格把關", "極致質感呈現", "熱銷好評回饋", "全台限定通路", "經典經典重現", "限時尊榮呈獻"] }
+    { id: "3c", icon: "🏠", title: "3C 家電海報", desc: "冷氣、電視、冰箱、洗衣機、手機、電腦", subProducts: ["冷氣", "電視", "冰箱", "洗衣機", "吸塵器", "手機", "電腦", "智慧手錶"], features: ["R32變頻", "1級節能", "智慧靜音", "Wi-Fi控溫", "HEPA濾網", "雙重除濕", "超長續航", "極致防塵"], offers: ["分期0利率", "政府補助折扣", "3年延長保固", "免費到府配送", "限時加碼下殺", "舊機折抵換新", "新品限量上市", "VIP尊榮禮包"], ctas: ["🛒 立即下單搶購", "⏰ 限時搶購倒數中", "📞 點擊預約專人諮詢", "📍 到店親自試用體驗", "📩 領取專屬驚喜折價券"], environments: ["🏡 溫馨家庭時光", "🏙️ 高級豪宅客廳", "⚡ 酷炫科技空間", "☀️ 涼爽夏季海灘", "🍂 質感秋冬暖意"] },
+    { id: "food", icon: "🍔", title: "美食餐飲海報", desc: "飲料、甜點、火鍋、燒肉、餐館、咖啡廳", subProducts: ["手搖飲料", "精緻甜點", "麻辣火鍋", "日式燒肉", "早午餐", "義式咖啡", "便當外帶"], features: ["嚴選天然食材", "現點現做", "職人手作", "外送熱壓配送", "無添加防腐劑", "獨家秘製醬汁", "限時限量", "產地直送"], offers: ["開幕首週85折", "第二杯半價", "滿額贈甜點", "外帶自取9折", "會員集點兩倍送", "限定套餐優惠", "生日壽星免費", "打卡送小菜"], ctas: ["📲 立即線上訂位", "🛵 外送平台點餐去", "📍 Google Map 導航到店", "🎫 領取專屬折價券", "📞 電話訂位預約"], environments: ["🍽️ 質感餐廳場景", "☕ 文青咖啡廳角落", "🌿 戶外花園露天座", "🏪 溫暖街邊小店", "🏠 居家美食時光"] },
+    { id: "auto", icon: "🚗", title: "汽車房產海報", desc: "新車上市、中古車、豪宅建案、租屋", subProducts: ["新車上市", "認證中古車", "奢華豪宅", "捷運精品宅", "商辦租售", "重機跑車"], features: ["零頭款輕鬆入主", "原廠認證中古車", "絕版特惠價", "捷運站旁3分鐘", "頂級智慧保全", "超大棟距視野", "尊榮露台", "低公設比"], offers: ["低月付超值方案", "限時優惠利率", "交車禮贈萬元配件", "免費賞屋專車", "簽約送家電禮包", "舊換新加碼補助", "首購族優惠專案", "限量釋出"], ctas: ["📞 預約賞車試駕", "🏠 立即線上賞屋", "📩 索取專屬報價單", "📍 預約現場參觀", "📋 填寫預約表單"], environments: ["🛣️ 公路駕駛場景", "🏙️ 都會精華地段", "🌄 山景第一排視野", "🅿️ 豪華車庫展示", "🌆 黃昏城市天際線"] },
+    { id: "fashion", icon: "🛍️", title: "電商服飾海報", desc: "男裝女裝、鞋包配件、美妝保養", subProducts: ["女裝服飾", "男裝潮流", "精品包款", "運動跑鞋", "美妝保養", "飾品配件"], features: ["親膚透氣素材", "專利抗皺美型", "日本限量進口", "網紅口碑推薦", "水感保濕修護", "修身顯瘦剪裁", "多色可選", "免運直送"], offers: ["全館滿千折百", "新會員首購9折", "免運費直送到府", "限時閃購下殺", "加購價超值配件", "季末清倉出清", "買二送一", "獨家組合優惠"], ctas: ["🛒 立即加入購物車", "👗 查看更多穿搭", "📩 領取新客折價券", "⏰ 限時搶購倒數中", "🔗 前往賣場選購"], environments: ["📸 時尚攝影棚", "🌸 戶外自然光街拍", "🛍️ 精品概念店", "🏠 居家穿搭日常", "🌆 都會街頭時尚"] },
+    { id: "people", icon: "👤", title: "人物寫真海報", desc: "個人形象照、講師簡介、網紅推薦", subProducts: ["個人形象照", "專業講師", "網紅推薦", "企業高階", "職人名片", "藝術寫真"], features: ["實戰經驗豐富", "知名品牌指定", "百萬觀看創作者", "頂級攝影團隊", "個人特質定製", "專屬風格打造"], offers: ["早鳥預約享優惠", "雙人同行折扣", "加贈精修底片", "免費妝髮造型", "作品集免費提供", "限量名額預約中", "學生專屬優惠", "推薦好友回饋"], ctas: ["📩 私訊預約檔期", "📞 立即來電諮詢", "📋 填寫預約表單", "🔗 查看更多作品集", "📲 Line 私訊洽詢"], environments: ["📸 專業攝影棚", "🌿 戶外自然光場景", "🏛️ 文藝建築背景", "☕ 生活感日常場景", "🌅 黃昏逆光外拍"] },
+    { id: "event", icon: "🎉", title: "活動慶典海報", desc: "開幕慶、週年慶、音樂祭、講座", subProducts: ["新店開幕慶", "品牌週年慶", "音樂祭特輯", "專業講座", "快閃店登場", "年終特賣"], features: ["免費入場體驗", "席次有限預約制", "憑票兌換精美好禮", "現場限量贈品", "獨家大咖嘉賓", "抽獎大送禮"], offers: ["早鳥票限量優惠", "團報享折扣", "VIP席位升等", "打卡送好禮", "消費滿額抽獎", "會員獨享入場", "免費體驗名額", "限時預購特價"], ctas: ["📩 立即報名參加", "🎫 搶購早鳥票", "📍 查看活動地點", "📲 加入活動群組", "🔗 了解活動詳情"], environments: ["🎪 戶外大型活動場", "🏟️ 室內展演場館", "🎉 派對慶典場景", "🏬 百貨商場中庭", "🌃 夜間燈光舞台"] },
+    { id: "biz", icon: "💼", title: "商業企業海報", desc: "金融理財、信用卡、企業徵才", subProducts: ["金融理財", "專屬信用卡", "企業徵才", "法律諮詢", "資產配置", "B2B 服務"], features: ["高額回饋優惠", "專屬VIP貴賓禮", "彈性高薪福利", "國際級認證團隊", "一對一專業諮詢", "快速核貸通路"], offers: ["首年免年費", "推薦好友雙重獎", "限時開戶禮", "零手續費優惠", "高額簽帳金回饋", "專屬理財諮詢", "報到禮金發放", "新戶限定好禮"], ctas: ["📋 立即線上申辦", "📞 預約專人諮詢", "📩 投遞履歷應徵", "🔗 了解更多方案", "📲 下載官方 App"], environments: ["🏢 企業總部大廳", "💼 商務會議空間", "🌆 金融商業區街景", "📊 專業辦公環境", "🏛️ 尊榮貴賓廳"] },
+    { id: "general", icon: "✨", title: "萬用品牌海報", desc: "自訂主題、通用品牌質感宣傳", subProducts: ["品牌形象", "新品宣傳", "限時折扣", "概念產品", "企業 ESG", "VIP 尊榮"], features: ["品質嚴格把關", "極致質感呈現", "熱銷好評回饋", "全台限定通路", "經典經典重現", "限時尊榮呈獻"], offers: ["限時折扣優惠", "新品上市特惠", "VIP尊榮禮包", "滿額贈好禮", "獨家通路優惠", "季節限定推出", "會員專屬回饋", "首購驚喜好禮"], ctas: ["🛒 立即選購", "📩 訂閱獲取最新消息", "🔗 前往官網了解更多", "📞 聯繫品牌專員", "📲 關注社群帳號"], environments: ["✨ 品牌概念空間", "🏬 精品旗艦門市", "📸 極簡攝影棚", "🌿 自然質感場景", "🎨 藝術策展空間"] }
   ];
 
   const platforms = ["FB 粉專 (1200×630)", "IG 貼文 (1080×1080)", "IG 限動/Reels (1080×1920)", "Threads 圖文 (1080×1350)", "LINE 群組推播 (1040×1040)", "蝦皮 Banner (1200×600)", "A4 商業海報 (210×297mm)", "4K 高畫質桌布 (3840×2160)"];
+  const platformArMap: Record<string, string> = { "FB 粉專 (1200×630)": "16:9", "IG 貼文 (1080×1080)": "1:1", "IG 限動/Reels (1080×1920)": "9:16", "Threads 圖文 (1080×1350)": "4:5", "LINE 群組推播 (1040×1040)": "1:1", "蝦皮 Banner (1200×600)": "16:9", "A4 商業海報 (210×297mm)": "4:5", "4K 高畫質桌布 (3840×2160)": "16:9" };
   const styles = [
     { title: "Apple 蘋果極簡", spec: "Apple brand aesthetic, ultra-clean minimalist, sleek modern premium look" },
     { title: "IKEA 溫馨家居", spec: "IKEA Scandinavian style, warm cozy home interior, natural wood accents" },
@@ -1315,9 +1316,6 @@ function PosterTool({ copied, setCopied, language }: { copied: string; setCopied
   const fonts = ["💥 粗體重擊 (Bold)", "💎 精品極細字 (Fine Thin)", "🍵 日系溫柔明體 (Mincho)", "⚡ 科技幾何 (Tech Geometric)", "🎨 活潑手寫 (Creative Sans)", "💼 商務簡潔 (Corporate Clean)"];
   const positions = ["📍 正中央焦點", "⬅️ 居左主視覺", "➡️ 居右主視覺", "🖼️ 滿版透視", "📐 45° 俯瞰斜角"];
   const priceStyles = ["👑 奢華金色標章", "⚪️ 經典白底簡約", "⬛ 潮黑邊框極簡", "🔴 爆款強烈紅底", "💥 爆炸星芒標籤", "⚡ 霓虹夜光框"];
-  const offerList = ["分期0利率", "政府補助折扣", "3年延長保固", "免費到府配送", "限時加碼下殺", "新品限量上市", "VIP尊榮禮包", "買一送一超值"];
-  const ctas = ["🛒 立即下單搶購", "⏰ 限時搶購倒數中", "📞 點擊預約專人諮詢", "📍 到店親自試用體驗", "📩 領取專屬驚喜折價券"];
-  const environments = ["🏡 溫馨家庭時光", "🏙️ 高級豪宅客廳", "⚡ 酷炫科技空間", "☀️ 涼爽夏季海灘", "🍂 質感秋冬暖意", "⛺ 戶外風格露營"];
   const lights = ["💡 柔和漫射商業光", "📸 頂級棚拍商業攝影", "☀️ 自然晨曦暖陽光", "🎬 電影戲劇感逆光", "⚡ 炫彩霓虹夜景光"];
   const logoPositions = ["↖️ 頂部左上角", "↗️ 頂部右上角", "⬆️ 正上方中央", "↙️ 底部左下角"];
   const densities = ["☁️ 極簡極度留白", "📄 標準商業海報", "🛍️ 資訊豐富賣場風", "⚡ 爆款強壓 DM 風"];
@@ -1334,10 +1332,10 @@ function PosterTool({ copied, setCopied, language }: { copied: string; setCopied
   const [font, setFont] = useState(fonts[0]);
   const [position, setPosition] = useState(positions[0]);
   const [priceStyle, setPriceStyle] = useState(priceStyles[0]);
-  const [offers, setOffers] = useState<string[]>(["分期0利率", "政府補助折扣", "3年延長保固"]);
+  const [offers, setOffers] = useState<string[]>(categories[0].offers.slice(0, 3));
   const [features, setFeatures] = useState<string[]>(currentCat.features.slice(0, 3));
-  const [cta, setCta] = useState(ctas[0]);
-  const [env, setEnv] = useState(environments[0]);
+  const [cta, setCta] = useState(categories[0].ctas[0]);
+  const [env, setEnv] = useState(categories[0].environments[0]);
   const [light, setLight] = useState(lights[0]);
   const [logoPos, setLogoPos] = useState(logoPositions[0]);
   const [density, setDensity] = useState(densities[1]);
@@ -1587,6 +1585,9 @@ ${fetchedText}`
     if (cat) {
       setProduct(cat.subProducts[0]);
       setFeatures(cat.features.slice(0, 3));
+      setOffers(cat.offers.slice(0, 3));
+      setCta(cat.ctas[0]);
+      setEnv(cat.environments[0]);
     }
   };
 
@@ -1937,7 +1938,7 @@ CTA 按鈕：${cta}
               <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
                 Step 1. 發布平台與尺寸
               </label>
-              <select value={platform} onChange={(e) => setPlatform(e.target.value)} style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
+              <select value={platform} onChange={(e) => { const v = e.target.value; setPlatform(v); if (platformArMap[v]) setAspectRatio(platformArMap[v]); }} style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
                 {platforms.map((p) => <option key={p} value={p}>{p}</option>)}
               </select>
             </div>
@@ -2149,7 +2150,7 @@ CTA 按鈕：${cta}
           </div>
 
           <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-            {offerList.map((off) => {
+            {currentCat.offers.map((off) => {
               const active = offers.includes(off);
               return (
                 <button
@@ -2170,7 +2171,7 @@ CTA 按鈕：${cta}
                 </button>
               );
             })}
-            {offers.filter(o => !offerList.includes(o)).map((customOff) => (
+            {offers.filter(o => !currentCat.offers.includes(o)).map((customOff) => (
               <button
                 key={customOff}
                 onClick={() => toggleOffer(customOff)}
@@ -2274,7 +2275,7 @@ CTA 按鈕：${cta}
           />
           <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", alignItems: "center" }}>
             <span style={{ fontSize: "11px", color: "var(--muted)", fontWeight: 650 }}>💡 常用 CTA 預設：</span>
-            {ctas.map((c) => (
+            {currentCat.ctas.map((c) => (
               <button
                 key={c}
                 type="button"
@@ -2302,7 +2303,7 @@ CTA 按鈕：${cta}
               Step 13. 氛圍情境
             </label>
             <select value={env} onChange={(e) => setEnv(e.target.value)} style={{ width: "100%", padding: "8px 8px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "11px" }}>
-              {environments.map((ev) => <option key={ev} value={ev}>{ev}</option>)}
+              {currentCat.environments.map((ev) => <option key={ev} value={ev}>{ev}</option>)}
             </select>
           </div>
           <div>
