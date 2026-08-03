@@ -113,9 +113,20 @@ const fontVariants = (text: string) => [
   { name: "刪除線", value: Array.from(text).map((c) => c + "\u0336").join("") },
 ];
 
+function addGlobalHistory(item: string) {
+  if (!item) return;
+  try {
+    const prev: string[] = JSON.parse(localStorage.getItem("textlab.globalHistory") || "[]");
+    const next = [item, ...prev.filter((x) => x !== item)].slice(0, 10);
+    localStorage.setItem("textlab.globalHistory", JSON.stringify(next));
+    window.dispatchEvent(new CustomEvent("textlab-history-updated", { detail: next }));
+  } catch {}
+}
+
 function copyText(value: string, onCopied: (value: string) => void) {
   const done = () => {
     onCopied(value);
+    addGlobalHistory(value);
     window.setTimeout(() => onCopied(""), 1500);
   };
   if (navigator.clipboard?.writeText) {
@@ -642,6 +653,19 @@ export default function App() {
     document.body.style.overflow = "hidden";
     return () => { document.removeEventListener("keydown", closeOnEscape); document.body.style.overflow = ""; };
   }, [guideOpen]);
+  const [globalHistory, setGlobalHistory] = useState<string[]>(() => {
+    try { return JSON.parse(localStorage.getItem("textlab.globalHistory") || "[]"); } catch { return []; }
+  });
+  const [historyOpen, setHistoryOpen] = useState(false);
+
+  useEffect(() => {
+    const syncHistory = () => {
+      try { setGlobalHistory(JSON.parse(localStorage.getItem("textlab.globalHistory") || "[]")); } catch {}
+    };
+    window.addEventListener("textlab-history-updated", syncHistory);
+    return () => window.removeEventListener("textlab-history-updated", syncHistory);
+  }, []);
+
   const toolProps = { copied, setCopied, language };
   return <div className="app-shell">
     <header className="topbar"><a className="brand" href="#symbols" onClick={() => selectTool("symbols")}><BrandLogo /><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button onClick={() => selectTool("symbols")}>{t(language, "特殊符號", "Symbols")}</button><button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>{theme === "dark" ? "🌙 深色" : theme === "light" ? "☀️ 淺色" : "🌗 自動"}</button><span className="free-pill">{t(language, "完全免費", "100% free")}</span><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
@@ -660,6 +684,52 @@ export default function App() {
         <footer><span>{t(language, "字研所", "TEXTLAB")} TEXT LAB</span><p>{t(language, "讓每一段文字，都剛剛好。", "Make every word feel just right.")}</p><small>© 2026 · Made for everyday expression</small></footer>
       </main>
     </div>
+
+    {/* 浮動全域剪貼簿歷程抽屜 (Clipboard Quick History Tray) */}
+    {!!globalHistory.length && (
+      <>
+        <button
+          onClick={() => setHistoryOpen(!historyOpen)}
+          style={{
+            position: "fixed",
+            left: "24px",
+            bottom: "24px",
+            zIndex: 45,
+            border: "1px solid var(--line)",
+            borderRadius: "12px",
+            background: "var(--paper)",
+            color: "var(--ink)",
+            padding: "9px 13px",
+            fontSize: "11px",
+            fontWeight: 650,
+            boxShadow: "var(--shadow)",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px"
+          }}
+        >
+          <span>📋</span> {t(language, `剪貼記錄 (${globalHistory.length})`, `History (${globalHistory.length})`)}
+        </button>
+
+        {historyOpen && (
+          <div style={{ position: "fixed", left: "24px", bottom: "72px", zIndex: 45, width: "310px", padding: "16px", borderRadius: "16px", background: "var(--paper)", border: "1px solid var(--line)", boxShadow: "0 14px 45px rgba(0,0,0,0.2)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+              <strong style={{ fontSize: "12px", color: "var(--purple)" }}>📋 {t(language, "跨工具複製歷程", "Cross-tool Clipboard")}</strong>
+              <button onClick={() => { setGlobalHistory([]); localStorage.removeItem("textlab.globalHistory"); }} style={{ border: 0, background: "transparent", color: "var(--subtle)", fontSize: "10px", cursor: "pointer" }}>{t(language, "清除記錄", "Clear")}</button>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", maxHeight: "190px", overflowY: "auto" }}>
+              {globalHistory.map((item, idx) => (
+                <button key={`${item}-${idx}`} onClick={() => copyText(item, setCopied)} style={{ border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", borderRadius: "8px", padding: "5px 9px", fontSize: "11px", cursor: "pointer", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </>
+    )}
+
     {guideOpen && <GuideModal language={language} onClose={() => setGuideOpen(false)} onSelectTool={(id) => { selectTool(id); setGuideOpen(false); }} />}
     {!!copied && <div className="toast" role="status"><span>✓</span> {t(language, "已複製到剪貼簿", "Copied to clipboard")}</div>}
   </div>;
