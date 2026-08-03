@@ -1163,7 +1163,7 @@ function BrandLogo() {
 }
 
 export default function App() {
-  const [active, setActive] = useState<ToolId>(() => (window.location.hash.replace("#", "").split("/")[0] as ToolId) || "symbols");
+  const [active, setActive] = useState<ToolId>(() => (window.location.hash.replace("#", "").split("/")[0] as ToolId) || "layout");
   const [copied, setCopied] = useState("");
   const [guideOpen, setGuideOpen] = useState(false);
   const [language, setLanguage] = useState<Language>(() => {
