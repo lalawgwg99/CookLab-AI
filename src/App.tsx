@@ -1029,7 +1029,7 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
         headers: {
           "Authorization": `Bearer ${BUILTIN_KEY}`,
           "HTTP-Referer": window.location.origin,
-          "X-Title": "字研所 TextLab",
+          "X-Title": "TextLab AI",
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
