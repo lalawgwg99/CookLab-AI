@@ -1137,7 +1137,7 @@ function AIPostTool({ copied, setCopied, language }: { copied: string; setCopied
                 <label style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", padding: "14px", borderRadius: "10px", background: "var(--paper)", border: "1px dashed var(--line)", cursor: "pointer", fontSize: "13px", color: "var(--purple)", fontWeight: 600 }}>
                   <span>📷</span>
                   <span>{t(language, "點擊拍照或上傳照片試用", "Tap to take or choose photo")}</span>
-                  <input type="file" accept="image/*" capture="environment" onChange={handlePhotoUpload} style={{ display: "none" }} />
+                  <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{ display: "none" }} />
                 </label>
               )}
             </div>
