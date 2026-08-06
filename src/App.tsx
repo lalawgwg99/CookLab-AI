@@ -940,10 +940,23 @@ function toDoubleStruck(str: string) {
   });
 }
 
+function extractSmartTopic(content: string): string {
+  const skipWords = ["哈囉", "大家好", "嗨", "Hello", "各位", "今天", "這裡", "紀錄", "分享", "改完"];
+  const lines = content.split("\n").filter((l) => l.trim());
+  for (const line of lines) {
+    const clean = line.replace(/[#@✦•▪▪️]/g, "").trim();
+    if (clean.length > 3 && !skipWords.some((w) => clean.startsWith(w))) {
+      return clean.slice(0, 40);
+    }
+  }
+  return "aesthetic lifestyle scene";
+}
+
 function CarouselImageGenerator({ postContent, language }: { postContent: string; language: Language }) {
   const [imgCount, setImgCount] = useState<number>(3);
   const [imgStyle, setImgStyle] = useState<string>("realistic");
   const [images, setImages] = useState<string[]>([]);
+  const [loadedIndexes, setLoadedIndexes] = useState<number[]>([]);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   const styleMap: Record<string, string> = {
@@ -957,9 +970,9 @@ function CarouselImageGenerator({ postContent, language }: { postContent: string
   const handleGenerateCarousel = async () => {
     if (!postContent.trim() || isGenerating) return;
     setIsGenerating(true);
+    setLoadedIndexes([]);
 
-    const firstLine = postContent.split("\n")[0]?.replace(/[^\w\s\u4e00-\u9fa5]/gi, "").trim() || "aesthetic lifestyle";
-    const topic = firstLine.slice(0, 30);
+    const topic = extractSmartTopic(postContent);
     const seed = Math.floor(Math.random() * 900000) + 100000;
     const stylePrompt = styleMap[imgStyle] || styleMap["realistic"];
 
@@ -983,12 +996,27 @@ function CarouselImageGenerator({ postContent, language }: { postContent: string
     setIsGenerating(false);
   };
 
-  const handleDownloadSingle = (url: string, index: number) => {
-    const a = document.createElement("a");
-    a.href = url;
-    a.target = "_blank";
-    a.download = `textlab-carousel-${index + 1}.jpg`;
-    a.click();
+  const handleDownloadSingle = async (url: string, index: number) => {
+    try {
+      const res = await fetch(url);
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = `textlab-carousel-${index + 1}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+    } catch (e) {
+      window.open(url, "_blank");
+    }
+  };
+
+  const handleDownloadAll = async () => {
+    for (let i = 0; i < images.length; i++) {
+      await handleDownloadSingle(images[i], i);
+    }
   };
 
   return (
@@ -1050,7 +1078,17 @@ function CarouselImageGenerator({ postContent, language }: { postContent: string
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${images.length}, 1fr)`, gap: "8px", marginBottom: "12px" }}>
             {images.map((imgUrl, idx) => (
               <div key={idx} style={{ position: "relative", borderRadius: "10px", overflow: "hidden", border: "1px solid var(--line)", background: "var(--canvas)", aspectRatio: "1/1" }}>
-                <img src={imgUrl} alt={`Carousel ${idx + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                {!loadedIndexes.includes(idx) && (
+                  <div className="loading-shimmer" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "var(--muted)" }}>
+                    <span>✨ 圖片加載中...</span>
+                  </div>
+                )}
+                <img
+                  src={imgUrl}
+                  alt={`Carousel ${idx + 1}`}
+                  onLoad={() => setLoadedIndexes((prev) => [...prev, idx])}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", opacity: loadedIndexes.includes(idx) ? 1 : 0, transition: "opacity 0.4s ease" }}
+                />
                 <button
                   type="button"
                   onClick={() => handleDownloadSingle(imgUrl, idx)}
@@ -1061,18 +1099,14 @@ function CarouselImageGenerator({ postContent, language }: { postContent: string
               </div>
             ))}
           </div>
-          <div style={{ display: "flex", gap: "8px" }}>
-            {images.map((imgUrl, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => handleDownloadSingle(imgUrl, idx)}
-                style={{ flex: 1, border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", borderRadius: "8px", padding: "7px", fontSize: "11px", cursor: "pointer", fontWeight: 650 }}
-              >
-                下載第 {idx + 1} 張
-              </button>
-            ))}
-          </div>
+          <button
+            type="button"
+            onClick={handleDownloadAll}
+            className="primary-button wide"
+            style={{ background: "var(--paper)", color: "var(--purple-dark)", border: "1.5px solid var(--purple)", fontWeight: 700 }}
+          >
+            ⬇️ 一鍵下載全部 ({images.length} 張輪播圖)
+          </button>
         </div>
       )}
     </div>
@@ -3216,10 +3250,10 @@ export default function App() {
         enDesc: "Create professional Midjourney & DALL-E 3 poster prompts without writing text. 100% free visual ad generator."
       },
       ai: {
-        zhTitle: "AI 社群貼文助手｜Threads / IG / FB 爆款文案一鍵生成｜字研所 TextLab",
-        zhDesc: "專為台灣社群生態設計的 AI 採編工具！支援 IG 美學圖文、FB 粉專文、Threads 爆款討論、LINE 團購推播與小紅書種草提案。",
-        enTitle: "AI Social Post Assistant | Viral IG & Threads Creator | TextLab",
-        enDesc: "AI copywriter for Instagram, Threads, Facebook & LINE. Generate viral Taiwanese social posts instantly."
+        zhTitle: "AI 社群貼文助手｜Threads / IG 爆款文案與同風格 IG 輪播配圖生成器｜字研所 TextLab",
+        zhDesc: "專為台灣社群設計的 AI 發文助手！輸入想法一鍵生成 IG、FB、Threads、小紅書爆款貼文，並自動產出 3~5 張風格統一的 IG 輪播圖片。免費免註冊。",
+        enTitle: "AI Social Post Assistant & IG Carousel Image Generator | TextLab",
+        enDesc: "AI copywriter for Instagram, Threads & Redbook. Generate viral social posts and matching cohesive carousel images instantly."
       },
       layout: {
         zhTitle: "IG / Threads 免費排版換行工具｜解決貼文縮排擠成一團｜字研所 TextLab",
