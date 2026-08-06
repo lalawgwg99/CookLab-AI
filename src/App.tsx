@@ -1625,6 +1625,9 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
         },
         body: JSON.stringify({
           model: MODEL_ID,
+          provider: {
+            allow_fallbacks: false
+          },
           messages: [
             {
               role: "system",
@@ -2092,6 +2095,9 @@ function PosterTool({ copied, setCopied, language }: { copied: string; setCopied
         },
         body: JSON.stringify({
           model: "nvidia/nemotron-3-ultra-550b-a55b:free",
+          provider: {
+            allow_fallbacks: false
+          },
           messages: [
             {
               role: "system",
@@ -2198,6 +2204,9 @@ ${fetchedText}`
         },
         body: JSON.stringify({
           model: "nvidia/nemotron-3-ultra-550b-a55b:free",
+          provider: {
+            allow_fallbacks: false
+          },
           messages: [
             {
               role: "system",
@@ -2406,6 +2415,9 @@ High commercial quality, 8k resolution, photorealistic studio render.`;
         },
         body: JSON.stringify({
           model: "nvidia/nemotron-3-ultra-550b-a55b:free",
+          provider: {
+            allow_fallbacks: false
+          },
           messages: [
             {
               role: "system",
