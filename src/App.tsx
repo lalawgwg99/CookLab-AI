@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 
-type ToolId = "symbols" | "emoji" | "kaomoji" | "fonts" | "layout" | "nickname" | "blank" | "bio" | "hashtags" | "ai" | "poster";
+type ToolId = "symbols" | "emoji" | "kaomoji" | "fonts" | "layout" | "nickname" | "blank" | "bio" | "hashtags" | "ai" | "poster" | "hook" | "title";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -34,6 +34,8 @@ type Tool = {
 const tools: Tool[] = [
   { id: "poster", name: "AI 廣告研究所", nameEn: "AI Ad Studio", short: "點選生成專業海報 Prompt", shortEn: "Visual AI Poster Generator", icon: "🎨", tone: "yellow", badge: "NEW" },
   { id: "ai", name: "AI 發文助手", nameEn: "AI Post Assistant", short: "一鍵生成 Threads／IG 貼文", shortEn: "Generate viral social posts", icon: "🪄", tone: "lilac", badge: "AI" },
+  { id: "hook", name: "爆款 Hook 產生器", nameEn: "Viral Hook Studio", short: "IG/Threads 勾魂第一句", shortEn: "High-converting caption hooks", icon: "🔥", tone: "yellow", badge: "HOT" },
+  { id: "title", name: "花邊標題組裝", nameEn: "Title Frame Studio", short: "日系風格標題邊框", shortEn: "Aesthetic header frame builder", icon: "✦", tone: "coral", badge: "NEW" },
   { id: "layout", name: "社群排版", nameEn: "Social Formatter", short: "IG／Threads 換行", shortEn: "Instagram / Threads spacing", icon: "¶", tone: "blue", badge: "熱門" },
   { id: "bio", name: "個人檔案 Bio", nameEn: "Bio Studio", short: "IG / Threads 簡介佈置", shortEn: "Instagram & Threads Profile", icon: "📇", tone: "pink" },
   { id: "hashtags", name: "熱門標籤", nameEn: "Hashtags", short: "Threads / IG 導流標籤", shortEn: "Trending Hashtag Bundles", icon: "#", tone: "mint" },
@@ -1208,6 +1210,197 @@ function toDoubleStruck(str: string) {
     if (code >= 48 && code <= 57) return String.fromCodePoint(0x1d7d8 + (code - 48));
     return char;
   });
+}
+
+function HookTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const [topic, setTopic] = useState("把心態放慢之後，工作效率反而變高了");
+  const [activeCategory, setActiveCategory] = useState("all");
+
+  const hookCategories = [
+    {
+      id: "curiosity",
+      name: "🔥 好奇反常識",
+      templates: [
+        (t: string) => `🔥【千萬別再這樣做！】${t}`,
+        (t: string) => `💡【大家都以為錯了...】${t}`,
+        (t: string) => `⚠️【90% 的人都不知道的秘密：】${t}`,
+        (t: string) => `改了 5 版草稿之後，我終於悟出了一個道理：${t}`
+      ]
+    },
+    {
+      id: "perspective",
+      name: "💡 觀點思考",
+      templates: [
+        (t: string) => `💡【關於最近的一個小思考...】${t}`,
+        (t: string) => `工作第 5 年，我最慶幸自己做對的選擇是：${t}`,
+        (t: string) => `✦【今天想聊聊這個體悟：】${t}`,
+        (t: string) => `如果你也在思考這件事，請花 1 分鐘看完：${t}`
+      ]
+    },
+    {
+      id: "empathy",
+      name: "💖 共鳴情感",
+      templates: [
+        (t: string) => `✨【如果你也在經歷這個階段...】${t}`,
+        (t: string) => `致每一個深夜還在咬牙堅持的你：${t}`,
+        (t: string) => `☁️【給正在迷惘的你一封信：】${t}`,
+        (t: string) => `🫠【優雅崩潰日常：】${t}`
+      ]
+    },
+    {
+      id: "sales",
+      name: "🛍️ 導購促銷",
+      templates: [
+        (t: string) => `🛒【爆款限定開團｜獨家優惠】${t}`,
+        (t: string) => `⏰【最後倒數！賣爆的理由是：】${t}`,
+        (t: string) => `🎁【小編私心強烈推薦：】${t}`,
+        (t: string) => `🔥【獨家社群限定價！錯過不再：】${t}`
+      ]
+    }
+  ];
+
+  const filteredCategories = activeCategory === "all"
+    ? hookCategories
+    : hookCategories.filter((c) => c.id === activeCategory);
+
+  return (
+    <>
+      <ToolIntro tool={tools.find((t) => t.id === "hook")!} language={language} />
+
+      <div className="input-card" style={{ marginBottom: "20px" }}>
+        <div className="field-label">
+          <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
+            {t(language, "輸入您的發文主題或核心文案", "Type your post topic or core message")}
+          </strong>
+        </div>
+
+        <input
+          type="text"
+          value={topic}
+          onChange={(e) => setTopic(e.target.value)}
+          placeholder={t(language, "例如：把心態放慢之後，工作效率反而變高了", "e.g. Slowing down increased my productivity")}
+          style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "14px", outline: "none", marginBottom: "12px" }}
+        />
+
+        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+          <button onClick={() => setActiveCategory("all")} style={{ border: "1px solid var(--line)", background: activeCategory === "all" ? "var(--purple)" : "var(--paper)", color: activeCategory === "all" ? "#fff" : "var(--ink)", borderRadius: "8px", padding: "6px 12px", fontSize: "11px", cursor: "pointer", fontWeight: 650 }}>
+            全部分類 (All)
+          </button>
+          {hookCategories.map((cat) => (
+            <button key={cat.id} onClick={() => setActiveCategory(cat.id)} style={{ border: "1px solid var(--line)", background: activeCategory === cat.id ? "var(--purple)" : "var(--paper)", color: activeCategory === cat.id ? "#fff" : "var(--ink)", borderRadius: "8px", padding: "6px 12px", fontSize: "11px", cursor: "pointer", fontWeight: 650 }}>
+              {cat.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gap: "14px" }}>
+        {filteredCategories.map((cat) => (
+          <section key={cat.id} className="input-card">
+            <h3 style={{ fontSize: "14px", margin: "0 0 12px", color: "var(--purple-dark)" }}>{cat.name}</h3>
+            <div style={{ display: "grid", gap: "10px" }}>
+              {cat.templates.map((tplFn, idx) => {
+                const textResult = tplFn(topic);
+                return (
+                  <div key={idx} style={{ padding: "12px 14px", borderRadius: "10px", background: "var(--canvas)", border: "1px solid var(--line)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
+                    <span style={{ fontSize: "13px", color: "var(--ink)", fontWeight: 550, lineHeight: 1.5, wordBreak: "break-all" }}>{textResult}</span>
+                    <button onClick={() => copyText(textResult, setCopied)} style={{ border: "1px solid var(--purple)", background: "var(--paper)", color: "var(--purple-dark)", borderRadius: "8px", padding: "6px 12px", fontSize: "11px", cursor: "pointer", fontWeight: 650, whiteSpace: "nowrap", flexShrink: 0 }}>
+                      {copied === textResult ? t(language, "已複製 ✓", "Copied ✓") : t(language, "一鍵複製", "Copy")}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function TitleTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const [titleText, setTitleText] = useState("MY DAILY LOG");
+
+  const patterns = [
+    { name: "✦ 星閃雙邊", build: (t: string) => `✦ ─── ${t} ─── ✦` },
+    { name: "♡ 愛心對稱", build: (t: string) => `♡ ┈┈ ${t} ┈┈ ♡` },
+    { name: "౨ৎ 日系蝴蝶結", build: (t: string) => `౨ৎ  ${t}  ౨ৎ` },
+    { name: "⋆⋅☆⋅⋆ 璀璨星光", build: (t: string) => `⋆⋅☆⋅⋆  ${t}  ⋆⋅☆⋅⋆` },
+    { name: "『 』角括號", build: (t: string) => `『 ${t} 』` },
+    { name: "【 】黑大括號", build: (t: string) => `【 ${t} 】` },
+    { name: "〰︎ 波浪紋", build: (t: string) => `〰︎ ${t} 〰︎` },
+    { name: "•✦ 雙星線條", build: (t: string) => `•✦───── ${t} ─────✦•` },
+    { name: "*̣̥☆ 奢華星光", build: (t: string) => `*̣̥☆·͙̥‧ ${t} ‧·͙̥̣☆*̣̥` },
+    { name: "୨୧ 夢幻蕾絲", build: (t: string) => `୨୧ ${t} ୨୧` },
+    { name: "[ ] 日系方括號", build: (t: string) => `[ ${t} ]` },
+    { name: "::: 復古三點", build: (t: string) => `::: ${t} :::` }
+  ];
+
+  return (
+    <>
+      <ToolIntro tool={tools.find((t) => t.id === "title")!} language={language} />
+
+      <div className="input-card" style={{ marginBottom: "20px" }}>
+        <div className="field-label">
+          <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
+            {t(language, "輸入您的標題或主題文字", "Type your header or title text")}
+          </strong>
+        </div>
+
+        <input
+          type="text"
+          value={titleText}
+          onChange={(e) => setTitleText(e.target.value)}
+          placeholder={t(language, "例如：MY DAILY LOG、今日社畜日記...", "e.g. MY DAILY LOG, WEEKEND VIBES...")}
+          style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "14px", outline: "none" }}
+        />
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "12px" }}>
+        {patterns.map((p) => {
+          const formatted = p.build(titleText);
+          return (
+            <div key={p.name} className="input-card" style={{ padding: "14px", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "10px" }}>
+              <span style={{ fontSize: "11px", color: "var(--muted)", fontWeight: 600 }}>{p.name}</span>
+              <div style={{ fontSize: "15px", fontWeight: 700, color: "var(--purple-dark)", background: "var(--canvas)", padding: "10px", borderRadius: "8px", textAlign: "center", wordBreak: "break-all" }}>
+                {formatted}
+              </div>
+              <button onClick={() => copyText(formatted, setCopied)} className="primary-button wide" style={{ padding: "8px", fontSize: "11px" }}>
+                {copied === formatted ? t(language, "標題已複製 ✓", "Copied ✓") : t(language, "複製標題邊框", "Copy Frame Title")}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
+function OnboardingBanner({ language, selectTool }: { language: Language; selectTool: (id: ToolId) => void }) {
+  return (
+    <div style={{ background: "linear-gradient(135deg, var(--purple-soft) 0%, var(--paper) 100%)", border: "1px solid var(--line)", borderRadius: "14px", padding: "12px 16px", marginBottom: "18px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <span style={{ fontSize: "18px" }}>🎯</span>
+        <strong style={{ fontSize: "12px", color: "var(--purple-dark)" }}>
+          {t(language, "小編快速入門指引：您今天想處理什麼任務？", "Quick Start: What would you like to create today?")}
+        </strong>
+      </div>
+      <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+        <button onClick={() => selectTool("ai")} style={{ border: "1px solid var(--purple)", background: "var(--paper)", color: "var(--purple-dark)", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}>
+          📝 寫社群貼文 ➔
+        </button>
+        <button onClick={() => selectTool("hook")} style={{ border: "1px solid var(--purple)", background: "var(--purple)", color: "white", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}>
+          🔥 爆款 Hook ➔
+        </button>
+        <button onClick={() => selectTool("title")} style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}>
+          ✦ 花邊標題 ➔
+        </button>
+        <button onClick={() => selectTool("symbols")} style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer" }}>
+          🔍 特殊符號 ➔
+        </button>
+      </div>
+    </div>
+  );
 }
 
 function AIPostTool({ copied, setCopied, language, selectTool }: { copied: string; setCopied: (v: string) => void; language: Language; selectTool?: (id: ToolId) => void }) {
@@ -3336,6 +3529,18 @@ export default function App() {
     let descStr = t(language, `${current.name}線上工具：${current.short}，免費使用、不需登入。`, `${current.nameEn}: ${current.shortEn}. Free, no sign-up.`);
 
     const seoMap: Record<string, { zhTitle: string; zhDesc: string; enTitle: string; enDesc: string }> = {
+      hook: {
+        zhTitle: "爆款 Hook 產生器｜Threads / IG / 小紅書勾魂開頭與標題公式｜字研所 TextLab",
+        zhDesc: "專為台灣小編設計的爆款 Hook 第一句產生器！收錄好奇反常識、觀點思考、共鳴情感與強導購開頭模板，拯救發文零點擊。",
+        enTitle: "Viral Social Caption Hook Studio | High-Converting Hooks | TextLab",
+        enDesc: "High-converting caption hooks for Instagram, Threads and Redbook. Double your post engagement instantly."
+      },
+      title: {
+        zhTitle: "日系花邊標題組裝器｜IG / Threads 標題框與邊框文字美化｜字研所 TextLab",
+        zhDesc: "輸入文字即時生成日系星閃、蝴蝶結、角括號與花紋標題邊框！讓 Threads 與 IG 貼文標題質感瞬間爆表。",
+        enTitle: "Aesthetic Title Frame Builder | Japanese Header Frames | TextLab",
+        enDesc: "Generate aesthetic Japanese header frames, star sparkles, and bow dividers for Instagram & Threads titles."
+      },
       poster: {
         zhTitle: "AI 廣告研究所｜免寫 Prompt 一鍵生成商業海報 (Midjourney / ChatGPT)｜字研所 TextLab",
         zhDesc: "不需英文或複雜提示詞！30 秒透過點選自動產生 Midjourney、ChatGPT (DALL-E 3)、Gemini 專業商業海報 Prompt，支援網址解析與 AI 廣告評分。",
@@ -3446,7 +3651,10 @@ export default function App() {
       <aside className="sidebar"><p className="sidebar-label">{t(language, "文字工具箱", "TEXT TOOLBOX")}</p><div className="tool-nav">{tools.map((tool) => <button key={tool.id} className={active === tool.id ? "active" : ""} onClick={() => selectTool(tool.id)}><span className={`tool-icon ${tool.tone}`}>{tool.icon}</span><span><strong>{t(language, tool.name, tool.nameEn)}</strong><small>{t(language, tool.short, tool.shortEn)}</small></span>{tool.badge && <em>{t(language, tool.badge, "HOT")}</em>}</button>)}</div><div className="sidebar-note"><span>✦</span><p><strong>{t(language, "你的文字，只留在這裡", "Your text stays here")}</strong><br />{t(language, "所有轉換都在瀏覽器完成，我們不會儲存內容。", "Everything runs in your browser. We never store your content.")}</p></div></aside>
       <main className="workspace"><div className="mobile-tool-picker"><span>{t(language, "目前工具", "CURRENT TOOL")}</span><select value={active} onChange={(e) => selectTool(e.target.value as ToolId)}>{tools.map((tool) => <option value={tool.id} key={tool.id}>{t(language, tool.name, tool.nameEn)}｜{t(language, tool.short, tool.shortEn)}</option>)}</select></div>
         <div className="tool-surface">
+          <OnboardingBanner language={language} selectTool={selectTool} />
           {active === "poster" && <PosterTool {...toolProps} />}
+          {active === "hook" && <HookTool {...toolProps} />}
+          {active === "title" && <TitleTool {...toolProps} />}
           {active === "ai" && <AIPostTool {...toolProps} selectTool={selectTool} />}
           {active === "symbols" && <SymbolsTool {...toolProps} />}
           {active === "emoji" && <EmojiTool {...toolProps} />}
