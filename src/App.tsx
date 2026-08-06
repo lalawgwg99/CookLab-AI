@@ -3670,7 +3670,57 @@ export default function App() {
   return <div className="app-shell">
     <header className="topbar"><a className="brand" href="/symbols" onClick={(e) => { e.preventDefault(); selectTool("symbols"); }}><BrandLogo /><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button className="guide-nav-button" onClick={() => setGuidesOpen(true)}>📚 {t(language, "行銷指南", "Guides")}</button><button className="guide-nav-button" onClick={() => setEmbedOpen(true)}>🔗 {t(language, "嵌入與分享", "Embed")}</button><button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>{theme === "dark" ? "🌙 深色" : theme === "light" ? "☀️ 淺色" : "🌗 自動"}</button><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
     <div className="layout">
-      <aside className="sidebar"><p className="sidebar-label">{t(language, "文字工具箱", "TEXT TOOLBOX")}</p><div className="tool-nav">{tools.map((tool) => <button key={tool.id} className={active === tool.id ? "active" : ""} onClick={() => selectTool(tool.id)}><span className={`tool-icon ${tool.tone}`}>{tool.icon}</span><span><strong>{t(language, tool.name, tool.nameEn)}</strong><small>{t(language, tool.short, tool.shortEn)}</small></span>{tool.badge && <em>{t(language, tool.badge, "HOT")}</em>}</button>)}</div><div className="sidebar-note"><span>✦</span><p><strong>{t(language, "你的文字，只留在這裡", "Your text stays here")}</strong><br />{t(language, "所有轉換都在瀏覽器完成，我們不會儲存內容。", "Everything runs in your browser. We never store your content.")}</p></div></aside>
+      <aside className="sidebar">
+        <p className="sidebar-label" style={{ marginBottom: "8px" }}>{t(language, "文字工具箱 (13 合 1)", "TEXT LAB TOOLS (13-IN-1)")}</p>
+        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+          {[
+            {
+              title: "🌟 AI 智慧發文企劃",
+              titleEn: "AI CREATION",
+              ids: ["poster", "ai", "hook"]
+            },
+            {
+              title: "🎨 貼文排版與美化",
+              titleEn: "FORMATTING & STYLES",
+              ids: ["layout", "title", "fonts", "bio", "hashtags"]
+            },
+            {
+              title: "✦ 符號顏文字與表情",
+              titleEn: "SYMBOLS & EMOJIS",
+              ids: ["symbols", "emoji", "kaomoji"]
+            },
+            {
+              title: "🛠️ 實用小工具",
+              titleEn: "UTILITY TOOLS",
+              ids: ["nickname", "blank"]
+            }
+          ].map((sec) => (
+            <div key={sec.title}>
+              <div className="sidebar-section-title">{t(language, sec.title, sec.titleEn)}</div>
+              <div className="tool-nav">
+                {tools.filter((tItem) => sec.ids.includes(tItem.id)).map((tool) => (
+                  <button key={tool.id} className={active === tool.id ? "active" : ""} onClick={() => selectTool(tool.id)}>
+                    <span className={`tool-icon ${tool.tone}`}>{tool.icon}</span>
+                    <span>
+                      <strong>{t(language, tool.name, tool.nameEn)}</strong>
+                      <small>{t(language, tool.short, tool.shortEn)}</small>
+                    </span>
+                    {tool.badge && <em>{t(language, tool.badge, "HOT")}</em>}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="sidebar-note" style={{ marginTop: "16px" }}>
+          <span>✦</span>
+          <p>
+            <strong>{t(language, "你的文字，只留在這裡", "Your text stays here")}</strong>
+            <br />
+            {t(language, "所有轉換都在瀏覽器完成，我們不會儲存內容。", "Everything runs in your browser. We never store your content.")}
+          </p>
+        </div>
+      </aside>
       <main className="workspace"><div className="mobile-tool-picker"><span>{t(language, "目前工具", "CURRENT TOOL")}</span><select value={active} onChange={(e) => selectTool(e.target.value as ToolId)}>{tools.map((tool) => <option value={tool.id} key={tool.id}>{t(language, tool.name, tool.nameEn)}｜{t(language, tool.short, tool.shortEn)}</option>)}</select></div>
         <div className="tool-surface">
           <OnboardingBanner language={language} selectTool={selectTool} />
