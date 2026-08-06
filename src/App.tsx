@@ -940,179 +940,6 @@ function toDoubleStruck(str: string) {
   });
 }
 
-function extractSmartTopic(content: string): string {
-  const skipWords = ["哈囉", "大家好", "嗨", "Hello", "各位", "今天", "這裡", "紀錄", "分享", "改完"];
-  const lines = content.split("\n").filter((l) => l.trim());
-  for (const line of lines) {
-    const clean = line.replace(/[#@✦•▪▪️]/g, "").trim();
-    if (clean.length > 3 && !skipWords.some((w) => clean.startsWith(w))) {
-      return clean.slice(0, 40);
-    }
-  }
-  return "aesthetic lifestyle scene";
-}
-
-function CarouselImageGenerator({ postContent, language }: { postContent: string; language: Language }) {
-  const [imgCount, setImgCount] = useState<number>(3);
-  const [imgStyle, setImgStyle] = useState<string>("realistic");
-  const [images, setImages] = useState<string[]>([]);
-  const [loadedIndexes, setLoadedIndexes] = useState<number[]>([]);
-  const [isGenerating, setIsGenerating] = useState<boolean>(false);
-
-  const styleMap: Record<string, string> = {
-    realistic: "aesthetic realistic photography, soft natural diffuse lighting, shallow depth of field, 8k quality",
-    japanese: "Japanese minimalist aesthetic, soft pastel colors, film grain texture, natural light",
-    illustration: "flat vector illustration, clean lines, modern graphic design, vibrant pastel colors",
-    render3d: "3D isometric render, soft clay lighting, 3d art, clean studio lighting",
-    warmcafe: "cozy warm café atmosphere, warm indoor lighting, wooden textures, aesthetic teatime"
-  };
-
-  const handleGenerateCarousel = async () => {
-    if (!postContent.trim() || isGenerating) return;
-    setIsGenerating(true);
-    setLoadedIndexes([]);
-
-    const topic = extractSmartTopic(postContent);
-    const seed = Math.floor(Math.random() * 900000) + 100000;
-    const stylePrompt = styleMap[imgStyle] || styleMap["realistic"];
-
-    const shots = [
-      "wide establishing shot",
-      "medium detail shot",
-      "close-up macro shot with soft bokeh",
-      "overhead flat lay perspective",
-      "side angle atmospheric view"
-    ];
-
-    const generatedUrls: string[] = [];
-    for (let i = 0; i < imgCount; i++) {
-      const shotPrompt = shots[i % shots.length];
-      const fullPrompt = `${topic}, ${shotPrompt}, ${stylePrompt}`;
-      const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=1024&height=1024&seed=${seed + i * 17}&nologo=true`;
-      generatedUrls.push(url);
-    }
-
-    setImages(generatedUrls);
-    setIsGenerating(false);
-  };
-
-  const handleDownloadSingle = async (url: string, index: number) => {
-    try {
-      const res = await fetch(url);
-      const blob = await res.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = blobUrl;
-      a.download = `textlab-carousel-${index + 1}.jpg`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(blobUrl);
-    } catch (e) {
-      window.open(url, "_blank");
-    }
-  };
-
-  const handleDownloadAll = async () => {
-    for (let i = 0; i < images.length; i++) {
-      await handleDownloadSingle(images[i], i);
-    }
-  };
-
-  return (
-    <div style={{ marginTop: "16px", padding: "16px", borderRadius: "14px", border: "1.5px solid var(--purple)", background: "var(--paper)", textAlign: "left" }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <span style={{ fontSize: "20px" }}>🖼️</span>
-          <strong style={{ fontSize: "14px", color: "var(--purple-dark)" }}>
-            {t(language, "AI 貼文視覺配圖與 IG 輪播圖生成器", "AI Post Image & Story Carousel Generator")}
-          </strong>
-        </div>
-        <span style={{ fontSize: "10px", color: "var(--muted)", background: "var(--purple-soft)", padding: "3px 8px", borderRadius: "6px", fontWeight: 600 }}>
-          同風格 Seed 演算法
-        </span>
-      </div>
-
-      <p style={{ fontSize: "11px", color: "var(--muted)", margin: "0 0 12px", lineHeight: 1.5 }}>
-        {t(language, "自動根據您的文案主題，使用相同視覺 Seed 一鍵產出 3~5 張風格統一、不同角度的 IG 輪播圖片！", "Generates 3-5 cohesive carousel images matching your post content using identical seed styling.")}
-      </p>
-
-      {/* 控制選項 */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "12px" }}>
-        <div>
-          <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--ink)", display: "block", marginBottom: "4px" }}>
-            張數選擇 (Carousel Count):
-          </label>
-          <select value={imgCount} onChange={(e) => setImgCount(Number(e.target.value))} style={{ width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
-            <option value={3}>3 張輪播圖 (精簡圖文)</option>
-            <option value={5}>5 張輪播圖 (完整故事敘事)</option>
-          </select>
-        </div>
-        <div>
-          <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--ink)", display: "block", marginBottom: "4px" }}>
-            視覺風格 (Visual Style):
-          </label>
-          <select value={imgStyle} onChange={(e) => setImgStyle(e.target.value)} style={{ width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
-            <option value="realistic">📷 質感實拍 (Realistic)</option>
-            <option value="japanese">🌸 日系清新 (Pastel Film)</option>
-            <option value="illustration">🎨 平面插畫 (Vector Art)</option>
-            <option value="render3d">🧊 3D 質感渲染 (3D Clay)</option>
-            <option value="warmcafe">☕️ 溫暖咖啡館 (Warm Cafe)</option>
-          </select>
-        </div>
-      </div>
-
-      <button
-        type="button"
-        onClick={handleGenerateCarousel}
-        disabled={isGenerating}
-        className="primary-button wide"
-        style={{ background: "linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%)", marginBottom: "14px" }}
-      >
-        {isGenerating ? t(language, "✨ AI 正在渲染同風格輪播圖...", "✨ Rendering Cohesive Images...") : t(language, `🪄 一鍵生成 ${imgCount} 張風格統一 IG 輪播圖`, `Generate ${imgCount} Cohesive Carousel Images`)}
-      </button>
-
-      {/* 圖片成果展示 */}
-      {!!images.length && (
-        <div>
-          <div style={{ display: "grid", gridTemplateColumns: `repeat(${images.length}, 1fr)`, gap: "8px", marginBottom: "12px" }}>
-            {images.map((imgUrl, idx) => (
-              <div key={idx} style={{ position: "relative", borderRadius: "10px", overflow: "hidden", border: "1px solid var(--line)", background: "var(--canvas)", aspectRatio: "1/1" }}>
-                {!loadedIndexes.includes(idx) && (
-                  <div className="loading-shimmer" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "var(--muted)" }}>
-                    <span>✨ 圖片加載中...</span>
-                  </div>
-                )}
-                <img
-                  src={imgUrl}
-                  alt={`Carousel ${idx + 1}`}
-                  onLoad={() => setLoadedIndexes((prev) => [...prev, idx])}
-                  style={{ width: "100%", height: "100%", objectFit: "cover", opacity: loadedIndexes.includes(idx) ? 1 : 0, transition: "opacity 0.4s ease" }}
-                />
-                <button
-                  type="button"
-                  onClick={() => handleDownloadSingle(imgUrl, idx)}
-                  style={{ position: "absolute", right: "6px", bottom: "6px", border: 0, background: "rgba(0,0,0,0.65)", color: "white", borderRadius: "6px", padding: "4px 7px", fontSize: "10px", cursor: "pointer", backdropFilter: "blur(4px)" }}
-                >
-                  ⬇️ #{idx + 1}
-                </button>
-              </div>
-            ))}
-          </div>
-          <button
-            type="button"
-            onClick={handleDownloadAll}
-            className="primary-button wide"
-            style={{ background: "var(--paper)", color: "var(--purple-dark)", border: "1.5px solid var(--purple)", fontWeight: 700 }}
-          >
-            ⬇️ 一鍵下載全部 ({images.length} 張輪播圖)
-          </button>
-        </div>
-      )}
-    </div>
-  );
-}
-
 function AIPostTool({ copied, setCopied, language, selectTool }: { copied: string; setCopied: (v: string) => void; language: Language; selectTool?: (id: ToolId) => void }) {
   const tones = [
     {
@@ -1597,37 +1424,6 @@ ${idea.trim()}`
           <button className="primary-button wide" onClick={() => copyText(output, setCopied)}>
             {copied === output ? t(language, "貼文已複製 ✓", "Post Copied ✓") : t(language, "一鍵複製完整貼文", "Copy Full Post")}
           </button>
-
-          {/* 🖼️ AI 貼文視覺配圖與 IG 輪播圖生成器 */}
-          <CarouselImageGenerator postContent={output} language={language} />
-
-          <div style={{
-            marginTop: "16px",
-            padding: "14px",
-            borderRadius: "12px",
-            border: "1.5px solid var(--purple)",
-            background: "var(--paper)",
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            textAlign: "left"
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span style={{ fontSize: "18px" }}>🎨</span>
-              <strong style={{ fontSize: "13px", color: "var(--purple-dark)" }}>一鍵將此貼文設計為商業海報</strong>
-            </div>
-            <p style={{ fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.5 }}>
-              AI 將自動分析本篇貼文內容，提取品牌名稱、產品詞、價格與賣點，並自動切換填入海報企劃面板！
-            </p>
-            <button
-              onClick={handleTransferToPoster}
-              disabled={isTransferring}
-              className="primary-button wide"
-              style={{ background: "linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%)" }}
-            >
-              {isTransferring ? "✨ AI 正在解析貼文並企劃海報中..." : "🪄 一鍵分析貼文 ➔ 自動設計海報"}
-            </button>
-          </div>
         </div>
       )}
     </>
@@ -3250,10 +3046,10 @@ export default function App() {
         enDesc: "Create professional Midjourney & DALL-E 3 poster prompts without writing text. 100% free visual ad generator."
       },
       ai: {
-        zhTitle: "AI 社群貼文助手｜Threads / IG 爆款文案與同風格 IG 輪播配圖生成器｜字研所 TextLab",
-        zhDesc: "專為台灣社群設計的 AI 發文助手！輸入想法一鍵生成 IG、FB、Threads、小紅書爆款貼文，並自動產出 3~5 張風格統一的 IG 輪播圖片。免費免註冊。",
-        enTitle: "AI Social Post Assistant & IG Carousel Image Generator | TextLab",
-        enDesc: "AI copywriter for Instagram, Threads & Redbook. Generate viral social posts and matching cohesive carousel images instantly."
+        zhTitle: "AI 社群貼文助手｜Threads / IG / FB 爆款文案一鍵生成｜字研所 TextLab",
+        zhDesc: "專為台灣社群生態設計的 AI 發文助手！輸入想法一鍵生成 IG、FB、Threads、小紅書與 LINE 爆款貼文文案，免費免註冊。",
+        enTitle: "AI Social Post Assistant | Viral IG & Threads Creator | TextLab",
+        enDesc: "AI copywriter for Instagram, Threads, Facebook & LINE. Generate viral Taiwanese social posts instantly."
       },
       layout: {
         zhTitle: "IG / Threads 免費排版換行工具｜解決貼文縮排擠成一團｜字研所 TextLab",
