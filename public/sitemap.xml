@@ -2,73 +2,73 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://cooklabai.com/</loc>
-    <lastmod>2026-08-03</lastmod>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://cooklabai.com/#poster</loc>
-    <lastmod>2026-08-03</lastmod>
+    <loc>https://cooklabai.com/poster</loc>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://cooklabai.com/#ai</loc>
-    <lastmod>2026-08-03</lastmod>
+    <loc>https://cooklabai.com/ai</loc>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://cooklabai.com/#layout</loc>
-    <lastmod>2026-08-03</lastmod>
+    <loc>https://cooklabai.com/layout</loc>
+    <lastmod>2026-08-06</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://cooklabai.com/bio</loc>
+    <lastmod>2026-08-06</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://cooklabai.com/hashtags</loc>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cooklabai.com/#bio</loc>
-    <lastmod>2026-08-03</lastmod>
+    <loc>https://cooklabai.com/symbols</loc>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cooklabai.com/#hashtags</loc>
-    <lastmod>2026-08-03</lastmod>
+    <loc>https://cooklabai.com/emoji</loc>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cooklabai.com/#symbols</loc>
-    <lastmod>2026-08-03</lastmod>
+    <loc>https://cooklabai.com/kaomoji</loc>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cooklabai.com/#emoji</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://cooklabai.com/#kaomoji</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://cooklabai.com/#fonts</loc>
-    <lastmod>2026-08-03</lastmod>
+    <loc>https://cooklabai.com/fonts</loc>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://cooklabai.com/#nickname</loc>
-    <lastmod>2026-08-03</lastmod>
+    <loc>https://cooklabai.com/nickname</loc>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://cooklabai.com/#blank</loc>
-    <lastmod>2026-08-03</lastmod>
+    <loc>https://cooklabai.com/blank</loc>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>

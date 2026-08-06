@@ -2879,7 +2879,32 @@ function BrandLogo() {
 }
 
 export default function App() {
-  const [active, setActive] = useState<ToolId>(() => (window.location.hash.replace("#", "").split("/")[0] as ToolId) || "layout");
+  const parseCurrentTool = (): ToolId => {
+    if (typeof window === "undefined") return "poster";
+    if (window.location.hash) {
+      const hashTool = window.location.hash.replace("#", "").split("/")[0] as ToolId;
+      if (tools.some((t) => t.id === hashTool)) {
+        window.history.replaceState(null, "", `/${hashTool}`);
+        return hashTool;
+      }
+    }
+    const pathTool = window.location.pathname.replace("/", "").split("/")[0] as ToolId;
+    if (tools.some((t) => t.id === pathTool)) {
+      return pathTool;
+    }
+    return "poster";
+  };
+
+  const [active, setActive] = useState<ToolId>(parseCurrentTool);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const tool = parseCurrentTool();
+      setActive(tool);
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
   const [copied, setCopied] = useState("");
   const [guideOpen, setGuideOpen] = useState(false);
   const [guidesOpen, setGuidesOpen] = useState(false);
@@ -2911,7 +2936,12 @@ export default function App() {
     }
   }, [theme]);
   const current = tools.find((tool) => tool.id === active) || tools[0];
-  const selectTool = (id: ToolId) => { setActive(id); window.location.hash = id; window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const selectTool = (id: ToolId) => {
+    setActive(id);
+    const newPath = `/${id}`;
+    window.history.pushState(null, "", newPath);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   const changeLanguage = (next: Language) => {
     setLanguage(next);
     localStorage.setItem("textlab.language", next);
