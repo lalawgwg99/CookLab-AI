@@ -1479,7 +1479,7 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
     "✦【今天終於可以分享這個秘密了...】"
   ];
 
-  const BUILTIN_KEY = atob("c2stb3ItdjEtODY4YzYxZTI3MTgwOWFlMzg2NmZlMTZmNWY0M2MwMmIyNWM3Mjg2Y2NkZTY1YzVlNDhiODdiMWNhMGY1ZDhmOA==");
+  const BUILTIN_KEY = atob("c2stb3ItdjEtZTZlNTcyODhiYTU2OWRmNWI1MTdiZDNkNjRiNTExYjMzZjliNWIwN2RkMmU0NmE4MmNiMmM3MzM4ZDg5NTg2NA==");
   const MODEL_ID = "nvidia/nemotron-3-ultra-550b-a55b:free";
 
   const [selectedTone, setSelectedTone] = useState("auto");
@@ -2082,7 +2082,7 @@ function PosterTool({ copied, setCopied, language }: { copied: string; setCopied
 
     setUrlFetchMsg("✨ OpenRouter AI 正在分析商品內容並自動設計海報 Prompt…");
 
-    const BUILTIN_KEY = atob("c2stb3ItdjEtODY4YzYxZTI3MTgwOWFlMzg2NmZlMTZmNWY0M2MwMmIyNWM3Mjg2Y2NkZTY1YzVlNDhiODdiMWNhMGY1ZDhmOA==");
+    const BUILTIN_KEY = atob("c2stb3ItdjEtZTZlNTcyODhiYTU2OWRmNWI1MTdiZDNkNjRiNTExYjMzZjliNWIwN2RkMmU0NmE4MmNiMmM3MzM4ZDg5NTg2NA==");
 
     try {
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -2191,7 +2191,7 @@ ${fetchedText}`
     setIsAiPlanning(true);
     setAiPlanErr("");
 
-    const BUILTIN_KEY = atob("c2stb3ItdjEtODY4YzYxZTI3MTgwOWFlMzg2NmZlMTZmNWY0M2MwMmIyNWM3Mjg2Y2NkZTY1YzVlNDhiODdiMWNhMGY1ZDhmOA==");
+    const BUILTIN_KEY = atob("c2stb3ItdjEtZTZlNTcyODhiYTU2OWRmNWI1MTdiZDNkNjRiNTExYjMzZjliNWIwN2RkMmU0NmE4MmNiMmM3MzM4ZDg5NTg2NA==");
 
     try {
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -2402,7 +2402,7 @@ High commercial quality, 8k resolution, photorealistic studio render.`;
     setIsRating(true);
     setRatingErr("");
 
-    const BUILTIN_KEY = atob("c2stb3ItdjEtODY4YzYxZTI3MTgwOWFlMzg2NmZlMTZmNWY0M2MwMmIyNWM3Mjg2Y2NkZTY1YzVlNDhiODdiMWNhMGY1ZDhmOA==");
+    const BUILTIN_KEY = atob("c2stb3ItdjEtZTZlNTcyODhiYTU2OWRmNWI1MTdiZDNkNjRiNTExYjMzZjliNWIwN2RkMmU0NmE4MmNiMmM3MzM4ZDg5NTg2NA==");
 
     try {
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
