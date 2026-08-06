@@ -49,8 +49,8 @@ const tools: Tool[] = [
 
 const FREE_MODELS_LIST = [
   "nvidia/nemotron-3-ultra-550b-a55b:free",
-  "nvidia/nemotron-3-super-120b-a32b:free",
-  "poolside/laguna-s-2.1:free"
+  "poolside/laguna-s-2.1:free",
+  "inclusionai/ling-3.0-flash:free"
 ];
 
 const t = (language: Language, zh: string, en: string) => language === "zh-TW" ? zh : en;
