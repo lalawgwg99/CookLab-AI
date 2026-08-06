@@ -67,21 +67,273 @@ const symbolEnglish: Record<string, { name: string; short: string; description: 
   cards: { name: "Chess & Cards", short: "Games", description: "Chess pieces, card suits and dice for games and score keeping." },
   language: { name: "Languages & Letters", short: "Letters", description: "Greek, extended Latin and Japanese iteration marks." },
   objects: { name: "Everyday Objects", short: "Objects", description: "Everyday, communication and utility marks for schedules and contact details." },
+  dividers: { name: "Dividers & Borders", short: "Dividers", description: "Aesthetic line dividers, headers and frames for social posts." },
+  "mini-numbers": { name: "Mini Numbers", short: "Mini Numbers", description: "Subscript and superscript numbers for notes and numbering." },
+  "mini-letters": { name: "Mini Letters", short: "Mini Letters", description: "Miniature superscript letters for captions and bios." },
+  "geometric-decor": { name: "Geometric Decor", short: "Decor", description: "Minimalist geometric accents and diamond sparkles." },
+  "math-units": { name: "Math & Units", short: "Math & Units", description: "Advanced mathematical and measurement units." },
+  "playing-cards-decor": { name: "Playing Cards", short: "Cards", description: "Classic playing card suits." },
+  "music-decor": { name: "Music Symbols", short: "Music", description: "Musical notes and playback icons." },
+  suzhou: { name: "Suzhou Numerals", short: "Suzhou", description: "Traditional Suzhou numerals for aesthetic vintage notes." },
 };
 
 const emojiEnglish: Record<string, string> = { popular: "Popular", faces: "Faces", gestures: "Gestures", hearts: "Hearts", people: "People", animals: "Animals", nature: "Nature", food: "Food", activities: "Activities", travel: "Travel", objects: "Objects", symbols: "Symbols", flags: "Flags" };
-const kaomojiEnglish: Record<string, string> = { 開心: "Happy", 害羞: "Shy", 難過: "Sad", 生氣: "Angry", 打招呼: "Greetings", 愛心: "Love", 無奈: "Helpless", 拜託: "Pray & Sorry", 得意: "Proud" };
+const kaomojiEnglish: Record<string, string> = {
+  開心: "Happy", 害羞: "Shy", 無奈: "Helpless", 拜託: "Pray & Sorry", 得意: "Proud",
+  難過: "Sad", 生氣: "Angry", 打招呼: "Greetings", 愛心: "Love",
+  貓咪: "Cats", 狗狗: "Dogs", 熊與小動物: "Bears & Animals", 聖誕節慶: "Christmas",
+  食物吃貨: "Food & Eating", 運動加油: "Sports & Cheering", 睡覺疲倦: "Sleepy & Tired",
+  魔法奇幻: "Magic & Fantasy", 尷尬汗顏: "Embarrassed", 撒嬌可愛: "Cute & Sweet", 特殊少見: "Rare & Special"
+};
 
 const kaomojiGroups = [
-  { name: "開心", keywords: "開心 可愛 happy", items: ["(◕‿◕)", "(｡•̀ᴗ-)✧", "٩(ˊᗜˋ*)و", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧", "(๑˃ᴗ˂)ﻭ", "ヽ(•‿•)ノ"] },
-  { name: "害羞", keywords: "害羞 shy", items: ["(⁄ ⁄•⁄ω⁄•⁄ ⁄)", "(〃ω〃)", "(⁄˃ᆺ˂)", "(„ಡωಡ„)", "(⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)", "(*ﾉωﾉ)"] },
-  { name: "無奈", keywords: "無奈 無語 helpless", items: ["(￣_￣)", "( -_・)", "(눈_눈)", "( •̀_•́ )", "(￣▽￣)", "(・_・;)"] },
-  { name: "拜託", keywords: "拜託 道歉 pray sorry", items: ["(つ﹏⊂)", "( ; ω ; )", "(>_<)", "(人 •͈ᴗ•͈)", "(🙇‍♂️)", "(｡•́︿•̀｡)"] },
-  { name: "得意", keywords: "得意 傲嬌 proud", items: ["(¬‿¬)", "( 𠁆 ‿ 𠁆 )", "(๑•̀ㅂ•́)و", "(⌐■_■)", "(•̀ᴗ•́)و", "(°∀°)"] },
-  { name: "難過", keywords: "難過 哭 sad cry", items: ["(╥﹏╥)", "(｡•́︿•̀｡)", "(っ˘̩╭╮˘̩)っ", "(ಥ﹏ಥ)", "(ノ_<。)", "(｡╯︵╰｡)"] },
-  { name: "生氣", keywords: "生氣 angry", items: ["(╬ Ò﹏Ó)", "(¬_¬)", "(＃`Д´)", "ヽ( `д´*)ノ", "(•̀⤙•́)", "(눈_눈)"] },
-  { name: "打招呼", keywords: "打招呼 hello bye", items: ["ヾ(＾-＾)ノ", "( ´ ▽ ` )ﾉ", "ヾ(☆▽☆)", "(｡･ω･)ﾉﾞ", "(￣▽￣)ノ", "ヾ(•ω•`)o"] },
-  { name: "愛心", keywords: "愛心 喜歡 love", items: ["(♡˙︶˙♡)", "( ˘ ³˘)♥", "(づ￣ ³￣)づ", "(っ˘з(˘⌣˘ )", "(๑♡⌓♡๑)", "♡( ◡‿◡ )"] },
+  {
+    "name": "開心",
+    "keywords": "開心 可愛 happy",
+    "items": [
+      "(◕‿◕)",
+      "(｡•̀ᴗ-)✧",
+      "٩(ˊᗜˋ*)و",
+      "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧",
+      "(๑˃ᴗ˂)ﻭ",
+      "ヽ(•‿•)ノ",
+      "( ˶ˆ꒳ˆ˵ )",
+      "(´∇｀)",
+      "(^‿^)",
+      "(★^O^★)"
+    ]
+  },
+  {
+    "name": "貓咪",
+    "keywords": "貓咪 貓咪顏文字 cat kitty",
+    "items": [
+      "(=^･ω･^=)",
+      "(=①ω①=)",
+      "(=^‥^=)",
+      "(=；ェ；=)",
+      "(=ｘェｘ=)",
+      "ฅ(≈>⩊<≈)ฅ",
+      "(=^･ｪ･^=)",
+      "(^・x・^)"
+    ]
+  },
+  {
+    "name": "狗狗",
+    "keywords": "狗狗 寵物 dog puppy",
+    "items": [
+      "U･ェ･U",
+      "U^ｪ^U",
+      "ｖ・。・Ｖ",
+      "(U＾ω＾)",
+      "U(´-﹏-`)U",
+      "(∪｡･.･｡∪)"
+    ]
+  },
+  {
+    "name": "熊與小動物",
+    "keywords": "熊 小動物 兔子 bear rabbit animal",
+    "items": [
+      "(￣(ｴ)￣)ﾉ",
+      "(*ノ・ω・）",
+      "(´(ｪ)｀）",
+      "(・(ｪ)・)",
+      "(•ө•)",
+      "ʕ•ᴥ•ʔ",
+      "ʕ •̀ o •́ ʔ",
+      "ʕ·ᴥ·ʔ"
+    ]
+  },
+  {
+    "name": "撒嬌可愛",
+    "keywords": "撒嬌 可愛 賣萌 cute sweet",
+    "items": [
+      "(◍•ᴗ•◍)❤",
+      "(｡･ω･｡)ﾉ♡",
+      "꒰ᐢ. .ᐢ꒱",
+      "(´∩｡• ᵕ •｡∩`)",
+      "(๑>◡<๑)",
+      "(˶ᵔ ᵕ ᵔ˶)",
+      "( ˘ ³˘)♥"
+    ]
+  },
+  {
+    "name": "聖誕節慶",
+    "keywords": "聖誕 節慶 派對 禮物 christmas holiday",
+    "items": [
+      "🎅(⁀ᗢ⁀)",
+      "✧*｡🎄｡*✧",
+      "(人*´∀｀)｡*ﾟ+",
+      "❅*⋆⍋*⋆*❅",
+      "🎁(•ө•)",
+      "🎉(*^▽^*)"
+    ]
+  },
+  {
+    "name": "食物吃貨",
+    "keywords": "食物 吃貨 美食 甜點 food eating yummy",
+    "items": [
+      "(๑´ㅂ`๑)",
+      "(っ˘ڡ˘ς)",
+      "(๑><๑)",
+      "(´～｀ヾ)",
+      "( 🥤•̀ᴗ•́ )",
+      "☕( -_・)"
+    ]
+  },
+  {
+    "name": "運動加油",
+    "keywords": "運動 加油 奮鬥 power cheer sports",
+    "items": [
+      "٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ",
+      "ᕙ( •̀ ᗜ •́ )ᕗ",
+      "୧(๑•̀⌄•́๑)૭",
+      "ᕦ(ò_óˇ)ᕤ",
+      "٩( 🔥ω🔥 )و"
+    ]
+  },
+  {
+    "name": "睡覺疲倦",
+    "keywords": "睡覺 疲倦 累 下班 sleepy tired zzz",
+    "items": [
+      "(´-ω-`)",
+      "(￣o￣) zzZ",
+      "(ρ_-)o",
+      "(´～`)",
+      "( -_-) zzz",
+      "🫠( 🏃‍♂️💨 )"
+    ]
+  },
+  {
+    "name": "魔法奇幻",
+    "keywords": "魔法 奇幻 光芒 閃亮 magic fantasy sparkle",
+    "items": [
+      "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧",
+      "✧*｡٩(ˊᗜˋ*)و✧*｡",
+      "(๑˃̵ᴗ<ctrl42>)و",
+      "✦✧( •̀∀•́ )✧✦",
+      "🪄(｡•̀ᴗ-)✧"
+    ]
+  },
+  {
+    "name": "生氣炸毛",
+    "keywords": "生氣 炸毛 翻桌 憤怒 angry rage",
+    "items": [
+      "(╬ Ò ‸ Ó)",
+      "(｀Д´*)",
+      "ヽ(｀⌒´メ)ノ",
+      "(╯°□°）╯︵ ┻━┻",
+      "(╬ Ò﹏Ó)",
+      "(＃`Д´)"
+    ]
+  },
+  {
+    "name": "尷尬汗顏",
+    "keywords": "尷尬 汗顏 遮臉 吐嘈 embarrassed awkward",
+    "items": [
+      "(^_^;)",
+      "(；一_一)",
+      "(￣▽￣|||)",
+      "(//∇//)",
+      "(・_・;)",
+      "(￣_￣|||)"
+    ]
+  },
+  {
+    "name": "特殊少見",
+    "keywords": "特殊 少見 天使 翅膀 rare special angel",
+    "items": [
+      "꒰ঌ(⃔ ⌯' '⌯)⃕໒꒱",
+      "⁽⁽ଘ( ˊᵕˋ )ଓ⁾⁾",
+      "ଘ(੭ˊ꒳ ˋ)੭✧",
+      "꒰✧₍ᐢ. .ᐢ₎✧꒱",
+      "໒꒱(๑•̀.̫•́๑)",
+      "‎(ꕤ 🈀 🈀)"
+    ]
+  },
+  {
+    "name": "害羞",
+    "keywords": "害羞 shy",
+    "items": [
+      "(⁄ ⁄•⁄ω⁄•⁄ ⁄)",
+      "(〃ω〃)",
+      "(⁄˃ᆺ˂)",
+      "(„ಡωಡ„)",
+      "(⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)",
+      "(*ﾉωﾉ)"
+    ]
+  },
+  {
+    "name": "無奈",
+    "keywords": "無奈 無語 helpless",
+    "items": [
+      "(￣_￣)",
+      "( -_・)",
+      "(눈_눈)",
+      "( •̀_•́ )",
+      "(￣▽￣)",
+      "(・_・;)"
+    ]
+  },
+  {
+    "name": "拜託",
+    "keywords": "拜託 道歉 pray sorry",
+    "items": [
+      "(つ﹏⊂)",
+      "( ; ω ; )",
+      "(>_<)",
+      "(人 •͈ᴗ•͈)",
+      "(🙇‍♂️)",
+      "(｡•́︿•̀｡)"
+    ]
+  },
+  {
+    "name": "得意",
+    "keywords": "得意 傲嬌 proud",
+    "items": [
+      "(¬‿¬)",
+      "( 𠁆 ‿ 𠁆 )",
+      "(๑•̀ㅂ•́)و",
+      "(⌐■_■)",
+      "(•̀ᴗ•́)و",
+      "(°∀°)"
+    ]
+  },
+  {
+    "name": "難過",
+    "keywords": "難過 哭 sad cry",
+    "items": [
+      "(╥﹏╥)",
+      "(｡•́︿•̀｡)",
+      "(っ˘̩╭╮˘̩)っ",
+      "(ಥ﹏ಥ)",
+      "(ノ_<。)",
+      "(｡╯︵╰｡)"
+    ]
+  },
+  {
+    "name": "打招呼",
+    "keywords": "打招呼 hello bye",
+    "items": [
+      "ヾ(＾-＾)ノ",
+      "( ´ ▽ ` )ﾉ",
+      "ヾ(☆▽☆)",
+      "(｡･ω･)ﾉﾞ",
+      "(￣▽￣)ノ",
+      "ヾ(•ω•`)o"
+    ]
+  },
+  {
+    "name": "愛心",
+    "keywords": "愛心 喜歡 love",
+    "items": [
+      "(♡˙︶˙♡)",
+      "( ˘ ³˘)♥",
+      "(づ￣ ³￣)づ",
+      "(っ˘з(˘⌣˘ )",
+      "(๑♡⌓♡๑)",
+      "♡( ◡‿◡ )"
+    ]
+  }
 ];
 
 const nickAdjectives = ["奶油", "月光", "透明", "慵懶", "微甜", "宇宙", "午後", "小小", "霧灰", "草莓", "緩慢", "焦糖"];

@@ -164,6 +164,70 @@ export const symbolGroups: SymbolGroup[] = [
     description: "生活物件、通訊與常見標誌，適合行程、聯絡資訊和日常貼文。",
     items: ["☎", "☏", "✆", "✉", "✈", "⌂", "⌘", "⌖", "⌕", "⌚", "⌛", "⚐", "⚑", "⚒", "⚓", "⚖", "⚙", "⚚", "⚛", "⚜", "⚠", "⚡", "☕", "♨", "✂", "✎", "✐", "✑", "✒", "✏", "⌨", "⎙", "⏎", "⏏", "⏱", "⏲"],
   },
+  {
+    id: "dividers",
+    name: "分隔線與邊框",
+    shortName: "分隔線",
+    keywords: "分隔線 邊框 裝飾線 divider border line frame",
+    description: "適合 IG 貼文分段、手帳邊框與內文隔開的精緻裝飾符號。",
+    items: ["𓍄", "𓂃", "✧⊹⊱°", "⪩⪨", "₊⊹", "୨୧", "--- ୨୧ ---", "*̣̥☆·͙̥‧", "❅‧·͙̥̣☆*̣̥", "─── ✦ ───", "┈┈┈ ♡ ┈┈┈", "⋆⋅☆⋅⋆", "౨ৎ", "『 』", "〰︎", "✦ ───", "─── ✦", "•─────•", "•✦───────────✦•"]
+  },
+  {
+    id: "mini-numbers",
+    name: "迷你數字",
+    shortName: "迷你數字",
+    keywords: "迷你數字 下標 上標 數字 mini numbers subscript superscript",
+    description: "可用於註解、小標題、頁碼與精緻數字標記。",
+    items: ["₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉", "⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"]
+  },
+  {
+    id: "mini-letters",
+    name: "迷你字母",
+    shortName: "迷你字母",
+    keywords: "迷你字母 小字 裝飾 mini letters superscript text",
+    description: "小巧可愛的上標迷你英文字母，適合貼文標號與個人檔案簡介。",
+    items: ["ᵃ", "ᵇ", "ᶜ", "ᵈ", "ᵉ", "ᶠ", "ᵍ", "ʰ", "ⁱ", "ʲ", "ᵏ", "ˡ", "ᵐ", "ⁿ", "ᵒ", "ᵖ", "ʳ", "ˢ", "ᵗ", "ᵘ", "ᵛ", "ʷ", "ˣ", "ʸ", "ᶻ"]
+  },
+  {
+    id: "geometric-decor",
+    name: "幾何裝飾",
+    shortName: "幾何",
+    keywords: "幾何 裝飾極簡 菱形 圓圈 geometric decor minimalist",
+    description: "極簡風與日系風格常用之點綴幾何符號。",
+    items: ["⟡", "✧", "⊹", "₊", "◌", "⌁", "ꔛ", "ꕤ", "◡̎", ".ᐟ.ᐟ", "✦", "✧", "◈", "◇", "◈", "◆"]
+  },
+  {
+    id: "math-units",
+    name: "數學與單位",
+    shortName: "數學單位",
+    keywords: "數學 單位 積分 等於 math units calculate formula",
+    description: "數學運算、邏輯、分數與常用科技工程單位符號。",
+    items: ["≈", "≠", "±", "∑", "π", "‰", "‱", "∫", "∮", "∠", "∟", "⊥", "⅟", "½", "⅓", "⅔", "¼", "¾"]
+  },
+  {
+    id: "playing-cards-decor",
+    name: "撲克牌",
+    shortName: "撲克牌",
+    keywords: "撲克牌 黑桃 紅心 方塊 梅花 playing cards poker",
+    description: "撲克牌四花色實心與空心圖案。",
+    items: ["♠", "♥", "♣", "♦", "♤", "♡", "♧", "♢"]
+  },
+  {
+    id: "music-decor",
+    name: "音樂符號",
+    shortName: "音樂符號",
+    keywords: "音樂 音符 樂譜 歌單 music note song",
+    description: "音符、升降記號與歌單播放圖標。",
+    items: ["♫", "♬", "♪", "♩", "♭", "♮", "♯", "ø", "ヰ", "∮", "¶"]
+  },
+  {
+    id: "suzhou",
+    name: "蘇州碼子（花碼）",
+    shortName: "蘇州碼子",
+    keywords: "蘇州碼子 花碼 復古 傳統 記號 suzhou numerals vintage",
+    description: "傳統復古風格與文青筆記愛用的蘇州碼子數字系統。",
+    items: ["〇", "〡", "〢", "〣", "〤", "〥", "〦", "〧", "〨", "〩"]
+  },
 ];
 
 export const totalSymbolCount = symbolGroups.reduce((total, group) => total + group.items.length, 0);
