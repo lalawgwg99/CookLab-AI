@@ -47,6 +47,14 @@ const tools: Tool[] = [
   { id: "blank", name: "空白文字", nameEn: "Invisible Text", short: "產生與複製", shortEn: "Generate and copy", icon: "□", tone: "sand" },
 ];
 
+const FREE_MODELS_LIST = [
+  "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "nvidia/nemotron-3-super-120b-a32b:free",
+  "poolside/laguna-s-2.1:free",
+  "ling/ling-3.0-flash:free",
+  "google/gemma-2-9b-it:free"
+];
+
 const t = (language: Language, zh: string, en: string) => language === "zh-TW" ? zh : en;
 
 const symbolEnglish: Record<string, { name: string; short: string; description: string }> = {
@@ -1480,7 +1488,6 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
   ];
 
   const BUILTIN_KEY = atob("c2stb3ItdjEtZTZlNTcyODhiYTU2OWRmNWI1MTdiZDNkNjRiNTExYjMzZjliNWIwN2RkMmU0NmE4MmNiMmM3MzM4ZDg5NTg2NA==");
-  const MODEL_ID = "nvidia/nemotron-3-ultra-550b-a55b:free";
 
   const [selectedTone, setSelectedTone] = useState("auto");
   const [idea, setIdea] = useState("今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書");
@@ -1536,7 +1543,10 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "nvidia/nemotron-3-ultra-550b-a55b:free",
+          models: FREE_MODELS_LIST,
+          provider: {
+            allow_fallbacks: false
+          },
           messages: [
             {
               role: "system",
@@ -1605,7 +1615,7 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
     if (!idea.trim() || isGenerating || cooldownSec > 0) return;
 
     // 重複請求攔截 (Deduplication Check)
-    const currentRequestKey = `${selectedTone}::${MODEL_ID}::${idea.trim()}`;
+    const currentRequestKey = `${selectedTone}::${FREE_MODELS_LIST[0]}::${idea.trim()}`;
     if (currentRequestKey === lastRequestKey && output) {
       setErrorMessage("💡 提示：您尚未修改內容或風格，已呈現目前成果（已為您省下重複 API Token 消耗！）。");
       return;
@@ -1624,7 +1634,7 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: MODEL_ID,
+          models: FREE_MODELS_LIST,
           provider: {
             allow_fallbacks: false
           },
@@ -2094,7 +2104,7 @@ function PosterTool({ copied, setCopied, language }: { copied: string; setCopied
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "nvidia/nemotron-3-ultra-550b-a55b:free",
+          models: FREE_MODELS_LIST,
           provider: {
             allow_fallbacks: false
           },
@@ -2203,7 +2213,7 @@ ${fetchedText}`
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "nvidia/nemotron-3-ultra-550b-a55b:free",
+          models: FREE_MODELS_LIST,
           provider: {
             allow_fallbacks: false
           },
@@ -2414,7 +2424,7 @@ High commercial quality, 8k resolution, photorealistic studio render.`;
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "nvidia/nemotron-3-ultra-550b-a55b:free",
+          models: FREE_MODELS_LIST,
           provider: {
             allow_fallbacks: false
           },
