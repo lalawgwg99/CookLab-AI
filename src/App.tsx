@@ -187,7 +187,7 @@ function symbolCodePoints(value: string) {
 
 function SymbolsTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
   const [query, setQuery] = useState("");
-  const initialCategory = window.location.hash.split("/")[1] || "all";
+  const initialCategory = (window.location.hash.split("/")[1] || window.location.pathname.split("/")[2] || "all");
   const [category, setCategoryState] = useState(symbolGroups.some((group) => group.id === initialCategory) ? initialCategory : "all");
   const [recent, setRecent] = useState<string[]>(() => JSON.parse(localStorage.getItem("textlab.recentSymbols") || "[]"));
   const [favorites, setFavorites] = useState<string[]>(() => JSON.parse(localStorage.getItem("textlab.favoriteSymbols") || "[]"));
@@ -235,7 +235,7 @@ function SymbolsTool({ copied, setCopied, language }: { copied: string; setCopie
   const setCategory = (id: string) => {
     setCategoryState(id);
     setQuery("");
-    window.history.replaceState(null, "", id === "all" ? "#symbols" : `#symbols/${id}`);
+    window.history.replaceState(null, "", id === "all" ? "/symbols" : `/symbols/${id}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const choose = (item: string) => {
@@ -308,7 +308,7 @@ function SymbolsTool({ copied, setCopied, language }: { copied: string; setCopie
       {!!favorites.length && <section className="symbol-section"><div className="section-title-row"><div><span className="section-kicker">SAVED</span><h2>{t(language, "我的收藏", "Favorites")}</h2></div></div><SymbolTiles items={favorites} favorites={favorites} copied={copied} onCopy={choose} onFavorite={toggleFavorite} /></section>}
       <section className="symbol-section"><div className="section-title-row"><div><span className="section-kicker">QUICK PICKS</span><h2>{t(language, "熱門符號", "Popular symbols")}</h2></div></div><SymbolTiles items={popularSymbols} favorites={favorites} copied={copied} onCopy={choose} onFavorite={toggleFavorite} /></section>
     </div>}
-    <div className="symbol-sections">{groups.map((group) => <section className="symbol-section" id={`symbol-${group.id}`} key={group.id}><div className="section-title-row symbol-title"><div><span className="section-kicker">{group.items.length} SYMBOLS</span><h2>{t(language, group.name, symbolEnglish[group.id].name)}</h2><p>{t(language, group.description, symbolEnglish[group.id].description)}</p></div><button className="share-category" onClick={() => copyText(`${window.location.origin}${window.location.pathname}#symbols/${group.id}`, setCopied)}>⌁ {t(language, "複製分類連結", "Copy category link")}</button></div><SymbolTiles items={group.items} favorites={favorites} copied={copied} onCopy={choose} onFavorite={toggleFavorite} /></section>)}</div>
+    <div className="symbol-sections">{groups.map((group) => <section className="symbol-section" id={`symbol-${group.id}`} key={group.id}><div className="section-title-row symbol-title"><div><span className="section-kicker">{group.items.length} SYMBOLS</span><h2>{t(language, group.name, symbolEnglish[group.id].name)}</h2><p>{t(language, group.description, symbolEnglish[group.id].description)}</p></div><button className="share-category" onClick={() => copyText(`${window.location.origin}/symbols/${group.id}`, setCopied)}>⌁ {t(language, "複製分類連結", "Copy category link")}</button></div><SymbolTiles items={group.items} favorites={favorites} copied={copied} onCopy={choose} onFavorite={toggleFavorite} /></section>)}</div>
     {!!selected && <aside className="symbol-detail" aria-label={t(language, "已選符號資訊", "Selected symbol info")}><div className="selected-symbol">{selected}</div><div><span className="section-kicker">SYMBOL INFO</span><strong>{selectedGroup ? t(language, selectedGroup.name, symbolEnglish[selectedGroup.id].name) : t(language, "特殊符號", "Symbol")}</strong><code>{symbolCodePoints(selected)}</code></div><button onClick={() => choose(selected)}>{t(language, "再次複製", "Copy again")}</button><button className={favorites.includes(selected) ? "saved" : ""} onClick={() => toggleFavorite(selected)}>{favorites.includes(selected) ? t(language, "♥ 已收藏", "♥ Saved") : t(language, "♡ 收藏", "♡ Save")}</button><button className="detail-close" onClick={() => setSelected("")} aria-label={t(language, "關閉符號資訊", "Close symbol info")}>×</button></aside>}
     {!groups.length && <EmptyState text={t(language, "找不到這個符號，換個關鍵字試試看。", "No matching symbol. Try another keyword.")} />}</>;
 }
@@ -2882,13 +2882,16 @@ export default function App() {
   const parseCurrentTool = (): ToolId => {
     if (typeof window === "undefined") return "poster";
     if (window.location.hash) {
-      const hashTool = window.location.hash.replace("#", "").split("/")[0] as ToolId;
+      const hashParts = window.location.hash.replace("#", "").split("/");
+      const hashTool = hashParts[0] as ToolId;
       if (tools.some((t) => t.id === hashTool)) {
-        window.history.replaceState(null, "", `/${hashTool}`);
+        const subCat = hashParts[1] ? `/${hashParts[1]}` : "";
+        window.history.replaceState(null, "", `/${hashTool}${subCat}`);
         return hashTool;
       }
     }
-    const pathTool = window.location.pathname.replace("/", "").split("/")[0] as ToolId;
+    const pathParts = window.location.pathname.replace("/", "").split("/");
+    const pathTool = pathParts[0] as ToolId;
     if (tools.some((t) => t.id === pathTool)) {
       return pathTool;
     }
@@ -3064,7 +3067,7 @@ export default function App() {
 
   const toolProps = { copied, setCopied, language };
   return <div className="app-shell">
-    <header className="topbar"><a className="brand" href="#symbols" onClick={() => selectTool("symbols")}><BrandLogo /><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button className="guide-nav-button" onClick={() => setGuidesOpen(true)}>📚 {t(language, "行銷指南", "Guides")}</button><button className="guide-nav-button" onClick={() => setEmbedOpen(true)}>🔗 {t(language, "嵌入與分享", "Embed")}</button><button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>{theme === "dark" ? "🌙 深色" : theme === "light" ? "☀️ 淺色" : "🌗 自動"}</button><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
+    <header className="topbar"><a className="brand" href="/symbols" onClick={(e) => { e.preventDefault(); selectTool("symbols"); }}><BrandLogo /><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button className="guide-nav-button" onClick={() => setGuidesOpen(true)}>📚 {t(language, "行銷指南", "Guides")}</button><button className="guide-nav-button" onClick={() => setEmbedOpen(true)}>🔗 {t(language, "嵌入與分享", "Embed")}</button><button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>{theme === "dark" ? "🌙 深色" : theme === "light" ? "☀️ 淺色" : "🌗 自動"}</button><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
     <div className="layout">
       <aside className="sidebar"><p className="sidebar-label">{t(language, "文字工具箱", "TEXT TOOLBOX")}</p><div className="tool-nav">{tools.map((tool) => <button key={tool.id} className={active === tool.id ? "active" : ""} onClick={() => selectTool(tool.id)}><span className={`tool-icon ${tool.tone}`}>{tool.icon}</span><span><strong>{t(language, tool.name, tool.nameEn)}</strong><small>{t(language, tool.short, tool.shortEn)}</small></span>{tool.badge && <em>{t(language, tool.badge, "HOT")}</em>}</button>)}</div><div className="sidebar-note"><span>✦</span><p><strong>{t(language, "你的文字，只留在這裡", "Your text stays here")}</strong><br />{t(language, "所有轉換都在瀏覽器完成，我們不會儲存內容。", "Everything runs in your browser. We never store your content.")}</p></div></aside>
       <main className="workspace"><div className="mobile-tool-picker"><span>{t(language, "目前工具", "CURRENT TOOL")}</span><select value={active} onChange={(e) => selectTool(e.target.value as ToolId)}>{tools.map((tool) => <option value={tool.id} key={tool.id}>{t(language, tool.name, tool.nameEn)}｜{t(language, tool.short, tool.shortEn)}</option>)}</select></div>
