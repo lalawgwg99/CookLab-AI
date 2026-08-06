@@ -341,6 +341,20 @@ const nickNouns = ["烤吐司", "小行星", "收信人", "漫遊者", "日記",
 const nickAdjectivesEn = ["butter", "moonlit", "clear", "lazy", "sweet", "cosmic", "afternoon", "little", "misty", "berry", "slow", "caramel"];
 const nickNounsEn = ["toast", "asteroid", "receiver", "wanderer", "diary", "cloud", "penguin", "bubble", "researcher", "film", "chestnut", "traveler"];
 
+function flipText(str: string) {
+  const flipTable: Record<string, string> = {
+    a: "ɐ", b: "q", c: "ɔ", d: "p", e: "ǝ", f: "ɟ", g: "ɓ", h: "ɥ", i: "ı", j: "ɾ",
+    k: "ʞ", l: "ꞁ", m: "ɯ", n: "u", o: "o", p: "d", q: "b", r: "ɹ", s: "s", t: "ʇ",
+    u: "n", v: "ʌ", w: "ʍ", x: "x", y: "ʎ", z: "z", A: "∀", B: "𐐒", C: "Ɔ", D: "◖",
+    E: "Ǝ", F: "Ⅎ", G: "⅁", H: "H", I: "I", J: "ſ", K: "⋊", L: "⅂", M: "W", N: "N",
+    O: "O", P: "Ԁ", Q: "Ò", R: "ᴚ", S: "S", T: "┴", U: "∩", V: "∀", W: "M", X: "X",
+    Y: "⅄", Z: "Z", "0": "0", "1": "⇂", "2": "乙", "3": "Ɛ", "4": "⇃", "5": "ϛ",
+    "6": "9", "7": "ㄥ", "8": "8", "9": "6", ".": "˙", ",": "'", "'": ",", '"': "„",
+    "!": "¡", "?": "¿", "(": ")", ")": "(", "[": "]", "]": "[", "{": "}", "}": "{"
+  };
+  return Array.from(str).reverse().map((char) => flipTable[char] || char).join("");
+}
+
 const toRange = (text: string, upper: number, lower: number, digit?: number) =>
   Array.from(text).map((char) => {
     const code = char.charCodeAt(0);
@@ -369,6 +383,10 @@ const fontVariants = (text: string) => [
   { name: "方框", value: Array.from(text.toUpperCase()).map((c) => /[A-Z]/.test(c) ? String.fromCodePoint(0x1f130 + c.charCodeAt(0) - 65) : c).join("") },
   { name: "刪除線", value: Array.from(text).map((c) => c + "\u0336").join("") },
   { name: "底線", value: Array.from(text).map((c) => c + "\u0332").join("") },
+  { name: "🙃 顛倒翻轉字", value: flipText(text) },
+  { name: "✦ 星閃邊框標題", value: `✦ ─── ${text} ─── ✦` },
+  { name: "౨ৎ 蝴蝶結夢幻標題", value: `౨ৎ  ${text}  ౨ৎ` },
+  { name: "⋆⋅☆⋅⋆ 璀璨星光標題", value: `⋆⋅☆⋅⋆  ${text}  ⋆⋅☆⋅⋆` },
 ];
 
 function addGlobalHistory(item: string) {
@@ -1259,6 +1277,15 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
     { title: "社畜下班吐嘈", idea: "改完第 5 版草稿，終於可以下班去吃麻辣鍋放空了" }
   ];
 
+  const viralHooks = [
+    "🔥【千萬別再...】",
+    "💡【關於最近的一個小思考...】",
+    "✨【如果你也在經歷... 請花 1 分鐘看完】",
+    "🛒【限時搶購倒數｜獨家優惠】",
+    "🫠【改了 5 版草稿之後，我悟出了一個道理...】",
+    "✦【今天終於可以分享這個秘密了...】"
+  ];
+
   const BUILTIN_KEY = atob("c2stb3ItdjEtODY4YzYxZTI3MTgwOWFlMzg2NmZlMTZmNWY0M2MwMmIyNWM3Mjg2Y2NkZTY1YzVlNDhiODdiMWNhMGY1ZDhmOA==");
   const MODEL_ID = "nvidia/nemotron-3-ultra-550b-a55b:free";
 
@@ -1577,6 +1604,24 @@ ${idea.trim()}`
           rows={4}
           style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", lineHeight: 1.5, resize: "vertical", outline: "none", marginBottom: "12px" }}
         />
+
+        <div style={{ marginBottom: "12px" }}>
+          <span style={{ fontSize: "11px", color: "var(--purple)", width: "100%", fontWeight: 700, display: "block", marginBottom: "6px" }}>
+            🔥 一鍵套用社群爆款 Hook 勾魂開頭：
+          </span>
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+            {viralHooks.map((hk) => (
+              <button
+                key={hk}
+                type="button"
+                onClick={() => setIdea((prev) => `${hk}\n${prev}`)}
+                style={{ border: "1px solid var(--purple-soft)", background: "var(--purple-soft)", color: "var(--purple-dark)", borderRadius: "6px", padding: "4px 8px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}
+              >
+                + ${hk}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "16px" }}>
           <span style={{ fontSize: "11px", color: "var(--muted)", width: "100%", fontWeight: 650 }}>
