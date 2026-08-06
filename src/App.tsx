@@ -2715,6 +2715,141 @@ CTA 按鈕：${cta}
 
 function EmptyState({ text }: { text: string }) { return <div className="empty-state"><span>⌕</span><p>{text}</p></div>; }
 
+function MarketingGuidesModal({ language, onClose }: { language: Language; onClose: () => void }) {
+  return (
+    <div className="guide-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <section className="guide-modal" role="dialog" aria-modal="true" style={{ maxWidth: "860px" }}>
+        <button className="guide-close" onClick={onClose}>×</button>
+        
+        <div className="guide-hero">
+          <span className="tool-icon lilac">📚</span>
+          <div>
+            <span className="section-kicker">SEO & MARKETING GUIDES</span>
+            <h2>{t(language, "爆款行銷與排版完整實戰指南", "Marketing & Copywriting Guides")}</h2>
+            <p>{t(language, "收錄 2026 最熱門的社群排版技巧、AI 海報生成 Prompt 指南與演算法爆款心法。", "Practical guides for social media marketing, AI poster prompts, and algorithm hacks.")}</p>
+          </div>
+        </div>
+
+        <div style={{ display: "grid", gap: "16px", marginTop: "20px" }}>
+          
+          <article style={{ border: "1px solid var(--line)", borderRadius: "14px", padding: "18px", background: "var(--paper)" }}>
+            <h3 style={{ fontSize: "15px", color: "var(--purple-dark)", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
+              <span>🎨</span> 指南 1：不用寫 Prompt！30 秒用 AI 點選生成 Midjourney 商業海報
+            </h3>
+            <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.7, margin: 0 }}>
+              對於完全不懂英文提示詞或剛接觸 AI 的使用者來說，寫 Prompt 常面臨不知道專業術語（如打光漫射光線、金色標章、留白密度）的痛點。<strong>字研所 AI 廣告研究所</strong> 將 20+ 招商業海報排版結構模組化，使用者只需從產業（3C家電、美食餐飲、汽車房產、電商服飾）開始，點選主色調、背景與 CTA，系統會自動組合出包含 <code>--ar</code> 比例與 <code>--style raw</code> 的高轉換Prompt！
+            </p>
+          </article>
+
+          <article style={{ border: "1px solid var(--line)", borderRadius: "14px", padding: "18px", background: "var(--paper)" }}>
+            <h3 style={{ fontSize: "15px", color: "var(--purple-dark)", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
+              <span>¶</span> 指南 2：2026 IG 貼文換行與爆款排版完整教學
+            </h3>
+            <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.7, margin: 0 }}>
+              在 Instagram 和 Threads 發文時，直接按 Enter 換行常會被平台預設機制吃掉，導致整段內文擠成一團。解決這個問題的核心是插入 <strong>隱形 Unicode 空白字元 (U+3164)</strong>。字研所的社群排版工具會自動把每個換行替換為高相容性的隱形字元，並提供風格分隔線 (─── ⋆⋅☆⋅⋆ ───) 與微符號，提升手機閱讀留白體驗。
+            </p>
+          </article>
+
+          <article style={{ border: "1px solid var(--line)", borderRadius: "14px", padding: "18px", background: "var(--paper)" }}>
+            <h3 style={{ fontSize: "15px", color: "var(--purple-dark)", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
+              <span>💬</span> 指南 3：Threads 爆款討論文案怎麼寫？7 個小編實測公式
+            </h3>
+            <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.7, margin: 0 }}>
+              Threads 演算法極度偏好「引發留言互動」的內容。爆款貼文往往具備三大要素：1. 開頭用引人好奇的破題句（如『關於最近的一個小思考…』）；2. 內文段落短小、留白充裕；3. 結尾拋出開放式問題並附上 3-5 個導流黑標籤。使用字研所 AI 社群貼文助手選取「💬 Threads 觀點」語氣，即可一鍵套用爆款公式。
+            </p>
+          </article>
+
+          <article style={{ border: "1px solid var(--line)", borderRadius: "14px", padding: "18px", background: "var(--paper)" }}>
+            <h3 style={{ fontSize: "15px", color: "var(--purple-dark)", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
+              <span>✨</span> 指南 4：小紅書高轉換種草文案：AI + 人工潤飾全攻略
+            </h3>
+            <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.7, margin: 0 }}>
+              小紅書種草文章講求「視覺氛圍感」與「實用指標評分」。標題必須帶有儀式感符號（✦ 氛圍感生活提案 ✦），內文搭配五星評分（▪ 視覺氛圍：滿分 💯、▪ 出片指數：★★★★★），並於結尾提醒『點讚收藏不迷路』。AI 發文助手的「✨ 小紅書種草」語氣可自動生成完整種草結構。
+            </p>
+          </article>
+
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function EmbedShareModal({ language, onClose }: { language: Language; onClose: () => void }) {
+  const [copiedEmbed, setCopiedEmbed] = useState(false);
+  const embedCode = `<iframe src="https://cooklabai.com/#poster" width="100%" height="700" frameborder="0" style="border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.1);"></iframe>`;
+
+  const copyEmbed = () => {
+    navigator.clipboard.writeText(embedCode);
+    setCopiedEmbed(true);
+    setTimeout(() => setCopiedEmbed(false), 2000);
+  };
+
+  return (
+    <div className="guide-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <section className="guide-modal" role="dialog" aria-modal="true" style={{ maxWidth: "620px" }}>
+        <button className="guide-close" onClick={onClose}>×</button>
+        
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
+          <span style={{ fontSize: "24px" }}>🔗</span>
+          <div>
+            <h2 style={{ fontSize: "18px", margin: 0, color: "var(--ink)" }}>{t(language, "分享與嵌入字研所工具", "Share & Embed TextLab")}</h2>
+            <p style={{ fontSize: "11px", color: "var(--muted)", margin: "2px 0 0" }}>{t(language, "讓您的讀者或社群好友也能免費體驗 AI 廣告研究所！", "Embed our tool on your blog or share with friends!")}</p>
+          </div>
+        </div>
+
+        {/* 嵌入碼 */}
+        <div style={{ marginBottom: "20px" }}>
+          <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
+            1. 部落格/網站 嵌入語法 (Embed Code):
+          </label>
+          <textarea
+            readOnly
+            value={embedCode}
+            rows={3}
+            style={{ width: "100%", padding: "10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "11px", fontFamily: "monospace", resize: "none", outline: "none", marginBottom: "8px" }}
+          />
+          <button className="primary-button wide" onClick={copyEmbed}>
+            {copiedEmbed ? "嵌入語法已複製 ✓" : "一鍵複製嵌入語法 (iframe)"}
+          </button>
+        </div>
+
+        {/* 社群分享連結 */}
+        <div>
+          <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "8px" }}>
+            2. 一鍵分享給社群好友:
+          </label>
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+            <a
+              href="https://line.me/R/msg/text/?字研所%20AI%20廣告研究所｜30秒免寫%20Prompt%20生成商業海報！%20https://cooklabai.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "8px 14px", fontSize: "12px", textDecoration: "none", fontWeight: 650, display: "flex", alignItems: "center", gap: "6px" }}
+            >
+              🟢 LINE 分享
+            </a>
+            <a
+              href="https://www.facebook.com/sharer/sharer.php?u=https://cooklabai.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "8px 14px", fontSize: "12px", textDecoration: "none", fontWeight: 650, display: "flex", alignItems: "center", gap: "6px" }}
+            >
+              🔵 FB 分享
+            </a>
+            <a
+              href="https://threads.net/intent/post?text=發現一個超級好用的免費%20AI%20廣告海報產生器「字研所」！完全不用寫%20Prompt，點選就能生出%20Midjourney%20和%20ChatGPT%20海報提示詞：https://cooklabai.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "8px 14px", fontSize: "12px", textDecoration: "none", fontWeight: 650, display: "flex", alignItems: "center", gap: "6px" }}
+            >
+              💬 Threads 分享
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 function GuideModal({ language, onClose, onSelectTool }: { language: Language; onClose: () => void; onSelectTool: (id: ToolId) => void }) {
   return <div className="guide-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
     <section className="guide-modal" role="dialog" aria-modal="true" aria-labelledby="guide-title">
@@ -2747,6 +2882,8 @@ export default function App() {
   const [active, setActive] = useState<ToolId>(() => (window.location.hash.replace("#", "").split("/")[0] as ToolId) || "layout");
   const [copied, setCopied] = useState("");
   const [guideOpen, setGuideOpen] = useState(false);
+  const [guidesOpen, setGuidesOpen] = useState(false);
+  const [embedOpen, setEmbedOpen] = useState(false);
   const [language, setLanguage] = useState<Language>(() => {
     const requested = new URLSearchParams(window.location.search).get("lang");
     if (requested === "en") return "en";
@@ -2791,12 +2928,79 @@ export default function App() {
     let titleStr = `${t(language, current.name, current.nameEn)}｜TextLab AI`;
     let descStr = t(language, `${current.name}線上工具：${current.short}，免費使用、不需登入。`, `${current.nameEn}: ${current.shortEn}. Free, no sign-up.`);
 
-    if (current.id === "poster") {
-      titleStr = t(language, "AI 廣告研究所｜免寫 Prompt 一鍵生成商業海報 (Midjourney / ChatGPT)｜字研所 TextLab", "AI Commercial Poster Studio | Visual Ad Prompt Generator | TextLab");
-      descStr = t(language, "不需英文或複雜提示詞！30 秒透過點選自動產生 Midjourney、ChatGPT (DALL-E 3)、Gemini 專業商業海報 Prompt，支援網址解析與 AI 廣告評分。", "Create professional Midjourney & DALL-E 3 poster prompts without writing text. 100% free visual ad generator.");
-    } else if (current.id === "ai") {
-      titleStr = t(language, "AI 社群貼文助手｜Threads / IG / FB 爆款文案一鍵生成｜字研所 TextLab", "AI Social Post Assistant | Viral IG & Threads Creator | TextLab");
-      descStr = t(language, "專為台灣社群生態設計的 AI 發文助手，支援 IG 圖文、FB 粉專文、Threads 爆款討論、LINE 團購推播與小紅書種草提案。", "AI copywriter for Instagram, Threads, Facebook & LINE. Generate viral Taiwanese social posts instantly.");
+    const seoMap: Record<string, { zhTitle: string; zhDesc: string; enTitle: string; enDesc: string }> = {
+      poster: {
+        zhTitle: "AI 廣告研究所｜免寫 Prompt 一鍵生成商業海報 (Midjourney / ChatGPT)｜字研所 TextLab",
+        zhDesc: "不需英文或複雜提示詞！30 秒透過點選自動產生 Midjourney、ChatGPT (DALL-E 3)、Gemini 專業商業海報 Prompt，支援網址解析與 AI 廣告評分。",
+        enTitle: "AI Commercial Poster Studio | Visual Ad Prompt Generator | TextLab",
+        enDesc: "Create professional Midjourney & DALL-E 3 poster prompts without writing text. 100% free visual ad generator."
+      },
+      ai: {
+        zhTitle: "AI 社群貼文助手｜Threads / IG / FB 爆款文案一鍵生成｜字研所 TextLab",
+        zhDesc: "專為台灣社群生態設計的 AI 採編工具！支援 IG 美學圖文、FB 粉專文、Threads 爆款討論、LINE 團購推播與小紅書種草提案。",
+        enTitle: "AI Social Post Assistant | Viral IG & Threads Creator | TextLab",
+        enDesc: "AI copywriter for Instagram, Threads, Facebook & LINE. Generate viral Taiwanese social posts instantly."
+      },
+      layout: {
+        zhTitle: "IG / Threads 免費排版換行工具｜解決貼文縮排擠成一團｜字研所 TextLab",
+        zhDesc: "最穩定的 IG 貼文排版換行產生器！一鍵解決 Instagram、Threads 貼文換行失效與縮排擠成一團的問題，可插入隱形空白與風格符號。",
+        enTitle: "Instagram & Threads Line Break Formatter | TextLab",
+        enDesc: "Fix Instagram & Threads caption spacing issues instantly. Free line break & layout tool."
+      },
+      bio: {
+        zhTitle: "IG / Threads 個人檔案 Bio 排版美化工具｜字研所 TextLab",
+        zhDesc: "擺脫平庸主頁！一鍵生成質感 IG 個人檔案 (Bio) 排版、Threads 簡介佈置、花式字體與風格排版分隔線。",
+        enTitle: "Instagram & Threads Bio Studio | Profile Designer | TextLab",
+        enDesc: "Design aesthetic Instagram & Threads bios with custom Unicode fonts, symbols and dividers."
+      },
+      hashtags: {
+        zhTitle: "2026 社群爆款熱門標籤 Hashtags 懶人包｜IG / Threads 流量導流｜字研所 TextLab",
+        zhDesc: "整理最新 Threads 與 IG 爆款流量 Hashtag 標籤包！包含甜點探店、穿搭靈感、職人覆盤、電商團購等熱門標籤，一鍵複製直接用。",
+        enTitle: "Trending Instagram & Threads Hashtag Bundles 2026 | TextLab",
+        enDesc: "Discover high-converting hashtag bundles for Instagram, Threads and TikTok. Copy with one click."
+      },
+      symbols: {
+        zhTitle: "特殊符號大全 2026｜愛心、星星、箭頭、日系花樣符號一鍵複製｜字研所 TextLab",
+        zhDesc: "收錄超過 2000+ 款特殊符號：星星、愛心、箭頭、框線、日系明體花紋、標題括號，分類清晰、一鍵點選複製！",
+        enTitle: "Unicode Symbols Library 2026 | Search & Copy Symbols | TextLab",
+        enDesc: "Search and copy 2000+ Unicode symbols, stars, hearts, arrows, brackets and dividers."
+      },
+      emoji: {
+        zhTitle: "Emoji 視覺實驗室｜全網最全 Emoji 搜尋與組合懶人包｜字研所 TextLab",
+        zhDesc: "Unicode 最新 Emoji 視覺搜尋與組合庫！整理優雅崩潰、社畜下班、陰陽怪氣等經典 Emoji 連發組合，社群小編發文必備。",
+        enTitle: "Emoji Visual Lab | Search, Copy & Combos | TextLab",
+        enDesc: "Explore and search all Unicode emojis with curated aesthetic emoji combinations."
+      },
+      kaomoji: {
+        zhTitle: "日系顏文字大全 2026｜可愛、委屈、開心、搞笑顏文字一鍵複製｜字研所 TextLab",
+        zhDesc: "超過 1000+ 款經典與爆款日系顏文字庫！收錄 (◡̈)、( 🫠 )、( 🥺 ) 等可愛、賣萌、無奈顏文字，一鍵複製增添發文靈魂。",
+        enTitle: "Japanese Kaomoji Library 2026 | Cute Emoticons | TextLab",
+        enDesc: "Search and copy cute Japanese kaomoji emoticons for messages and social posts."
+      },
+      fonts: {
+        zhTitle: "Unicode 特殊字體轉換器｜IG 英文字體、花式草寫一鍵轉換｜字研所 TextLab",
+        zhDesc: "免費將一般英文字母轉換為花式手寫體、圈圈字、哥德體、雙線體 (𝔻𝕠𝕦𝕓𝕝𝕖-𝕊𝕥𝕣𝕦𝕔𝕜) 與草寫字體，貼在 IG 個人檔案主頁超亮眼。",
+        enTitle: "Unicode Fancy Text Converter | Instagram Fonts | TextLab",
+        enDesc: "Convert plain text into aesthetic cursive, gothic, circled, and double-struck Unicode fonts."
+      },
+      nickname: {
+        zhTitle: "花式風格暱稱產生器｜遊戲 ID、IG 帳號風格暱稱｜字研所 TextLab",
+        zhDesc: "一鍵產生充滿文青感、日系質感或極簡風格的暱稱與遊戲 ID 組合，擺脫菜市場名，找到專屬於你的個人特色名稱。",
+        enTitle: "Aesthetic Nickname & Username Generator | TextLab",
+        enDesc: "Generate unique aesthetic usernames, gaming IDs and nickname ideas for Instagram and TikTok."
+      },
+      blank: {
+        zhTitle: "透明空白文字複製｜隱形空白字元產生器 (IG/Threads/遊戲ID)｜字研所 TextLab",
+        zhDesc: "免費複製隱形空白文字字元 (Invisible Text / Blank Character)，解決 Line、IG 名字空白、遊戲 ID 留白與文章縮排排版需求。",
+        enTitle: "Invisible Text & Blank Character Copy | TextLab",
+        enDesc: "Copy empty space characters (Unicode U+3164) for invisible usernames and custom spacing."
+      }
+    };
+
+    if (seoMap[current.id]) {
+      const item = seoMap[current.id];
+      titleStr = t(language, item.zhTitle, item.enTitle);
+      descStr = t(language, item.zhDesc, item.enDesc);
     }
 
     if (current.id !== "symbols") {
@@ -2830,7 +3034,7 @@ export default function App() {
 
   const toolProps = { copied, setCopied, language };
   return <div className="app-shell">
-    <header className="topbar"><a className="brand" href="#symbols" onClick={() => selectTool("symbols")}><BrandLogo /><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>{theme === "dark" ? "🌙 深色" : theme === "light" ? "☀️ 淺色" : "🌗 自動"}</button><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
+    <header className="topbar"><a className="brand" href="#symbols" onClick={() => selectTool("symbols")}><BrandLogo /><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button className="guide-nav-button" onClick={() => setGuidesOpen(true)}>📚 {t(language, "行銷指南", "Guides")}</button><button className="guide-nav-button" onClick={() => setEmbedOpen(true)}>🔗 {t(language, "嵌入與分享", "Embed")}</button><button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>{theme === "dark" ? "🌙 深色" : theme === "light" ? "☀️ 淺色" : "🌗 自動"}</button><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
     <div className="layout">
       <aside className="sidebar"><p className="sidebar-label">{t(language, "文字工具箱", "TEXT TOOLBOX")}</p><div className="tool-nav">{tools.map((tool) => <button key={tool.id} className={active === tool.id ? "active" : ""} onClick={() => selectTool(tool.id)}><span className={`tool-icon ${tool.tone}`}>{tool.icon}</span><span><strong>{t(language, tool.name, tool.nameEn)}</strong><small>{t(language, tool.short, tool.shortEn)}</small></span>{tool.badge && <em>{t(language, tool.badge, "HOT")}</em>}</button>)}</div><div className="sidebar-note"><span>✦</span><p><strong>{t(language, "你的文字，只留在這裡", "Your text stays here")}</strong><br />{t(language, "所有轉換都在瀏覽器完成，我們不會儲存內容。", "Everything runs in your browser. We never store your content.")}</p></div></aside>
       <main className="workspace"><div className="mobile-tool-picker"><span>{t(language, "目前工具", "CURRENT TOOL")}</span><select value={active} onChange={(e) => selectTool(e.target.value as ToolId)}>{tools.map((tool) => <option value={tool.id} key={tool.id}>{t(language, tool.name, tool.nameEn)}｜{t(language, tool.short, tool.shortEn)}</option>)}</select></div>
@@ -2897,6 +3101,8 @@ export default function App() {
     )}
 
     {guideOpen && <GuideModal language={language} onClose={() => setGuideOpen(false)} onSelectTool={(id) => { selectTool(id); setGuideOpen(false); }} />}
+    {guidesOpen && <MarketingGuidesModal language={language} onClose={() => setGuidesOpen(false)} />}
+    {embedOpen && <EmbedShareModal language={language} onClose={() => setEmbedOpen(false)} />}
     {!!copied && <div className="toast" role="status"><span>✓</span> {t(language, "已複製到剪貼簿", "Copied to clipboard")}</div>}
   </div>;
 }
