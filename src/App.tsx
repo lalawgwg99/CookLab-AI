@@ -48,12 +48,6 @@ const tools: Tool[] = [
   { id: "blank", name: "空白文字", nameEn: "Invisible Text", short: "產生與複製", shortEn: "Generate and copy", icon: "□", tone: "sand" },
 ];
 
-const FREE_MODELS_LIST = [
-  "nvidia/nemotron-3-ultra-550b-a55b:free",
-  "nvidia/nemotron-3-super-120b-a12b:free",
-  "poolside/laguna-s-2.1:free"
-];
-
 const t = (language: Language, zh: string, en: string) => language === "zh-TW" ? zh : en;
 
 const symbolEnglish: Record<string, { name: string; short: string; description: string }> = {
@@ -1490,8 +1484,6 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
     "✦【今天終於可以分享這個秘密了...】"
   ];
 
-  const BUILTIN_KEY = atob("c2stb3ItdjEtZTZlNTcyODhiYTU2OWRmNWI1MTdiZDNkNjRiNTExYjMzZjliNWIwN2RkMmU0NmE4MmNiMmM3MzM4ZDg5NTg2NA==");
-
   const [selectedTone, setSelectedTone] = useState("auto");
   const [idea, setIdea] = useState("今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書");
   const [output, setOutput] = useState("");
@@ -1532,70 +1524,23 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
     selectTool("layout");
   };
 
-  const handleTransferToPoster = async () => {
+  const handleTransferToPoster = () => {
     if (!output.trim() || isTransferring) return;
     setIsTransferring(true);
-
-    try {
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${BUILTIN_KEY}`,
-          "HTTP-Referer": window.location.origin,
-          "X-Title": "TextLab AI",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          models: FREE_MODELS_LIST,
-          provider: {
-            allow_fallbacks: false
-          },
-          messages: [
-            {
-              role: "system",
-              content: "你是一位頂級商業海報企劃總監。請分析以下這段社群文案，自動為其精準解析品牌、產品名稱、售價、優惠與賣點，並填寫海報企劃選單參數。\n\n請嚴格只回傳 JSON 格式（不要包含任何 Markdown 標記或文字）：\n{\n  \"catId\": \"3c\", // 判定適合的海報分類，必須是以下其中之一: \"3c\", \"food\", \"auto\", \"fashion\", \"people\", \"event\", \"biz\", \"general\"\n  \"brandName\": \"品牌名稱\", // 若文案中無品牌字眼則回傳空字串\n  \"product\": \"精準商品名稱\", // 必須提取出最核心的產品或服務主詞\n  \"priceValue\": \"NT$ 售價\", // 提取價格(若有)，例如 \"NT$ 1,580\" 或 \"特惠價 $99\"，若無則回傳空字串\n  \"cta\": \"🛒 立即下單搶購\", // 選擇或寫一個最契合的 CTA 號召\n  \"offers\": [\"優惠1\", \"優惠2\"], // 提取 1-3 個促銷優惠或折扣點\n  \"features\": [\"賣點1\", \"賣點2\"] // 提取 1-3 個產品特色或規格賣點\n}"
-            },
-            {
-              role: "user",
-              content: `社群文案內容：\n${output}`
-            }
-          ]
-        })
-      });
-
-      if (!res.ok) throw new Error("AI 解析異常");
-      const data = await res.json();
-      const contentRes = data.choices?.[0]?.message?.content || "";
-      const ticks = String.fromCharCode(96, 96, 96);
-      const cleaned = contentRes.split(ticks + "json").join("").split(ticks).join("").trim();
-      const parsed = JSON.parse(cleaned);
-
-      // Save to localStorage so PosterTool picks it up on mount
-      localStorage.setItem("textlab.transferredPosterState", JSON.stringify(parsed));
-      
-      // Navigate to poster tab
-      if (selectTool) {
-        selectTool("poster");
-      }
-    } catch (err) {
-      console.error("Transfer error:", err);
-      // Fallback
-      const fallbackState = {
-        catId: "general",
-        brandName: "",
-        product: idea.substring(0, 15),
-        priceValue: "",
-        cta: "🛒 立即搶購",
-        offers: ["熱銷推薦"],
-        features: ["質感呈現"]
-      };
-      localStorage.setItem("textlab.transferredPosterState", JSON.stringify(fallbackState));
-      if (selectTool) {
-        selectTool("poster");
-      }
-    } finally {
-      setIsTransferring(false);
+    const fallbackState = {
+      catId: "general",
+      brandName: "",
+      product: idea.substring(0, 15),
+      priceValue: "",
+      cta: "🛒 立即搶購",
+      offers: ["熱銷推薦"],
+      features: ["質感呈現"]
+    };
+    localStorage.setItem("textlab.transferredPosterState", JSON.stringify(fallbackState));
+    if (selectTool) {
+      selectTool("poster");
     }
+    setIsTransferring(false);
   };
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -1618,7 +1563,7 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
     if (!idea.trim() || isGenerating || cooldownSec > 0) return;
 
     // 重複請求攔截 (Deduplication Check)
-    const currentRequestKey = `${selectedTone}::${FREE_MODELS_LIST[0]}::${idea.trim()}`;
+    const currentRequestKey = `${selectedTone}::local::${idea.trim()}`;
     if (currentRequestKey === lastRequestKey && output) {
       setErrorMessage("💡 提示：您尚未修改內容或風格，已呈現目前成果（已為您省下重複 API Token 消耗！）。");
       return;
@@ -1627,67 +1572,7 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
     setIsGenerating(true);
     setErrorMessage("");
 
-    try {
-      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${BUILTIN_KEY}`,
-          "HTTP-Referer": window.location.origin,
-          "X-Title": "TextLab AI",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          models: FREE_MODELS_LIST,
-          provider: {
-            allow_fallbacks: false
-          },
-          messages: [
-            {
-              role: "system",
-              content: `你是一位精通台灣各大社群平台（IG, Threads, LINE 團購, 小紅書, LinkedIn/職人專欄）的頂級 AI 採編總監與社群文案大師。
-
-【核心撰寫規範】：
-1. 語言規範：一律使用正體繁體中文（台灣習慣用語、社群流行用語）。
-2. 發文風格要求：本次發文風格為【${currentTone.name}】。
-   專屬風格指南：${currentTone.promptSpec}
-3. 輸出規範：
-   - 段落分明，善用換行保持極佳的手機閱讀體驗。
-   - 根據內容情境，加入最適量的視覺圖示 (Emoji) 與條列符號。
-   - 直接輸出最終可複製發布的貼文內容，不要包含任何開頭介紹、結尾說明或 \`\`\` 程式碼標記。`
-            },
-            {
-              role: "user",
-              content: `請根據以下使用者提供的想法與素材，撰寫完整社群貼文：
-
-使用者想法與素材：
-${idea.trim()}`
-            }
-          ]
-        })
-      });
-
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData?.error?.message || `API 回應錯誤 (${response.status})`);
-      }
-
-      const data = await response.json();
-      const content = data.choices?.[0]?.message?.content;
-      if (content) {
-        setOutput(content.trim());
-        setLastRequestKey(currentRequestKey);
-        setIsGenerating(false);
-        setCooldownSec(3); // 啟動 3 秒冷卻保護鎖
-        return;
-      } else {
-        throw new Error("API 未返回有效內容");
-      }
-    } catch (err: any) {
-      console.warn("OpenRouter API Error, falling back to smart generator:", err);
-      setErrorMessage(`⚠️ AI 生成暫時無法回應 (${err?.message || "請檢查網路"})，已自動切換至備用文案引擎。`);
-    }
-
-    // Fallback: Smart local generator
+    // 免費本機文案引擎：不會傳送資料或產生 API 費用。
     setTimeout(() => {
       let result = "";
       const text = idea.trim() || "紀錄這份當下的美好。";
@@ -2093,94 +1978,13 @@ function PosterTool({ copied, setCopied, language }: { copied: string; setCopied
       fetchedText = `商品網址：${url}`;
     }
 
-    setUrlFetchMsg("✨ OpenRouter AI 正在分析商品內容並自動設計海報 Prompt…");
-
-    const BUILTIN_KEY = atob("c2stb3ItdjEtZTZlNTcyODhiYTU2OWRmNWI1MTdiZDNkNjRiNTExYjMzZjliNWIwN2RkMmU0NmE4MmNiMmM3MzM4ZDg5NTg2NA==");
-
-    try {
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${BUILTIN_KEY}`,
-          "HTTP-Referer": window.location.origin,
-          "X-Title": "TextLab AI",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          models: FREE_MODELS_LIST,
-          provider: {
-            allow_fallbacks: false
-          },
-          messages: [
-            {
-              role: "system",
-              content: `你是一位頂級商業海報企劃總監與電商數據分析師。請分析從商品網址/網頁中提取出來的產品內容，自動為其精準解析品牌、產品名稱、售價、優惠與賣點，並填寫海報企劃選單參數。
-
-請嚴格只回傳 JSON 格式（不要包含任何 Markdown \`\`\` 標記或文字）：
-{
-  "catId": "3c",
-  "brandName": "品牌名稱",
-  "product": "精準商品名稱",
-  "priceValue": "NT$ 售價",
-  "styleTitle": "Apple 蘋果極簡",
-  "colorTitle": "⬜ 極簡純白",
-  "bgTitle": "漸層微光束",
-  "layoutTitle": "💰 價格最大焦點",
-  "cta": "🛒 立即下單搶購",
-  "offers": ["優惠1", "優惠2"],
-  "features": ["賣點1", "賣點2"]
-}`
-            },
-            {
-              role: "user",
-              content: `商品網址：${url}
-提取的網頁資訊與標題描述：
-${fetchedText}`
-            }
-          ]
-        })
-      });
-
-      if (!res.ok) throw new Error("AI 解析異常");
-      const data = await res.json();
-      const content = data.choices?.[0]?.message?.content || "";
-      const cleaned = content.replace(/```json/g, "").replace(/```/g, "").trim();
-      const parsed = JSON.parse(cleaned);
-
-      if (parsed.catId && categories.some((c) => c.id === parsed.catId)) {
-        handleCategorySelect(parsed.catId);
-      }
-      if (parsed.brandName) setBrandName(parsed.brandName);
-      if (parsed.product) setProduct(parsed.product);
-      if (parsed.priceValue) setPriceValue(parsed.priceValue);
-      if (parsed.styleTitle) {
-        const match = styles.find((s) => s.title.includes(parsed.styleTitle) || parsed.styleTitle.includes(s.title));
-        if (match) setStyleObj(match);
-      }
-      if (parsed.colorTitle) {
-        const match = colors.find((c) => c.title.includes(parsed.colorTitle) || parsed.colorTitle.includes(c.title));
-        if (match) setColorObj(match);
-      }
-      if (parsed.bgTitle) {
-        const match = bgs.find((b) => b.title.includes(parsed.bgTitle) || parsed.bgTitle.includes(b.title));
-        if (match) setBgObj(match);
-      }
-      if (parsed.layoutTitle) {
-        const match = layouts.find((l) => l.title.includes(parsed.layoutTitle) || parsed.layoutTitle.includes(l.title));
-        if (match) setLayoutObj(match);
-      }
-      if (parsed.cta) setCta(parsed.cta);
-      if (Array.isArray(parsed.offers) && parsed.offers.length) setOffers(parsed.offers);
-      if (Array.isArray(parsed.features) && parsed.features.length) setFeatures(parsed.features);
-
-      setUrlFetchMsg("🎉 成功從網址擷取並分析！已自動為您勾選填寫所有海報選單！");
-    } catch (err: any) {
-      console.warn("URL AI Parse error:", err);
-      setUrlFetchMsg("⚠️ 網址分析完畢，已自動為您帶入預設商業海報風格");
-      applyPreset("apple");
-    } finally {
-      setIsFetchingUrl(false);
+    const titleGuess = fetchedText.split("\n")[0]?.trim();
+    if (titleGuess && !titleGuess.startsWith("商品網址：")) {
+      setProduct(titleGuess.slice(0, 40));
     }
+    applyPreset("apple");
+    setUrlFetchMsg("🎉 已擷取商品資訊並套用免費本機商業海報配置（不使用付費 API）");
+    setIsFetchingUrl(false);
   };
 
   const addCustomOffer = () => {
@@ -2199,85 +2003,13 @@ ${fetchedText}`
     setCustomFeatureInput("");
   };
 
-  const runAiAutoPlan = async () => {
+  const runAiAutoPlan = () => {
     if (!userIdea.trim() || isAiPlanning) return;
     setIsAiPlanning(true);
-    setAiPlanErr("");
-
-    const BUILTIN_KEY = atob("c2stb3ItdjEtZTZlNTcyODhiYTU2OWRmNWI1MTdiZDNkNjRiNTExYjMzZjliNWIwN2RkMmU0NmE4MmNiMmM3MzM4ZDg5NTg2NA==");
-
-    try {
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${BUILTIN_KEY}`,
-          "HTTP-Referer": window.location.origin,
-          "X-Title": "TextLab AI",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          models: FREE_MODELS_LIST,
-          provider: {
-            allow_fallbacks: false
-          },
-          messages: [
-            {
-              role: "system",
-              content: `你是一位頂級商業海報企劃總監。請分析使用者輸入的廣告想法，自動為其挑選最適切的海報企劃選單參數。
-
-請嚴格只回傳 JSON 格式（不要包含任何 Markdown \`\`\` 標記或文字）：
-{
-  "catId": "3c",
-  "product": "涼感風扇",
-  "styleTitle": "Apple 蘋果極簡",
-  "colorTitle": "⬜ 極簡純白",
-  "bgTitle": "漸層微光束",
-  "layoutTitle": "💰 價格最大焦點",
-  "cta": "🛒 立即下單搶購"
-}`
-            },
-            {
-              role: "user",
-              content: `使用者廣告想法與需求：${userIdea.trim()}`
-            }
-          ]
-        })
-      });
-
-      if (!res.ok) throw new Error("API 回應異常");
-      const data = await res.json();
-      const content = data.choices?.[0]?.message?.content || "";
-      const cleaned = content.replace(/```json/g, "").replace(/```/g, "").trim();
-      const parsed = JSON.parse(cleaned);
-
-      if (parsed.catId && categories.some((c) => c.id === parsed.catId)) {
-        handleCategorySelect(parsed.catId);
-      }
-      if (parsed.product) setProduct(parsed.product);
-      if (parsed.styleTitle) {
-        const match = styles.find((s) => s.title.includes(parsed.styleTitle) || parsed.styleTitle.includes(s.title));
-        if (match) setStyleObj(match);
-      }
-      if (parsed.colorTitle) {
-        const match = colors.find((c) => c.title.includes(parsed.colorTitle) || parsed.colorTitle.includes(c.title));
-        if (match) setColorObj(match);
-      }
-      if (parsed.bgTitle) {
-        const match = bgs.find((b) => b.title.includes(parsed.bgTitle) || parsed.bgTitle.includes(b.title));
-        if (match) setBgObj(match);
-      }
-      if (parsed.layoutTitle) {
-        const match = layouts.find((l) => l.title.includes(parsed.layoutTitle) || parsed.layoutTitle.includes(l.title));
-        if (match) setLayoutObj(match);
-      }
-      if (parsed.cta) setCta(parsed.cta);
-    } catch (err: any) {
-      console.warn("AI Auto-plan fallback:", err);
-      setAiPlanErr("⚠️ AI 連線忙碌，已為您套用精選商業海報建議組合");
-      applyPreset("apple");
-    } finally {
-      setIsAiPlanning(false);
-    }
+    setProduct(userIdea.trim().slice(0, 40));
+    applyPreset("apple");
+    setAiPlanErr("已使用免費本機企劃引擎，不會產生 API 費用。");
+    setIsAiPlanning(false);
   };
 
   const handleCategorySelect = (catId: string) => {
@@ -2410,80 +2142,27 @@ High commercial quality, 8k resolution, photorealistic studio render.`;
 
   const currentPromptText = prompts[activeModel];
 
-  // OpenRouter AI Rating
-  const runAiRating = async () => {
+  // 免費本機評分：不呼叫外部 API。
+  const runAiRating = () => {
     setIsRating(true);
-    setRatingErr("");
-
-    const BUILTIN_KEY = atob("c2stb3ItdjEtZTZlNTcyODhiYTU2OWRmNWI1MTdiZDNkNjRiNTExYjMzZjliNWIwN2RkMmU0NmE4MmNiMmM3MzM4ZDg5NTg2NA==");
-
-    try {
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${BUILTIN_KEY}`,
-          "HTTP-Referer": window.location.origin,
-          "X-Title": "TextLab AI",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          models: FREE_MODELS_LIST,
-          provider: {
-            allow_fallbacks: false
-          },
-          messages: [
-            {
-              role: "system",
-              content: `你是一位國際頂級商業廣告總監。請分析以下廣告海報 Prompt 規劃，對其行銷效果進行六大維度評分 (1-100分) 與星級評分 (1-5星)。
-
-請嚴格只回傳 JSON 格式（不要包含任何 MarkDown \`\`\` 標記或多餘文字）：
-{
-  "scores": {
-    "readability": 92,
-    "promo": 95,
-    "brand": 88,
-    "priceEye": 98,
-    "ctaPower": 91,
-    "printSafety": 100
-  },
-  "overallStars": 5,
-  "advice": "這份海報規劃非常出色！建議價格標籤可微調為亮黃色星芒框，在社群縮圖中能額外提升 15% 點擊率。"
-}`
-            },
-            {
-              role: "user",
-              content: `海報規劃主題：${currentCat.title} (${product})
-品牌名稱：${brandName.trim() || "未填寫"}
-標示售價：${priceValue.trim() || "未填寫"}
-視覺風格：${styleObj.title}
-主色調：${colorObj.title}
-構圖：${layoutObj.title}
-優惠標章：${offers.join(", ")}
-產品賣點：${features.join(", ")}
-CTA 按鈕：${cta}
-整體密度：${density}`
-            }
-          ]
-        })
-      });
-
-      if (!res.ok) throw new Error("AI 回應異常");
-      const data = await res.json();
-      const content = data.choices?.[0]?.message?.content || "";
-      const cleaned = content.replace(/```json/g, "").replace(/```/g, "").trim();
-      const parsed = JSON.parse(cleaned);
-      setRatingResult(parsed);
-    } catch (err: any) {
-      console.warn("Rating Error:", err);
-      setRatingErr("⚠️ AI 診斷暫時無回應，為您呈現預估評分");
-      setRatingResult({
-        scores: { readability: 92, promo: 95, brand: 88, priceEye: 98, ctaPower: 91, printSafety: 96 },
-        overallStars: 5,
-        advice: "視覺層級非常清晰！價格與賣點標籤配置得宜，非常適合直接發布於 IG/FB 贊助廣告。"
-      });
-    } finally {
-      setIsRating(false);
-    }
+    setRatingErr("免費本機評分，不會產生 API 費用。");
+    const completeness = [brandName, priceValue, cta, ...offers, ...features].filter((item) => item.trim()).length;
+    const bonus = Math.min(8, completeness);
+    setRatingResult({
+      scores: {
+        readability: 84 + bonus,
+        promo: 82 + bonus,
+        brand: brandName.trim() ? 92 : 78,
+        priceEye: priceValue.trim() ? 94 : 76,
+        ctaPower: cta.trim() ? 91 : 75,
+        printSafety: 94
+      },
+      overallStars: completeness >= 6 ? 5 : 4,
+      advice: brandName.trim() && priceValue.trim()
+        ? "資訊完整，建議再確認手機縮圖下價格與 CTA 是否仍清楚可讀。"
+        : "補上品牌名稱與明確價格，可讓海報訊息更完整。"
+    });
+    setIsRating(false);
   };
 
   return (
@@ -2496,7 +2175,7 @@ CTA 按鈕：${cta}
           <strong style={{ fontSize: "14px", color: "var(--purple)", display: "flex", alignItems: "center", gap: "6px" }}>
             <span>🪄</span> AI 智慧全自動企劃 (輸入想法 or 貼上商品網址，AI 自動生成選單)
           </strong>
-          <span style={{ fontSize: "11px", color: "var(--muted)" }}>免手動選擇，100% 免費</span>
+          <span style={{ fontSize: "11px", color: "var(--muted)" }}>本機運算，100% 免費</span>
         </div>
 
         {/* 模式切換鈕 */}
@@ -2553,7 +2232,7 @@ CTA 按鈕：${cta}
               disabled={isAiPlanning}
               style={{ width: "100%", padding: "10px" }}
             >
-              {isAiPlanning ? "✨ OpenRouter AI 智慧企劃中…" : "🪄 一鍵讓 AI 分析想法 & 自動填寫所有選單"}
+              {isAiPlanning ? "✨ 本機智慧企劃中…" : "🪄 一鍵分析想法 & 自動填寫所有選單"}
             </button>
           </>
         ) : (
@@ -3455,7 +3134,7 @@ function GuideModal({ language, onClose, onSelectTool }: { language: Language; o
       </div>
       <div className="guide-section-title" style={{ marginTop: "20px" }}><div><span className="section-kicker">TOOLS</span><h3>{t(language, "你想做什麼？", "What would you like to do?")}</h3></div><span>{t(language, "點選後直接開啟", "Opens instantly")}</span></div>
       <div className="guide-tools">{tools.map((tool) => <button key={tool.id} onClick={() => onSelectTool(tool.id)}><span className={`tool-icon ${tool.tone}`}>{tool.icon}</span><span><strong>{t(language, tool.name, tool.nameEn)}</strong><small>{t(language, tool.short, tool.shortEn)}</small></span><i>→</i></button>)}</div>
-      <div className="guide-bottom"><div className="guide-privacy"><span>✦</span><div><strong>{t(language, "內容只留在你的裝置", "Your content stays on your device")}</strong><p>{t(language, "所有文字工具在瀏覽器完成，不會上傳或儲存。AI 貼文助手會將輸入內容傳送至 OpenRouter API 進行生成；最近使用與收藏只保存在目前瀏覽器。", "Text tools run locally and are never uploaded. The AI assistant sends your input to OpenRouter API for generation. Recents and favorites are stored only in this browser.")}</p></div></div><div className="guide-faq"><strong>{t(language, "常見問題", "Quick answers")}</strong><p><span>{t(language, "AI 生成需要費用嗎？", "Does AI generation cost anything?")}</span>{t(language, "完全免費，系統已內建 API，無需輸入任何金鑰或信用卡。", "Completely free. The API is built-in — no key or credit card needed.")}</p><p><span>{t(language, "複製後沒反應？", "Copy not working?")}</span>{t(language, "確認瀏覽器已允許剪貼簿權限，或改用其他瀏覽器。", "Allow clipboard access or try another browser.")}</p><p><span>{t(language, "哪些平台能用？", "Where can I use it?")}</span>{t(language, "大多數支援 Unicode 的社群、文件與遊戲都能使用。", "Most social apps, documents and games that support Unicode.")}</p></div></div>
+      <div className="guide-bottom"><div className="guide-privacy"><span>✦</span><div><strong>{t(language, "內容只留在你的裝置", "Your content stays on your device")}</strong><p>{t(language, "所有文字與智慧產生工具都在瀏覽器完成，不會上傳或儲存；最近使用與收藏只保存在目前瀏覽器。", "All text and smart-generation tools run locally and are never uploaded. Recents and favorites are stored only in this browser.")}</p></div></div><div className="guide-faq"><strong>{t(language, "常見問題", "Quick answers")}</strong><p><span>{t(language, "智慧產生需要費用嗎？", "Does smart generation cost anything?")}</span>{t(language, "完全免費，使用本機產生器，不需 API 金鑰或信用卡。", "Completely free. It runs locally with no API key or credit card required.")}</p><p><span>{t(language, "複製後沒反應？", "Copy not working?")}</span>{t(language, "確認瀏覽器已允許剪貼簿權限，或改用其他瀏覽器。", "Allow clipboard access or try another browser.")}</p><p><span>{t(language, "哪些平台能用？", "Where can I use it?")}</span>{t(language, "大多數支援 Unicode 的社群、文件與遊戲都能使用。", "Most social apps, documents and games that support Unicode.")}</p></div></div>
     </section>
   </div>;
 }

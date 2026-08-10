@@ -23,7 +23,7 @@
 
 ## 🤖 AI 社群貼文助手
 
-**不需任何設定，開啟即用。** 系統已內建 AI 連線，由 [OpenRouter](https://openrouter.ai) 提供支援，使用 NVIDIA Nemotron 3 Super 120B 免費模型。
+**不需任何設定，開啟即用。** 智慧文案與海報企劃使用瀏覽器本機產生器，不需 API 金鑰，也不會產生模型費用。
 
 ### 支援風格
 | 風格 | 適用平台 |
@@ -47,7 +47,7 @@
 ## 🔒 隱私說明
 
 - 所有文字工具在瀏覽器端完成，不上傳任何資料
-- AI 貼文助手會將輸入內容送至 OpenRouter API 進行生成
+- 智慧貼文助手在瀏覽器本機產生內容，不會把輸入傳送至模型 API
 - 最近使用、收藏紀錄僅存於本機 localStorage
 
 ---
@@ -77,7 +77,7 @@ npm run build
 
 - **框架**：React + TypeScript + Vite
 - **樣式**：Vanilla CSS（CSS Custom Properties）
-- **AI**：OpenRouter API（NVIDIA Nemotron 3 Super 120B :free）
+- **智慧產生**：瀏覽器本機規則引擎（零 API 費用）
 - **部署**：GitHub Pages
 
 ---
