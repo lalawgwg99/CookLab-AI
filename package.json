@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && cp dist/index.html dist/404.html",
-    "preview": "vite preview"
+    "build": "tsc && vite build && node scripts/generate-seo-pages.mjs",
+    "preview": "vite preview",
+    "verify:seo": "node scripts/verify-seo.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.103.0",

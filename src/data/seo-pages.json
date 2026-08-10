@@ -1,0 +1,106 @@
+{
+  "poster": {
+    "nameZh": "AI 廣告研究所",
+    "nameEn": "AI Commercial Poster Studio",
+    "titleZh": "AI 廣告研究所｜免寫 Prompt 一鍵生成商業海報 (Midjourney / ChatGPT)｜字研所 TextLab",
+    "descriptionZh": "不需英文或複雜提示詞！30 秒透過點選自動產生 Midjourney、ChatGPT、Gemini 專業商業海報 Prompt，支援網址解析與 AI 廣告評分。",
+    "titleEn": "AI Commercial Poster Studio | Visual Ad Prompt Generator | TextLab",
+    "descriptionEn": "Create professional Midjourney, ChatGPT and Gemini poster prompts without writing complex instructions. Free visual ad prompt generator."
+  },
+  "ai": {
+    "nameZh": "AI 社群貼文助手",
+    "nameEn": "AI Social Post Assistant",
+    "titleZh": "AI 社群貼文助手｜Threads / IG / FB 爆款文案一鍵生成｜字研所 TextLab",
+    "descriptionZh": "專為台灣社群生態設計的 AI 發文助手！輸入想法一鍵生成 IG、FB、Threads、小紅書與 LINE 社群貼文文案，免費免註冊。",
+    "titleEn": "AI Social Post Assistant | Instagram & Threads Copywriter | TextLab",
+    "descriptionEn": "Generate social posts for Instagram, Threads, Facebook, LINE and Redbook with a free AI copywriting assistant."
+  },
+  "hook": {
+    "nameZh": "爆款 Hook 產生器",
+    "nameEn": "Viral Hook Studio",
+    "titleZh": "爆款 Hook 產生器｜Threads / IG / 小紅書勾魂開頭與標題公式｜字研所 TextLab",
+    "descriptionZh": "專為台灣小編設計的爆款 Hook 第一句產生器！收錄好奇反常識、觀點思考、共鳴情感與強導購開頭模板，拯救發文零點擊。",
+    "titleEn": "Viral Social Caption Hook Studio | High-Converting Hooks | TextLab",
+    "descriptionEn": "Create high-converting opening lines and caption hooks for Instagram, Threads and Redbook social posts."
+  },
+  "title": {
+    "nameZh": "日系花邊標題組裝器",
+    "nameEn": "Aesthetic Title Frame Builder",
+    "titleZh": "日系花邊標題組裝器｜IG / Threads 標題框與邊框文字美化｜字研所 TextLab",
+    "descriptionZh": "輸入文字即時生成日系星閃、蝴蝶結、角括號與花紋標題邊框，快速美化 Threads 與 IG 貼文標題。",
+    "titleEn": "Aesthetic Title Frame Builder | Japanese Header Frames | TextLab",
+    "descriptionEn": "Generate aesthetic Japanese header frames, sparkles, brackets and dividers for Instagram and Threads titles."
+  },
+  "layout": {
+    "nameZh": "IG / Threads 社群排版工具",
+    "nameEn": "Instagram & Threads Formatter",
+    "titleZh": "IG / Threads 免費排版換行工具｜解決貼文縮排擠成一團｜字研所 TextLab",
+    "descriptionZh": "免費 IG 與 Threads 貼文排版換行產生器，一鍵處理社群貼文換行、隱形空白、段落留白與風格分隔線。",
+    "titleEn": "Instagram & Threads Line Break Formatter | TextLab",
+    "descriptionEn": "Fix Instagram and Threads caption spacing with free line breaks, invisible spaces, dividers and formatting templates."
+  },
+  "bio": {
+    "nameZh": "IG / Threads Bio 排版工具",
+    "nameEn": "Instagram & Threads Bio Studio",
+    "titleZh": "IG / Threads 個人檔案 Bio 排版美化工具｜字研所 TextLab",
+    "descriptionZh": "一鍵生成質感 IG 個人檔案 Bio、Threads 簡介佈置、花式字體、符號與風格排版分隔線。",
+    "titleEn": "Instagram & Threads Bio Studio | Profile Designer | TextLab",
+    "descriptionEn": "Design Instagram and Threads bios with Unicode fonts, symbols, dividers and profile layout templates."
+  },
+  "hashtags": {
+    "nameZh": "社群熱門標籤工具",
+    "nameEn": "Social Hashtag Bundles",
+    "titleZh": "2026 社群熱門標籤 Hashtags 懶人包｜IG / Threads 流量導流｜字研所 TextLab",
+    "descriptionZh": "整理 Threads 與 IG Hashtag 標籤包，包含甜點探店、穿搭靈感、職人覆盤、電商團購等主題，一鍵複製直接使用。",
+    "titleEn": "Trending Instagram & Threads Hashtag Bundles 2026 | TextLab",
+    "descriptionEn": "Copy curated hashtag bundles for Instagram, Threads and TikTok across food, fashion, travel and creator topics."
+  },
+  "symbols": {
+    "nameZh": "特殊符號大全",
+    "nameEn": "Unicode Symbols Library",
+    "titleZh": "特殊符號大全 2026｜愛心、星星、箭頭、日系花樣符號一鍵複製｜字研所 TextLab",
+    "descriptionZh": "收錄超過 2000 款特殊符號：星星、愛心、箭頭、框線、日系花紋與標題括號，支援搜尋、分類與一鍵複製。",
+    "titleEn": "Unicode Symbols Library 2026 | Search & Copy Symbols | TextLab",
+    "descriptionEn": "Search and copy more than 2,000 Unicode symbols, stars, hearts, arrows, brackets, borders and dividers."
+  },
+  "emoji": {
+    "nameZh": "Emoji 視覺實驗室",
+    "nameEn": "Emoji Search & Combo Library",
+    "titleZh": "Emoji 視覺實驗室｜Emoji 搜尋、分類與組合懶人包｜字研所 TextLab",
+    "descriptionZh": "搜尋與複製最新 Unicode Emoji，依表情、手勢、愛心、動物等分類瀏覽，並提供社群常用 Emoji 連發組合。",
+    "titleEn": "Emoji Search & Combo Library | Browse and Copy Emoji | TextLab",
+    "descriptionEn": "Search, browse and copy Unicode emoji by category, with curated emoji combinations for social posts and messages."
+  },
+  "kaomoji": {
+    "nameZh": "日系顏文字大全",
+    "nameEn": "Japanese Kaomoji Library",
+    "titleZh": "日系顏文字大全 2026｜可愛、委屈、開心、搞笑顏文字一鍵複製｜字研所 TextLab",
+    "descriptionZh": "收錄超過 1000 款日系顏文字，包含可愛、開心、委屈、生氣、貓咪與特殊顏文字，支援搜尋、收藏與一鍵複製。",
+    "titleEn": "Japanese Kaomoji Library 2026 | Cute Emoticons | TextLab",
+    "descriptionEn": "Search, save and copy more than 1,000 Japanese kaomoji, including cute, happy, sad, angry and animal emoticons."
+  },
+  "fonts": {
+    "nameZh": "Unicode 特殊字體轉換器",
+    "nameEn": "Unicode Fancy Text Converter",
+    "titleZh": "Unicode 特殊字體轉換器｜IG 英文字體、花式草寫一鍵轉換｜字研所 TextLab",
+    "descriptionZh": "免費將一般英文字母轉換為花式手寫體、圈圈字、哥德體、雙線體與草寫 Unicode 字體，一鍵複製到 IG 個人檔案。",
+    "titleEn": "Unicode Fancy Text Converter | Instagram Fonts | TextLab",
+    "descriptionEn": "Convert plain text into cursive, gothic, circled and double-struck Unicode fonts for Instagram and social profiles."
+  },
+  "nickname": {
+    "nameZh": "花式風格暱稱產生器",
+    "nameEn": "Aesthetic Nickname Generator",
+    "titleZh": "花式風格暱稱產生器｜遊戲 ID、IG 帳號風格暱稱｜字研所 TextLab",
+    "descriptionZh": "一鍵產生文青、日系、可愛或極簡風格暱稱與遊戲 ID，搭配 Unicode 字體與特殊符號建立專屬名稱。",
+    "titleEn": "Aesthetic Nickname & Username Generator | TextLab",
+    "descriptionEn": "Generate aesthetic usernames, gaming IDs and nickname ideas with Unicode fonts and decorative symbols."
+  },
+  "blank": {
+    "nameZh": "透明空白文字產生器",
+    "nameEn": "Invisible Text Generator",
+    "titleZh": "透明空白文字複製｜隱形空白字元產生器 (IG/Threads/遊戲 ID)｜字研所 TextLab",
+    "descriptionZh": "免費複製隱形空白文字字元，適用於 LINE、IG 名稱、Threads 排版、遊戲 ID 留白與社群文章縮排。",
+    "titleEn": "Invisible Text & Blank Character Copy | TextLab",
+    "descriptionEn": "Copy invisible Unicode blank characters for social spacing, empty usernames, Instagram, Threads and gaming IDs."
+  }
+}

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
+import seoPages from "./data/seo-pages.json";
 
 type ToolId = "symbols" | "emoji" | "kaomoji" | "fonts" | "layout" | "nickname" | "blank" | "bio" | "hashtags" | "ai" | "poster" | "hook" | "title";
 type Language = "zh-TW" | "en";
@@ -465,7 +466,7 @@ function symbolCodePoints(value: string) {
 
 function SymbolsTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
   const [query, setQuery] = useState("");
-  const initialCategory = (window.location.hash.split("/")[1] || window.location.pathname.split("/")[2] || "all");
+  const initialCategory = (window.location.hash.split("/")[1] || new URLSearchParams(window.location.search).get("category") || window.location.pathname.split("/")[2] || "all");
   const [category, setCategoryState] = useState(symbolGroups.some((group) => group.id === initialCategory) ? initialCategory : "all");
   const [recent, setRecent] = useState<string[]>(() => JSON.parse(localStorage.getItem("textlab.recentSymbols") || "[]"));
   const [favorites, setFavorites] = useState<string[]>(() => JSON.parse(localStorage.getItem("textlab.favoriteSymbols") || "[]"));
@@ -505,15 +506,19 @@ function SymbolsTool({ copied, setCopied, language }: { copied: string; setCopie
 
   useEffect(() => {
     const translatedGroup = activeGroup ? symbolEnglish[activeGroup.id] : undefined;
-    document.title = activeGroup ? `${t(language, activeGroup.name, translatedGroup?.name || activeGroup.name)}｜TextLab` : t(language, "特殊符號大全｜字研所 TextLab", "Symbols Library | TextLab");
-    const description = activeGroup ? t(language, activeGroup.description, translatedGroup?.description || activeGroup.description) : t(language, `收錄 ${totalSymbolCount} 個特殊符號，支援分類搜尋、最近使用、收藏與一鍵複製。`, `${totalSymbolCount} symbols with categories, search, recents, favorites and one-click copy.`);
+    const baseSeo = seoPages.symbols;
+    document.title = activeGroup ? `${t(language, activeGroup.name, translatedGroup?.name || activeGroup.name)}｜TextLab` : t(language, baseSeo.titleZh, baseSeo.titleEn);
+    const description = activeGroup ? t(language, activeGroup.description, translatedGroup?.description || activeGroup.description) : t(language, baseSeo.descriptionZh, baseSeo.descriptionEn);
     document.querySelector('meta[name="description"]')?.setAttribute("content", description);
   }, [activeGroup, language]);
 
   const setCategory = (id: string) => {
     setCategoryState(id);
     setQuery("");
-    window.history.replaceState(null, "", id === "all" ? "/symbols" : `/symbols/${id}`);
+    const url = new URL(window.location.href);
+    if (id === "all") url.searchParams.delete("category");
+    else url.searchParams.set("category", id);
+    window.history.replaceState(null, "", `${url.pathname}${url.search}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const choose = (item: string) => {
@@ -586,7 +591,7 @@ function SymbolsTool({ copied, setCopied, language }: { copied: string; setCopie
       {!!favorites.length && <section className="symbol-section"><div className="section-title-row"><div><span className="section-kicker">SAVED</span><h2>{t(language, "我的收藏", "Favorites")}</h2></div></div><SymbolTiles items={favorites} favorites={favorites} copied={copied} onCopy={choose} onFavorite={toggleFavorite} /></section>}
       <section className="symbol-section"><div className="section-title-row"><div><span className="section-kicker">QUICK PICKS</span><h2>{t(language, "熱門符號", "Popular symbols")}</h2></div></div><SymbolTiles items={popularSymbols} favorites={favorites} copied={copied} onCopy={choose} onFavorite={toggleFavorite} /></section>
     </div>}
-    <div className="symbol-sections">{groups.map((group) => <section className="symbol-section" id={`symbol-${group.id}`} key={group.id}><div className="section-title-row symbol-title"><div><span className="section-kicker">{group.items.length} SYMBOLS</span><h2>{t(language, group.name, symbolEnglish[group.id].name)}</h2><p>{t(language, group.description, symbolEnglish[group.id].description)}</p></div><button className="share-category" onClick={() => copyText(`${window.location.origin}/symbols/${group.id}`, setCopied)}>⌁ {t(language, "複製分類連結", "Copy category link")}</button></div><SymbolTiles items={group.items} favorites={favorites} copied={copied} onCopy={choose} onFavorite={toggleFavorite} /></section>)}</div>
+    <div className="symbol-sections">{groups.map((group) => <section className="symbol-section" id={`symbol-${group.id}`} key={group.id}><div className="section-title-row symbol-title"><div><span className="section-kicker">{group.items.length} SYMBOLS</span><h2>{t(language, group.name, symbolEnglish[group.id].name)}</h2><p>{t(language, group.description, symbolEnglish[group.id].description)}</p></div><button className="share-category" onClick={() => copyText(`${window.location.origin}${language === "en" ? "/en" : ""}/symbols?category=${group.id}`, setCopied)}>⌁ {t(language, "複製分類連結", "Copy category link")}</button></div><SymbolTiles items={group.items} favorites={favorites} copied={copied} onCopy={choose} onFavorite={toggleFavorite} /></section>)}</div>
     {!!selected && <aside className="symbol-detail" aria-label={t(language, "已選符號資訊", "Selected symbol info")}><div className="selected-symbol">{selected}</div><div><span className="section-kicker">SYMBOL INFO</span><strong>{selectedGroup ? t(language, selectedGroup.name, symbolEnglish[selectedGroup.id].name) : t(language, "特殊符號", "Symbol")}</strong><code>{symbolCodePoints(selected)}</code></div><button onClick={() => choose(selected)}>{t(language, "再次複製", "Copy again")}</button><button className={favorites.includes(selected) ? "saved" : ""} onClick={() => toggleFavorite(selected)}>{favorites.includes(selected) ? t(language, "♥ 已收藏", "♥ Saved") : t(language, "♡ 收藏", "♡ Save")}</button><button className="detail-close" onClick={() => setSelected("")} aria-label={t(language, "關閉符號資訊", "Close symbol info")}>×</button></aside>}
     {!groups.length && <EmptyState text={t(language, "找不到這個符號，換個關鍵字試試看。", "No matching symbol. Try another keyword.")} />}</>;
 }
@@ -3472,13 +3477,15 @@ export default function App() {
       const hashParts = window.location.hash.replace("#", "").split("/");
       const hashTool = hashParts[0] as ToolId;
       if (tools.some((t) => t.id === hashTool)) {
-        const subCat = hashParts[1] ? `/${hashParts[1]}` : "";
-        window.history.replaceState(null, "", `/${hashTool}${subCat}`);
+        const requestedLanguage = new URLSearchParams(window.location.search).get("lang");
+        const prefix = requestedLanguage === "en" ? "/en" : "";
+        const category = hashParts[1] ? `?category=${encodeURIComponent(hashParts[1])}` : "";
+        window.history.replaceState(null, "", `${prefix}/${hashTool}${category}`);
         return hashTool;
       }
     }
-    const pathParts = window.location.pathname.replace("/", "").split("/");
-    const pathTool = pathParts[0] as ToolId;
+    const pathParts = window.location.pathname.split("/").filter(Boolean);
+    const pathTool = (pathParts[0] === "en" ? pathParts[1] : pathParts[0]) as ToolId;
     if (tools.some((t) => t.id === pathTool)) {
       return pathTool;
     }
@@ -3500,6 +3507,9 @@ export default function App() {
   const [guidesOpen, setGuidesOpen] = useState(false);
   const [embedOpen, setEmbedOpen] = useState(false);
   const [language, setLanguage] = useState<Language>(() => {
+    const pathParts = window.location.pathname.split("/").filter(Boolean);
+    if (pathParts[0] === "en") return "en";
+    if (tools.some((tool) => tool.id === pathParts[0])) return "zh-TW";
     const requested = new URLSearchParams(window.location.search).get("lang");
     if (requested === "en") return "en";
     if (requested === "zh-TW" || requested === "zh") return "zh-TW";
@@ -3528,7 +3538,7 @@ export default function App() {
   const current = tools.find((tool) => tool.id === active) || tools[0];
   const selectTool = (id: ToolId) => {
     setActive(id);
-    const newPath = `/${id}`;
+    const newPath = `${language === "en" ? "/en" : ""}/${id}`;
     window.history.pushState(null, "", newPath);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -3536,103 +3546,32 @@ export default function App() {
     setLanguage(next);
     localStorage.setItem("textlab.language", next);
     const url = new URL(window.location.href);
-    url.searchParams.set("lang", next);
-    window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+    url.pathname = `${next === "en" ? "/en" : ""}/${current.id}`;
+    url.searchParams.delete("lang");
+    window.history.replaceState(null, "", `${url.pathname}${url.search}`);
   };
   useEffect(() => {
     document.documentElement.lang = language;
+    const routePath = `${language === "en" ? "/en" : ""}/${current.id}`;
+    const canonicalUrl = `https://cooklabai.com${routePath}`;
+    const zhUrl = `https://cooklabai.com/${current.id}`;
+    const enUrl = `https://cooklabai.com/en/${current.id}`;
     const canonical = document.querySelector('link[rel="canonical"]');
-    canonical?.setAttribute("href", language === "en" ? "https://cooklabai.com/?lang=en" : "https://cooklabai.com/?lang=zh-TW");
+    canonical?.setAttribute("href", canonicalUrl);
+    document.querySelector('link[rel="alternate"][hreflang="zh-Hant"]')?.setAttribute("href", zhUrl);
+    document.querySelector('link[rel="alternate"][hreflang="en"]')?.setAttribute("href", enUrl);
+    document.querySelector('link[rel="alternate"][hreflang="x-default"]')?.setAttribute("href", zhUrl);
     document.querySelector('meta[property="og:locale"]')?.setAttribute("content", language === "en" ? "en_US" : "zh_TW");
+    document.querySelector('meta[property="og:url"]')?.setAttribute("content", canonicalUrl);
     
     let titleStr = `${t(language, current.name, current.nameEn)}｜TextLab AI`;
     let descStr = t(language, `${current.name}線上工具：${current.short}，免費使用、不需登入。`, `${current.nameEn}: ${current.shortEn}. Free, no sign-up.`);
 
-    const seoMap: Record<string, { zhTitle: string; zhDesc: string; enTitle: string; enDesc: string }> = {
-      hook: {
-        zhTitle: "爆款 Hook 產生器｜Threads / IG / 小紅書勾魂開頭與標題公式｜字研所 TextLab",
-        zhDesc: "專為台灣小編設計的爆款 Hook 第一句產生器！收錄好奇反常識、觀點思考、共鳴情感與強導購開頭模板，拯救發文零點擊。",
-        enTitle: "Viral Social Caption Hook Studio | High-Converting Hooks | TextLab",
-        enDesc: "High-converting caption hooks for Instagram, Threads and Redbook. Double your post engagement instantly."
-      },
-      title: {
-        zhTitle: "日系花邊標題組裝器｜IG / Threads 標題框與邊框文字美化｜字研所 TextLab",
-        zhDesc: "輸入文字即時生成日系星閃、蝴蝶結、角括號與花紋標題邊框！讓 Threads 與 IG 貼文標題質感瞬間爆表。",
-        enTitle: "Aesthetic Title Frame Builder | Japanese Header Frames | TextLab",
-        enDesc: "Generate aesthetic Japanese header frames, star sparkles, and bow dividers for Instagram & Threads titles."
-      },
-      poster: {
-        zhTitle: "AI 廣告研究所｜免寫 Prompt 一鍵生成商業海報 (Midjourney / ChatGPT)｜字研所 TextLab",
-        zhDesc: "不需英文或複雜提示詞！30 秒透過點選自動產生 Midjourney、ChatGPT (DALL-E 3)、Gemini 專業商業海報 Prompt，支援網址解析與 AI 廣告評分。",
-        enTitle: "AI Commercial Poster Studio | Visual Ad Prompt Generator | TextLab",
-        enDesc: "Create professional Midjourney & DALL-E 3 poster prompts without writing text. 100% free visual ad generator."
-      },
-      ai: {
-        zhTitle: "AI 社群貼文助手｜Threads / IG / FB 爆款文案一鍵生成｜字研所 TextLab",
-        zhDesc: "專為台灣社群生態設計的 AI 發文助手！輸入想法一鍵生成 IG、FB、Threads、小紅書與 LINE 爆款貼文文案，免費免註冊。",
-        enTitle: "AI Social Post Assistant | Viral IG & Threads Creator | TextLab",
-        enDesc: "AI copywriter for Instagram, Threads, Facebook & LINE. Generate viral Taiwanese social posts instantly."
-      },
-      layout: {
-        zhTitle: "IG / Threads 免費排版換行工具｜解決貼文縮排擠成一團｜字研所 TextLab",
-        zhDesc: "最穩定的 IG 貼文排版換行產生器！一鍵解決 Instagram、Threads 貼文換行失效與縮排擠成一團的問題，可插入隱形空白與風格符號。",
-        enTitle: "Instagram & Threads Line Break Formatter | TextLab",
-        enDesc: "Fix Instagram & Threads caption spacing issues instantly. Free line break & layout tool."
-      },
-      bio: {
-        zhTitle: "IG / Threads 個人檔案 Bio 排版美化工具｜字研所 TextLab",
-        zhDesc: "擺脫平庸主頁！一鍵生成質感 IG 個人檔案 (Bio) 排版、Threads 簡介佈置、花式字體與風格排版分隔線。",
-        enTitle: "Instagram & Threads Bio Studio | Profile Designer | TextLab",
-        enDesc: "Design aesthetic Instagram & Threads bios with custom Unicode fonts, symbols and dividers."
-      },
-      hashtags: {
-        zhTitle: "2026 社群爆款熱門標籤 Hashtags 懶人包｜IG / Threads 流量導流｜字研所 TextLab",
-        zhDesc: "整理最新 Threads 與 IG 爆款流量 Hashtag 標籤包！包含甜點探店、穿搭靈感、職人覆盤、電商團購等熱門標籤，一鍵複製直接用。",
-        enTitle: "Trending Instagram & Threads Hashtag Bundles 2026 | TextLab",
-        enDesc: "Discover high-converting hashtag bundles for Instagram, Threads and TikTok. Copy with one click."
-      },
-      symbols: {
-        zhTitle: "特殊符號大全 2026｜愛心、星星、箭頭、日系花樣符號一鍵複製｜字研所 TextLab",
-        zhDesc: "收錄超過 2000+ 款特殊符號：星星、愛心、箭頭、框線、日系明體花紋、標題括號，分類清晰、一鍵點選複製！",
-        enTitle: "Unicode Symbols Library 2026 | Search & Copy Symbols | TextLab",
-        enDesc: "Search and copy 2000+ Unicode symbols, stars, hearts, arrows, brackets and dividers."
-      },
-      emoji: {
-        zhTitle: "Emoji 視覺實驗室｜全網最全 Emoji 搜尋與組合懶人包｜字研所 TextLab",
-        zhDesc: "Unicode 最新 Emoji 視覺搜尋與組合庫！整理優雅崩潰、社畜下班、陰陽怪氣等經典 Emoji 連發組合，社群小編發文必備。",
-        enTitle: "Emoji Visual Lab | Search, Copy & Combos | TextLab",
-        enDesc: "Explore and search all Unicode emojis with curated aesthetic emoji combinations."
-      },
-      kaomoji: {
-        zhTitle: "日系顏文字大全 2026｜可愛、委屈、開心、搞笑顏文字一鍵複製｜字研所 TextLab",
-        zhDesc: "超過 1000+ 款經典與爆款日系顏文字庫！收錄 (◡̈)、( 🫠 )、( 🥺 ) 等可愛、賣萌、無奈顏文字，一鍵複製增添發文靈魂。",
-        enTitle: "Japanese Kaomoji Library 2026 | Cute Emoticons | TextLab",
-        enDesc: "Search and copy cute Japanese kaomoji emoticons for messages and social posts."
-      },
-      fonts: {
-        zhTitle: "Unicode 特殊字體轉換器｜IG 英文字體、花式草寫一鍵轉換｜字研所 TextLab",
-        zhDesc: "免費將一般英文字母轉換為花式手寫體、圈圈字、哥德體、雙線體 (𝔻𝕠𝕦𝕓𝕝𝕖-𝕊𝕥𝕣𝕦𝕔𝕜) 與草寫字體，貼在 IG 個人檔案主頁超亮眼。",
-        enTitle: "Unicode Fancy Text Converter | Instagram Fonts | TextLab",
-        enDesc: "Convert plain text into aesthetic cursive, gothic, circled, and double-struck Unicode fonts."
-      },
-      nickname: {
-        zhTitle: "花式風格暱稱產生器｜遊戲 ID、IG 帳號風格暱稱｜字研所 TextLab",
-        zhDesc: "一鍵產生充滿文青感、日系質感或極簡風格的暱稱與遊戲 ID 組合，擺脫菜市場名，找到專屬於你的個人特色名稱。",
-        enTitle: "Aesthetic Nickname & Username Generator | TextLab",
-        enDesc: "Generate unique aesthetic usernames, gaming IDs and nickname ideas for Instagram and TikTok."
-      },
-      blank: {
-        zhTitle: "透明空白文字複製｜隱形空白字元產生器 (IG/Threads/遊戲ID)｜字研所 TextLab",
-        zhDesc: "免費複製隱形空白文字字元 (Invisible Text / Blank Character)，解決 Line、IG 名字空白、遊戲 ID 留白與文章縮排排版需求。",
-        enTitle: "Invisible Text & Blank Character Copy | TextLab",
-        enDesc: "Copy empty space characters (Unicode U+3164) for invisible usernames and custom spacing."
-      }
-    };
 
-    if (seoMap[current.id]) {
-      const item = seoMap[current.id];
-      titleStr = t(language, item.zhTitle, item.enTitle);
-      descStr = t(language, item.zhDesc, item.enDesc);
+    const item = seoPages[current.id as keyof typeof seoPages];
+    if (item) {
+      titleStr = t(language, item.titleZh, item.titleEn);
+      descStr = t(language, item.descriptionZh, item.descriptionEn);
     }
 
     if (current.id !== "symbols") {
@@ -3666,7 +3605,7 @@ export default function App() {
 
   const toolProps = { copied, setCopied, language };
   return <div className="app-shell">
-    <header className="topbar"><a className="brand" href="/symbols" onClick={(e) => { e.preventDefault(); selectTool("symbols"); }}><BrandLogo /><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button className="guide-nav-button" onClick={() => setGuidesOpen(true)}>📚 {t(language, "行銷指南", "Guides")}</button><button className="guide-nav-button" onClick={() => setEmbedOpen(true)}>🔗 {t(language, "嵌入與分享", "Embed")}</button><button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>{theme === "dark" ? "🌙 深色" : theme === "light" ? "☀️ 淺色" : "🌗 自動"}</button><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
+    <header className="topbar"><a className="brand" href={`${language === "en" ? "/en" : ""}/poster`} onClick={(e) => { e.preventDefault(); selectTool("poster"); }}><BrandLogo /><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button className="guide-nav-button" onClick={() => setGuidesOpen(true)}>📚 {t(language, "行銷指南", "Guides")}</button><button className="guide-nav-button" onClick={() => setEmbedOpen(true)}>🔗 {t(language, "嵌入與分享", "Embed")}</button><button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>{theme === "dark" ? "🌙 深色" : theme === "light" ? "☀️ 淺色" : "🌗 自動"}</button><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
     <div className="layout">
       <aside className="sidebar">
         <p className="sidebar-label" style={{ marginBottom: "8px" }}>{t(language, "文字工具箱 (13 合 1)", "TEXT LAB TOOLS (13-IN-1)")}</p>
@@ -3697,14 +3636,14 @@ export default function App() {
               <div className="sidebar-section-title">{t(language, sec.title, sec.titleEn)}</div>
               <div className="tool-nav">
                 {tools.filter((tItem) => sec.ids.includes(tItem.id)).map((tool) => (
-                  <button key={tool.id} className={active === tool.id ? "active" : ""} onClick={() => selectTool(tool.id)}>
+                  <a key={tool.id} href={`${language === "en" ? "/en" : ""}/${tool.id}`} className={active === tool.id ? "active" : ""} onClick={(event) => { event.preventDefault(); selectTool(tool.id); }}>
                     <span className={`tool-icon ${tool.tone}`}>{tool.icon}</span>
                     <span>
                       <strong>{t(language, tool.name, tool.nameEn)}</strong>
                       <small>{t(language, tool.short, tool.shortEn)}</small>
                     </span>
                     {tool.badge && <em>{t(language, tool.badge, "HOT")}</em>}
-                  </button>
+                  </a>
                 ))}
               </div>
             </div>
