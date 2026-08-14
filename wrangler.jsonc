@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "cooklab-ai",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-08-14",
+  "compatibility_flags": ["nodejs_compat"],
+  "ai": {
+    "binding": "AI"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "AI_RATE_LIMITS",
+      "id": "17e7a4bb3ed043b19d13aacd2d99f250"
+    }
+  ]
+}

@@ -426,9 +426,12 @@ function fallbackCopy(value: string, done: () => void) {
 }
 
 function ToolIntro({ tool, language }: { tool: Tool; language: Language }) {
+  const privacyNote = tool.id === "ai"
+    ? t(language, `${tool.short}，不需登入；送出內容會交由 Cloudflare Workers AI 處理，額度不足時自動改用本機產生器。`, `${tool.shortEn}. No sign-up; submitted text is processed by Cloudflare Workers AI, with an automatic local fallback when quota is unavailable.`)
+    : t(language, `${tool.short}，不需登入、不會上傳你的文字。`, `${tool.shortEn}. No sign-up, and your text never leaves your device.`);
   return <div className="tool-heading">
     <span className={`tool-icon hero-icon ${tool.tone}`}>{tool.icon}</span>
-    <div><span className="mini-label">ONLINE TOOL · {t(language, "免費使用", "FREE TO USE")}</span><h1>{t(language, tool.name, tool.nameEn)}</h1><p>{t(language, `${tool.short}，不需登入、不會上傳你的文字。`, `${tool.shortEn}. No sign-up, and your text never leaves your device.`)}</p></div>
+    <div><span className="mini-label">ONLINE TOOL · {t(language, "免費使用", "FREE TO USE")}</span><h1>{t(language, tool.name, tool.nameEn)}</h1><p>{privacyNote}</p></div>
   </div>;
 }
 
@@ -1392,16 +1395,16 @@ function OnboardingBanner({ language, selectTool }: { language: Language; select
       </div>
       <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
         <button onClick={() => selectTool("ai")} style={{ border: "1px solid var(--purple)", background: "var(--paper)", color: "var(--purple-dark)", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}>
-          📝 寫社群貼文 ➔
+          {t(language, "📝 寫社群貼文 ➔", "📝 Write a post ➔")}
         </button>
         <button onClick={() => selectTool("hook")} style={{ border: "1px solid var(--purple)", background: "var(--purple)", color: "white", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}>
-          🔥 爆款 Hook ➔
+          {t(language, "🔥 爆款 Hook ➔", "🔥 Create a hook ➔")}
         </button>
         <button onClick={() => selectTool("title")} style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}>
-          ✦ 花邊標題 ➔
+          {t(language, "✦ 花邊標題 ➔", "✦ Style a title ➔")}
         </button>
         <button onClick={() => selectTool("symbols")} style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer" }}>
-          🔍 特殊符號 ➔
+          {t(language, "🔍 特殊符號 ➔", "🔍 Find symbols ➔")}
         </button>
       </div>
     </div>
@@ -1469,23 +1472,23 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
   ];
 
   const presets = [
-    { title: "風扇商品開團", idea: "質感極簡風扇限時開團！雙重涼感極致靜音，原價 $1580 限時優惠折 $200" },
-    { title: "古宅咖啡廳探店", idea: "今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書" },
-    { title: "Threads 思考紀錄", idea: "最近發現把心態放慢之後，工作效率反而變高了，想聊聊這個體悟" },
-    { title: "社畜下班吐嘈", idea: "改完第 5 版草稿，終於可以下班去吃麻辣鍋放空了" }
+    { title: "風扇商品開團", titleEn: "Fan product launch", idea: "質感極簡風扇限時開團！雙重涼感極致靜音，原價 $1580 限時優惠折 $200", ideaEn: "A minimalist quiet cooling fan is launching for a limited time, with a practical dual-cooling design and a $200 introductory discount." },
+    { title: "古宅咖啡廳探店", titleEn: "Vintage café visit", idea: "今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書", ideaEn: "I visited a vintage café today. The matcha latte was fragrant, the window light was beautiful, and it felt perfect for reading alone." },
+    { title: "Threads 思考紀錄", titleEn: "Threads reflection", idea: "最近發現把心態放慢之後，工作效率反而變高了，想聊聊這個體悟", ideaEn: "I have noticed that slowing down mentally has actually made me more productive, and I want to share what changed." },
+    { title: "社畜下班吐嘈", titleEn: "After-work humor", idea: "改完第 5 版草稿，終於可以下班去吃麻辣鍋放空了", ideaEn: "After finishing the fifth revision, I can finally log off, get dinner, and let my brain rest." }
   ];
 
   const viralHooks = [
-    "🔥【千萬別再...】",
-    "💡【關於最近的一個小思考...】",
-    "✨【如果你也在經歷... 請花 1 分鐘看完】",
-    "🛒【限時搶購倒數｜獨家優惠】",
-    "🫠【改了 5 版草稿之後，我悟出了一個道理...】",
-    "✦【今天終於可以分享這個秘密了...】"
+    { zh: "🔥【千萬別再...】", en: "🔥 Stop doing this if you want to..." },
+    { zh: "💡【關於最近的一個小思考...】", en: "💡 A small thought I keep coming back to..." },
+    { zh: "✨【如果你也在經歷... 請花 1 分鐘看完】", en: "✨ If you are going through this too, read this..." },
+    { zh: "🛒【限時搶購倒數｜獨家優惠】", en: "🛒 Limited-time offer—here is what to know" },
+    { zh: "🫠【改了 5 版草稿之後，我悟出了一個道理...】", en: "🫠 After five revisions, I finally realized..." },
+    { zh: "✦【今天終於可以分享這個秘密了...】", en: "✦ I can finally share this little secret..." }
   ];
 
   const [selectedTone, setSelectedTone] = useState("auto");
-  const [idea, setIdea] = useState("今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書");
+  const [idea, setIdea] = useState(() => t(language, "今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書", "I visited a vintage café today. The matcha latte was fragrant, the window light was beautiful, and it felt perfect for reading alone."));
   const [output, setOutput] = useState("");
   const [isTransferring, setIsTransferring] = useState(false);
 
@@ -1556,30 +1559,105 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
     return () => clearInterval(timer);
   }, [cooldownSec]);
 
-  const currentTone = tones.find((t) => t.id === selectedTone) || tones[0];
-
   const generatePost = async () => {
     // 防連點與防空內容鎖定 (Anti-double click & cooldown guard)
     if (!idea.trim() || isGenerating || cooldownSec > 0) return;
 
     // 重複請求攔截 (Deduplication Check)
-    const currentRequestKey = `${selectedTone}::local::${idea.trim()}`;
+    const currentRequestKey = `${selectedTone}::${language}::${idea.trim()}`;
     if (currentRequestKey === lastRequestKey && output) {
-      setErrorMessage("💡 提示：您尚未修改內容或風格，已呈現目前成果（已為您省下重複 API Token 消耗！）。");
+      setErrorMessage(t(language, "💡 內容與風格沒有變更，已保留目前成果，避免重複使用免費額度。", "💡 Your content and style have not changed, so the current result is kept to save the free quota."));
       return;
     }
 
     setIsGenerating(true);
     setErrorMessage("");
 
-    // 免費本機文案引擎：不會傳送資料或產生 API 費用。
+    // 優先使用 Cloudflare Workers AI 免費額度；失敗或達上限時自動改用本機產生器。
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 12_000);
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task: "post", input: idea.trim(), tone: selectedTone, language }),
+        signal: controller.signal
+      });
+      const data: unknown = await response.json();
+      if (response.ok && data && typeof data === "object" && "output" in data && typeof data.output === "string" && data.output.trim()) {
+        setOutput(data.output.trim());
+        setLastRequestKey(currentRequestKey);
+        setIsGenerating(false);
+        setCooldownSec(3);
+        return;
+      }
+      throw new Error(`AI request failed: ${response.status}`);
+    } catch {
+      setErrorMessage(t(language, "免費 AI 暫時忙碌或今日額度已滿，已自動改用本機產生器，不會產生費用。", "Free AI is busy or today's quota is full. Switched to the local generator automatically—no charge."));
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+
     setTimeout(() => {
       let result = "";
       const text = idea.trim() || "紀錄這份當下的美好。";
       const timestampSeed = Date.now();
       const variantIdx = timestampSeed % 3;
 
-      if (selectedTone === "auto") {
+      if (language === "en") {
+        const englishStyles: Record<string, { hooks: string[]; bridges: string[]; closings: string[]; tags: string }> = {
+          auto: {
+            hooks: ["✦ A thought worth sharing", "💬 Today’s small discovery", "✨ A moment I wanted to remember"],
+            bridges: ["Here’s what stood out to me:", "The detail that made the biggest difference:", "My honest takeaway:"],
+            closings: ["What would you add to this?", "Save this for later, and share it with someone who might relate.", "Sometimes the simplest moments leave the strongest impression."],
+            tags: "#DailyNotes #CreativeThoughts #LifeInspiration #SocialPost"
+          },
+          cozy: {
+            hooks: ["☁️ A quiet note from today", "🍃 Slow moments, soft thoughts", "✦ Finding beauty in the everyday"],
+            bridges: ["A small detail I want to hold onto:", "This was my reminder to slow down:", "Today felt a little softer because of this:"],
+            closings: ["Here’s to making room for more gentle moments.", "A little pause can change the whole rhythm of a day.", "Saving this feeling for the days that move too fast."],
+            tags: "#SlowLiving #CozyMoments #DailyJournal #SimpleJoy"
+          },
+          threads: {
+            hooks: ["A thought I can’t stop thinking about:", "Hot take—or maybe just an honest observation:", "Something clicked for me today:"],
+            bridges: ["The short version:", "Here’s why I think it matters:", "The part nobody talks about enough:"],
+            closings: ["Do you agree, or see it differently?", "Curious how this looks from your side.", "What has your experience been?"],
+            tags: "#Threads #ConversationStarter #Perspective #CreatorNotes"
+          },
+          line: {
+            hooks: ["📢 Community update", "⚡ Quick announcement", "✨ A helpful update for everyone"],
+            bridges: ["Here are the key details:", "What you need to know:", "Quick summary:"],
+            closings: ["Reply in the group if you have any questions.", "Please share this update with anyone who may need it.", "Save this message so you can find the details easily."],
+            tags: "#CommunityUpdate #Announcement #StayConnected"
+          },
+          sales: {
+            hooks: ["🛍️ A practical find worth a closer look", "✨ Why this stands out", "🔥 A timely pick for anyone who needs this"],
+            bridges: ["The value is in the details:", "Three reasons it may be a good fit:", "Here’s the benefit at a glance:"],
+            closings: ["Check the verified product details before ordering.", "Save this comparison for when you’re ready to decide.", "Choose based on what genuinely fits your needs."],
+            tags: "#ProductFind #SmartShopping #WorthConsidering #BuyerGuide"
+          },
+          redbook: {
+            hooks: ["✨ An aesthetic find I’d genuinely recommend", "✦ A little lifestyle upgrade", "♡ Saved to my inspiration list"],
+            bridges: ["What makes it memorable:", "The details I liked most:", "My honest experience:"],
+            closings: ["Save this idea for your next inspiration day.", "Would this make your list too?", "A simple idea, but the atmosphere makes all the difference."],
+            tags: "#LifestyleInspo #AestheticFinds #DailyDiscovery #Inspiration"
+          },
+          pro: {
+            hooks: ["💡 Professional note", "✦ A lesson from the work", "⚙️ A practical takeaway"],
+            bridges: ["The core observation:", "What the experience taught me:", "The principle worth keeping:"],
+            closings: ["01 / Clarify the real problem\n02 / Improve one step at a time", "01 / Focus on the useful signal\n02 / Review and refine", "01 / Keep the process simple\n02 / Measure what actually matters"],
+            tags: "#ProfessionalGrowth #WorkNotes #PracticalInsight #ContinuousImprovement"
+          },
+          humor: {
+            hooks: ["🫠 Today’s highly professional survival update", "☕ Current status: powered by deadlines", "💼 A small win from the corporate wilderness"],
+            bridges: ["The situation, in one sentence:", "Today’s plot twist:", "What happened next was extremely on-brand:"],
+            closings: ["Anyway, we survived—and that deserves a snack.", "Logging off before someone discovers another revision.", "Polite smile. Save file. Go home."],
+            tags: "#WorkHumor #OfficeLife #Relatable #AfterWork"
+          }
+        };
+        const style = englishStyles[selectedTone] || englishStyles.auto;
+        result = `${style.hooks[variantIdx]}\n\n${style.bridges[variantIdx]}\n${text}\n\n${style.closings[variantIdx]} ✨\n\n${style.tags}`;
+      } else if (selectedTone === "auto") {
         const intros = ["✦ AI 智慧隨筆提案 ✦", "💬 社群話題靈感紀錄", "☁️ Daily Moments & Notes"];
         const outros = [
           "紀錄下這個美好的瞬間，分享當下的想法與視覺細節。✨\n\n─── ⋆⋅☆⋅⋆ ───\n#日常紀錄 #生活提案 #靈感隨筆 #Threads日常",
@@ -1701,19 +1779,22 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
 
         <div style={{ marginBottom: "12px" }}>
           <span style={{ fontSize: "11px", color: "var(--purple)", width: "100%", fontWeight: 700, display: "block", marginBottom: "6px" }}>
-            🔥 一鍵套用社群爆款 Hook 勾魂開頭：
+            {t(language, "🔥 一鍵套用社群爆款 Hook 勾魂開頭：", "🔥 Add a scroll-stopping hook:")}
           </span>
           <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-            {viralHooks.map((hk) => (
+            {viralHooks.map((hk) => {
+              const hookText = t(language, hk.zh, hk.en);
+              return (
               <button
-                key={hk}
+                key={hk.zh}
                 type="button"
-                onClick={() => setIdea((prev) => `${hk}\n${prev}`)}
+                onClick={() => setIdea((prev) => `${hookText}\n${prev}`)}
                 style={{ border: "1px solid var(--purple-soft)", background: "var(--purple-soft)", color: "var(--purple-dark)", borderRadius: "6px", padding: "4px 8px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}
               >
-                + ${hk}
+                + {hookText}
               </button>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -1724,10 +1805,10 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
           {presets.map((p) => (
             <button
               key={p.title}
-              onClick={() => { setIdea(p.idea); }}
+              onClick={() => { setIdea(t(language, p.idea, p.ideaEn)); }}
               style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--muted)", borderRadius: "8px", padding: "5px 9px", fontSize: "11px", cursor: "pointer" }}
             >
-              {p.title}
+              {t(language, p.title, p.titleEn)}
             </button>
           ))}
         </div>
@@ -3134,7 +3215,7 @@ function GuideModal({ language, onClose, onSelectTool }: { language: Language; o
       </div>
       <div className="guide-section-title" style={{ marginTop: "20px" }}><div><span className="section-kicker">TOOLS</span><h3>{t(language, "你想做什麼？", "What would you like to do?")}</h3></div><span>{t(language, "點選後直接開啟", "Opens instantly")}</span></div>
       <div className="guide-tools">{tools.map((tool) => <button key={tool.id} onClick={() => onSelectTool(tool.id)}><span className={`tool-icon ${tool.tone}`}>{tool.icon}</span><span><strong>{t(language, tool.name, tool.nameEn)}</strong><small>{t(language, tool.short, tool.shortEn)}</small></span><i>→</i></button>)}</div>
-      <div className="guide-bottom"><div className="guide-privacy"><span>✦</span><div><strong>{t(language, "內容只留在你的裝置", "Your content stays on your device")}</strong><p>{t(language, "所有文字與智慧產生工具都在瀏覽器完成，不會上傳或儲存；最近使用與收藏只保存在目前瀏覽器。", "All text and smart-generation tools run locally and are never uploaded. Recents and favorites are stored only in this browser.")}</p></div></div><div className="guide-faq"><strong>{t(language, "常見問題", "Quick answers")}</strong><p><span>{t(language, "智慧產生需要費用嗎？", "Does smart generation cost anything?")}</span>{t(language, "完全免費，使用本機產生器，不需 API 金鑰或信用卡。", "Completely free. It runs locally with no API key or credit card required.")}</p><p><span>{t(language, "複製後沒反應？", "Copy not working?")}</span>{t(language, "確認瀏覽器已允許剪貼簿權限，或改用其他瀏覽器。", "Allow clipboard access or try another browser.")}</p><p><span>{t(language, "哪些平台能用？", "Where can I use it?")}</span>{t(language, "大多數支援 Unicode 的社群、文件與遊戲都能使用。", "Most social apps, documents and games that support Unicode.")}</p></div></div>
+      <div className="guide-bottom"><div className="guide-privacy"><span>✦</span><div><strong>{t(language, "清楚的資料使用方式", "Clear data handling")}</strong><p>{t(language, "一般文字工具都在瀏覽器完成。只有 AI 貼文助手會把你送出的內容交由 Cloudflare Workers AI 處理；本站不儲存該內容。最近使用與收藏只保存在目前瀏覽器。", "Regular text tools run in your browser. Only the AI Post Assistant sends submitted text to Cloudflare Workers AI for processing; this site does not store that content. Recents and favorites stay in this browser.")}</p></div></div><div className="guide-faq"><strong>{t(language, "常見問題", "Quick answers")}</strong><p><span>{t(language, "AI 生成需要費用嗎？", "Does AI generation cost anything?")}</span>{t(language, "訪客完全免費，不需 API 金鑰或信用卡；免費額度不足時會自動切換本機產生器。", "It is free for visitors with no API key or credit card. When the free quota is unavailable, it automatically switches to the local generator.")}</p><p><span>{t(language, "複製後沒反應？", "Copy not working?")}</span>{t(language, "確認瀏覽器已允許剪貼簿權限，或改用其他瀏覽器。", "Allow clipboard access or try another browser.")}</p><p><span>{t(language, "哪些平台能用？", "Where can I use it?")}</span>{t(language, "大多數支援 Unicode 的社群、文件與遊戲都能使用。", "Most social apps, documents and games that support Unicode.")}</p></div></div>
     </section>
   </div>;
 }
@@ -3331,9 +3412,9 @@ export default function App() {
         <div className="sidebar-note" style={{ marginTop: "16px" }}>
           <span>✦</span>
           <p>
-            <strong>{t(language, "你的文字，只留在這裡", "Your text stays here")}</strong>
+            <strong>{t(language, "不儲存你的內容", "We do not store your content")}</strong>
             <br />
-            {t(language, "所有轉換都在瀏覽器完成，我們不會儲存內容。", "Everything runs in your browser. We never store your content.")}
+            {t(language, "一般工具在瀏覽器完成；AI 貼文只在生成時交由 Cloudflare 處理。", "Regular tools run in your browser; AI post text is sent to Cloudflare only for generation.")}
           </p>
         </div>
       </aside>

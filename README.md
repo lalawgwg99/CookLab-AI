@@ -2,7 +2,7 @@
 
 > 為繁體中文使用者設計的免費日常文字工具箱，內建 AI 社群貼文助手。
 
-🌐 **Live：** [https://lalawgwg99.github.io/CookLab-AI](https://lalawgwg99.github.io/CookLab-AI)
+🌐 **Live：** [https://cooklabai.com](https://cooklabai.com)
 
 ---
 
@@ -23,7 +23,7 @@
 
 ## 🤖 AI 社群貼文助手
 
-**不需任何設定，開啟即用。** 智慧文案與海報企劃使用瀏覽器本機產生器，不需 API 金鑰，也不會產生模型費用。
+**不需任何設定，開啟即用。** 智慧文案只使用 Cloudflare Workers AI 的純文字 8B 基本模型，不接圖片生成模型。免費額度不足或服務忙碌時自動切回內容更完整、支援中英文的瀏覽器本機產生器。訪客不需 API 金鑰或信用卡。
 
 ### 支援風格
 | 風格 | 適用平台 |
@@ -46,8 +46,9 @@
 
 ## 🔒 隱私說明
 
-- 所有文字工具在瀏覽器端完成，不上傳任何資料
-- 智慧貼文助手在瀏覽器本機產生內容，不會把輸入傳送至模型 API
+- 一般文字工具在瀏覽器端完成，不上傳文字內容
+- AI 貼文助手會把送出的文字交由 Cloudflare Workers AI 處理；本站不儲存該內容
+- AI 免費額度設有單一使用者與全站每日上限，無法使用時自動切回本機產生器
 - 最近使用、收藏紀錄僅存於本機 localStorage
 
 ---
@@ -77,8 +78,8 @@ npm run build
 
 - **框架**：React + TypeScript + Vite
 - **樣式**：Vanilla CSS（CSS Custom Properties）
-- **智慧產生**：瀏覽器本機規則引擎（零 API 費用）
-- **部署**：GitHub Pages
+- **智慧產生**：Cloudflare Workers AI + 瀏覽器本機備援
+- **部署**：Cloudflare Pages
 
 ---
 
