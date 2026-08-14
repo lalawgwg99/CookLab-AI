@@ -1386,14 +1386,14 @@ function TitleTool({ copied, setCopied, language }: { copied: string; setCopied:
 
 function OnboardingBanner({ language, selectTool }: { language: Language; selectTool: (id: ToolId) => void }) {
   return (
-    <div style={{ background: "linear-gradient(135deg, var(--purple-soft) 0%, var(--paper) 100%)", border: "1px solid var(--line)", borderRadius: "14px", padding: "12px 16px", marginBottom: "18px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
+    <div className="onboarding-banner">
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
         <span style={{ fontSize: "18px" }}>🎯</span>
         <strong style={{ fontSize: "12px", color: "var(--purple-dark)" }}>
           {t(language, "小編快速入門指引：您今天想處理什麼任務？", "Quick Start: What would you like to create today?")}
         </strong>
       </div>
-      <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+      <div className="onboarding-actions">
         <button onClick={() => selectTool("ai")} style={{ border: "1px solid var(--purple)", background: "var(--paper)", color: "var(--purple-dark)", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}>
           {t(language, "📝 寫社群貼文 ➔", "📝 Write a post ➔")}
         </button>
@@ -3223,7 +3223,7 @@ function GuideModal({ language, onClose, onSelectTool }: { language: Language; o
 function BrandLogo() {
   return (
     <svg width="38" height="38" viewBox="0 0 128 128" style={{ borderRadius: "10px", flexShrink: 0, display: "block" }}>
-      <rect width="128" height="128" rx="28" fill="#7666b6" />
+      <rect width="128" height="128" rx="28" fill="#6d5cac" />
       <text x="64" y="86" textAnchor="middle" fontFamily="'Noto Sans TC', system-ui, sans-serif" fontWeight="900" fontSize="64" fill="#ffffff">字</text>
       <path d="M 96 24 Q 96 32 104 32 Q 96 32 96 40 Q 96 32 88 32 Q 96 32 96 24 Z" fill="#ffd778" />
     </svg>
@@ -3365,7 +3365,7 @@ export default function App() {
 
   const toolProps = { copied, setCopied, language };
   return <div className="app-shell">
-    <header className="topbar"><a className="brand" href={`${language === "en" ? "/en" : ""}/poster`} onClick={(e) => { e.preventDefault(); selectTool("poster"); }}><BrandLogo /><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button className="guide-nav-button" onClick={() => setGuidesOpen(true)}>📚 {t(language, "行銷指南", "Guides")}</button><button className="guide-nav-button" onClick={() => setEmbedOpen(true)}>🔗 {t(language, "嵌入與分享", "Embed")}</button><button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>{theme === "dark" ? "🌙 深色" : theme === "light" ? "☀️ 淺色" : "🌗 自動"}</button><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
+    <header className="topbar"><a className="brand" href={`${language === "en" ? "/en" : ""}/poster`} onClick={(e) => { e.preventDefault(); selectTool("poster"); }}><BrandLogo /><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button className="guide-nav-button secondary-nav" onClick={() => setGuidesOpen(true)}>📚 {t(language, "行銷指南", "Guides")}</button><button className="guide-nav-button secondary-nav" onClick={() => setEmbedOpen(true)}>🔗 {t(language, "嵌入與分享", "Embed")}</button><button className="guide-nav-button secondary-nav" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button theme-toggle" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")} aria-label={t(language, "切換主題風格", "Toggle theme")}><span aria-hidden="true">{theme === "dark" ? "🌙" : theme === "light" ? "☀️" : "🌗"}</span><span className="theme-label">{theme === "dark" ? t(language, "深色", "Dark") : theme === "light" ? t(language, "淺色", "Light") : t(language, "自動", "Auto")}</span></button><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
     <div className="layout">
       <aside className="sidebar">
         <p className="sidebar-label" style={{ marginBottom: "8px" }}>{t(language, "文字工具箱 (13 合 1)", "TEXT LAB TOOLS (13-IN-1)")}</p>
