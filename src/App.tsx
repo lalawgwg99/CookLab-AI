@@ -37,7 +37,7 @@ const tools: Tool[] = [
   { id: "ai", name: "社群貼文", nameEn: "Social Post Writer", short: "產生 Threads／IG 貼文", shortEn: "Create Threads / Instagram posts", icon: "✎", tone: "lilac" },
   { id: "hook", name: "開頭句", nameEn: "Opening Lines", short: "IG／Threads 第一行", shortEn: "First lines for social posts", icon: "↗", tone: "yellow" },
   { id: "title", name: "花邊標題", nameEn: "Title Frames", short: "日系標題邊框", shortEn: "Aesthetic title frames", icon: "✦", tone: "coral" },
-  { id: "layout", name: "社群排版", nameEn: "Social Formatter", short: "IG／Threads 換行", shortEn: "Instagram / Threads spacing", icon: "¶", tone: "blue" },
+  { id: "layout", name: "IG 換行／Threads 排版", nameEn: "Instagram & Threads Formatter", short: "空白文字、段落留白與分隔線", shortEn: "Line breaks, invisible text and dividers", icon: "¶", tone: "blue" },
   { id: "bio", name: "個人檔案 Bio", nameEn: "Bio Studio", short: "IG / Threads 簡介佈置", shortEn: "Instagram & Threads Profile", icon: "📇", tone: "pink" },
   { id: "hashtags", name: "熱門標籤", nameEn: "Hashtags", short: "Threads / IG 導流標籤", shortEn: "Trending Hashtag Bundles", icon: "#", tone: "mint" },
   { id: "symbols", name: "特殊符號", nameEn: "Symbols", short: "搜尋與一鍵複製", shortEn: "Search and copy", icon: "✦", tone: "coral" },
@@ -3205,7 +3205,7 @@ function BrandLogo() {
 
 export default function App() {
   const parseCurrentTool = (): ToolId => {
-    if (typeof window === "undefined") return "poster";
+    if (typeof window === "undefined") return "layout";
     if (window.location.hash) {
       const hashParts = window.location.hash.replace("#", "").split("/");
       const hashTool = hashParts[0] as ToolId;
@@ -3222,7 +3222,7 @@ export default function App() {
     if (tools.some((t) => t.id === pathTool)) {
       return pathTool;
     }
-    return "poster";
+    return "layout";
   };
 
   const [active, setActive] = useState<ToolId>(parseCurrentTool);
@@ -3279,16 +3279,18 @@ export default function App() {
     setLanguage(next);
     localStorage.setItem("textlab.language", next);
     const url = new URL(window.location.href);
-    url.pathname = `${next === "en" ? "/en" : ""}/${current.id}`;
+    const isHome = current.id === "layout" && ["/", "/en", "/en/"].includes(url.pathname);
+    url.pathname = isHome ? (next === "en" ? "/en" : "/") : `${next === "en" ? "/en" : ""}/${current.id}`;
     url.searchParams.delete("lang");
     window.history.replaceState(null, "", `${url.pathname}${url.search}`);
   };
   useEffect(() => {
     document.documentElement.lang = language;
-    const routePath = `${language === "en" ? "/en" : ""}/${current.id}`;
+    const isHome = current.id === "layout" && ["/", "/en", "/en/"].includes(window.location.pathname);
+    const routePath = isHome ? (language === "en" ? "/en" : "/") : `${language === "en" ? "/en" : ""}/${current.id}`;
     const canonicalUrl = `https://cooklabai.com${routePath}`;
-    const zhUrl = `https://cooklabai.com/${current.id}`;
-    const enUrl = `https://cooklabai.com/en/${current.id}`;
+    const zhUrl = isHome ? "https://cooklabai.com/" : `https://cooklabai.com/${current.id}`;
+    const enUrl = isHome ? "https://cooklabai.com/en" : `https://cooklabai.com/en/${current.id}`;
     const canonical = document.querySelector('link[rel="canonical"]');
     canonical?.setAttribute("href", canonicalUrl);
     document.querySelector('link[rel="alternate"][hreflang="zh-Hant"]')?.setAttribute("href", zhUrl);
@@ -3338,31 +3340,31 @@ export default function App() {
 
   const toolProps = { copied, setCopied, language };
   return <div className="app-shell">
-    <header className="topbar"><a className="brand" href={`${language === "en" ? "/en" : ""}/poster`} onClick={(e) => { e.preventDefault(); selectTool("poster"); }}><BrandLogo /><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button className="guide-nav-button secondary-nav" onClick={() => setGuidesOpen(true)}>📚 {t(language, "行銷指南", "Guides")}</button><button className="guide-nav-button secondary-nav" onClick={() => setEmbedOpen(true)}>🔗 {t(language, "嵌入與分享", "Embed")}</button><button className="guide-nav-button secondary-nav" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button theme-toggle" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")} aria-label={t(language, "切換主題風格", "Toggle theme")}><span aria-hidden="true">{theme === "dark" ? "🌙" : theme === "light" ? "☀️" : "🌗"}</span><span className="theme-label">{theme === "dark" ? t(language, "深色", "Dark") : theme === "light" ? t(language, "淺色", "Light") : t(language, "自動", "Auto")}</span></button><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
+    <header className="topbar"><a className="brand" href={`${language === "en" ? "/en" : ""}/layout`} onClick={(e) => { e.preventDefault(); selectTool("layout"); }}><BrandLogo /><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button className="guide-nav-button secondary-nav" onClick={() => setGuidesOpen(true)}>📚 {t(language, "行銷指南", "Guides")}</button><button className="guide-nav-button secondary-nav" onClick={() => setEmbedOpen(true)}>🔗 {t(language, "嵌入與分享", "Embed")}</button><button className="guide-nav-button secondary-nav" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button theme-toggle" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")} aria-label={t(language, "切換主題風格", "Toggle theme")}><span aria-hidden="true">{theme === "dark" ? "🌙" : theme === "light" ? "☀️" : "🌗"}</span><span className="theme-label">{theme === "dark" ? t(language, "深色", "Dark") : theme === "light" ? t(language, "淺色", "Light") : t(language, "自動", "Auto")}</span></button><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
     <div className="layout">
       <aside className="sidebar">
         <p className="sidebar-label" style={{ marginBottom: "8px" }}>{t(language, "文字工具", "TEXT TOOLS")}</p>
         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           {[
             {
-              title: "內容創作",
-              titleEn: "CREATE",
-              ids: ["poster", "ai", "hook"]
+              title: "社群排版",
+              titleEn: "SOCIAL FORMATTING",
+              ids: ["layout", "blank", "symbols"]
             },
             {
-              title: "🎨 貼文排版與美化",
-              titleEn: "FORMATTING & STYLES",
-              ids: ["layout", "title", "fonts", "bio", "hashtags"]
+              title: "發文工具",
+              titleEn: "POST TOOLS",
+              ids: ["ai", "hook", "title", "bio", "hashtags"]
             },
             {
               title: "✦ 符號顏文字與表情",
               titleEn: "SYMBOLS & EMOJIS",
-              ids: ["symbols", "emoji", "kaomoji"]
+              ids: ["emoji", "kaomoji", "fonts"]
             },
             {
               title: "🛠️ 實用小工具",
               titleEn: "UTILITY TOOLS",
-              ids: ["nickname", "blank"]
+              ids: ["nickname", "poster"]
             }
           ].map((sec) => (
             <div key={sec.title}>

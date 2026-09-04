@@ -1,23 +1,23 @@
 {
   "poster": {
-    "nameZh": "AI 廣告研究所",
-    "nameEn": "AI Commercial Poster Studio",
+    "nameZh": "海報企劃",
+    "nameEn": "Poster Planner",
     "titleZh": "AI 廣告研究所｜免寫 Prompt 一鍵生成商業海報 (Midjourney / ChatGPT)｜字研所 TextLab",
     "descriptionZh": "不需英文或複雜提示詞！30 秒透過點選自動產生 Midjourney、ChatGPT、Gemini 專業商業海報 Prompt，支援網址解析與 AI 廣告評分。",
     "titleEn": "AI Commercial Poster Studio | Visual Ad Prompt Generator | TextLab",
     "descriptionEn": "Create professional Midjourney, ChatGPT and Gemini poster prompts without writing complex instructions. Free visual ad prompt generator."
   },
   "ai": {
-    "nameZh": "AI 社群貼文助手",
-    "nameEn": "AI Social Post Assistant",
+    "nameZh": "社群貼文工具",
+    "nameEn": "Social Post Writer",
     "titleZh": "AI 社群貼文助手｜Threads / IG / FB 爆款文案一鍵生成｜字研所 TextLab",
     "descriptionZh": "專為台灣社群生態設計的 AI 發文助手！輸入想法一鍵生成 IG、FB、Threads、小紅書與 LINE 社群貼文文案，免費免註冊。",
     "titleEn": "AI Social Post Assistant | Instagram & Threads Copywriter | TextLab",
     "descriptionEn": "Generate social posts for Instagram, Threads, Facebook, LINE and Redbook with a free AI copywriting assistant."
   },
   "hook": {
-    "nameZh": "爆款 Hook 產生器",
-    "nameEn": "Viral Hook Studio",
+    "nameZh": "社群開頭句工具",
+    "nameEn": "Social Opening Lines",
     "titleZh": "爆款 Hook 產生器｜Threads / IG / 小紅書勾魂開頭與標題公式｜字研所 TextLab",
     "descriptionZh": "專為台灣小編設計的爆款 Hook 第一句產生器！收錄好奇反常識、觀點思考、共鳴情感與強導購開頭模板，拯救發文零點擊。",
     "titleEn": "Viral Social Caption Hook Studio | High-Converting Hooks | TextLab",
@@ -32,12 +32,12 @@
     "descriptionEn": "Generate aesthetic Japanese header frames, sparkles, brackets and dividers for Instagram and Threads titles."
   },
   "layout": {
-    "nameZh": "IG / Threads 社群排版工具",
+    "nameZh": "IG 換行／Threads 排版工具",
     "nameEn": "Instagram & Threads Formatter",
-    "titleZh": "IG / Threads 免費排版換行工具｜解決貼文縮排擠成一團｜字研所 TextLab",
-    "descriptionZh": "免費 IG 與 Threads 貼文排版換行產生器，一鍵處理社群貼文換行、隱形空白、段落留白與風格分隔線。",
-    "titleEn": "Instagram & Threads Line Break Formatter | TextLab",
-    "descriptionEn": "Fix Instagram and Threads caption spacing with free line breaks, invisible spaces, dividers and formatting templates."
+    "titleZh": "IG 換行、Threads 排版工具｜空白文字與特殊符號一鍵複製｜字研所",
+    "descriptionZh": "免費 IG 換行與 Threads 排版工具：整理段落留白、隱形空白文字、分隔線與特殊符號，複製後可直接貼上社群貼文。",
+    "titleEn": "Instagram & Threads Formatter | Line Breaks & Invisible Text | TextLab",
+    "descriptionEn": "Format Instagram and Threads posts with line breaks, invisible text, dividers and Unicode symbols. Copy and paste directly into social posts."
   },
   "bio": {
     "nameZh": "IG / Threads Bio 排版工具",

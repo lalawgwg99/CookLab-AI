@@ -90,6 +90,18 @@ const buildPage = (id, language) => {
   return html;
 };
 
+const buildHome = (language) => {
+  const localized = buildPage("layout", language);
+  const isEnglish = language === "en";
+  const homeUrl = `${siteUrl}${isEnglish ? "/en" : "/"}`;
+  const zhUrl = `${siteUrl}/`;
+  const enUrl = `${siteUrl}/en`;
+  return localized
+    .replaceAll(`${siteUrl}${isEnglish ? "/en/layout" : "/layout"}`, homeUrl)
+    .replaceAll(`href="${zhUrl}layout"`, `href="${zhUrl}"`)
+    .replaceAll(`href="${enUrl}/layout"`, `href="${enUrl}"`);
+};
+
 for (const id of toolIds) {
   for (const language of ["zh-TW", "en"]) {
     const outputDir = language === "en" ? path.join(distDir, "en") : distDir;
@@ -99,8 +111,8 @@ for (const id of toolIds) {
 }
 
 await mkdir(path.join(distDir, "en"), { recursive: true });
-await writeFile(path.join(distDir, "index.html"), buildPage("poster", "zh-TW"));
-await writeFile(path.join(distDir, "en", "index.html"), buildPage("poster", "en"));
+await writeFile(path.join(distDir, "index.html"), buildHome("zh-TW"));
+await writeFile(path.join(distDir, "en", "index.html"), buildHome("en"));
 
 const lastmod = new Date().toISOString().slice(0, 10);
 const sitemapUrls = toolIds.flatMap((id) => {
@@ -109,10 +121,11 @@ const sitemapUrls = toolIds.flatMap((id) => {
   const alternates = `<xhtml:link rel="alternate" hreflang="zh-Hant" href="${zhUrl}"/><xhtml:link rel="alternate" hreflang="en" href="${enUrl}"/><xhtml:link rel="alternate" hreflang="x-default" href="${zhUrl}"/>`;
   return [`<url><loc>${zhUrl}</loc><lastmod>${lastmod}</lastmod>${alternates}</url>`, `<url><loc>${enUrl}</loc><lastmod>${lastmod}</lastmod>${alternates}</url>`];
 });
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${sitemapUrls.map((entry) => `  ${entry}`).join("\n")}\n</urlset>\n`;
+const homeEntries = [`<url><loc>${siteUrl}/</loc><lastmod>${lastmod}</lastmod><xhtml:link rel="alternate" hreflang="zh-Hant" href="${siteUrl}/"/><xhtml:link rel="alternate" hreflang="en" href="${siteUrl}/en"/><xhtml:link rel="alternate" hreflang="x-default" href="${siteUrl}/"/></url>`, `<url><loc>${siteUrl}/en</loc><lastmod>${lastmod}</lastmod><xhtml:link rel="alternate" hreflang="zh-Hant" href="${siteUrl}/"/><xhtml:link rel="alternate" hreflang="en" href="${siteUrl}/en"/><xhtml:link rel="alternate" hreflang="x-default" href="${siteUrl}/"/></url>`];
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${[...homeEntries, ...sitemapUrls].map((entry) => `  ${entry}`).join("\n")}\n</urlset>\n`;
 await writeFile(path.join(distDir, "sitemap.xml"), sitemap);
 
-const notFound = `<!doctype html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1"><title>找不到頁面｜字研所 TextLab</title></head><body><main><h1>找不到這個頁面</h1><p><a href="/poster">返回字研所工具箱</a></p></main></body></html>`;
+const notFound = `<!doctype html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1"><title>找不到頁面｜字研所 TextLab</title></head><body><main><h1>找不到這個頁面</h1><p><a href="/layout">返回 IG／Threads 排版工具</a></p></main></body></html>`;
 await writeFile(path.join(distDir, "404.html"), notFound);
 
 console.log(`Generated ${toolIds.length * 2 + 2} localized SEO pages and sitemap.xml`);

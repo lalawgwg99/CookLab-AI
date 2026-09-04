@@ -28,11 +28,23 @@ for (const id of Object.keys(pages)) {
 
 const sitemap = await readFile(path.join(distDir, "sitemap.xml"), "utf8");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-if (sitemapUrls.length !== Object.keys(pages).length * 2) failures.push(`sitemap: expected ${Object.keys(pages).length * 2} URLs, found ${sitemapUrls.length}`);
+const expectedSitemapUrls = Object.keys(pages).length * 2 + 2;
+if (sitemapUrls.length !== expectedSitemapUrls) failures.push(`sitemap: expected ${expectedSitemapUrls} URLs, found ${sitemapUrls.length}`);
+for (const url of [`${siteUrl}/`, `${siteUrl}/en`]) {
+  if (!sitemapUrls.includes(url)) failures.push(`sitemap: missing ${url}`);
+}
 for (const id of Object.keys(pages)) {
   for (const url of [`${siteUrl}/${id}`, `${siteUrl}/en/${id}`]) {
     if (!sitemapUrls.includes(url)) failures.push(`sitemap: missing ${url}`);
   }
+}
+
+for (const [language, file, canonical] of [["zh-TW", path.join(distDir, "index.html"), `${siteUrl}/`], ["en", path.join(distDir, "en", "index.html"), `${siteUrl}/en`]]) {
+  const html = await readFile(file, "utf8");
+  if (!html.includes(`<html lang="${language}">`)) failures.push(`${canonical}: incorrect lang`);
+  if (!html.includes(`<link rel="canonical" href="${canonical}" />`)) failures.push(`${canonical}: incorrect canonical`);
+  if (!html.includes("IG 換行") && language === "zh-TW") failures.push(`${canonical}: missing IG 換行 focus`);
+  if (!html.includes("Instagram &amp; Threads") && language === "en") failures.push(`${canonical}: missing English focus`);
 }
 
 const notFound = await readFile(path.join(distDir, "404.html"), "utf8");
