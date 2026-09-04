@@ -33,11 +33,11 @@ type Tool = {
 };
 
 const tools: Tool[] = [
-  { id: "poster", name: "AI 廣告研究所", nameEn: "AI Ad Studio", short: "點選生成專業海報 Prompt", shortEn: "Visual AI Poster Generator", icon: "🎨", tone: "yellow", badge: "NEW" },
-  { id: "ai", name: "AI 發文助手", nameEn: "AI Post Assistant", short: "一鍵生成 Threads／IG 貼文", shortEn: "Generate viral social posts", icon: "🪄", tone: "lilac", badge: "AI" },
-  { id: "hook", name: "爆款 Hook 產生器", nameEn: "Viral Hook Studio", short: "IG/Threads 勾魂第一句", shortEn: "High-converting caption hooks", icon: "🔥", tone: "yellow", badge: "HOT" },
-  { id: "title", name: "花邊標題組裝", nameEn: "Title Frame Studio", short: "日系風格標題邊框", shortEn: "Aesthetic header frame builder", icon: "✦", tone: "coral", badge: "NEW" },
-  { id: "layout", name: "社群排版", nameEn: "Social Formatter", short: "IG／Threads 換行", shortEn: "Instagram / Threads spacing", icon: "¶", tone: "blue", badge: "熱門" },
+  { id: "poster", name: "海報企劃", nameEn: "Poster Planner", short: "組合海報提示詞", shortEn: "Build poster prompts", icon: "✦", tone: "yellow" },
+  { id: "ai", name: "社群貼文", nameEn: "Social Post Writer", short: "產生 Threads／IG 貼文", shortEn: "Create Threads / Instagram posts", icon: "✎", tone: "lilac" },
+  { id: "hook", name: "開頭句", nameEn: "Opening Lines", short: "IG／Threads 第一行", shortEn: "First lines for social posts", icon: "↗", tone: "yellow" },
+  { id: "title", name: "花邊標題", nameEn: "Title Frames", short: "日系標題邊框", shortEn: "Aesthetic title frames", icon: "✦", tone: "coral" },
+  { id: "layout", name: "社群排版", nameEn: "Social Formatter", short: "IG／Threads 換行", shortEn: "Instagram / Threads spacing", icon: "¶", tone: "blue" },
   { id: "bio", name: "個人檔案 Bio", nameEn: "Bio Studio", short: "IG / Threads 簡介佈置", shortEn: "Instagram & Threads Profile", icon: "📇", tone: "pink" },
   { id: "hashtags", name: "熱門標籤", nameEn: "Hashtags", short: "Threads / IG 導流標籤", shortEn: "Trending Hashtag Bundles", icon: "#", tone: "mint" },
   { id: "symbols", name: "特殊符號", nameEn: "Symbols", short: "搜尋與一鍵複製", shortEn: "Search and copy", icon: "✦", tone: "coral" },
@@ -427,11 +427,11 @@ function fallbackCopy(value: string, done: () => void) {
 
 function ToolIntro({ tool, language }: { tool: Tool; language: Language }) {
   const privacyNote = tool.id === "ai"
-    ? t(language, `${tool.short}，不需登入；送出內容會交由 Cloudflare Workers AI 處理，額度不足時自動改用本機產生器。`, `${tool.shortEn}. No sign-up; submitted text is processed by Cloudflare Workers AI, with an automatic local fallback when quota is unavailable.`)
-    : t(language, `${tool.short}，不需登入、不會上傳你的文字。`, `${tool.shortEn}. No sign-up, and your text never leaves your device.`);
+    ? t(language, "輸入想法，整理成可直接發布的社群貼文。", "Turn an idea into a ready-to-post social caption.")
+    : t(language, tool.short, tool.shortEn);
   return <div className="tool-heading">
     <span className={`tool-icon hero-icon ${tool.tone}`}>{tool.icon}</span>
-    <div><span className="mini-label">ONLINE TOOL · {t(language, "免費使用", "FREE TO USE")}</span><h1>{t(language, tool.name, tool.nameEn)}</h1><p>{privacyNote}</p></div>
+    <div><h1>{t(language, tool.name, tool.nameEn)}</h1><p>{privacyNote}</p></div>
   </div>;
 }
 
@@ -1384,39 +1384,12 @@ function TitleTool({ copied, setCopied, language }: { copied: string; setCopied:
   );
 }
 
-function OnboardingBanner({ language, selectTool }: { language: Language; selectTool: (id: ToolId) => void }) {
-  return (
-    <div className="onboarding-banner">
-      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-        <span style={{ fontSize: "18px" }}>🎯</span>
-        <strong style={{ fontSize: "12px", color: "var(--purple-dark)" }}>
-          {t(language, "小編快速入門指引：您今天想處理什麼任務？", "Quick Start: What would you like to create today?")}
-        </strong>
-      </div>
-      <div className="onboarding-actions">
-        <button onClick={() => selectTool("ai")} style={{ border: "1px solid var(--purple)", background: "var(--paper)", color: "var(--purple-dark)", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}>
-          {t(language, "📝 寫社群貼文 ➔", "📝 Write a post ➔")}
-        </button>
-        <button onClick={() => selectTool("hook")} style={{ border: "1px solid var(--purple)", background: "var(--purple)", color: "white", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}>
-          {t(language, "🔥 爆款 Hook ➔", "🔥 Create a hook ➔")}
-        </button>
-        <button onClick={() => selectTool("title")} style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}>
-          {t(language, "✦ 花邊標題 ➔", "✦ Style a title ➔")}
-        </button>
-        <button onClick={() => selectTool("symbols")} style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer" }}>
-          {t(language, "🔍 特殊符號 ➔", "🔍 Find symbols ➔")}
-        </button>
-      </div>
-    </div>
-  );
-}
-
 function AIPostTool({ copied, setCopied, language, selectTool }: { copied: string; setCopied: (v: string) => void; language: Language; selectTool?: (id: ToolId) => void }) {
   const tones = [
     {
       id: "auto",
-      name: "🤖 AI 智慧自動匹配 (推薦)",
-      nameEn: "AI Smart Match",
+      name: "自動匹配（推薦）",
+      nameEn: "Auto match",
       hint: "AI 自動深度分析主題，智慧選定 IG / FB / Threads / LINE / 小紅書最適體裁與排版",
       promptSpec: "請對使用者輸入的主題進行深度意圖分析（判定是產品開箱、探店日誌、FB粉專觀點、職場心得、日常生活吐嘈、促銷團購或爆款討論），自動選擇最適合的社群平台體裁（IG 美學圖文 / FB 品牌粉專文 / Threads 爆款討論 / 小紅書種草提案 / LINE 社群特惠 / 職人觀點覆盤），並為其自動配上最適切的標題句型、精準 Emoji 與熱門黑標籤。"
     },
@@ -1821,10 +1794,10 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
 
         <button className="primary-button wide" onClick={generatePost} disabled={isGenerating || cooldownSec > 0}>
           {isGenerating
-            ? t(language, "✨ AI 思考生成中…", "✨ AI Generating…")
+            ? t(language, "正在整理…", "Writing…")
             : cooldownSec > 0
             ? t(language, `⏳ 冷卻保護中 (${cooldownSec}s)`, `⏳ Cooldown (${cooldownSec}s)`)
-            : t(language, "🪄 一鍵生成 AI 社群貼文", "🪄 Generate AI Social Post")}
+            : t(language, "產生貼文", "Create post")}
         </button>
       </div>
 
@@ -1833,7 +1806,7 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
         <div className="input-card">
           <div className="field-label">
             <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
-              {t(language, "✨ AI 社群貼文產出 (即可複製貼至 IG / Threads)", "✨ Generated Social Post")}
+              {t(language, "貼文成果", "Your post")}
             </strong>
             <span>{output.length} {t(language, "字", "chars")}</span>
           </div>
@@ -3368,12 +3341,12 @@ export default function App() {
     <header className="topbar"><a className="brand" href={`${language === "en" ? "/en" : ""}/poster`} onClick={(e) => { e.preventDefault(); selectTool("poster"); }}><BrandLogo /><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button className="guide-nav-button secondary-nav" onClick={() => setGuidesOpen(true)}>📚 {t(language, "行銷指南", "Guides")}</button><button className="guide-nav-button secondary-nav" onClick={() => setEmbedOpen(true)}>🔗 {t(language, "嵌入與分享", "Embed")}</button><button className="guide-nav-button secondary-nav" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button theme-toggle" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")} aria-label={t(language, "切換主題風格", "Toggle theme")}><span aria-hidden="true">{theme === "dark" ? "🌙" : theme === "light" ? "☀️" : "🌗"}</span><span className="theme-label">{theme === "dark" ? t(language, "深色", "Dark") : theme === "light" ? t(language, "淺色", "Light") : t(language, "自動", "Auto")}</span></button><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
     <div className="layout">
       <aside className="sidebar">
-        <p className="sidebar-label" style={{ marginBottom: "8px" }}>{t(language, "文字工具箱 (13 合 1)", "TEXT LAB TOOLS (13-IN-1)")}</p>
+        <p className="sidebar-label" style={{ marginBottom: "8px" }}>{t(language, "文字工具", "TEXT TOOLS")}</p>
         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           {[
             {
-              title: "🌟 AI 智慧發文企劃",
-              titleEn: "AI CREATION",
+              title: "內容創作",
+              titleEn: "CREATE",
               ids: ["poster", "ai", "hook"]
             },
             {
@@ -3409,18 +3382,9 @@ export default function App() {
             </div>
           ))}
         </div>
-        <div className="sidebar-note" style={{ marginTop: "16px" }}>
-          <span>✦</span>
-          <p>
-            <strong>{t(language, "不儲存你的內容", "We do not store your content")}</strong>
-            <br />
-            {t(language, "一般工具在瀏覽器完成；AI 貼文只在生成時交由 Cloudflare 處理。", "Regular tools run in your browser; AI post text is sent to Cloudflare only for generation.")}
-          </p>
-        </div>
       </aside>
       <main className="workspace"><div className="mobile-tool-picker"><span>{t(language, "目前工具", "CURRENT TOOL")}</span><select value={active} onChange={(e) => selectTool(e.target.value as ToolId)}>{tools.map((tool) => <option value={tool.id} key={tool.id}>{t(language, tool.name, tool.nameEn)}｜{t(language, tool.short, tool.shortEn)}</option>)}</select></div>
         <div className="tool-surface">
-          <OnboardingBanner language={language} selectTool={selectTool} />
           {active === "poster" && <PosterTool {...toolProps} />}
           {active === "hook" && <HookTool {...toolProps} />}
           {active === "title" && <TitleTool {...toolProps} />}
