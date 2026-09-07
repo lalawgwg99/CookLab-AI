@@ -7,9 +7,9 @@
   --line: #e5e5ea;
   --paper: #ffffff;
   --canvas: #f5f5f7;
-  --purple: #6e56cf;
-  --purple-dark: #5741bd;
-  --purple-soft: #f2eefa;
+  --purple: #1d1d1f;
+  --purple-dark: #000000;
+  --purple-soft: #e5e5ea;
   --shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Noto Sans TC", system-ui, sans-serif;
   color: var(--ink);
@@ -27,9 +27,9 @@
     --line: #2c2c2e;
     --paper: #1c1c1e;
     --canvas: #000000;
-    --purple: #9d8bf0;
-    --purple-dark: #b8a9fc;
-    --purple-soft: #282438;
+    --purple: #f5f5f7;
+    --purple-dark: #ffffff;
+    --purple-soft: #2c2c2e;
     --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   }
 }
@@ -41,9 +41,9 @@
   --line: #2c2c2e;
   --paper: #1c1c1e;
   --canvas: #000000;
-  --purple: #9d8bf0;
-  --purple-dark: #b8a9fc;
-  --purple-soft: #282438;
+  --purple: #f5f5f7;
+  --purple-dark: #ffffff;
+  --purple-soft: #2c2c2e;
   --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
@@ -54,9 +54,9 @@
   --line: #e5e5ea;
   --paper: #ffffff;
   --canvas: #f5f5f7;
-  --purple: #6e56cf;
-  --purple-dark: #5741bd;
-  --purple-soft: #f2eefa;
+  --purple: #1d1d1f;
+  --purple-dark: #000000;
+  --purple-soft: #e5e5ea;
   --shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
 }
 
@@ -388,7 +388,7 @@ kbd { border: 1px solid var(--line); background: var(--canvas); color: var(--mut
 .category-tabs button.active, .segmented button.active {
   background: var(--purple);
   border-color: var(--purple);
-  color: white;
+  color: var(--paper);
   font-weight: 600;
 }
 
@@ -514,7 +514,7 @@ kbd { border: 1px solid var(--line); background: var(--canvas); color: var(--mut
   border-radius: 10px;
   padding: 10px 18px;
   background: var(--purple);
-  color: white;
+  color: var(--paper);
   font-weight: 600;
   font-size: 13px;
   transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
@@ -654,7 +654,7 @@ kbd { border: 1px solid var(--line); background: var(--canvas); color: var(--mut
   border-radius: 50%;
   display: grid;
   place-items: center;
-  color: white;
+  color: var(--paper);
   background: var(--purple);
   font-size: 10px;
   font-weight: 700;

@@ -1640,7 +1640,7 @@ function ProPaywallModal({ language, onClose, onRedeemSuccess }: { language: Lan
     <div className="guide-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <section className="guide-modal" role="dialog" aria-modal="true" style={{ maxWidth: "500px", textAlign: "center" }}>
         <button className="guide-close" onClick={onClose}>×</button>
-        <div style={{ width: "52px", height: "52px", borderRadius: "14px", background: "linear-gradient(135deg, var(--purple), var(--purple-dark))", color: "#ffffff", fontSize: "24px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
+        <div style={{ width: "52px", height: "52px", borderRadius: "14px", background: "linear-gradient(135deg, #1d1d1f, #3a3a3c)", color: "#ffffff", fontSize: "24px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
           👑
         </div>
         <h2 style={{ fontSize: "20px", fontWeight: 700, margin: "0 0 6px", color: "var(--ink)" }}>
@@ -1673,7 +1673,7 @@ function ProPaywallModal({ language, onClose, onRedeemSuccess }: { language: Lan
           <button
             type="button"
             className="primary-button"
-            style={{ width: "100%", padding: "14px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "14px", fontWeight: 700, borderRadius: "12px", background: "var(--purple)", color: "#fff", border: "none", cursor: "pointer" }}
+            style={{ width: "100%", padding: "14px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "14px", fontWeight: 700, borderRadius: "12px", background: "var(--purple)", color: "var(--paper)", border: "none", cursor: "pointer" }}
             onClick={() => {
               alert(t(language, "即將前往綠界 / Stripe 結帳頁面（早鳥終身買斷 NT$ 399）。一次付費，永久免費享用未來所有商業爆款更新！", "Redirecting to checkout (Early Bird Lifetime NT$ 399). Pay once, own forever!"));
             }}
@@ -3115,9 +3115,9 @@ function StatsModal({ language, onClose }: { language: Language; onClose: () => 
 function BrandLogo() {
   return (
     <svg width="38" height="38" viewBox="0 0 128 128" style={{ borderRadius: "10px", flexShrink: 0, display: "block" }}>
-      <rect width="128" height="128" rx="28" fill="#6d5cac" />
+      <rect width="128" height="128" rx="28" fill="#1d1d1f" />
       <text x="64" y="86" textAnchor="middle" fontFamily="'Noto Sans TC', system-ui, sans-serif" fontWeight="900" fontSize="64" fill="#ffffff">字</text>
-      <path d="M 96 24 Q 96 32 104 32 Q 96 32 96 40 Q 96 32 88 32 Q 96 32 96 24 Z" fill="#ffd778" />
+      <path d="M 96 24 Q 96 32 104 32 Q 96 32 96 40 Q 96 32 88 32 Q 96 32 96 24 Z" fill="#e5e5ea" />
     </svg>
   );
 }
