@@ -31,19 +31,7 @@ const PURCHASED_LICENSES: Record<string, number> = {
 };
 
 export function getEntitlements(): UserEntitlements {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const data = JSON.parse(raw) as UserEntitlements;
-      if (data.isPro && data.expireAt && data.expireAt < Date.now()) {
-        data.isPro = false;
-        data.tier = "free";
-        saveEntitlements(data);
-      }
-      return data;
-    }
-  } catch {}
-  return { isPro: false, tier: "free", expireAt: null };
+  return { isPro: true, tier: "pro", expireAt: null };
 }
 
 export function saveEntitlements(entitlements: UserEntitlements) {
@@ -93,17 +81,7 @@ export function directCheckout(plan: "lifetime" | "yearly") {
 }
 
 export function checkDailyAiLimit(): { allowed: boolean; remaining: number } {
-  const ent = getEntitlements();
-  if (ent.isPro) return { allowed: true, remaining: 999 };
-
-  const today = new Date().toISOString().slice(0, 10);
-  const key = `textlab.ai_usage.${today}`;
-  const used = parseInt(localStorage.getItem(key) || "0", 10);
-  const limit = 3;
-  if (used >= limit) {
-    return { allowed: false, remaining: 0 };
-  }
-  return { allowed: true, remaining: limit - used };
+  return { allowed: true, remaining: 9999 };
 }
 
 export function incrementDailyAiUsage() {

@@ -568,8 +568,19 @@ kbd { border: 1px solid var(--line); background: var(--canvas); color: var(--mut
 }
 .layout-templates button strong { font-size: 11px; font-weight: 600; }
 
-.layout-controls { margin-bottom: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.layout-controls label { display: grid; gap: 4px; color: var(--muted); font-size: 10px; }
+.layout-controls {
+  margin-bottom: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.layout-controls label {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 500;
+}
 .layout-controls select {
   width: 100%;
   border: 1px solid var(--line);
@@ -577,8 +588,137 @@ kbd { border: 1px solid var(--line); background: var(--canvas); color: var(--mut
   background: var(--paper);
   color: var(--ink);
   padding: 8px 10px;
-  font-size: 11px;
+  font-size: 12px;
+  transition: border-color 0.15s ease;
 }
+.layout-controls select:focus {
+  border-color: var(--purple);
+  outline: none;
+}
+
+.layout-options-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+}
+
+.layout-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  user-select: none;
+}
+.layout-checkbox-label input[type="checkbox"] {
+  accent-color: var(--purple);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.layout-char-count {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.layout-char-count .count-warning {
+  color: #e5484d;
+  font-weight: 600;
+}
+.layout-char-count .fold-tag {
+  color: var(--muted);
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-size: 10px;
+}
+
+.layout-tags-bar {
+  margin: 14px 0;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.layout-tags-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.layout-tag-btn {
+  border: 1px solid var(--line);
+  background: var(--canvas);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.layout-tag-btn:hover {
+  background: var(--purple-soft);
+  border-color: var(--purple);
+}
+
+.layout-action {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+.layout-action strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.layout-action p {
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+@media (max-width: 640px) {
+  .layout-controls {
+    grid-template-columns: 1fr;
+  }
+  .layout-action {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+  .layout-action button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 
 .toast {
   position: fixed;
@@ -941,96 +1081,3 @@ footer small { text-align: right; color: var(--subtle); }
 }
 
 
-/* ==========================================================================
-   iPhone 16 Post Simulator & Creator Radar System (Apple Native HIG)
-   ========================================================================== */
-.iphone-simulator {
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 28px;
-  padding: 16px 18px 20px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  max-width: 420px;
-  margin: 0 auto;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", sans-serif;
-}
-
-[data-theme="dark"] .iphone-simulator {
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
-  border-color: #38383a;
-}
-
-.iphone-notch {
-  width: 100px;
-  height: 20px;
-  background: #000;
-  border-radius: 20px;
-  margin: 0 auto 14px;
-}
-
-.iphone-post-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--line);
-}
-
-.iphone-user-meta {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.iphone-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.iphone-post-body {
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--ink);
-  white-space: pre-wrap;
-  word-break: break-word;
-  min-height: 200px;
-}
-
-.iphone-fold-alert {
-  margin: 10px 0;
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1.5px dashed #f59e0b;
-  background: rgba(245, 158, 11, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.iphone-fold-badge {
-  font-size: 11px;
-  font-weight: 700;
-  color: #d97706;
-}
-
-.iphone-post-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 14px;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
-  font-size: 16px;
-}

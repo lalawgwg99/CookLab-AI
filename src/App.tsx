@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { trackPageView, trackCopyAction, fetchLiveStats, LiveStatsData } from "./services/analytics";
-import { getEntitlements, verifyLicenseKey, checkDailyAiLimit, incrementDailyAiUsage, UserEntitlements } from "./services/subscription";
+import { incrementDailyAiUsage } from "./services/subscription";
 import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 import seoPages from "./data/seo-pages.json";
@@ -803,7 +803,6 @@ function LayoutTool({ copied, setCopied, language }: { copied: string; setCopied
   const [decoration, setDecoration] = useState("sparkle");
   const [cjkSpacing, setCjkSpacing] = useState(true);
   const [platform, setPlatform] = useState<"threads" | "ig" | "redbook" | "bio">("threads");
-  const [previewMode, setPreviewMode] = useState<"clean" | "iphone">("clean");
 
   const platformLimits = {
     threads: { name: "Threads", limit: 500, fold: 500 },
@@ -815,46 +814,6 @@ function LayoutTool({ copied, setCopied, language }: { copied: string; setCopied
   const currentLimit = platformLimits[platform];
   const isOverLimit = text.length > currentLimit.limit;
   const isFolded = platform === "ig" && text.length > 125;
-
-  // 爆款文案吸睛度雷達演算法
-  const viralStats = useMemo(() => {
-    const lines = text.trim().split("\n").map(l => l.trim()).filter(Boolean);
-    const firstLine = lines[0] || "";
-    const hasNumber = /[0-9０-９]/.test(firstLine);
-    const hasQuestion = /[?？!！]/.test(firstLine);
-    const hookScore = Math.min(100, Math.max(40, (hasNumber ? 30 : 10) + (hasQuestion ? 30 : 15) + (firstLine.length > 5 && firstLine.length < 35 ? 30 : 10)));
-    const avgLineLen = lines.length > 0 ? Math.round(text.length / lines.length) : 0;
-    const readability = avgLineLen < 28 ? "極致呼吸感" : avgLineLen < 45 ? "良好" : "偏緊湊";
-    return { hookScore, readability, lineCount: lines.length };
-  }, [text]);
-
-  // 一鍵風格轉換
-  const handleTransformTone = (tone: "threads" | "cozy" | "deal" | "clean") => {
-    if (tone === "threads") {
-      const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
-      const hook = lines[0] ? `千萬別再這樣做！${lines[0]}` : "這是我今年發現最痛的領悟：";
-      setText(`${hook}\n\n${lines.slice(1).map(l => `▸ ${l}`).join("\n\n")}\n\n你認同嗎？下方留言告訴我 👇`);
-    } else if (tone === "cozy") {
-      const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
-      setText(`『 ${lines[0] || "漫漫生活"} 』\n\n${lines.slice(1).join("\n\n")}\n\n〰︎ 慢慢生活，把喜歡的日子過成詩 🌿`);
-    } else if (tone === "deal") {
-      const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
-      setText(`🔥 限時開團通知｜手慢無！\n\n【亮點精選】\n${lines.map(l => `✔ ${l}`).join("\n")}\n\n⏳ 結單時間：本週日 23:59 準時關單！\n👉 點擊個人簡介連結搶先下單`);
-    } else if (tone === "clean") {
-      let cleaned = text;
-      const dict: Record<string, string> = {
-        "視頻": "影片", "音頻": "音檔", "軟件": "軟體", "硬件": "硬體",
-        "質量": "品質", "網紅": "KOL", "走心": "用心", "立馬": "立刻",
-        "給力": "很罩", "忽悠": "唬弄", "項目": "專案", "搞定": "處理好",
-        "靠譜": "可靠", "種草": "被燒到", "拔草": "滅火", "老鐵": "好友",
-        "貓膩": "內幕", "巨好吃": "超好吃", "內卷": "過度競爭", "牛逼": "超強",
-      };
-      Object.entries(dict).forEach(([c, t]) => {
-        cleaned = cleaned.split(c).join(t);
-      });
-      setText(cleaned);
-    }
-  };
 
   const result = useMemo(() => {
     let raw = text;
@@ -906,134 +865,77 @@ function LayoutTool({ copied, setCopied, language }: { copied: string; setCopied
         </div>
       </section>
 
-      {/* 爆款吸睛診斷雷達 */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "10px", margin: "14px 0" }}>
-        <div style={{ padding: "12px 14px", borderRadius: "12px", background: "var(--paper)", border: "1px solid var(--line)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <span style={{ fontSize: "11px", color: "var(--muted)", display: "block" }}>⚡ 前 3 秒鉤子評分</span>
-            <strong style={{ fontSize: "18px", color: viralStats.hookScore >= 75 ? "#16a34a" : "#d97706" }}>{viralStats.hookScore} / 100</strong>
-          </div>
-          <span style={{ fontSize: "10px", background: "var(--purple-soft)", color: "var(--purple)", padding: "2px 6px", borderRadius: "4px", fontWeight: 700 }}>高爆發潛力</span>
-        </div>
-        <div style={{ padding: "12px 14px", borderRadius: "12px", background: "var(--paper)", border: "1px solid var(--line)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <span style={{ fontSize: "11px", color: "var(--muted)", display: "block" }}>📱 行動端呼吸感</span>
-            <strong style={{ fontSize: "16px", color: viralStats.readability === "極致呼吸感" ? "#16a34a" : "#ea580c" }}>{viralStats.readability}</strong>
-          </div>
-          <span style={{ fontSize: "10px", color: "var(--muted)" }}>{viralStats.readability === "極致呼吸感" ? "段落分明好閱讀" : "文字塊過厚"}</span>
-        </div>
-      </div>
-
-      {/* 一鍵風格神仙四變 */}
-      <div style={{ margin: "12px 0", padding: "12px 14px", borderRadius: "12px", background: "var(--paper)", border: "1px solid var(--line)" }}>
-        <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "8px" }}>
-          🪄 一鍵風格神仙四變（貼上任何草稿，瞬間變換語感）：
-        </span>
-        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-          <button
-            type="button"
-            onClick={() => handleTransformTone("threads")}
-            style={{ padding: "6px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
-          >
-            🔥 轉為 Threads 爆款體
-          </button>
-          <button
-            type="button"
-            onClick={() => handleTransformTone("cozy")}
-            style={{ padding: "6px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
-          >
-            ☁️ 轉為日系文青感
-          </button>
-          <button
-            type="button"
-            onClick={() => handleTransformTone("deal")}
-            style={{ padding: "6px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
-          >
-            🛒 轉為電商開團促銷
-          </button>
-          <button
-            type="button"
-            onClick={() => handleTransformTone("clean")}
-            style={{ padding: "6px 12px", borderRadius: "8px", border: "1.5px solid var(--purple)", background: "var(--purple-soft)", color: "var(--purple)", fontSize: "12px", fontWeight: 700, cursor: "pointer" }}
-          >
-            🇹🇼 一鍵去大陸支語・法規避雷
-          </button>
-        </div>
-      </div>
-
       <div className="layout-controls">
-        <label>{t(language, "目標平台與字數", "Target Platform & Limit")}<select value={platform} onChange={(e) => setPlatform(e.target.value as any)}><option value="threads">Threads (500字)</option><option value="ig">Instagram 貼文 (2200字)</option><option value="redbook">小紅書 (1000字)</option><option value="bio">IG 個人簡介 (150字)</option></select></label>
-        <label>{t(language, "段落格式", "Paragraph spacing")}<select value={spacing} onChange={(event) => setSpacing(event.target.value)}><option value="spacious">{t(language, "舒展留白", "Spacious")}</option><option value="compact">{t(language, "緊湊排列", "Compact")}</option><option value="list">{t(language, "自動項目符號", "Auto bullets")}</option></select></label>
-        <label>{t(language, "標題裝飾", "Title decoration")}<select value={decoration} onChange={(event) => setDecoration(event.target.value)}><option value="sparkle">✦ {t(language, "星光分隔", "Sparkle divider")}</option><option value="soft">୨୧ {t(language, "柔和框線", "Soft frame")}</option><option value="quote">『 {t(language, "日系雙角括", "CJK Quotes")} 』</option><option value="minimal">─── {t(language, "極簡細線", "Minimal line")}</option><option value="wave">〰︎ {t(language, "波浪紋", "Wave")}</option><option value="none">{t(language, "無裝飾", "None")}</option></select></label>
-        <label>{t(language, "預覽模式切換", "Preview Mode")}<select value={previewMode} onChange={(e) => setPreviewMode(e.target.value as any)}><option value="clean">📋 雙欄預覽</option><option value="iphone">📱 iPhone 16 真機發文模擬</option></select></label>
-      </div>
-
-      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "10px", margin: "-4px 0 16px", padding: "10px 14px", border: "1px solid var(--line)", borderRadius: "12px", background: "var(--paper)" }}>
-        <label style={{ display: "inline-flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "var(--ink)", cursor: "pointer", userSelect: "none" }}>
-          <input type="checkbox" checked={cjkSpacing} onChange={(e) => setCjkSpacing(e.target.checked)} style={{ accentColor: "var(--purple)", width: "16px", height: "16px" }} />
-          <strong>{t(language, "自動補齊中英 / Emoji 呼吸空格", "Auto-space CJK, English & Emoji")}</strong>
+        <label>
+          {t(language, "目標平台與字數", "Target Platform & Limit")}
+          <select value={platform} onChange={(e) => setPlatform(e.target.value as any)}>
+            <option value="threads">Threads (500字)</option>
+            <option value="ig">Instagram 貼文 (2200字)</option>
+            <option value="redbook">小紅書 (1000字)</option>
+            <option value="bio">IG 個人簡介 (150字)</option>
+          </select>
         </label>
-        <div style={{ fontSize: "11px", color: isOverLimit ? "#d9534f" : "var(--muted)", fontWeight: 600, display: "flex", alignItems: "center", gap: "10px" }}>
-          <span>{text.length} / {currentLimit.limit} {t(language, "字", "chars")}</span>
-          {isFolded && <span style={{ color: "#d97724", background: "rgba(217, 119, 36, 0.12)", padding: "2px 7px", borderRadius: "6px" }}>⚠️ {t(language, ">125字：IG將在此處摺疊顯示「...更多」", ">125 chars: IG will fold here")}</span>}
+        <label>
+          {t(language, "段落格式", "Paragraph spacing")}
+          <select value={spacing} onChange={(event) => setSpacing(event.target.value)}>
+            <option value="spacious">{t(language, "舒展留白", "Spacious")}</option>
+            <option value="compact">{t(language, "緊湊排列", "Compact")}</option>
+            <option value="list">{t(language, "自動項目符號", "Auto bullets")}</option>
+          </select>
+        </label>
+        <label>
+          {t(language, "標題裝飾", "Title decoration")}
+          <select value={decoration} onChange={(event) => setDecoration(event.target.value)}>
+            <option value="sparkle">✦ {t(language, "星光分隔", "Sparkle divider")}</option>
+            <option value="soft">୨୧ {t(language, "柔和框線", "Soft frame")}</option>
+            <option value="quote">『 {t(language, "日系雙角括", "CJK Quotes")} 』</option>
+            <option value="minimal">─── {t(language, "極簡細線", "Minimal line")}</option>
+            <option value="wave">〰︎ {t(language, "波浪紋", "Wave")}</option>
+            <option value="none">{t(language, "無裝飾", "None")}</option>
+          </select>
+        </label>
+      </div>
+
+      <div className="layout-options-bar">
+        <label className="layout-checkbox-label">
+          <input type="checkbox" checked={cjkSpacing} onChange={(e) => setCjkSpacing(e.target.checked)} />
+          <span>{t(language, "自動補齊中英／Emoji 呼吸空格", "Auto-space CJK, English & Emoji")}</span>
+        </label>
+        <div className="layout-char-count">
+          <span className={isOverLimit ? "count-warning" : ""}>{text.length} / {currentLimit.limit} {t(language, "字", "chars")}</span>
+          {isFolded && <span className="fold-tag">⚠️ {t(language, ">125字：IG 將在此處摺疊顯示「...更多」", ">125 chars: IG folds here")}</span>}
         </div>
       </div>
 
-      {previewMode === "clean" ? (
-        <div className="editor-grid">
-          <div className="input-card">
-            <div className="field-label"><label htmlFor="layout-input">{t(language, "原始文字", "Original text")}</label><span>{text.length} {t(language, "字", "characters")}</span></div>
-            <textarea id="layout-input" value={text} onChange={(e) => setText(e.target.value)} />
+      <div className="editor-grid">
+        <div className="input-card">
+          <div className="field-label">
+            <label htmlFor="layout-input">{t(language, "原始文字", "Original text")}</label>
+            <span>{text.length} {t(language, "字", "characters")}</span>
           </div>
-          <div className="input-card result-card">
-            <div className="field-label"><span>{t(language, "排版後預覽", "Formatted preview")}</span><span className="changed-badge">{t(language, "已套用格式", "Format applied")}</span></div>
-            <div className="preview-text formatted-preview">{result.split("\n").map((line, index) => line === "⠀" ? <span className="invisible-line" key={`${line}-${index}`}>{t(language, "隱形空白 · 貼上後看不見", "Invisible blank · hidden after pasting")}</span> : <span key={`${line}-${index}`}>{line || " "}</span>)}</div>
+          <textarea id="layout-input" value={text} onChange={(e) => setText(e.target.value)} />
+        </div>
+        <div className="input-card result-card">
+          <div className="field-label">
+            <span>{t(language, "排版後預覽", "Formatted preview")}</span>
+            <span className="changed-badge">{t(language, "已套用格式", "Format applied")}</span>
+          </div>
+          <div className="preview-text formatted-preview">
+            {result.split("\n").map((line, index) =>
+              line === "⠀" ? (
+                <span className="invisible-line" key={`${line}-${index}`}>
+                  {t(language, "隱形空白 · 貼上後看不見", "Invisible blank · hidden after pasting")}
+                </span>
+              ) : (
+                <span key={`${line}-${index}`}>{line || " "}</span>
+              )
+            )}
           </div>
         </div>
-      ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "16px", marginBottom: "16px" }}>
-          <div className="input-card">
-            <div className="field-label"><label htmlFor="layout-input-iphone">{t(language, "文案草稿", "Draft text")}</label><span>{text.length} 字</span></div>
-            <textarea id="layout-input-iphone" rows={12} value={text} onChange={(e) => setText(e.target.value)} style={{ width: "100%", height: "380px" }} />
-          </div>
-          {/* iPhone 16 真機模擬視窗 */}
-          <div className="iphone-simulator">
-            <div className="iphone-notch"></div>
-            <div className="iphone-post-header">
-              <div className="iphone-user-meta">
-                <div className="iphone-avatar">字</div>
-                <div>
-                  <strong style={{ fontSize: "12px", display: "block" }}>your_brand_id</strong>
-                  <small style={{ fontSize: "10px", color: "var(--muted)" }}>Taipei, Taiwan</small>
-                </div>
-              </div>
-              <span style={{ fontSize: "14px", color: "var(--muted)" }}>•••</span>
-            </div>
-            <div className="iphone-post-body">
-              {result.slice(0, 125)}
-              {result.length > 125 && (
-                <>
-                  <div className="iphone-fold-alert">
-                    <span className="iphone-fold-badge">⚠️ IG / Threads 在此處摺疊「...更多」</span>
-                  </div>
-                  <span style={{ color: "var(--muted)" }}>{result.slice(125)}</span>
-                </>
-              )}
-            </div>
-            <div className="iphone-post-footer">
-              <div style={{ display: "flex", gap: "12px" }}>
-                <span>❤️</span>
-                <span>💬</span>
-                <span>✈️</span>
-              </div>
-              <span>🔖</span>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
 
-      <div style={{ margin: "14px 0", padding: "12px 16px", border: "1px solid var(--line)", borderRadius: "12px", background: "var(--paper)", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-        <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--muted)" }}>{t(language, "一鍵快捷落款：", "Quick Footer / Tags:")}</span>
+      <div className="layout-tags-bar">
+        <span className="layout-tags-label">{t(language, "快捷落款：", "Quick Footer:")}</span>
         {[
           "#Threads #日常 #質感排版",
           "#日常記錄 #生活隨筆",
@@ -1043,8 +945,9 @@ function LayoutTool({ copied, setCopied, language }: { copied: string; setCopied
         ].map((tag) => (
           <button
             key={tag}
+            type="button"
+            className="layout-tag-btn"
             onClick={() => insertTag(tag)}
-            style={{ border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--purple)", borderRadius: "8px", padding: "4px 9px", fontSize: "11px", cursor: "pointer" }}
           >
             + {tag}
           </button>
@@ -1054,10 +957,10 @@ function LayoutTool({ copied, setCopied, language }: { copied: string; setCopied
       <div className="layout-action">
         <div>
           <strong>{t(language, "看得見的預覽，看不見的空白", "Visible preview, invisible blank lines")}</strong>
-          <p>{t(language, "紫色提示只用來標示空行，複製到 IG／Threads 時不會出現。", "The purple guide only marks blank lines here. It will not appear on Instagram or Threads.")}</p>
+          <p>{t(language, "淡灰提示只用來標示空行，複製到 IG／Threads 時不會出現。", "The guide only marks blank lines here. It will not appear on Instagram or Threads.")}</p>
         </div>
         <button className="primary-button" onClick={() => { copyText(result, setCopied); trackCopyAction("layout"); }}>
-          {copied === result ? t(language, "已複製 ✓", "Copied ✓") : t(language, "⚡ 一鍵複製排版完成文字", "Copy formatted text")}
+          {copied === result ? t(language, "已複製 ✓", "Copied ✓") : t(language, "一鍵複製排版完成文字", "Copy formatted text")}
         </button>
       </div>
     </>
@@ -1618,117 +1521,6 @@ function CarouselModal({ text, language, onClose, onCopy }: { text: string; lang
   );
 }
 
-function ProPaywallModal({ language, onClose, onRedeemSuccess }: { language: Language; onClose: () => void; onRedeemSuccess: () => void }) {
-  const [code, setCode] = useState("");
-  const [msg, setMsg] = useState("");
-  const [isError, setIsError] = useState(false);
-
-  const handleVerifyLicense = () => {
-    if (!code.trim()) return;
-    const res = verifyLicenseKey(code);
-    setIsError(!res.success);
-    setMsg(res.message);
-    if (res.success) {
-      setTimeout(() => {
-        onRedeemSuccess();
-        onClose();
-      }, 1200);
-    }
-  };
-
-  return (
-    <div className="guide-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <section className="guide-modal" role="dialog" aria-modal="true" style={{ maxWidth: "500px", textAlign: "center" }}>
-        <button className="guide-close" onClick={onClose}>×</button>
-        <div style={{ width: "52px", height: "52px", borderRadius: "14px", background: "linear-gradient(135deg, #1d1d1f, #3a3a3c)", color: "#ffffff", fontSize: "24px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
-          👑
-        </div>
-        <h2 style={{ fontSize: "20px", fontWeight: 700, margin: "0 0 6px", color: "var(--ink)" }}>
-          {t(language, "解鎖 TextLab Pro 商業專屬特權", "Unlock TextLab Pro Pass")}
-        </h2>
-        <p style={{ fontSize: "13px", color: "var(--muted)", margin: "0 0 18px" }}>
-          {t(language, "省下 40,000 元衛生局法規罰單、杜絕大陸支語爭議、現成爆款直接抄！", "Save $40,000 regulatory fines, cleanse mainland buzzwords, swipe viral posts.")}
-        </p>
-
-        {/* 核心專業特權清單 */}
-        <div style={{ textAlign: "left", display: "flex", flexDirection: "column", gap: "10px", marginBottom: "20px", background: "var(--canvas)", padding: "16px", borderRadius: "14px", border: "1px solid var(--line)" }}>
-          {[
-            { icon: "🛡️", title: "衛福部廣告法規避雷針", desc: "自動掃描食安法/化粧品法違規詞，一鍵替換合法合規詞，免遭 4~40 萬罰鍰" },
-            { icon: "🇹🇼", title: "台灣在地用語一鍵過濾器", desc: "自動將視頻、質量、立馬等大陸用語轉為正統台灣繁體質感，杜絕社群公關災難" },
-            { icon: "📚", title: "實戰爆款文案庫 (直接抄作業)", desc: "Threads 破萬愛心熱門架構、團購開團破百萬催購模板，點擊直接套用" },
-            { icon: "🛒", title: "電商開團爆單機與私訊轉單腳本", desc: "即時折扣試算、防客訴售後條款、IG/Threads 留言「+1」3 步驟轉單腳本" }
-          ].map((item, i) => (
-            <div key={i} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-              <span style={{ fontSize: "15px" }}>{item.icon}</span>
-              <div>
-                <strong style={{ fontSize: "12px", color: "var(--ink)", display: "block" }}>{item.title}</strong>
-                <span style={{ fontSize: "11px", color: "var(--muted)" }}>{item.desc}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* 方案選擇按鈕（早鳥終身買斷 NT$ 49 與年繳 NT$ 99） */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "18px" }}>
-          <button
-            type="button"
-            className="primary-button"
-            style={{ width: "100%", padding: "14px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "14px", fontWeight: 700, borderRadius: "12px", background: "var(--purple)", color: "var(--paper)", border: "none", cursor: "pointer" }}
-            onClick={() => {
-              alert(t(language, "即將前往綠界 / Stripe 結帳頁面（早鳥終身買斷 NT$ 49）。一杯飲料錢，永久免費享用未來所有商業爆款更新！", "Redirecting to checkout (Early Bird Lifetime NT$ 49). Pay once, own forever!"));
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span>👑 早鳥終身買斷方案</span>
-              <span style={{ fontSize: "10px", background: "#f59e0b", color: "#fff", padding: "2px 6px", borderRadius: "6px", fontWeight: 700 }}>限量前200名</span>
-            </div>
-            <span>NT$ 49 終身買斷 ➔</span>
-          </button>
-
-          <button
-            type="button"
-            style={{ width: "100%", padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "13px", fontWeight: 650, borderRadius: "12px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", cursor: "pointer" }}
-            onClick={() => {
-              alert(t(language, "即將前往綠界 / Stripe 結帳頁面（年度暢通方案 NT$ 99 / 年）。平均一天不到 0.3 元！", "Redirecting to checkout (Annual Pass NT$ 99 / year). Less than NT$ 0.3 / day!"));
-            }}
-          >
-            <span>🌟 年度暢通方案</span>
-            <span>NT$ 99 / 年 ➔</span>
-          </button>
-        </div>
-
-        {/* 授權序號驗證區 */}
-        <div style={{ borderTop: "1px solid var(--line)", paddingTop: "14px" }}>
-          <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "6px" }}>
-            {t(language, "付款完成後請輸入訂單授權序號直接開通（如 LIFETIME-49）：", "Enter your purchased license key to activate:")}
-          </span>
-          <div style={{ display: "flex", gap: "6px" }}>
-            <input
-              type="text"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              placeholder="例: LIFETIME-49 或 TL-8888-9999"
-              style={{ flex: 1, padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "12px", color: "var(--ink)" }}
-            />
-            <button
-              onClick={handleVerifyLicense}
-              style={{ padding: "8px 14px", borderRadius: "8px", border: "1px solid var(--purple)", background: "var(--purple-soft)", color: "var(--purple)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
-            >
-              {t(language, "驗證開通", "Activate")}
-            </button>
-          </div>
-          {!!msg && (
-            <div style={{ marginTop: "8px", fontSize: "11px", color: isError ? "#e5484d" : "var(--purple)", fontWeight: 600 }}>
-              {msg}
-            </div>
-          )}
-        </div>
-      </section>
-    </div>
-  );
-}
-
-
 const LEGAL_RISKS: { term: string; risk: string; replace: string; law: string }[] = [
   { term: "消炎", risk: "宣稱醫療效能", replace: "舒緩修護、安撫敏弱", law: "化粧品衛生安全法 §10" },
   { term: "抗敏", risk: "宣稱醫療效能", replace: "穩定敏弱膚況", law: "化粧品衛生安全法 §10" },
@@ -1743,19 +1535,7 @@ const LEGAL_RISKS: { term: string; risk: string; replace: string; law: string }[
   { term: "美白淡斑", risk: "特定宣稱限制", replace: "勻亮暗沉、展現透亮光澤", law: "化粧品衛生安全法 §10" },
 ];
 
-function DealTool({
-  copied,
-  setCopied,
-  language,
-  isPro,
-  onRequirePro
-}: {
-  copied: string;
-  setCopied: (v: string) => void;
-  language: Language;
-  isPro: boolean;
-  onRequirePro: () => void;
-}) {
+function DealTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
   const [productName, setProductName] = useState(t(language, "日本極輕量便攜靜音無線風扇", "Ultralight Quiet Cordless Fan"));
   const [originalPrice, setOriginalPrice] = useState("1680");
   const [dealPrice, setDealPrice] = useState("990");
@@ -1824,10 +1604,6 @@ function DealTool({
   }, [productName, orig, deal, savings, discountPct, shippingBonus, sellingPoints, urgency, disputeChecks, activeTab]);
 
   const handleCopy = () => {
-    if (!isPro) {
-      onRequirePro();
-      return;
-    }
     copyText(generatedCopy, setCopied);
     trackCopyAction("deal");
   };
@@ -1840,7 +1616,7 @@ function DealTool({
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <h2>{t(language, "電商團購爆單文案與防客訴規格機", "Group-Buy Deal & Sales Copy Engine")}</h2>
-              <span style={{ fontSize: "10px", background: "linear-gradient(135deg, #f59e0b, #d97706)", color: "#ffffff", padding: "2px 6px", borderRadius: "4px", fontWeight: 700 }}>PRO</span>
+              
             </div>
             <p>{t(language, "專為電商賣家、團購主打造！自動試算現省折扣、台灣廣告法規避雷審查、私訊轉單腳本與防客訴條款。", "Generate high-converting e-commerce copy, Taiwan legal risk shield, DM conversion flow.")}</p>
           </div>
@@ -2019,19 +1795,13 @@ function DealTool({
           style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.6, outline: "none", resize: "vertical" }}
         />
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10px", flexWrap: "wrap", gap: "8px" }}>
-          {!isPro ? (
-            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "var(--purple)", fontWeight: 600 }}>
-              <span>👑 此為 Pro 商業版旗艦工具（電商開團、法規避雷、私訊轉單腳本）</span>
-            </div>
-          ) : (
-            <span style={{ fontSize: "12px", color: "#16a34a", fontWeight: 600 }}>✓ 已開通 Pro 專業商業授權</span>
-          )}
+          <span style={{ fontSize: "12px", color: "var(--muted)", fontWeight: 500 }}>已自動生成合規與防客訴條款</span>
 
           <button
             onClick={handleCopy}
             style={{ padding: "10px 20px", borderRadius: "10px", border: "none", background: "var(--purple)", color: "#ffffff", fontSize: "13px", fontWeight: 650, cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}
           >
-            {isPro ? (copied === generatedCopy ? "✓ 已複製文案" : "⚡ 一鍵複製爆單文案") : "🔒 升級 Pro 一鍵複製"}
+            {copied === generatedCopy ? "已複製 ✓" : "一鍵複製爆單文案"}
           </button>
         </div>
       </div>
@@ -2079,7 +1849,7 @@ const SWIPE_TEMPLATES = [
   }
 ];
 
-function SwipeFileTool({ copied, setCopied, language, isPro, onRequirePro }: { copied: string; setCopied: (v: string) => void; language: Language; isPro: boolean; onRequirePro: () => void }) {
+function SwipeFileTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
   const [activeCategory, setActiveCategory] = useState("all");
   const [selectedTemplate, setSelectedTemplate] = useState(SWIPE_TEMPLATES[0]);
 
@@ -2087,10 +1857,6 @@ function SwipeFileTool({ copied, setCopied, language, isPro, onRequirePro }: { c
   const filtered = activeCategory === "all" ? SWIPE_TEMPLATES : SWIPE_TEMPLATES.filter(t => t.category === activeCategory);
 
   const handleCopy = (text: string) => {
-    if (!isPro) {
-      onRequirePro();
-      return;
-    }
     copyText(text, setCopied);
     trackCopyAction("swipe");
   };
@@ -2103,7 +1869,7 @@ function SwipeFileTool({ copied, setCopied, language, isPro, onRequirePro }: { c
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <h2>{t(language, "實戰爆款文案庫（直接抄作業）", "Viral Social Swipe File")}</h2>
-              <span style={{ fontSize: "10px", background: "linear-gradient(135deg, #f59e0b, #d97706)", color: "#ffffff", padding: "2px 6px", borderRadius: "4px", fontWeight: 700 }}>PRO</span>
+              
             </div>
             <p>{t(language, "精選台灣 Threads 破萬愛心熱門架構、團購破百萬爆單模板，不需從零發想，一鍵直接套用！", "Proven viral copy templates for Threads, Instagram, and group-buys.")}</p>
           </div>
@@ -2155,16 +1921,12 @@ function SwipeFileTool({ copied, setCopied, language, isPro, onRequirePro }: { c
           style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.6, resize: "vertical" }}
         />
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "12px", flexWrap: "wrap", gap: "8px" }}>
-          {!isPro ? (
-            <span style={{ fontSize: "12px", color: "var(--purple)", fontWeight: 600 }}>👑 Pro 商業版解鎖完整爆款庫一鍵複製</span>
-          ) : (
-            <span style={{ fontSize: "12px", color: "#16a34a", fontWeight: 600 }}>✓ 已開通 Pro 授權</span>
-          )}
+          <span style={{ fontSize: "12px", color: "var(--muted)" }}>可直接複製套用</span>
           <button
             onClick={() => handleCopy(selectedTemplate.template)}
             style={{ padding: "10px 20px", borderRadius: "10px", border: "none", background: "var(--purple)", color: "#fff", fontSize: "13px", fontWeight: 650, cursor: "pointer" }}
           >
-            {isPro ? (copied === selectedTemplate.template ? "✓ 已複製到剪貼簿" : "⚡ 一鍵複製爆款文案") : "🔒 升級 Pro 一鍵複製"}
+            {copied === selectedTemplate.template ? "已複製 ✓" : "一鍵複製爆款文案"}
           </button>
         </div>
       </div>
@@ -2204,7 +1966,7 @@ const MAINLAND_WORDS: { from: string; to: string; note: string }[] = [
   { from: "盒飯", to: "便當", note: "台灣飲食用語「便當」" },
 ];
 
-function LocalizeTool({ copied, setCopied, language, isPro, onRequirePro }: { copied: string; setCopied: (v: string) => void; language: Language; isPro: boolean; onRequirePro: () => void }) {
+function LocalizeTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
   const [input, setInput] = useState("這款質量極佳的視頻神器，立馬讓你的項目走心又給力！保證見效還能排毒瘦身，消炎效果絕頂，鏈接在下方！");
   const [output, setOutput] = useState("");
 
@@ -2230,10 +1992,6 @@ function LocalizeTool({ copied, setCopied, language, isPro, onRequirePro }: { co
   };
 
   const handleCopy = () => {
-    if (!isPro) {
-      onRequirePro();
-      return;
-    }
     copyText(output || input, setCopied);
     trackCopyAction("localize");
   };
@@ -2246,7 +2004,7 @@ function LocalizeTool({ copied, setCopied, language, isPro, onRequirePro }: { co
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <h2>{t(language, "台灣用語與法規避雷器", "Taiwan Voice & Legal Sanitizer")}</h2>
-              <span style={{ fontSize: "10px", background: "linear-gradient(135deg, #f59e0b, #d97706)", color: "#ffffff", padding: "2px 6px", borderRadius: "4px", fontWeight: 700 }}>PRO</span>
+              
             </div>
             <p>{t(language, "自動過濾大陸支語（視頻、質量、立馬等），並掃描衛福部食品/化粧品廣告法規違規詞，一鍵轉為 100% 台灣正統繁體美學文案！", "Cleanse mainland buzzwords and illegal advertising terms into natural Taiwanese.")}</p>
           </div>
@@ -2302,16 +2060,12 @@ function LocalizeTool({ copied, setCopied, language, isPro, onRequirePro }: { co
             style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.5 }}
           />
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10px" }}>
-            {!isPro ? (
-              <span style={{ fontSize: "12px", color: "var(--purple)", fontWeight: 600 }}>👑 Pro 商業版解鎖一鍵複製</span>
-            ) : (
-              <span style={{ fontSize: "12px", color: "#16a34a", fontWeight: 600 }}>✓ 已開通 Pro 授權</span>
-            )}
+            <span style={{ fontSize: "12px", color: "var(--muted)" }}>台灣正體與合規文案</span>
             <button
               onClick={handleCopy}
               style={{ padding: "8px 18px", borderRadius: "8px", border: "none", background: "var(--purple)", color: "#fff", fontSize: "13px", fontWeight: 650, cursor: "pointer" }}
             >
-              {isPro ? (copied === output ? "✓ 已複製文案" : "⚡ 一鍵複製合規文案") : "🔒 升級 Pro 一鍵複製"}
+              {copied === output ? "已複製 ✓" : "一鍵複製合規文案"}
             </button>
           </div>
         </div>
@@ -2320,7 +2074,7 @@ function LocalizeTool({ copied, setCopied, language, isPro, onRequirePro }: { co
   );
 }
 
-function AIPostTool({ copied, setCopied, language, selectTool, isPro = false, onRequirePro }: { copied: string; setCopied: (v: string) => void; language: Language; selectTool?: (id: ToolId) => void; isPro?: boolean; onRequirePro?: () => void }) {
+function AIPostTool({ copied, setCopied, language, selectTool }: { copied: string; setCopied: (v: string) => void; language: Language; selectTool?: (id: ToolId) => void }) {
   const tones = [
     {
       id: "auto",
@@ -2470,12 +2224,6 @@ function AIPostTool({ copied, setCopied, language, selectTool, isPro = false, on
     // 防連點與防空內容鎖定 (Anti-double click & cooldown guard)
     if (!idea.trim() || isGenerating || cooldownSec > 0) return;
 
-    // 免費每日額度檢測 (Free daily limit guard)
-    const limitCheck = checkDailyAiLimit();
-    if (!limitCheck.allowed) {
-      if (onRequirePro) onRequirePro();
-      return;
-    }
 
     // 重複請求攔截 (Deduplication Check)
     const currentRequestKey = `${selectedTone}::${language}::${idea.trim()}`;
@@ -2728,13 +2476,7 @@ function AIPostTool({ copied, setCopied, language, selectTool, isPro = false, on
           </div>
           <button
             type="button"
-            onClick={() => {
-              if (!isPro && onRequirePro) {
-                onRequirePro();
-                return;
-              }
-              setPersonaOpen(!personaOpen);
-            }}
+            onClick={() => setPersonaOpen(!personaOpen)}
             style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "5px 10px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}
           >
             {personaOpen ? t(language, "收合設定", "Collapse") : t(language, "⚙️ 設定品牌聲線", "⚙️ Configure")}
@@ -3156,15 +2898,7 @@ export default function App() {
   }, []);
   const [copied, setCopied] = useState("");
   const [guideOpen, setGuideOpen] = useState(false);
-  const [entitlements, setEntitlements] = useState<UserEntitlements>(getEntitlements);
-  const [paywallOpen, setPaywallOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleEntitlementUpdate = () => setEntitlements(getEntitlements());
-    window.addEventListener("textlab-entitlement-updated", handleEntitlementUpdate);
-    return () => window.removeEventListener("textlab-entitlement-updated", handleEntitlementUpdate);
-  }, []);
 
   const [statsOpen, setStatsOpen] = useState(() => {
     if (typeof window !== "undefined") {
@@ -3273,13 +3007,7 @@ export default function App() {
 
       {/* 桌面端完整導覽列 */}
       <nav className="desktop-nav">
-        <button
-          className="guide-nav-button pro-nav-btn"
-          onClick={() => setPaywallOpen(true)}
-          style={entitlements.isPro ? { border: "1px solid var(--purple)", color: "var(--purple)", fontWeight: 700 } : { color: "var(--purple)" }}
-        >
-          {entitlements.isPro ? "✦ Pro 會員" : "✦ 升級 Pro"}
-        </button>
+
         <button className="guide-nav-button" onClick={() => setStatsOpen(true)}>📊 {t(language, "流量數據", "Stats")}</button>
         <button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button>
         <button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>
@@ -3293,13 +3021,7 @@ export default function App() {
 
       {/* 手機端極簡控制項：只有升級按鈕與折疊選單 */}
       <div className="mobile-top-actions">
-        <button
-          className="mobile-pro-pill"
-          onClick={() => setPaywallOpen(true)}
-          style={entitlements.isPro ? { background: "var(--purple)", color: "#fff" } : {}}
-        >
-          {entitlements.isPro ? "✦ Pro" : "✦ 升級"}
-        </button>
+
         <button
           className={`mobile-menu-trigger ${mobileMenuOpen ? "active" : ""}`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -3374,22 +3096,22 @@ export default function App() {
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {[
             {
-              title: "👑 商業與爆款 (PRO)",
-              titleEn: "MONETIZATION (PRO)",
-              ids: ["swipe", "localize", "deal"] as ToolId[]
+              title: "常用排版與文案",
+              titleEn: "LAYOUT & COPYWRITING",
+              ids: ["layout", "swipe", "localize", "deal"] as ToolId[]
             },
             {
-              title: "📝 社群創作",
-              titleEn: "SOCIAL MEDIA",
-              ids: ["layout", "ai", "hook", "title", "bio"] as ToolId[]
+              title: "社群創作靈感",
+              titleEn: "SOCIAL INSPIRATION",
+              ids: ["ai", "hook", "title", "bio"] as ToolId[]
             },
             {
-              title: "✦ 符號美化",
+              title: "符號與字體美化",
               titleEn: "SYMBOLS & FONTS",
               ids: ["symbols", "emoji", "kaomoji", "fonts"] as ToolId[]
             },
             {
-              title: "🛠️ 實用工具",
+              title: "實用輔助工具",
               titleEn: "UTILITY TOOLS",
               ids: ["hashtags", "blank", "nickname"] as ToolId[]
             }
@@ -3403,11 +3125,7 @@ export default function App() {
                     <span style={{ flex: 1 }}>
                       <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                         <strong>{t(language, tool.name, tool.nameEn)}</strong>
-                        {["deal", "swipe", "localize"].includes(tool.id) && (
-                          <span style={{ fontSize: "9px", background: "linear-gradient(135deg, #f59e0b, #d97706)", color: "#fff", padding: "1px 5px", borderRadius: "4px", fontWeight: 700 }}>
-                            PRO
-                          </span>
-                        )}
+
                       </span>
                       <small>{t(language, tool.short, tool.shortEn)}</small>
                     </span>
@@ -3439,10 +3157,10 @@ export default function App() {
         </div>
         <div className="tool-surface">
           {active === "layout" && <LayoutTool {...toolProps} />}
-          {active === "swipe" && <SwipeFileTool {...toolProps} isPro={entitlements.isPro} onRequirePro={() => setPaywallOpen(true)} />}
-          {active === "localize" && <LocalizeTool {...toolProps} isPro={entitlements.isPro} onRequirePro={() => setPaywallOpen(true)} />}
-          {active === "deal" && <DealTool {...toolProps} isPro={entitlements.isPro} onRequirePro={() => setPaywallOpen(true)} />}
-          {active === "ai" && <AIPostTool {...toolProps} selectTool={selectTool} isPro={entitlements.isPro} onRequirePro={() => setPaywallOpen(true)} />}
+          {active === "swipe" && <SwipeFileTool {...toolProps} />}
+          {active === "localize" && <LocalizeTool {...toolProps} />}
+          {active === "deal" && <DealTool {...toolProps} />}
+          {active === "ai" && <AIPostTool {...toolProps} selectTool={selectTool} />}
           {active === "hook" && <HookTool {...toolProps} />}
           {active === "title" && <TitleTool {...toolProps} />}
           {active === "bio" && <BioTool {...toolProps} />}
@@ -3482,7 +3200,6 @@ export default function App() {
 
     {guideOpen && <GuideModal language={language} onClose={() => setGuideOpen(false)} onSelectTool={(id) => { selectTool(id); setGuideOpen(false); }} />}
     {statsOpen && <StatsModal language={language} onClose={() => setStatsOpen(false)} />}
-    {paywallOpen && <ProPaywallModal language={language} onClose={() => setPaywallOpen(false)} onRedeemSuccess={() => setEntitlements(getEntitlements())} />}
     {!!copied && <div className="toast"  role="status"><span>✓</span> {t(language, "已複製到剪貼簿", "Copied to clipboard")}</div>}
   </div>;
 }
