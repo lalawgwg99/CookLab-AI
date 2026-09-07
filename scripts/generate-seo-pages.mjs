@@ -45,7 +45,7 @@ const structuredData = (id, language, canonical, item) => ({
       url: canonical,
       name: language === "en" ? item.nameEn : item.nameZh,
       description: language === "en" ? item.descriptionEn : item.descriptionZh,
-      applicationCategory: id === "poster" ? "DesignApplication" : "UtilitiesApplication",
+      applicationCategory: "UtilitiesApplication",
       operatingSystem: "Any",
       inLanguage: language,
       isAccessibleForFree: true,

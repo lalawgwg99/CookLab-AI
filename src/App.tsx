@@ -3,7 +3,7 @@ import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 import seoPages from "./data/seo-pages.json";
 
-type ToolId = "symbols" | "emoji" | "kaomoji" | "fonts" | "layout" | "nickname" | "blank" | "bio" | "hashtags" | "ai" | "poster" | "hook" | "title";
+type ToolId = "layout" | "ai" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "hashtags" | "blank" | "nickname";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -28,24 +28,21 @@ type Tool = {
   short: string;
   shortEn: string;
   icon: string;
-  tone: string;
-  badge?: string;
 };
 
 const tools: Tool[] = [
-  { id: "poster", name: "海報企劃", nameEn: "Poster Planner", short: "組合海報提示詞", shortEn: "Build poster prompts", icon: "✦", tone: "yellow" },
-  { id: "ai", name: "社群貼文", nameEn: "Social Post Writer", short: "產生 Threads／IG 貼文", shortEn: "Create Threads / Instagram posts", icon: "✎", tone: "lilac" },
-  { id: "hook", name: "開頭句", nameEn: "Opening Lines", short: "IG／Threads 第一行", shortEn: "First lines for social posts", icon: "↗", tone: "yellow" },
-  { id: "title", name: "花邊標題", nameEn: "Title Frames", short: "日系標題邊框", shortEn: "Aesthetic title frames", icon: "✦", tone: "coral" },
-  { id: "layout", name: "IG 換行／Threads 排版", nameEn: "Instagram & Threads Formatter", short: "空白文字、段落留白與分隔線", shortEn: "Line breaks, invisible text and dividers", icon: "¶", tone: "blue" },
-  { id: "bio", name: "個人檔案 Bio", nameEn: "Bio Studio", short: "IG / Threads 簡介佈置", shortEn: "Instagram & Threads Profile", icon: "📇", tone: "pink" },
-  { id: "hashtags", name: "熱門標籤", nameEn: "Hashtags", short: "Threads / IG 導流標籤", shortEn: "Trending Hashtag Bundles", icon: "#", tone: "mint" },
-  { id: "symbols", name: "特殊符號", nameEn: "Symbols", short: "搜尋與一鍵複製", shortEn: "Search and copy", icon: "✦", tone: "coral" },
-  { id: "emoji", name: "Emoji", nameEn: "Emoji", short: "分類、搜尋、最近使用", shortEn: "Browse, search and recents", icon: "☺", tone: "yellow" },
-  { id: "kaomoji", name: "顏文字", nameEn: "Kaomoji", short: "搜尋與收藏", shortEn: "Search and favorites", icon: "◡̈", tone: "lilac" },
-  { id: "fonts", name: "特殊字體", nameEn: "Fancy Text", short: "Unicode 字體轉換", shortEn: "Unicode font converter", icon: "Aa", tone: "mint" },
-  { id: "nickname", name: "暱稱產生器", nameEn: "Nickname Generator", short: "快速找到你的風格", shortEn: "Find your online style", icon: "@", tone: "pink" },
-  { id: "blank", name: "空白文字", nameEn: "Invisible Text", short: "產生與複製", shortEn: "Generate and copy", icon: "□", tone: "sand" },
+  { id: "layout", name: "社群排版換行", nameEn: "Social Formatter", short: "IG／Threads 換行與縮排", shortEn: "Instagram / Threads spacing", icon: "¶" },
+  { id: "ai", name: "AI 發文助手", nameEn: "AI Post Assistant", short: "智慧生成社群貼文", shortEn: "Social copywriting assistant", icon: "🪄" },
+  { id: "hook", name: "爆款 Hook 產生器", nameEn: "Viral Hook Studio", short: "吸引點擊的開頭第一句", shortEn: "Caption hook formulas", icon: "⚡" },
+  { id: "title", name: "風格花邊標題", nameEn: "Title Frame Studio", short: "日系風格標題邊框", shortEn: "Aesthetic header frames", icon: "✦" },
+  { id: "bio", name: "個人檔案 Bio", nameEn: "Bio Designer", short: "IG / Threads 簡介排版", shortEn: "Profile intro builder", icon: "📇" },
+  { id: "symbols", name: "特殊符號", nameEn: "Symbols", short: "分類搜尋與一鍵複製", shortEn: "Search and copy symbols", icon: "✦" },
+  { id: "emoji", name: "Emoji 實驗室", nameEn: "Emoji Lab", short: "分類與經典情境連發", shortEn: "Browse & emoji combos", icon: "☺" },
+  { id: "kaomoji", name: "日系顏文字", nameEn: "Kaomoji", short: "精選日系顏文字庫", shortEn: "Japanese emoticons", icon: "◡̈" },
+  { id: "fonts", name: "特殊字體", nameEn: "Fancy Text", short: "Unicode 特殊字體轉換", shortEn: "Unicode font converter", icon: "Aa" },
+  { id: "hashtags", name: "熱門標籤", nameEn: "Hashtags", short: "Threads / IG 導流標籤", shortEn: "Trending hashtag sets", icon: "#" },
+  { id: "blank", name: "空白文字", nameEn: "Invisible Text", short: "隱形空白字元複製", shortEn: "Invisible blank character", icon: "□" },
+  { id: "nickname", name: "風格暱稱產生器", nameEn: "Nickname Generator", short: "快速找到專屬風格", shortEn: "Find your online style", icon: "@" },
 ];
 
 const t = (language: Language, zh: string, en: string) => language === "zh-TW" ? zh : en;
@@ -392,20 +389,9 @@ const fontVariants = (text: string) => [
   { name: "⋆⋅☆⋅⋆ 璀璨星光標題", value: `⋆⋅☆⋅⋆  ${text}  ⋆⋅☆⋅⋆` },
 ];
 
-function addGlobalHistory(item: string) {
-  if (!item) return;
-  try {
-    const prev: string[] = JSON.parse(localStorage.getItem("textlab.globalHistory") || "[]");
-    const next = [item, ...prev.filter((x) => x !== item)].slice(0, 10);
-    localStorage.setItem("textlab.globalHistory", JSON.stringify(next));
-    window.dispatchEvent(new CustomEvent("textlab-history-updated", { detail: next }));
-  } catch {}
-}
-
 function copyText(value: string, onCopied: (value: string) => void) {
   const done = () => {
     onCopied(value);
-    addGlobalHistory(value);
     window.setTimeout(() => onCopied(""), 1500);
   };
   if (navigator.clipboard?.writeText) {
@@ -430,7 +416,7 @@ function ToolIntro({ tool, language }: { tool: Tool; language: Language }) {
     ? t(language, "輸入想法，整理成可直接發布的社群貼文。", "Turn an idea into a ready-to-post social caption.")
     : t(language, tool.short, tool.shortEn);
   return <div className="tool-heading">
-    <span className={`tool-icon hero-icon ${tool.tone}`}>{tool.icon}</span>
+    <span className="tool-icon hero-icon">{tool.icon}</span>
     <div><h1>{t(language, tool.name, tool.nameEn)}</h1><p>{privacyNote}</p></div>
   </div>;
 }
@@ -1463,7 +1449,6 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
   const [selectedTone, setSelectedTone] = useState("auto");
   const [idea, setIdea] = useState(() => t(language, "今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書", "I visited a vintage café today. The matcha latte was fragrant, the window light was beautiful, and it felt perfect for reading alone."));
   const [output, setOutput] = useState("");
-  const [isTransferring, setIsTransferring] = useState(false);
 
   const handleInsertDecoration = () => {
     if (!output) return;
@@ -1500,24 +1485,6 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
     selectTool("layout");
   };
 
-  const handleTransferToPoster = () => {
-    if (!output.trim() || isTransferring) return;
-    setIsTransferring(true);
-    const fallbackState = {
-      catId: "general",
-      brandName: "",
-      product: idea.substring(0, 15),
-      priceValue: "",
-      cta: "🛒 立即搶購",
-      offers: ["熱銷推薦"],
-      features: ["質感呈現"]
-    };
-    localStorage.setItem("textlab.transferredPosterState", JSON.stringify(fallbackState));
-    if (selectTool) {
-      selectTool("poster");
-    }
-    setIsTransferring(false);
-  };
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [lastRequestKey, setLastRequestKey] = useState("");
@@ -1824,24 +1791,6 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
             </span>
           </div>
 
-          {/* 🌟 文案健康度與優化建議卡片 */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--purple-soft)", padding: "10px 14px", borderRadius: "10px", marginBottom: "14px" }}>
-            <div>
-              <strong style={{ fontSize: "12px", color: "var(--purple-dark)", display: "block" }}>📊 文案健康度分數：88 / 100</strong>
-              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "4px", fontSize: "10px", color: "var(--purple)" }}>
-                <span>✅ CTA 呼籲明確</span>
-                <span>✅ 排版留白適中</span>
-                <span>✅ Emoji 適量</span>
-                <span>✅ 導流黑標籤完整</span>
-              </div>
-            </div>
-            <span style={{ fontSize: "20px" }}>🌟</span>
-          </div>
-
-          <div style={{ padding: "16px", borderRadius: "12px", background: "var(--canvas)", border: "1px dashed var(--line)", fontSize: "14px", color: "var(--ink)", whiteSpace: "pre-wrap", lineHeight: 1.7, marginBottom: "14px" }}>
-            {output}
-          </div>
-
           {/* ⚡ 跨工具一鍵強化快捷工具列 */}
           <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px dashed var(--line)", marginBottom: "14px" }}>
             <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "8px" }}>
@@ -1875,1305 +1824,7 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
   );
 }
 
-function PosterTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
-  const categories = [
-    { id: "3c", icon: "🏠", title: "3C 家電海報", desc: "冷氣、電視、冰箱、洗衣機、手機、電腦", subProducts: ["冷氣", "電視", "冰箱", "洗衣機", "吸塵器", "手機", "電腦", "智慧手錶"], features: ["R32變頻", "1級節能", "智慧靜音", "Wi-Fi控溫", "HEPA濾網", "雙重除濕", "超長續航", "極致防塵"], offers: ["分期0利率", "政府補助折扣", "3年延長保固", "免費到府配送", "限時加碼下殺", "舊機折抵換新", "新品限量上市", "VIP尊榮禮包"], ctas: ["🛒 立即下單搶購", "⏰ 限時搶購倒數中", "📞 點擊預約專人諮詢", "📍 到店親自試用體驗", "📩 領取專屬驚喜折價券"], environments: ["🏡 溫馨家庭時光", "🏙️ 高級豪宅客廳", "⚡ 酷炫科技空間", "☀️ 涼爽夏季海灘", "🍂 質感秋冬暖意"] },
-    { id: "food", icon: "🍔", title: "美食餐飲海報", desc: "飲料、甜點、火鍋、燒肉、餐館、咖啡廳", subProducts: ["手搖飲料", "精緻甜點", "麻辣火鍋", "日式燒肉", "早午餐", "義式咖啡", "便當外帶"], features: ["嚴選天然食材", "現點現做", "職人手作", "外送熱壓配送", "無添加防腐劑", "獨家秘製醬汁", "限時限量", "產地直送"], offers: ["開幕首週85折", "第二杯半價", "滿額贈甜點", "外帶自取9折", "會員集點兩倍送", "限定套餐優惠", "生日壽星免費", "打卡送小菜"], ctas: ["📲 立即線上訂位", "🛵 外送平台點餐去", "📍 Google Map 導航到店", "🎫 領取專屬折價券", "📞 電話訂位預約"], environments: ["🍽️ 質感餐廳場景", "☕ 文青咖啡廳角落", "🌿 戶外花園露天座", "🏪 溫暖街邊小店", "🏠 居家美食時光"] },
-    { id: "auto", icon: "🚗", title: "汽車房產海報", desc: "新車上市、中古車、豪宅建案、租屋", subProducts: ["新車上市", "認證中古車", "奢華豪宅", "捷運精品宅", "商辦租售", "重機跑車"], features: ["零頭款輕鬆入主", "原廠認證中古車", "絕版特惠價", "捷運站旁3分鐘", "頂級智慧保全", "超大棟距視野", "尊榮露台", "低公設比"], offers: ["低月付超值方案", "限時優惠利率", "交車禮贈萬元配件", "免費賞屋專車", "簽約送家電禮包", "舊換新加碼補助", "首購族優惠專案", "限量釋出"], ctas: ["📞 預約賞車試駕", "🏠 立即線上賞屋", "📩 索取專屬報價單", "📍 預約現場參觀", "📋 填寫預約表單"], environments: ["🛣️ 公路駕駛場景", "🏙️ 都會精華地段", "🌄 山景第一排視野", "🅿️ 豪華車庫展示", "🌆 黃昏城市天際線"] },
-    { id: "fashion", icon: "🛍️", title: "電商服飾海報", desc: "男裝女裝、鞋包配件、美妝保養", subProducts: ["女裝服飾", "男裝潮流", "精品包款", "運動跑鞋", "美妝保養", "飾品配件"], features: ["親膚透氣素材", "專利抗皺美型", "日本限量進口", "網紅口碑推薦", "水感保濕修護", "修身顯瘦剪裁", "多色可選", "免運直送"], offers: ["全館滿千折百", "新會員首購9折", "免運費直送到府", "限時閃購下殺", "加購價超值配件", "季末清倉出清", "買二送一", "獨家組合優惠"], ctas: ["🛒 立即加入購物車", "👗 查看更多穿搭", "📩 領取新客折價券", "⏰ 限時搶購倒數中", "🔗 前往賣場選購"], environments: ["📸 時尚攝影棚", "🌸 戶外自然光街拍", "🛍️ 精品概念店", "🏠 居家穿搭日常", "🌆 都會街頭時尚"] },
-    { id: "people", icon: "👤", title: "人物寫真海報", desc: "個人形象照、講師簡介、網紅推薦", subProducts: ["個人形象照", "專業講師", "網紅推薦", "企業高階", "職人名片", "藝術寫真"], features: ["實戰經驗豐富", "知名品牌指定", "百萬觀看創作者", "頂級攝影團隊", "個人特質定製", "專屬風格打造"], offers: ["早鳥預約享優惠", "雙人同行折扣", "加贈精修底片", "免費妝髮造型", "作品集免費提供", "限量名額預約中", "學生專屬優惠", "推薦好友回饋"], ctas: ["📩 私訊預約檔期", "📞 立即來電諮詢", "📋 填寫預約表單", "🔗 查看更多作品集", "📲 Line 私訊洽詢"], environments: ["📸 專業攝影棚", "🌿 戶外自然光場景", "🏛️ 文藝建築背景", "☕ 生活感日常場景", "🌅 黃昏逆光外拍"] },
-    { id: "event", icon: "🎉", title: "活動慶典海報", desc: "開幕慶、週年慶、音樂祭、講座", subProducts: ["新店開幕慶", "品牌週年慶", "音樂祭特輯", "專業講座", "快閃店登場", "年終特賣"], features: ["免費入場體驗", "席次有限預約制", "憑票兌換精美好禮", "現場限量贈品", "獨家大咖嘉賓", "抽獎大送禮"], offers: ["早鳥票限量優惠", "團報享折扣", "VIP席位升等", "打卡送好禮", "消費滿額抽獎", "會員獨享入場", "免費體驗名額", "限時預購特價"], ctas: ["📩 立即報名參加", "🎫 搶購早鳥票", "📍 查看活動地點", "📲 加入活動群組", "🔗 了解活動詳情"], environments: ["🎪 戶外大型活動場", "🏟️ 室內展演場館", "🎉 派對慶典場景", "🏬 百貨商場中庭", "🌃 夜間燈光舞台"] },
-    { id: "biz", icon: "💼", title: "商業企業海報", desc: "金融理財、信用卡、企業徵才", subProducts: ["金融理財", "專屬信用卡", "企業徵才", "法律諮詢", "資產配置", "B2B 服務"], features: ["高額回饋優惠", "專屬VIP貴賓禮", "彈性高薪福利", "國際級認證團隊", "一對一專業諮詢", "快速核貸通路"], offers: ["首年免年費", "推薦好友雙重獎", "限時開戶禮", "零手續費優惠", "高額簽帳金回饋", "專屬理財諮詢", "報到禮金發放", "新戶限定好禮"], ctas: ["📋 立即線上申辦", "📞 預約專人諮詢", "📩 投遞履歷應徵", "🔗 了解更多方案", "📲 下載官方 App"], environments: ["🏢 企業總部大廳", "💼 商務會議空間", "🌆 金融商業區街景", "📊 專業辦公環境", "🏛️ 尊榮貴賓廳"] },
-    { id: "general", icon: "✨", title: "萬用品牌海報", desc: "自訂主題、通用品牌質感宣傳", subProducts: ["品牌形象", "新品宣傳", "限時折扣", "概念產品", "企業 ESG", "VIP 尊榮"], features: ["品質嚴格把關", "極致質感呈現", "熱銷好評回饋", "全台限定通路", "經典經典重現", "限時尊榮呈獻"], offers: ["限時折扣優惠", "新品上市特惠", "VIP尊榮禮包", "滿額贈好禮", "獨家通路優惠", "季節限定推出", "會員專屬回饋", "首購驚喜好禮"], ctas: ["🛒 立即選購", "📩 訂閱獲取最新消息", "🔗 前往官網了解更多", "📞 聯繫品牌專員", "📲 關注社群帳號"], environments: ["✨ 品牌概念空間", "🏬 精品旗艦門市", "📸 極簡攝影棚", "🌿 自然質感場景", "🎨 藝術策展空間"] }
-  ];
-
-  const platforms = ["FB 粉專 (1200×630)", "IG 貼文 (1080×1080)", "IG 限動/Reels (1080×1920)", "Threads 圖文 (1080×1350)", "LINE 群組推播 (1040×1040)", "蝦皮 Banner (1200×600)", "A4 商業海報 (210×297mm)", "4K 高畫質桌布 (3840×2160)"];
-  const platformArMap: Record<string, string> = { "FB 粉專 (1200×630)": "16:9", "IG 貼文 (1080×1080)": "1:1", "IG 限動/Reels (1080×1920)": "9:16", "Threads 圖文 (1080×1350)": "4:5", "LINE 群組推播 (1040×1040)": "1:1", "蝦皮 Banner (1200×600)": "16:9", "A4 商業海報 (210×297mm)": "4:5", "4K 高畫質桌布 (3840×2160)": "16:9" };
-  const styles = [
-    { title: "Apple 蘋果極簡", spec: "Apple brand aesthetic, ultra-clean minimalist, sleek modern premium look" },
-    { title: "IKEA 溫馨家居", spec: "IKEA Scandinavian style, warm cozy home interior, natural wood accents" },
-    { title: "Sony 科技日系", spec: "Sony Japan tech aesthetic, high precision futuristic studio look" },
-    { title: "Costco 美式大賣場", spec: "Costco supermarket promotional style, high impact bold deal poster" },
-    { title: "MUJI 無印質感", spec: "MUJI minimalist style, neutral warm tones, simple elegant composition" },
-    { title: "韓系柔和美學", spec: "Korean aesthetic soft lighting, pastel color palette, delicate elegance" },
-    { title: "奢華精品黑金", spec: "Luxury high-end fashion style, black and gold palette, dark moody glow" },
-    { title: "賽博龐克電競", spec: "Cyberpunk esports gaming style, neon blue and magenta illumination" }
-  ];
-  const colors = [
-    { title: "⬜ 極簡純白", spec: "pure white clean dominant color palette" },
-    { title: "⬛ 沉穩奢華黑", spec: "stealth luxury dark black color palette" },
-    { title: "🔵 科技湛藍", spec: "futuristic tech blue color palette" },
-    { title: "🟣 質感極致紫", spec: "deep royal purple color palette" },
-    { title: "🟢 自然生態綠", spec: "organic botanical green color palette" },
-    { title: "🟡 活潑亮黃", spec: "vibrant energetic yellow color palette" },
-    { title: "🟠 潮流活力橘", spec: "warm citrus orange color palette" },
-    { title: "🔴 爆款導購紅", spec: "high-converting hot red color palette" },
-    { title: "⚫ 現代工業灰", spec: "sleek industrial gray color palette" }
-  ];
-  const bgs = [
-    { title: "漸層微光束", spec: "soft gradient light beam background" },
-    { title: "現代奢華客廳", spec: "modern luxury living room background" },
-    { title: "科技光譜場館", spec: "high tech exhibition showroom background" },
-    { title: "溫暖質感木紋", spec: "warm natural wood texture background" },
-    { title: "深邃星空銀河", spec: "deep cosmic starry sky background" },
-    { title: "俐落金屬拉絲", spec: "brushed metallic metallic background" },
-    { title: "極簡攝影棚白底", spec: "clean photography studio white backdrop" },
-    { title: "清涼水滴冰爽", spec: "refreshing water splashes and droplets background" }
-  ];
-  const layouts = [
-    { title: "💰 價格最大焦點", spec: "price focal point prominent layout" },
-    { title: "📦 商品極致主視覺", spec: "hero product centered master composition" },
-    { title: "🔝 上下分層經典結構", spec: "top-down structured split layout" },
-    { title: "↔️ 左右對比雙欄構圖", spec: "side-by-side split column layout" },
-    { title: "🍎 Apple 留白黃金比例", spec: "Apple golden ratio whitespace composition" }
-  ];
-  const fonts = ["💥 粗體重擊 (Bold)", "💎 精品極細字 (Fine Thin)", "🍵 日系溫柔明體 (Mincho)", "⚡ 科技幾何 (Tech Geometric)", "🎨 活潑手寫 (Creative Sans)", "💼 商務簡潔 (Corporate Clean)"];
-  const positions = ["📍 正中央焦點", "⬅️ 居左主視覺", "➡️ 居右主視覺", "🖼️ 滿版透視", "📐 45° 俯瞰斜角"];
-  const priceStyles = ["👑 奢華金色標章", "⚪️ 經典白底簡約", "⬛ 潮黑邊框極簡", "🔴 爆款強烈紅底", "💥 爆炸星芒標籤", "⚡ 霓虹夜光框"];
-  const lights = ["💡 柔和漫射商業光", "📸 頂級棚拍商業攝影", "☀️ 自然晨曦暖陽光", "🎬 電影戲劇感逆光", "⚡ 炫彩霓虹夜景光"];
-  const logoPositions = ["↖️ 頂部左上角", "↗️ 頂部右上角", "⬆️ 正上方中央", "↙️ 底部左下角"];
-  const densities = ["☁️ 極簡極度留白", "📄 標準商業海報", "🛍️ 資訊豐富賣場風", "⚡ 爆款強壓 DM 風"];
-
-  const [selectedCatId, setSelectedCatId] = useState("3c");
-
-  useEffect(() => {
-    const saved = localStorage.getItem("textlab.transferredPosterState");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        localStorage.removeItem("textlab.transferredPosterState"); // clean up
-        
-        if (parsed.catId) setSelectedCatId(parsed.catId);
-        if (parsed.product) setProduct(parsed.product);
-        if (parsed.brandName) setBrandName(parsed.brandName);
-        if (parsed.priceValue) setPriceValue(parsed.priceValue);
-        if (parsed.cta) setCta(parsed.cta);
-        if (Array.isArray(parsed.offers) && parsed.offers.length) setOffers(parsed.offers);
-        if (Array.isArray(parsed.features) && parsed.features.length) setFeatures(parsed.features);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }, []);
-  const currentCat = categories.find((c) => c.id === selectedCatId) || categories[0];
-
-  const [platform, setPlatform] = useState(platforms[0]);
-  const [product, setProduct] = useState(currentCat.subProducts[0]);
-  const [styleObj, setStyleObj] = useState(styles[0]);
-  const [colorObj, setColorObj] = useState(colors[0]);
-  const [bgObj, setBgObj] = useState(bgs[0]);
-  const [layoutObj, setLayoutObj] = useState(layouts[0]);
-  const [font, setFont] = useState(fonts[0]);
-  const [position, setPosition] = useState(positions[0]);
-  const [priceStyle, setPriceStyle] = useState(priceStyles[0]);
-  const [offers, setOffers] = useState<string[]>(categories[0].offers.slice(0, 3));
-  const [features, setFeatures] = useState<string[]>(currentCat.features.slice(0, 3));
-  const [cta, setCta] = useState(categories[0].ctas[0]);
-  const [env, setEnv] = useState(categories[0].environments[0]);
-  const [light, setLight] = useState(lights[0]);
-  const [logoPos, setLogoPos] = useState(logoPositions[0]);
-  const [density, setDensity] = useState(densities[1]);
-
-  const [activeModel, setActiveModel] = useState<"midjourney" | "chatgpt" | "gemini" | "claude">("midjourney");
-  const [modifier, setModifier] = useState("");
-  const [expertMode, setExpertMode] = useState(false);
-  const [aspectRatio, setAspectRatio] = useState("1:1");
-  const [ratingResult, setRatingResult] = useState<any>(null);
-  const [isRating, setIsRating] = useState(false);
-  const [ratingErr, setRatingErr] = useState("");
-
-  // 自訂品牌的名稱與價格顯示
-  const [brandName, setBrandName] = useState("");
-  const [priceValue, setPriceValue] = useState("NT$ 1,580");
-  const [customOfferInput, setCustomOfferInput] = useState("");
-  const [customFeatureInput, setCustomFeatureInput] = useState("");
-
-  // AI 智慧全自動企劃 State
-  const [aiInputMode, setAiInputMode] = useState<"idea" | "url">("idea");
-  const [userIdea, setUserIdea] = useState("極簡靜音涼感風扇特惠下殺，限時享分期0利率與免運優惠");
-  const [productUrl, setProductUrl] = useState("");
-  const [isAiPlanning, setIsAiPlanning] = useState(false);
-  const [aiPlanErr, setAiPlanErr] = useState("");
-  const [isFetchingUrl, setIsFetchingUrl] = useState(false);
-  const [urlFetchMsg, setUrlFetchMsg] = useState("");
-
-  const analyzeProductUrl = async () => {
-    const url = productUrl.trim();
-    if (!url || isFetchingUrl) return;
-    setIsFetchingUrl(true);
-    setUrlFetchMsg("🔍 正在存取網頁資訊並擷取商品標題與描述…");
-
-    let fetchedText = "";
-
-    try {
-      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 6000);
-
-      const res = await fetch(proxyUrl, { signal: controller.signal }).catch(() => null);
-      clearTimeout(timeoutId);
-
-      if (res && res.ok) {
-        const htmlText = await res.text();
-        const doc = new DOMParser().parseFromString(htmlText, "text/html");
-        const title = doc.querySelector("title")?.textContent || "";
-        const ogTitle = doc.querySelector('meta[property="og:title"]')?.getAttribute("content") || "";
-        const ogDesc = doc.querySelector('meta[property="og:description"]')?.getAttribute("content") || "";
-        const metaDesc = doc.querySelector('meta[name="description"]')?.getAttribute("content") || "";
-        const headings = Array.from(doc.querySelectorAll("h1, h2, h3")).map((h) => h.textContent?.trim()).filter(Boolean).join(" | ");
-
-        fetchedText = [ogTitle || title, ogDesc || metaDesc, headings].filter(Boolean).join("\n");
-      }
-    } catch (e) {
-      console.warn("Proxy fetch silent fallback:", e);
-    }
-
-    if (!fetchedText || fetchedText.length < 10) {
-      fetchedText = `商品網址：${url}`;
-    }
-
-    const titleGuess = fetchedText.split("\n")[0]?.trim();
-    if (titleGuess && !titleGuess.startsWith("商品網址：")) {
-      setProduct(titleGuess.slice(0, 40));
-    }
-    applyPreset("apple");
-    setUrlFetchMsg("🎉 已擷取商品資訊並套用免費本機商業海報配置（不使用付費 API）");
-    setIsFetchingUrl(false);
-  };
-
-  const addCustomOffer = () => {
-    if (!customOfferInput.trim()) return;
-    if (!offers.includes(customOfferInput.trim())) {
-      setOffers([...offers, customOfferInput.trim()]);
-    }
-    setCustomOfferInput("");
-  };
-
-  const addCustomFeature = () => {
-    if (!customFeatureInput.trim()) return;
-    if (!features.includes(customFeatureInput.trim())) {
-      setFeatures([...features, customFeatureInput.trim()]);
-    }
-    setCustomFeatureInput("");
-  };
-
-  const runAiAutoPlan = () => {
-    if (!userIdea.trim() || isAiPlanning) return;
-    setIsAiPlanning(true);
-    setProduct(userIdea.trim().slice(0, 40));
-    applyPreset("apple");
-    setAiPlanErr("已使用免費本機企劃引擎，不會產生 API 費用。");
-    setIsAiPlanning(false);
-  };
-
-  const handleCategorySelect = (catId: string) => {
-    setSelectedCatId(catId);
-    const cat = categories.find((c) => c.id === catId);
-    if (cat) {
-      setProduct(cat.subProducts[0]);
-      setFeatures(cat.features.slice(0, 3));
-      setOffers(cat.offers.slice(0, 3));
-      setCta(cat.ctas[0]);
-      setEnv(cat.environments[0]);
-    }
-  };
-
-  const toggleOffer = (item: string) => {
-    setOffers((prev) => prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]);
-  };
-
-  const toggleFeature = (item: string) => {
-    setFeatures((prev) => prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]);
-  };
-
-  // Preset quick fill
-  const applyPreset = (presetName: string) => {
-    if (presetName === "apple") {
-      setStyleObj(styles[0]);
-      setColorObj(colors[0]);
-      setBgObj(bgs[6]);
-      setLayoutObj(layouts[4]);
-      setDensity(densities[0]);
-    } else if (presetName === "costco") {
-      setStyleObj(styles[3]);
-      setColorObj(colors[7]);
-      setBgObj(bgs[0]);
-      setLayoutObj(layouts[0]);
-      setDensity(densities[3]);
-    } else if (presetName === "muji") {
-      setStyleObj(styles[4]);
-      setColorObj(colors[0]);
-      setBgObj(bgs[3]);
-      setLayoutObj(layouts[1]);
-      setDensity(densities[0]);
-    }
-  };
-
-  // Helper to clean UI emojis from prompt text
-  const cleanText = (str: string) => str.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{2B50}]|[\u{2934}-\u{2935}]|[\u{25AA}-\u{25FE}]|[\u{1F100}-\u{1F1FF}]|[\u{E000}-\u{F8FF}]/gu, "").trim();
-
-  // Generate Prompt text per model
-  const prompts = useMemo(() => {
-    const offerStr = offers.length ? offers.join(", ") : "Special Offer";
-    const featStr = features.length ? features.join(", ") : "High Specs";
-    const modStr = modifier ? `, ${modifier}` : "";
-    const cleanFont = cleanText(font);
-    const cleanPos = cleanText(position);
-    const cleanPriceStyle = cleanText(priceStyle);
-    const cleanCta = cleanText(cta);
-    const cleanEnv = cleanText(env);
-    const cleanLight = cleanText(light);
-    const cleanLogoPos = cleanText(logoPos);
-    const cleanDensity = cleanText(density);
-    const cleanColor = cleanText(colorObj.title);
-    const cleanBg = cleanText(bgObj.title);
-    const cleanLayout = cleanText(layoutObj.title);
-
-    const mj = `Commercial advertising poster for ${currentCat.title} ("${product}")${brandName.trim() ? ` by ${brandName.trim()}` : ""}, ${styleObj.spec}, ${colorObj.spec}, ${bgObj.spec}, ${layoutObj.spec}, typography font style: ${cleanFont}, hero product placed at ${cleanPos}, featuring price tag styled as ${cleanPriceStyle}${priceValue.trim() ? ` displaying price "${priceValue.trim()}"` : ""}, promotional badges: [${offerStr}], key features: [${featStr}], call-to-action button saying "${cleanCta}", ambient setting: ${cleanEnv}, lighting: ${cleanLight}${brandName.trim() ? `, Brand Logo "${brandName.trim()}"` : ""} placed at ${cleanLogoPos}, visual density: ${cleanDensity}${modStr} --ar ${aspectRatio} --v 6.0 --style raw`;
-
-    const chatgpt = `Create a professional commercial advertising poster for ${currentCat.title} featuring "${product}".
-- Target Platform & Aspect Ratio: ${platform} (--ar ${aspectRatio})
-${brandName.trim() ? `- Brand / Store Name: "${brandName.trim()}"` : ""}
-${priceValue.trim() ? `- Display Price Amount: "${priceValue.trim()}"` : ""}
-- Visual Style & Mood: ${styleObj.title} (${styleObj.spec})
-- Color Palette & Lighting: ${cleanColor} (${colorObj.spec}), ${cleanLight}
-- Background & Setting: ${cleanBg} (${bgObj.spec}) set in ${cleanEnv}
-- Layout & Composition: ${cleanLayout} (${layoutObj.spec}), subject placed at ${cleanPos}
-- Typography & Font Style: ${cleanFont}
-- Price Badge Design: ${cleanPriceStyle} ${priceValue.trim() ? `showing text "${priceValue.trim()}"` : ""}
-- Marketing Callouts: Offers (${offerStr}), Key Features (${featStr})
-- Call-To-Action (CTA): Prominent button labeled "${cleanCta}"
-- Brand Logo Anchor: ${cleanLogoPos} ${brandName.trim() ? `(Logo: "${brandName.trim()}")` : ""}
-- Information Density & Feel: ${cleanDensity}${modStr}
-High commercial quality, 8k resolution, photorealistic studio render.`;
-
-    const gemini = `【商業海報設計 Prompt - Gemini AI 完整專業版】
-■ 專案與品項：${brandName.trim() ? `【${brandName.trim()}】` : ""}${currentCat.title}（${product}）
-■ 標示售價與金額：${priceValue.trim() ? `【${priceValue.trim()}】` : "未特別限定（以促銷標籤為主）"}
-■ 發布平台與尺寸：${platform}（比例：${aspectRatio}）
-■ 視覺風格定義：${styleObj.title}（${styleObj.spec}）
-■ 色調與打光攝影：${cleanColor}（${colorObj.spec}），採 ${cleanLight} 商業棚拍打光
-■ 背景與氛圍情境：${cleanBg}（${bgObj.spec}），融入 ${cleanEnv} 商業情境
-■ 排版構圖與視角：${cleanLayout}（${layoutObj.spec}），主商品放置於 ${cleanPos}
-■ 字體視覺風格：${cleanFont}
-■ 價格標籤設計：${cleanPriceStyle} ${priceValue.trim() ? `（標示金額：${priceValue.trim()}）` : ""}
-■ 促銷與賣點標章：優惠標籤【${offerStr}】｜ 產品賣點【${featStr}】
-■ 行動呼籲按鈕 (CTA)：「${cleanCta}」
-■ 品牌 Logo 與佈局：品牌 Logo ${brandName.trim() ? `「${brandName.trim()}」` : ""}置於 ${cleanLogoPos}
-■ 視覺密度與修飾：海報密度採 ${cleanDensity}${modStr ? `，修飾風格：${modStr}` : ""}`;
-
-    const claude = `Art Director Master Brief for Commercial Poster Design:
-
-1. Project & Brand Details:
-   - Industry Category: ${currentCat.title}
-   - Hero Subject / Product: "${product}"
-   ${brandName.trim() ? `- Brand Identity: "${brandName.trim()}"` : ""}
-   ${priceValue.trim() ? `- Display Price: "${priceValue.trim()}"` : ""}
-   - Target Platform Specs: ${platform} (--ar ${aspectRatio})
-
-2. Art Direction & Visual Identity:
-   - Style Direction: ${styleObj.title} (${styleObj.spec})
-   - Color Scheme: ${cleanColor} (${colorObj.spec})
-   - Background Atmosphere: ${cleanBg} (${bgObj.spec})
-   - Environment Context: ${cleanEnv}
-   - Lighting Setup: ${cleanLight}
-
-3. Composition & Layout:
-   - Focal Layout: ${cleanLayout} (${layoutObj.spec})
-   - Subject Position: ${cleanPos}
-   - Typography & Font Style: ${cleanFont}
-   - Brand Logo Anchor: ${cleanLogoPos} ${brandName.trim() ? `("${brandName.trim()}")` : ""}
-
-4. Marketing Highlights:
-   - Price Badge Styling: ${cleanPriceStyle} ${priceValue.trim() ? `(Amount: "${priceValue.trim()}")` : ""}
-   - Offer Badges: [${offerStr}]
-   - Feature Highlights: [${featStr}]
-   - Primary Call-To-Action: "${cleanCta}"
-   - Visual Density Level: ${cleanDensity}${modStr}`;
-
-    return { midjourney: mj, chatgpt, gemini, claude };
-  }, [selectedCatId, product, brandName, priceValue, platform, styleObj, colorObj, bgObj, layoutObj, font, position, priceStyle, offers, features, cta, env, light, logoPos, density, modifier, aspectRatio]);
-
-  const currentPromptText = prompts[activeModel];
-
-  // 免費本機評分：不呼叫外部 API。
-  const runAiRating = () => {
-    setIsRating(true);
-    setRatingErr("免費本機評分，不會產生 API 費用。");
-    const completeness = [brandName, priceValue, cta, ...offers, ...features].filter((item) => item.trim()).length;
-    const bonus = Math.min(8, completeness);
-    setRatingResult({
-      scores: {
-        readability: 84 + bonus,
-        promo: 82 + bonus,
-        brand: brandName.trim() ? 92 : 78,
-        priceEye: priceValue.trim() ? 94 : 76,
-        ctaPower: cta.trim() ? 91 : 75,
-        printSafety: 94
-      },
-      overallStars: completeness >= 6 ? 5 : 4,
-      advice: brandName.trim() && priceValue.trim()
-        ? "資訊完整，建議再確認手機縮圖下價格與 CTA 是否仍清楚可讀。"
-        : "補上品牌名稱與明確價格，可讓海報訊息更完整。"
-    });
-    setIsRating(false);
-  };
-
-  return (
-    <>
-      <ToolIntro tool={tools.find((t) => t.id === "poster")!} language={language} />
-
-      {/* 🪄 AI 智慧全自動企劃卡片 (支援文字想法 or 貼上商品網址) */}
-      <div className="input-card" style={{ marginBottom: "20px", border: "1.5px solid var(--purple)", background: "var(--paper)" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-          <strong style={{ fontSize: "14px", color: "var(--purple)", display: "flex", alignItems: "center", gap: "6px" }}>
-            <span>🪄</span> AI 智慧全自動企劃 (輸入想法 or 貼上商品網址，AI 自動生成選單)
-          </strong>
-          <span style={{ fontSize: "11px", color: "var(--muted)" }}>本機運算，100% 免費</span>
-        </div>
-
-        {/* 模式切換鈕 */}
-        <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
-          <button
-            onClick={() => setAiInputMode("idea")}
-            style={{
-              flex: 1,
-              padding: "8px",
-              borderRadius: "8px",
-              border: "1px solid var(--line)",
-              background: aiInputMode === "idea" ? "var(--purple)" : "var(--canvas)",
-              color: aiInputMode === "idea" ? "#fff" : "var(--ink)",
-              fontSize: "12px",
-              fontWeight: 650,
-              cursor: "pointer"
-            }}
-          >
-            ✍️ 輸入文字想法
-          </button>
-          <button
-            onClick={() => setAiInputMode("url")}
-            style={{
-              flex: 1,
-              padding: "8px",
-              borderRadius: "8px",
-              border: "1px solid var(--line)",
-              background: aiInputMode === "url" ? "var(--purple)" : "var(--canvas)",
-              color: aiInputMode === "url" ? "#fff" : "var(--ink)",
-              fontSize: "12px",
-              fontWeight: 650,
-              cursor: "pointer"
-            }}
-          >
-            🔗 貼上商品網址 (蝦皮/Momo/官網)
-          </button>
-        </div>
-
-        {aiInputMode === "idea" ? (
-          <>
-            <textarea
-              value={userIdea}
-              onChange={(e) => setUserIdea(e.target.value)}
-              placeholder="例如：想做一款極簡靜音涼感風扇特惠下殺，限時享分期0利率與全台免運優惠..."
-              rows={2}
-              style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", lineHeight: 1.5, resize: "none", outline: "none", marginBottom: "10px" }}
-            />
-
-            {aiPlanErr && <div style={{ fontSize: "11px", color: "#dc3545", marginBottom: "8px" }}>{aiPlanErr}</div>}
-
-            <button
-              className="primary-button wide"
-              onClick={runAiAutoPlan}
-              disabled={isAiPlanning}
-              style={{ width: "100%", padding: "10px" }}
-            >
-              {isAiPlanning ? "✨ 本機智慧企劃中…" : "🪄 一鍵分析想法 & 自動填寫所有選單"}
-            </button>
-          </>
-        ) : (
-          <>
-            <input
-              type="url"
-              value={productUrl}
-              onChange={(e) => setProductUrl(e.target.value)}
-              placeholder="請貼上商品連結，例如：https://shopee.tw/product/... 或 https://momo.com.tw/..."
-              style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--purple)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", outline: "none", marginBottom: "8px" }}
-            />
-
-            {urlFetchMsg && (
-              <div style={{ fontSize: "11px", color: "var(--purple-dark)", marginBottom: "8px", fontWeight: 600 }}>
-                {urlFetchMsg}
-              </div>
-            )}
-
-            <button
-              className="primary-button wide"
-              onClick={analyzeProductUrl}
-              disabled={isFetchingUrl || !productUrl.trim()}
-              style={{ width: "100%", padding: "10px" }}
-            >
-              {isFetchingUrl ? "🔍 網頁讀取與 AI 分析企劃中…" : "🔗 一鍵解析商品網址 & 自動企劃海報"}
-            </button>
-          </>
-        )}
-      </div>
-
-      {/* 🚀 入口大分類卡片 */}
-      <div style={{ marginBottom: "24px" }}>
-        <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--purple)", marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }}>
-          <span>🎨</span> 選擇海報產業大類 (點選立即切換對應賣點)
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "10px" }}>
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => handleCategorySelect(cat.id)}
-              style={{
-                border: selectedCatId === cat.id ? "2px solid var(--purple)" : "1px solid var(--line)",
-                background: selectedCatId === cat.id ? "var(--purple-soft)" : "var(--paper)",
-                borderRadius: "14px",
-                padding: "12px 10px",
-                textWrap: "wrap",
-                textAlign: "left",
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-                boxShadow: selectedCatId === cat.id ? "0 4px 14px rgba(118,102,182,0.18)" : "none"
-              }}
-            >
-              <div style={{ fontSize: "22px", marginBottom: "4px" }}>{cat.icon}</div>
-              <strong style={{ fontSize: "12px", color: selectedCatId === cat.id ? "var(--purple-dark)" : "var(--ink)", display: "block" }}>{cat.title}</strong>
-              <small style={{ fontSize: "10px", color: "var(--muted)", display: "block", marginTop: "2px" }}>{cat.desc}</small>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ⚡️ AI 快捷一鍵風格包 */}
-      <div className="input-card" style={{ marginBottom: "20px", padding: "14px 16px" }}>
-        <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--ink)", marginBottom: "8px" }}>
-          💡 快速靈感套籤（一鍵帶入爆款設計）:
-        </div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-          <button onClick={() => applyPreset("apple")} style={{ border: "1px solid var(--line)", background: "var(--paper)", borderRadius: "8px", padding: "6px 12px", fontSize: "11px", cursor: "pointer" }}>
-            🍎 Apple 極簡科技風
-          </button>
-          <button onClick={() => applyPreset("costco")} style={{ border: "1px solid var(--line)", background: "var(--paper)", borderRadius: "8px", padding: "6px 12px", fontSize: "11px", cursor: "pointer" }}>
-            🛒 Costco 大賣場爆款風
-          </button>
-          <button onClick={() => applyPreset("muji")} style={{ border: "1px solid var(--line)", background: "var(--paper)", borderRadius: "8px", padding: "6px 12px", fontSize: "11px", cursor: "pointer" }}>
-            ☕️ MUJI 無印日系質感風
-          </button>
-        </div>
-      </div>
-
-      {/* 📋 Step 1~16 視覺化點選控制面板 */}
-      <div className="input-card" style={{ marginBottom: "20px" }}>
-        
-        {/* Step 1 & Step 2 */}
-        <div style={{ marginBottom: "16px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "12px" }}>
-            <div>
-              <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-                Step 1. 發布平台與尺寸
-              </label>
-              <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                <select value={platform} onChange={(e) => { const v = e.target.value; setPlatform(v); if (platformArMap[v]) setAspectRatio(platformArMap[v]); }} style={{ flex: 1, padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
-                  {platforms.map((p) => <option key={p} value={p}>{p}</option>)}
-                </select>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "42px", height: "42px", border: "1px solid var(--line)", borderRadius: "8px", background: "var(--canvas)", flexShrink: 0 }} title={`目前比例: ${aspectRatio}`}>
-                  <div style={{
-                    width: aspectRatio === "16:9" ? "28px" : aspectRatio === "9:16" ? "12px" : aspectRatio === "4:5" ? "18px" : "20px",
-                    height: aspectRatio === "16:9" ? "16px" : aspectRatio === "9:16" ? "22px" : aspectRatio === "4:5" ? "22px" : "20px",
-                    border: "2px solid var(--purple)",
-                    borderRadius: "3px",
-                    background: "var(--purple-soft)",
-                    transition: "all 0.2s ease"
-                  }} />
-                  <span style={{ fontSize: "8px", color: "var(--purple)", marginTop: "2px", fontWeight: "bold" }}>{aspectRatio}</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-                自訂品牌 / 店家名稱 (選填)
-              </label>
-              <input
-                type="text"
-                value={brandName}
-                onChange={(e) => setBrandName(e.target.value)}
-                placeholder="例如：Dyson、字研所、小美咖啡館..."
-                style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", outline: "none" }}
-              />
-            </div>
-          </div>
-
-          {/* Step 2 自訂商品/主題名稱 */}
-          <div style={{ marginBottom: "8px" }}>
-            <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-              Step 2. 自訂商品 / 服務 / 主題名稱
-            </label>
-            <div className={(isFetchingUrl || isAiPlanning) ? "loading-shimmer" : ""}>
-              <input
-                type="text"
-                value={product}
-                onChange={(e) => setProduct(e.target.value)}
-                placeholder="可自由輸入任何商品或服務，例如：Dyson極靜風扇、抹茶提拉米蘇、特斯拉Model 3..."
-                style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--purple)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", outline: "none", marginBottom: "8px" }}
-              />
-            </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", alignItems: "center" }}>
-              <span style={{ fontSize: "11px", color: "var(--muted)", fontWeight: 650 }}>💡 快速點選預設：</span>
-              {currentCat.subProducts.map((sp) => (
-                <button
-                  key={sp}
-                  type="button"
-                  onClick={() => setProduct(sp)}
-                  style={{
-                    border: product === sp ? "1px solid var(--purple)" : "1px solid var(--line)",
-                    background: product === sp ? "var(--purple-soft)" : "var(--paper)",
-                    color: product === sp ? "var(--purple-dark)" : "var(--muted)",
-                    borderRadius: "8px",
-                    padding: "4px 8px",
-                    fontSize: "11px",
-                    cursor: "pointer"
-                  }}
-                >
-                  {sp}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Step 3: 海報風格 */}
-        <div style={{ marginBottom: "16px" }}>
-          <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-            Step 3. 海報視覺風格
-          </label>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }} className={(isFetchingUrl || isAiPlanning) ? "loading-shimmer" : ""}>
-            {styles.map((s) => (
-              <button
-                key={s.title}
-                onClick={() => setStyleObj(s)}
-                style={{
-                  border: "1px solid var(--line)",
-                  background: styleObj.title === s.title ? "var(--purple)" : "var(--paper)",
-                  color: styleObj.title === s.title ? "#fff" : "var(--ink)",
-                  borderRadius: "8px",
-                  padding: "6px 11px",
-                  fontSize: "11px",
-                  fontWeight: 600,
-                  cursor: "pointer"
-                }}
-              >
-                {s.title}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Step 4: 主色調 */}
-        <div style={{ marginBottom: "16px" }}>
-          <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-            Step 4. 主色調視覺
-          </label>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }} className={(isFetchingUrl || isAiPlanning) ? "loading-shimmer" : ""}>
-            {colors.map((c) => (
-              <button
-                key={c.title}
-                onClick={() => setColorObj(c)}
-                style={{
-                  border: "1px solid var(--line)",
-                  background: colorObj.title === c.title ? "var(--purple)" : "var(--paper)",
-                  color: colorObj.title === c.title ? "#fff" : "var(--ink)",
-                  borderRadius: "8px",
-                  padding: "6px 10px",
-                  fontSize: "11px",
-                  cursor: "pointer"
-                }}
-              >
-                {c.title}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Step 5: 背景質感 */}
-        <div style={{ marginBottom: "16px" }}>
-          <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-            Step 5. 背景視覺質感
-          </label>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }} className={(isFetchingUrl || isAiPlanning) ? "loading-shimmer" : ""}>
-            {bgs.map((b) => (
-              <button
-                key={b.title}
-                onClick={() => setBgObj(b)}
-                style={{
-                  border: "1px solid var(--line)",
-                  background: bgObj.title === b.title ? "var(--purple)" : "var(--paper)",
-                  color: bgObj.title === b.title ? "#fff" : "var(--ink)",
-                  borderRadius: "8px",
-                  padding: "6px 10px",
-                  fontSize: "11px",
-                  cursor: "pointer"
-                }}
-              >
-                {b.title}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Step 6 & 7 */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
-          <div>
-            <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-              Step 6. 排版構圖模式
-            </label>
-            <select value={layoutObj.title} onChange={(e) => setLayoutObj(layouts.find((l) => l.title === e.target.value) || layouts[0])} style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
-              {layouts.map((l) => <option key={l.title} value={l.title}>{l.title}</option>)}
-            </select>
-          </div>
-          <div>
-            <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-              Step 7. 字體風格視覺
-            </label>
-            <select value={font} onChange={(e) => setFont(e.target.value)} style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
-              {fonts.map((f) => <option key={f} value={f}>{f}</option>)}
-            </select>
-          </div>
-        </div>
-
-        {/* Step 8 & 9 */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px", marginBottom: "16px" }}>
-          <div>
-            <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-              Step 8. 商品位置
-            </label>
-            <select value={position} onChange={(e) => setPosition(e.target.value)} style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
-              {positions.map((p) => <option key={p} value={p}>{p}</option>)}
-            </select>
-          </div>
-          <div>
-            <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-              Step 9. 價格標籤樣式
-            </label>
-            <select value={priceStyle} onChange={(e) => setPriceStyle(e.target.value)} style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
-              {priceStyles.map((ps) => <option key={ps} value={ps}>{ps}</option>)}
-            </select>
-          </div>
-          <div>
-            <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-              標示金額 / 售價 (選填)
-            </label>
-            <input
-              type="text"
-              value={priceValue}
-              onChange={(e) => setPriceValue(e.target.value)}
-              placeholder="例如：NT$ 1,580, 特惠價$99"
-              style={{ width: "100%", padding: "9px 10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", outline: "none" }}
-            />
-          </div>
-        </div>
-
-        {/* Step 10: 優惠標章 (多選 + 自訂新增) */}
-        <div style={{ marginBottom: "16px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-            <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)" }}>
-              Step 10. 優惠促銷標章 (可複選或自訂輸入)
-            </label>
-          </div>
-
-          <div style={{ display: "flex", gap: "6px", marginBottom: "8px" }}>
-            <input
-              type="text"
-              value={customOfferInput}
-              onChange={(e) => setCustomOfferInput(e.target.value)}
-              placeholder="自訂優惠，例如：全館滿千折百、開學季85折..."
-              style={{ flex: 1, padding: "7px 10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", outline: "none" }}
-              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomOffer(); } }}
-            />
-            <button
-              type="button"
-              onClick={addCustomOffer}
-              style={{ border: "1px solid var(--purple)", background: "var(--purple-soft)", color: "var(--purple-dark)", borderRadius: "8px", padding: "0 12px", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
-            >
-              ＋新增標章
-            </button>
-          </div>
-
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-            {currentCat.offers.map((off) => {
-              const active = offers.includes(off);
-              return (
-                <button
-                  key={off}
-                  onClick={() => toggleOffer(off)}
-                  style={{
-                    border: active ? "1px solid var(--purple)" : "1px solid var(--line)",
-                    background: active ? "var(--purple-soft)" : "var(--paper)",
-                    color: active ? "var(--purple-dark)" : "var(--ink)",
-                    borderRadius: "8px",
-                    padding: "5px 9px",
-                    fontSize: "11px",
-                    fontWeight: active ? 700 : 400,
-                    cursor: "pointer"
-                  }}
-                >
-                  {active ? "☑ " : "☐ "}{off}
-                </button>
-              );
-            })}
-            {offers.filter(o => !currentCat.offers.includes(o)).map((customOff) => (
-              <button
-                key={customOff}
-                onClick={() => toggleOffer(customOff)}
-                style={{
-                  border: "1px solid var(--purple)",
-                  background: "var(--purple-soft)",
-                  color: "var(--purple-dark)",
-                  borderRadius: "8px",
-                  padding: "5px 9px",
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  cursor: "pointer"
-                }}
-              >
-                ☑ {customOff} (自訂)
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Step 11: 產品功能標章 (根據大分類 + 自訂新增) */}
-        <div style={{ marginBottom: "16px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-            <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)" }}>
-              Step 11. 【{currentCat.title}】賣點標章 (可複選或自訂輸入)
-            </label>
-          </div>
-
-          <div style={{ display: "flex", gap: "6px", marginBottom: "8px" }}>
-            <input
-              type="text"
-              value={customFeatureInput}
-              onChange={(e) => setCustomFeatureInput(e.target.value)}
-              placeholder="自訂賣點，例如：日本抗皺專利、極速快充30分..."
-              style={{ flex: 1, padding: "7px 10px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", outline: "none" }}
-              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomFeature(); } }}
-            />
-            <button
-              type="button"
-              onClick={addCustomFeature}
-              style={{ border: "1px solid var(--purple)", background: "var(--purple-soft)", color: "var(--purple-dark)", borderRadius: "8px", padding: "0 12px", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
-            >
-              ＋新增賣點
-            </button>
-          </div>
-
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-            {currentCat.features.map((feat) => {
-              const active = features.includes(feat);
-              return (
-                <button
-                  key={feat}
-                  onClick={() => toggleFeature(feat)}
-                  style={{
-                    border: active ? "1px solid var(--purple)" : "1px solid var(--line)",
-                    background: active ? "var(--purple-soft)" : "var(--paper)",
-                    color: active ? "var(--purple-dark)" : "var(--ink)",
-                    borderRadius: "8px",
-                    padding: "5px 9px",
-                    fontSize: "11px",
-                    fontWeight: active ? 700 : 400,
-                    cursor: "pointer"
-                  }}
-                >
-                  {active ? "☑ " : "☐ "}{feat}
-                </button>
-              );
-            })}
-            {features.filter(f => !currentCat.features.includes(f)).map((customFeat) => (
-              <button
-                key={customFeat}
-                onClick={() => toggleFeature(customFeat)}
-                style={{
-                  border: "1px solid var(--purple)",
-                  background: "var(--purple-soft)",
-                  color: "var(--purple-dark)",
-                  borderRadius: "8px",
-                  padding: "5px 9px",
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  cursor: "pointer"
-                }}
-              >
-                ☑ {customFeat} (自訂)
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Step 12 自訂行動呼籲 (CTA) */}
-        <div style={{ marginBottom: "16px" }}>
-          <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-            Step 12. 行動呼籲按鈕文案 CTA (可自由輸入或點選熱門推薦)
-          </label>
-          <input
-            type="text"
-            value={cta}
-            onChange={(e) => setCta(e.target.value)}
-            placeholder="輸入任何您的自訂 CTA 號召，例如：前往蝦皮領折價券、私訊小編領取試用包..."
-            style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--purple)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", outline: "none", marginBottom: "8px" }}
-          />
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", alignItems: "center" }}>
-            <span style={{ fontSize: "11px", color: "var(--muted)", fontWeight: 650 }}>💡 常用 CTA 預設：</span>
-            {currentCat.ctas.map((c) => (
-              <button
-                key={c}
-                type="button"
-                onClick={() => setCta(c)}
-                style={{
-                  border: cta === c ? "1px solid var(--purple)" : "1px solid var(--line)",
-                  background: cta === c ? "var(--purple-soft)" : "var(--paper)",
-                  color: cta === c ? "var(--purple-dark)" : "var(--muted)",
-                  borderRadius: "8px",
-                  padding: "4px 8px",
-                  fontSize: "11px",
-                  cursor: "pointer"
-                }}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Step 13 ~ 16 */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "12px" }}>
-          <div>
-            <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "4px" }}>
-              Step 13. 氛圍情境
-            </label>
-            <select value={env} onChange={(e) => setEnv(e.target.value)} style={{ width: "100%", padding: "8px 8px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "11px" }}>
-              {currentCat.environments.map((ev) => <option key={ev} value={ev}>{ev}</option>)}
-            </select>
-          </div>
-          <div>
-            <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "4px" }}>
-              Step 14. 打光攝影
-            </label>
-            <select value={light} onChange={(e) => setLight(e.target.value)} style={{ width: "100%", padding: "8px 8px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "11px" }}>
-              {lights.map((l) => <option key={l} value={l}>{l}</option>)}
-            </select>
-          </div>
-          <div>
-            <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "4px" }}>
-              Step 15. Logo 位置
-            </label>
-            <select value={logoPos} onChange={(e) => setLogoPos(e.target.value)} style={{ width: "100%", padding: "8px 8px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "11px" }}>
-              {logoPositions.map((lp) => <option key={lp} value={lp}>{lp}</option>)}
-            </select>
-          </div>
-          <div>
-            <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "4px" }}>
-              Step 16. 視覺密度
-            </label>
-            <select value={density} onChange={(e) => setDensity(e.target.value)} style={{ width: "100%", padding: "8px 8px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "11px" }}>
-              {densities.map((d) => <option key={d} value={d}>{d}</option>)}
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* 🚀 Step 18: 一鍵生成 4 大 AI 模型 Prompt */}
-      <div className="input-card" style={{ marginBottom: "20px" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-          <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
-            Step 18. 一鍵切換 4 大 AI 模型 Prompt 輸出
-          </strong>
-          <span style={{ fontSize: "11px", color: "var(--muted)" }}>不同模型最佳格式化參數</span>
-        </div>
-
-        {/* 模型按鈕切換列 */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px", marginBottom: "14px" }}>
-          <button
-            onClick={() => setActiveModel("midjourney")}
-            style={{
-              border: "1px solid var(--line)",
-              background: activeModel === "midjourney" ? "var(--purple)" : "var(--paper)",
-              color: activeModel === "midjourney" ? "#fff" : "var(--ink)",
-              borderRadius: "10px",
-              padding: "10px 6px",
-              fontSize: "12px",
-              fontWeight: 700,
-              cursor: "pointer"
-            }}
-          >
-            🎨 Midjourney
-          </button>
-          <button
-            onClick={() => setActiveModel("chatgpt")}
-            style={{
-              border: "1px solid var(--line)",
-              background: activeModel === "chatgpt" ? "var(--purple)" : "var(--paper)",
-              color: activeModel === "chatgpt" ? "#fff" : "var(--ink)",
-              borderRadius: "10px",
-              padding: "10px 6px",
-              fontSize: "12px",
-              fontWeight: 700,
-              cursor: "pointer"
-            }}
-          >
-            🤖 ChatGPT
-          </button>
-          <button
-            onClick={() => setActiveModel("gemini")}
-            style={{
-              border: "1px solid var(--line)",
-              background: activeModel === "gemini" ? "var(--purple)" : "var(--paper)",
-              color: activeModel === "gemini" ? "#fff" : "var(--ink)",
-              borderRadius: "10px",
-              padding: "10px 6px",
-              fontSize: "12px",
-              fontWeight: 700,
-              cursor: "pointer"
-            }}
-          >
-            💎 Gemini
-          </button>
-          <button
-            onClick={() => setActiveModel("claude")}
-            style={{
-              border: "1px solid var(--line)",
-              background: activeModel === "claude" ? "var(--purple)" : "var(--paper)",
-              color: activeModel === "claude" ? "#fff" : "var(--ink)",
-              borderRadius: "10px",
-              padding: "10px 6px",
-              fontSize: "12px",
-              fontWeight: 700,
-              cursor: "pointer"
-            }}
-          >
-            🧠 Claude
-          </button>
-        </div>
-
-        {/* Step 19: 一鍵優化微調按鈕 */}
-        <div style={{ marginBottom: "12px" }}>
-          <span style={{ fontSize: "11px", color: "var(--muted)", fontWeight: 700, display: "block", marginBottom: "6px" }}>
-            Step 19. 一鍵微調修飾 Prompt 方向:
-          </span>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-            {[
-              { label: "✨ 增加高級感", mod: "high-end luxury aesthetic, sleek minimalist elegance" },
-              { label: "🛒 價格更搶眼", mod: "ultra prominent eye-catching price focal point" },
-              { label: "🍎 更加 Apple 風", mod: "Apple design system minimal aesthetic" },
-              { label: "⚡ 增加科技光感", mod: "glowing neon tech lighting, futuristic reflections" },
-              { label: "📄 適合商業印刷", mod: "CMYK print-ready high clarity sharp edge detail" }
-            ].map((item) => (
-              <button
-                key={item.label}
-                onClick={() => setModifier(modifier === item.mod ? "" : item.mod)}
-                style={{
-                  border: "1px solid var(--line)",
-                  background: modifier === item.mod ? "var(--purple-soft)" : "var(--paper)",
-                  color: modifier === item.mod ? "var(--purple-dark)" : "var(--muted)",
-                  borderRadius: "8px",
-                  padding: "4px 8px",
-                  fontSize: "11px",
-                  cursor: "pointer"
-                }}
-              >
-                {modifier === item.mod ? "✓ " : ""}{item.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Prompt 輸出框 */}
-        <div style={{ padding: "14px", borderRadius: "10px", background: "var(--canvas)", border: "1px solid var(--line)", fontSize: "13px", color: "var(--ink)", whiteSpace: "pre-wrap", lineHeight: 1.6, marginBottom: "12px" }}>
-          {currentPromptText}
-        </div>
-
-        <div style={{ display: "flex", gap: "10px" }}>
-          <button className="primary-button wide" onClick={() => copyText(currentPromptText, setCopied)}>
-            {copied === currentPromptText ? t(language, "Prompt 已複製 ✓", "Prompt Copied ✓") : t(language, `一鍵複製 ${activeModel.toUpperCase()} Prompt`, `Copy ${activeModel.toUpperCase()} Prompt`)}
-          </button>
-
-          <button
-            type="button"
-            onClick={runAiRating}
-            disabled={isRating}
-            style={{
-              border: "1px solid var(--purple)",
-              background: "var(--paper)",
-              color: "var(--purple-dark)",
-              borderRadius: "10px",
-              padding: "0 14px",
-              fontSize: "12px",
-              fontWeight: 700,
-              cursor: "pointer",
-              whiteSpace: "nowrap"
-            }}
-          >
-            {isRating ? "✨ 評分中…" : "📊 Step 20. AI 診斷評分"}
-          </button>
-        </div>
-
-        {/* 💡 如何使用複製的 Prompt 3-step Midjourney tutorial */}
-        <div style={{
-          marginTop: "16px",
-          padding: "12px 14px",
-          borderRadius: "10px",
-          background: "var(--canvas)",
-          border: "1px solid var(--line)",
-          display: "flex",
-          gap: "10px",
-          alignItems: "flex-start",
-          textAlign: "left"
-        }}>
-          <span style={{ fontSize: "18px", marginTop: "2px" }}>💡</span>
-          <div>
-            <strong style={{ fontSize: "12px", color: "var(--purple-dark)", display: "block", marginBottom: "4px" }}>
-              如何使用複製的 Prompt 生成廣告海報？
-            </strong>
-            <ol style={{ margin: 0, paddingLeft: "16px", fontSize: "11px", color: "var(--muted)", lineHeight: 1.6 }}>
-              <li>點擊上方複製按鈕，複製您的專業廣告 {activeModel.toUpperCase()} Prompt。</li>
-              <li>開啟 <a href="https://discord.com/invite/midjourney" target="_blank" rel="noopener noreferrer" style={{ color: "var(--purple)", textDecoration: "underline", fontWeight: 600 }}>Midjourney Discord</a> (或 ChatGPT / Gemini 視窗)。</li>
-              <li>在輸入框中打上 <code>/imagine prompt</code> 後貼上您複製的字句，按下發送即可生成高質感宣傳海報！</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-
-      {/* 📊 Step 20: AI 診斷評分結果面板 */}
-      {(ratingResult || ratingErr) && (
-        <div className="input-card" style={{ marginBottom: "20px", border: "2px solid var(--purple)" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-            <strong style={{ fontSize: "15px", color: "var(--purple)" }}>
-              📊 Step 20. AI 廣告海報吸睛度診斷報告
-            </strong>
-            <span style={{ fontSize: "16px" }}>⭐⭐⭐⭐⭐ ({ratingResult?.overallStars || 5}/5)</span>
-          </div>
-
-          {ratingErr && <div style={{ fontSize: "12px", color: "#dc3545", marginBottom: "10px" }}>{ratingErr}</div>}
-
-          {ratingResult?.scores && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "10px", marginBottom: "14px" }}>
-              <div style={{ background: "var(--canvas)", padding: "8px 10px", borderRadius: "8px", textWrap: "wrap" }}>
-                <small style={{ fontSize: "10px", color: "var(--muted)" }}>可讀性分</small>
-                <strong style={{ fontSize: "16px", color: "var(--purple)", display: "block" }}>{ratingResult.scores.readability} 分</strong>
-              </div>
-              <div style={{ background: "var(--canvas)", padding: "8px 10px", borderRadius: "8px", textWrap: "wrap" }}>
-                <small style={{ fontSize: "10px", color: "var(--muted)" }}>促銷誘因感</small>
-                <strong style={{ fontSize: "16px", color: "var(--purple)", display: "block" }}>{ratingResult.scores.promo} 分</strong>
-              </div>
-              <div style={{ background: "var(--canvas)", padding: "8px 10px", borderRadius: "8px", textWrap: "wrap" }}>
-                <small style={{ fontSize: "10px", color: "var(--muted)" }}>品牌質感</small>
-                <strong style={{ fontSize: "16px", color: "var(--purple)", display: "block" }}>{ratingResult.scores.brand} 分</strong>
-              </div>
-              <div style={{ background: "var(--canvas)", padding: "8px 10px", borderRadius: "8px", textWrap: "wrap" }}>
-                <small style={{ fontSize: "10px", color: "var(--muted)" }}>價格吸睛度</small>
-                <strong style={{ fontSize: "16px", color: "var(--purple)", display: "block" }}>{ratingResult.scores.priceEye} 分</strong>
-              </div>
-              <div style={{ background: "var(--canvas)", padding: "8px 10px", borderRadius: "8px", textWrap: "wrap" }}>
-                <small style={{ fontSize: "10px", color: "var(--muted)" }}>CTA點擊強度</small>
-                <strong style={{ fontSize: "16px", color: "var(--purple)", display: "block" }}>{ratingResult.scores.ctaPower} 分</strong>
-              </div>
-              <div style={{ background: "var(--canvas)", padding: "8px 10px", borderRadius: "8px", textWrap: "wrap" }}>
-                <small style={{ fontSize: "10px", color: "var(--muted)" }}>印刷輸出安全</small>
-                <strong style={{ fontSize: "16px", color: "var(--purple)", display: "block" }}>{ratingResult.scores.printSafety} 分</strong>
-              </div>
-            </div>
-          )}
-
-          {ratingResult?.advice && (
-            <div style={{ padding: "12px", borderRadius: "10px", background: "var(--purple-soft)", color: "var(--purple-dark)", fontSize: "12px", lineHeight: 1.6 }}>
-              <strong>💡 AI 廣告優化建議：</strong><br />
-              {ratingResult.advice}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ⚙️ 專家模式折疊選單 (Expert Mode) */}
-      <div className="input-card" style={{ marginBottom: "20px", padding: "14px 16px" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }} onClick={() => setExpertMode(!expertMode)}>
-          <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--ink)" }}>
-            ⚙️ 高手專家模式 (Aspect Ratio, Negative Prompt)
-          </span>
-          <span style={{ fontSize: "12px", color: "var(--purple)", fontWeight: 600 }}>{expertMode ? "收合 ▲" : "展開 ▼"}</span>
-        </div>
-
-        {expertMode && (
-          <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid var(--line)", display: "flex", flexDirection: "column", gap: "10px" }}>
-            <div>
-              <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--ink)", display: "block", marginBottom: "4px" }}>
-                海報比例 (Aspect Ratio --ar):
-              </label>
-              <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                <select value={aspectRatio} onChange={(e) => setAspectRatio(e.target.value)} style={{ flex: 1, padding: "8px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px" }}>
-                  <option value="1:1">1:1 正方形 (IG/FB)</option>
-                  <option value="4:5">4:5 直式滿版 (IG Feed)</option>
-                  <option value="9:16">9:16 直式限動 (Story/Reels)</option>
-                  <option value="16:9">16:9 橫幅 Banner</option>
-                </select>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "42px", height: "42px", border: "1px solid var(--line)", borderRadius: "8px", background: "var(--canvas)", flexShrink: 0 }} title={`目前比例: ${aspectRatio}`}>
-                  <div style={{
-                    width: aspectRatio === "16:9" ? "28px" : aspectRatio === "9:16" ? "12px" : aspectRatio === "4:5" ? "18px" : "20px",
-                    height: aspectRatio === "16:9" ? "16px" : aspectRatio === "9:16" ? "22px" : aspectRatio === "4:5" ? "22px" : "20px",
-                    border: "2px solid var(--purple)",
-                    borderRadius: "3px",
-                    background: "var(--purple-soft)",
-                    transition: "all 0.2s ease"
-                  }} />
-                  <span style={{ fontSize: "8px", color: "var(--purple)", marginTop: "2px", fontWeight: "bold" }}>{aspectRatio}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </>
-  );
-}
-
 function EmptyState({ text }: { text: string }) { return <div className="empty-state"><span>⌕</span><p>{text}</p></div>; }
-
-function MarketingGuidesModal({ language, onClose }: { language: Language; onClose: () => void }) {
-  return (
-    <div className="guide-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <section className="guide-modal" role="dialog" aria-modal="true" style={{ maxWidth: "860px" }}>
-        <button className="guide-close" onClick={onClose}>×</button>
-        
-        <div className="guide-hero">
-          <span className="tool-icon lilac">📚</span>
-          <div>
-            <span className="section-kicker">SEO & MARKETING GUIDES</span>
-            <h2>{t(language, "爆款行銷與排版完整實戰指南", "Marketing & Copywriting Guides")}</h2>
-            <p>{t(language, "收錄 2026 最熱門的社群排版技巧、AI 海報生成 Prompt 指南與演算法爆款心法。", "Practical guides for social media marketing, AI poster prompts, and algorithm hacks.")}</p>
-          </div>
-        </div>
-
-        <div style={{ display: "grid", gap: "16px", marginTop: "20px" }}>
-          
-          <article style={{ border: "1px solid var(--line)", borderRadius: "14px", padding: "18px", background: "var(--paper)" }}>
-            <h3 style={{ fontSize: "15px", color: "var(--purple-dark)", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
-              <span>🎨</span> 指南 1：不用寫 Prompt！30 秒用 AI 點選生成 Midjourney 商業海報
-            </h3>
-            <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.7, margin: 0 }}>
-              對於完全不懂英文提示詞或剛接觸 AI 的使用者來說，寫 Prompt 常面臨不知道專業術語（如打光漫射光線、金色標章、留白密度）的痛點。<strong>字研所 AI 廣告研究所</strong> 將 20+ 招商業海報排版結構模組化，使用者只需從產業（3C家電、美食餐飲、汽車房產、電商服飾）開始，點選主色調、背景與 CTA，系統會自動組合出包含 <code>--ar</code> 比例與 <code>--style raw</code> 的高轉換Prompt！
-            </p>
-          </article>
-
-          <article style={{ border: "1px solid var(--line)", borderRadius: "14px", padding: "18px", background: "var(--paper)" }}>
-            <h3 style={{ fontSize: "15px", color: "var(--purple-dark)", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
-              <span>¶</span> 指南 2：2026 IG 貼文換行與爆款排版完整教學
-            </h3>
-            <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.7, margin: 0 }}>
-              在 Instagram 和 Threads 發文時，直接按 Enter 換行常會被平台預設機制吃掉，導致整段內文擠成一團。解決這個問題的核心是插入 <strong>隱形 Unicode 空白字元 (U+3164)</strong>。字研所的社群排版工具會自動把每個換行替換為高相容性的隱形字元，並提供風格分隔線 (─── ⋆⋅☆⋅⋆ ───) 與微符號，提升手機閱讀留白體驗。
-            </p>
-          </article>
-
-          <article style={{ border: "1px solid var(--line)", borderRadius: "14px", padding: "18px", background: "var(--paper)" }}>
-            <h3 style={{ fontSize: "15px", color: "var(--purple-dark)", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
-              <span>💬</span> 指南 3：Threads 爆款討論文案怎麼寫？7 個小編實測公式
-            </h3>
-            <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.7, margin: 0 }}>
-              Threads 演算法極度偏好「引發留言互動」的內容。爆款貼文往往具備三大要素：1. 開頭用引人好奇的破題句（如『關於最近的一個小思考…』）；2. 內文段落短小、留白充裕；3. 結尾拋出開放式問題並附上 3-5 個導流黑標籤。使用字研所 AI 社群貼文助手選取「💬 Threads 觀點」語氣，即可一鍵套用爆款公式。
-            </p>
-          </article>
-
-          <article style={{ border: "1px solid var(--line)", borderRadius: "14px", padding: "18px", background: "var(--paper)" }}>
-            <h3 style={{ fontSize: "15px", color: "var(--purple-dark)", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
-              <span>✨</span> 指南 4：小紅書高轉換種草文案：AI + 人工潤飾全攻略
-            </h3>
-            <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.7, margin: 0 }}>
-              小紅書種草文章講求「視覺氛圍感」與「實用指標評分」。標題必須帶有儀式感符號（✦ 氛圍感生活提案 ✦），內文搭配五星評分（▪ 視覺氛圍：滿分 💯、▪ 出片指數：★★★★★），並於結尾提醒『點讚收藏不迷路』。AI 發文助手的「✨ 小紅書種草」語氣可自動生成完整種草結構。
-            </p>
-          </article>
-
-        </div>
-      </section>
-    </div>
-  );
-}
-
-function EmbedShareModal({ language, onClose }: { language: Language; onClose: () => void }) {
-  const [copiedEmbed, setCopiedEmbed] = useState(false);
-  const embedCode = `<iframe src="https://cooklabai.com/#poster" width="100%" height="700" frameborder="0" style="border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.1);"></iframe>`;
-
-  const copyEmbed = () => {
-    navigator.clipboard.writeText(embedCode);
-    setCopiedEmbed(true);
-    setTimeout(() => setCopiedEmbed(false), 2000);
-  };
-
-  return (
-    <div className="guide-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <section className="guide-modal" role="dialog" aria-modal="true" style={{ maxWidth: "620px" }}>
-        <button className="guide-close" onClick={onClose}>×</button>
-        
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
-          <span style={{ fontSize: "24px" }}>🔗</span>
-          <div>
-            <h2 style={{ fontSize: "18px", margin: 0, color: "var(--ink)" }}>{t(language, "分享與嵌入字研所工具", "Share & Embed TextLab")}</h2>
-            <p style={{ fontSize: "11px", color: "var(--muted)", margin: "2px 0 0" }}>{t(language, "讓您的讀者或社群好友也能免費體驗 AI 廣告研究所！", "Embed our tool on your blog or share with friends!")}</p>
-          </div>
-        </div>
-
-        {/* 嵌入碼 */}
-        <div style={{ marginBottom: "20px" }}>
-          <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "6px" }}>
-            1. 部落格/網站 嵌入語法 (Embed Code):
-          </label>
-          <textarea
-            readOnly
-            value={embedCode}
-            rows={3}
-            style={{ width: "100%", padding: "10px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "11px", fontFamily: "monospace", resize: "none", outline: "none", marginBottom: "8px" }}
-          />
-          <button className="primary-button wide" onClick={copyEmbed}>
-            {copiedEmbed ? "嵌入語法已複製 ✓" : "一鍵複製嵌入語法 (iframe)"}
-          </button>
-        </div>
-
-        {/* 社群分享連結 */}
-        <div>
-          <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "8px" }}>
-            2. 一鍵分享給社群好友:
-          </label>
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            <a
-              href="https://line.me/R/msg/text/?字研所%20AI%20廣告研究所｜30秒免寫%20Prompt%20生成商業海報！%20https://cooklabai.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "8px 14px", fontSize: "12px", textDecoration: "none", fontWeight: 650, display: "flex", alignItems: "center", gap: "6px" }}
-            >
-              🟢 LINE 分享
-            </a>
-            <a
-              href="https://www.facebook.com/sharer/sharer.php?u=https://cooklabai.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "8px 14px", fontSize: "12px", textDecoration: "none", fontWeight: 650, display: "flex", alignItems: "center", gap: "6px" }}
-            >
-              🔵 FB 分享
-            </a>
-            <a
-              href="https://threads.net/intent/post?text=發現一個超級好用的免費%20AI%20廣告海報產生器「字研所」！完全不用寫%20Prompt，點選就能生出%20Midjourney%20和%20ChatGPT%20海報提示詞：https://cooklabai.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "8px 14px", fontSize: "12px", textDecoration: "none", fontWeight: 650, display: "flex", alignItems: "center", gap: "6px" }}
-            >
-              💬 Threads 分享
-            </a>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-}
 
 function GuideModal({ language, onClose, onSelectTool }: { language: Language; onClose: () => void; onSelectTool: (id: ToolId) => void }) {
   return <div className="guide-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
@@ -3187,7 +1838,7 @@ function GuideModal({ language, onClose, onSelectTool }: { language: Language; o
         <p style={{ marginBottom: "0" }}>{t(language, "支援 IG 美學圖文、FB 粉專文、Threads 爆款討論、LINE 社群推播、小紅書種草等平台風格自動生成。", "Supports auto-generation for IG aesthetic posts, FB brand posts, Threads viral takes, LINE community pushes, and Redbook lifestyle content.")}</p>
       </div>
       <div className="guide-section-title" style={{ marginTop: "20px" }}><div><span className="section-kicker">TOOLS</span><h3>{t(language, "你想做什麼？", "What would you like to do?")}</h3></div><span>{t(language, "點選後直接開啟", "Opens instantly")}</span></div>
-      <div className="guide-tools">{tools.map((tool) => <button key={tool.id} onClick={() => onSelectTool(tool.id)}><span className={`tool-icon ${tool.tone}`}>{tool.icon}</span><span><strong>{t(language, tool.name, tool.nameEn)}</strong><small>{t(language, tool.short, tool.shortEn)}</small></span><i>→</i></button>)}</div>
+      <div className="guide-tools">{tools.map((tool) => <button key={tool.id} onClick={() => onSelectTool(tool.id)}><span className="tool-icon">{tool.icon}</span><span><strong>{t(language, tool.name, tool.nameEn)}</strong><small>{t(language, tool.short, tool.shortEn)}</small></span><i>→</i></button>)}</div>
       <div className="guide-bottom"><div className="guide-privacy"><span>✦</span><div><strong>{t(language, "清楚的資料使用方式", "Clear data handling")}</strong><p>{t(language, "一般文字工具都在瀏覽器完成。只有 AI 貼文助手會把你送出的內容交由 Cloudflare Workers AI 處理；本站不儲存該內容。最近使用與收藏只保存在目前瀏覽器。", "Regular text tools run in your browser. Only the AI Post Assistant sends submitted text to Cloudflare Workers AI for processing; this site does not store that content. Recents and favorites stay in this browser.")}</p></div></div><div className="guide-faq"><strong>{t(language, "常見問題", "Quick answers")}</strong><p><span>{t(language, "AI 生成需要費用嗎？", "Does AI generation cost anything?")}</span>{t(language, "訪客完全免費，不需 API 金鑰或信用卡；免費額度不足時會自動切換本機產生器。", "It is free for visitors with no API key or credit card. When the free quota is unavailable, it automatically switches to the local generator.")}</p><p><span>{t(language, "複製後沒反應？", "Copy not working?")}</span>{t(language, "確認瀏覽器已允許剪貼簿權限，或改用其他瀏覽器。", "Allow clipboard access or try another browser.")}</p><p><span>{t(language, "哪些平台能用？", "Where can I use it?")}</span>{t(language, "大多數支援 Unicode 的社群、文件與遊戲都能使用。", "Most social apps, documents and games that support Unicode.")}</p></div></div>
     </section>
   </div>;
@@ -3237,8 +1888,6 @@ export default function App() {
   }, []);
   const [copied, setCopied] = useState("");
   const [guideOpen, setGuideOpen] = useState(false);
-  const [guidesOpen, setGuidesOpen] = useState(false);
-  const [embedOpen, setEmbedOpen] = useState(false);
   const [language, setLanguage] = useState<Language>(() => {
     const pathParts = window.location.pathname.split("/").filter(Boolean);
     if (pathParts[0] === "en") return "en";
@@ -3325,134 +1974,100 @@ export default function App() {
     document.body.style.overflow = "hidden";
     return () => { document.removeEventListener("keydown", closeOnEscape); document.body.style.overflow = ""; };
   }, [guideOpen]);
-  const [globalHistory, setGlobalHistory] = useState<string[]>(() => {
-    try { return JSON.parse(localStorage.getItem("textlab.globalHistory") || "[]"); } catch { return []; }
-  });
-  const [historyOpen, setHistoryOpen] = useState(false);
-
-  useEffect(() => {
-    const syncHistory = () => {
-      try { setGlobalHistory(JSON.parse(localStorage.getItem("textlab.globalHistory") || "[]")); } catch {}
-    };
-    window.addEventListener("textlab-history-updated", syncHistory);
-    return () => window.removeEventListener("textlab-history-updated", syncHistory);
-  }, []);
-
   const toolProps = { copied, setCopied, language };
   return <div className="app-shell">
-    <header className="topbar"><a className="brand" href={`${language === "en" ? "/en" : ""}/layout`} onClick={(e) => { e.preventDefault(); selectTool("layout"); }}><BrandLogo /><span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span></a><nav><button className="guide-nav-button secondary-nav" onClick={() => setGuidesOpen(true)}>📚 {t(language, "行銷指南", "Guides")}</button><button className="guide-nav-button secondary-nav" onClick={() => setEmbedOpen(true)}>🔗 {t(language, "嵌入與分享", "Embed")}</button><button className="guide-nav-button secondary-nav" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button><button className="guide-nav-button theme-toggle" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")} aria-label={t(language, "切換主題風格", "Toggle theme")}><span aria-hidden="true">{theme === "dark" ? "🌙" : theme === "light" ? "☀️" : "🌗"}</span><span className="theme-label">{theme === "dark" ? t(language, "深色", "Dark") : theme === "light" ? t(language, "淺色", "Light") : t(language, "自動", "Auto")}</span></button><div className="language-switch" aria-label="Language"><button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div></nav></header>
+    <header className="topbar">
+      <a className="brand" href="/layout" onClick={(e) => { e.preventDefault(); selectTool("layout"); }}>
+        <BrandLogo />
+        <span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span>
+      </a>
+      <nav>
+        <button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button>
+        <button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>
+          {theme === "dark" ? "🌙 深色" : theme === "light" ? "☀️ 淺色" : "🌗 自動"}
+        </button>
+        <div className="language-switch" aria-label="Language">
+          <button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁中</button>
+          <button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button>
+        </div>
+      </nav>
+    </header>
     <div className="layout">
       <aside className="sidebar">
-        <p className="sidebar-label" style={{ marginBottom: "8px" }}>{t(language, "文字工具", "TEXT TOOLS")}</p>
-        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+        <p className="sidebar-label" style={{ marginBottom: "10px" }}>{t(language, "文字工具箱", "TEXT LAB TOOLS")}</p>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {[
             {
-              title: "社群排版",
-              titleEn: "SOCIAL FORMATTING",
-              ids: ["layout", "blank", "symbols"]
+              title: "📝 社群創作",
+              titleEn: "SOCIAL MEDIA",
+              ids: ["layout", "ai", "hook", "title", "bio"] as ToolId[]
             },
             {
-              title: "發文工具",
-              titleEn: "POST TOOLS",
-              ids: ["ai", "hook", "title", "bio", "hashtags"]
+              title: "✦ 符號美化",
+              titleEn: "SYMBOLS & FONTS",
+              ids: ["symbols", "emoji", "kaomoji", "fonts"] as ToolId[]
             },
             {
-              title: "✦ 符號顏文字與表情",
-              titleEn: "SYMBOLS & EMOJIS",
-              ids: ["emoji", "kaomoji", "fonts"]
-            },
-            {
-              title: "🛠️ 實用小工具",
+              title: "🛠️ 實用工具",
               titleEn: "UTILITY TOOLS",
-              ids: ["nickname", "poster"]
+              ids: ["hashtags", "blank", "nickname"] as ToolId[]
             }
           ].map((sec) => (
             <div key={sec.title}>
               <div className="sidebar-section-title">{t(language, sec.title, sec.titleEn)}</div>
               <div className="tool-nav">
                 {tools.filter((tItem) => sec.ids.includes(tItem.id)).map((tool) => (
-                  <a key={tool.id} href={`${language === "en" ? "/en" : ""}/${tool.id}`} className={active === tool.id ? "active" : ""} onClick={(event) => { event.preventDefault(); selectTool(tool.id); }}>
-                    <span className={`tool-icon ${tool.tone}`}>{tool.icon}</span>
+                  <button key={tool.id} className={active === tool.id ? "active" : ""} onClick={() => selectTool(tool.id)}>
+                    <span className="tool-icon">{tool.icon}</span>
                     <span>
                       <strong>{t(language, tool.name, tool.nameEn)}</strong>
                       <small>{t(language, tool.short, tool.shortEn)}</small>
                     </span>
-                    {tool.badge && <em>{t(language, tool.badge, "HOT")}</em>}
-                  </a>
+                  </button>
                 ))}
               </div>
             </div>
           ))}
         </div>
+        <div className="sidebar-note" style={{ marginTop: "16px" }}>
+          <span>✦</span>
+          <p>
+            <strong>{t(language, "你的文字，只留在這裡", "Your text stays here")}</strong>
+            <br />
+            {t(language, "所有轉換都在瀏覽器完成，我們不會儲存內容。", "Everything runs in your browser. We never store your content.")}
+          </p>
+        </div>
       </aside>
-      <main className="workspace"><div className="mobile-tool-picker"><span>{t(language, "目前工具", "CURRENT TOOL")}</span><select value={active} onChange={(e) => selectTool(e.target.value as ToolId)}>{tools.map((tool) => <option value={tool.id} key={tool.id}>{t(language, tool.name, tool.nameEn)}｜{t(language, tool.short, tool.shortEn)}</option>)}</select></div>
+      <main className="workspace">
+        <div className="mobile-tool-picker">
+          <span>{t(language, "目前工具", "CURRENT TOOL")}</span>
+          <select value={active} onChange={(e) => selectTool(e.target.value as ToolId)}>
+            {tools.map((tool) => (
+              <option value={tool.id} key={tool.id}>
+                {t(language, tool.name, tool.nameEn)}｜{t(language, tool.short, tool.shortEn)}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="tool-surface">
-          {active === "poster" && <PosterTool {...toolProps} />}
+          {active === "layout" && <LayoutTool {...toolProps} />}
+          {active === "ai" && <AIPostTool {...toolProps} selectTool={selectTool} />}
           {active === "hook" && <HookTool {...toolProps} />}
           {active === "title" && <TitleTool {...toolProps} />}
-          {active === "ai" && <AIPostTool {...toolProps} selectTool={selectTool} />}
+          {active === "bio" && <BioTool {...toolProps} />}
           {active === "symbols" && <SymbolsTool {...toolProps} />}
           {active === "emoji" && <EmojiTool {...toolProps} />}
           {active === "kaomoji" && <KaomojiTool {...toolProps} />}
           {active === "fonts" && <FontsTool {...toolProps} />}
-          {active === "layout" && <LayoutTool {...toolProps} />}
-          {active === "nickname" && <NicknameTool {...toolProps} />}
-          {active === "blank" && <BlankTool {...toolProps} />}
-          {active === "bio" && <BioTool {...toolProps} />}
           {active === "hashtags" && <HashtagTool {...toolProps} />}
+          {active === "blank" && <BlankTool {...toolProps} />}
+          {active === "nickname" && <NicknameTool {...toolProps} />}
         </div>
         <footer><span>{t(language, "字研所", "TEXTLAB")} TEXT LAB</span><p>{t(language, "讓每一段文字，都剛剛好。", "Make every word feel just right.")}</p><small>© 2026 · Made for everyday expression</small></footer>
       </main>
     </div>
 
-    {/* 浮動全域剪貼簿歷程抽屜 (Clipboard Quick History Tray) */}
-    {!!globalHistory.length && (
-      <>
-        <button
-          onClick={() => setHistoryOpen(!historyOpen)}
-          style={{
-            position: "fixed",
-            left: "24px",
-            bottom: "24px",
-            zIndex: 45,
-            border: "1px solid var(--line)",
-            borderRadius: "12px",
-            background: "var(--paper)",
-            color: "var(--ink)",
-            padding: "9px 13px",
-            fontSize: "11px",
-            fontWeight: 650,
-            boxShadow: "var(--shadow)",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            gap: "6px"
-          }}
-        >
-          <span>📋</span> {t(language, `剪貼記錄 (${globalHistory.length})`, `History (${globalHistory.length})`)}
-        </button>
-
-        {historyOpen && (
-          <div style={{ position: "fixed", left: "24px", bottom: "72px", zIndex: 45, width: "310px", padding: "16px", borderRadius: "16px", background: "var(--paper)", border: "1px solid var(--line)", boxShadow: "0 14px 45px rgba(0,0,0,0.2)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
-              <strong style={{ fontSize: "12px", color: "var(--purple)" }}>📋 {t(language, "跨工具複製歷程", "Cross-tool Clipboard")}</strong>
-              <button onClick={() => { setGlobalHistory([]); localStorage.removeItem("textlab.globalHistory"); }} style={{ border: 0, background: "transparent", color: "var(--subtle)", fontSize: "10px", cursor: "pointer" }}>{t(language, "清除記錄", "Clear")}</button>
-            </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", maxHeight: "190px", overflowY: "auto" }}>
-              {globalHistory.map((item, idx) => (
-                <button key={`${item}-${idx}`} onClick={() => copyText(item, setCopied)} style={{ border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", borderRadius: "8px", padding: "5px 9px", fontSize: "11px", cursor: "pointer", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {item}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </>
-    )}
-
     {guideOpen && <GuideModal language={language} onClose={() => setGuideOpen(false)} onSelectTool={(id) => { selectTool(id); setGuideOpen(false); }} />}
-    {guidesOpen && <MarketingGuidesModal language={language} onClose={() => setGuidesOpen(false)} />}
-    {embedOpen && <EmbedShareModal language={language} onClose={() => setEmbedOpen(false)} />}
-    {!!copied && <div className="toast" role="status"><span>✓</span> {t(language, "已複製到剪貼簿", "Copied to clipboard")}</div>}
+    {!!copied && <div className="toast"  role="status"><span>✓</span> {t(language, "已複製到剪貼簿", "Copied to clipboard")}</div>}
   </div>;
 }

@@ -1,12 +1,4 @@
 {
-  "poster": {
-    "nameZh": "海報企劃",
-    "nameEn": "Poster Planner",
-    "titleZh": "AI 廣告研究所｜免寫 Prompt 一鍵生成商業海報 (Midjourney / ChatGPT)｜字研所 TextLab",
-    "descriptionZh": "不需英文或複雜提示詞！30 秒透過點選自動產生 Midjourney、ChatGPT、Gemini 專業商業海報 Prompt，支援網址解析與 AI 廣告評分。",
-    "titleEn": "AI Commercial Poster Studio | Visual Ad Prompt Generator | TextLab",
-    "descriptionEn": "Create professional Midjourney, ChatGPT and Gemini poster prompts without writing complex instructions. Free visual ad prompt generator."
-  },
   "ai": {
     "nameZh": "社群貼文工具",
     "nameEn": "Social Post Writer",
