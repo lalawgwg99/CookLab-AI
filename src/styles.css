@@ -939,3 +939,98 @@ footer small { text-align: right; color: var(--subtle); }
   color: var(--ink);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
+
+
+/* ==========================================================================
+   iPhone 16 Post Simulator & Creator Radar System (Apple Native HIG)
+   ========================================================================== */
+.iphone-simulator {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  padding: 16px 18px 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-width: 420px;
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", sans-serif;
+}
+
+[data-theme="dark"] .iphone-simulator {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  border-color: #38383a;
+}
+
+.iphone-notch {
+  width: 100px;
+  height: 20px;
+  background: #000;
+  border-radius: 20px;
+  margin: 0 auto 14px;
+}
+
+.iphone-post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.iphone-user-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.iphone-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.iphone-post-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 200px;
+}
+
+.iphone-fold-alert {
+  margin: 10px 0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1.5px dashed #f59e0b;
+  background: rgba(245, 158, 11, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iphone-fold-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #d97706;
+}
+
+.iphone-post-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 16px;
+}

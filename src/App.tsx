@@ -803,6 +803,7 @@ function LayoutTool({ copied, setCopied, language }: { copied: string; setCopied
   const [decoration, setDecoration] = useState("sparkle");
   const [cjkSpacing, setCjkSpacing] = useState(true);
   const [platform, setPlatform] = useState<"threads" | "ig" | "redbook" | "bio">("threads");
+  const [previewMode, setPreviewMode] = useState<"clean" | "iphone">("clean");
 
   const platformLimits = {
     threads: { name: "Threads", limit: 500, fold: 500 },
@@ -814,6 +815,46 @@ function LayoutTool({ copied, setCopied, language }: { copied: string; setCopied
   const currentLimit = platformLimits[platform];
   const isOverLimit = text.length > currentLimit.limit;
   const isFolded = platform === "ig" && text.length > 125;
+
+  // 爆款文案吸睛度雷達演算法
+  const viralStats = useMemo(() => {
+    const lines = text.trim().split("\n").map(l => l.trim()).filter(Boolean);
+    const firstLine = lines[0] || "";
+    const hasNumber = /[0-9０-９]/.test(firstLine);
+    const hasQuestion = /[?？!！]/.test(firstLine);
+    const hookScore = Math.min(100, Math.max(40, (hasNumber ? 30 : 10) + (hasQuestion ? 30 : 15) + (firstLine.length > 5 && firstLine.length < 35 ? 30 : 10)));
+    const avgLineLen = lines.length > 0 ? Math.round(text.length / lines.length) : 0;
+    const readability = avgLineLen < 28 ? "極致呼吸感" : avgLineLen < 45 ? "良好" : "偏緊湊";
+    return { hookScore, readability, lineCount: lines.length };
+  }, [text]);
+
+  // 一鍵風格轉換
+  const handleTransformTone = (tone: "threads" | "cozy" | "deal" | "clean") => {
+    if (tone === "threads") {
+      const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+      const hook = lines[0] ? `千萬別再這樣做！${lines[0]}` : "這是我今年發現最痛的領悟：";
+      setText(`${hook}\n\n${lines.slice(1).map(l => `▸ ${l}`).join("\n\n")}\n\n你認同嗎？下方留言告訴我 👇`);
+    } else if (tone === "cozy") {
+      const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+      setText(`『 ${lines[0] || "漫漫生活"} 』\n\n${lines.slice(1).join("\n\n")}\n\n〰︎ 慢慢生活，把喜歡的日子過成詩 🌿`);
+    } else if (tone === "deal") {
+      const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+      setText(`🔥 限時開團通知｜手慢無！\n\n【亮點精選】\n${lines.map(l => `✔ ${l}`).join("\n")}\n\n⏳ 結單時間：本週日 23:59 準時關單！\n👉 點擊個人簡介連結搶先下單`);
+    } else if (tone === "clean") {
+      let cleaned = text;
+      const dict: Record<string, string> = {
+        "視頻": "影片", "音頻": "音檔", "軟件": "軟體", "硬件": "硬體",
+        "質量": "品質", "網紅": "KOL", "走心": "用心", "立馬": "立刻",
+        "給力": "很罩", "忽悠": "唬弄", "項目": "專案", "搞定": "處理好",
+        "靠譜": "可靠", "種草": "被燒到", "拔草": "滅火", "老鐵": "好友",
+        "貓膩": "內幕", "巨好吃": "超好吃", "內卷": "過度競爭", "牛逼": "超強",
+      };
+      Object.entries(dict).forEach(([c, t]) => {
+        cleaned = cleaned.split(c).join(t);
+      });
+      setText(cleaned);
+    }
+  };
 
   const result = useMemo(() => {
     let raw = text;
@@ -844,65 +885,183 @@ function LayoutTool({ copied, setCopied, language }: { copied: string; setCopied
     setText((prev) => (prev ? `${prev}\n\n${tag}` : tag));
   };
 
-  return <><ToolIntro tool={tools.find((t) => t.id === "layout")!} language={language} />
-    <section className="layout-templates"><div className="section-title-row"><div><span className="section-kicker">START WITH A TEMPLATE</span><h2>{t(language, "選一個排版範本", "Choose a formatting template")}</h2></div><span>{t(language, "選擇後仍可自由修改", "You can edit it after selecting")}</span></div><div>{templates.map((template) => <button key={template.id} onClick={() => setText(t(language, template.text, template.textEn))}><span>{template.icon}</span><strong>{t(language, template.name, template.nameEn)}</strong></button>)}</div></section>
-    
-    <div className="layout-controls">
-      <label>{t(language, "目標平台與字數", "Target Platform & Limit")}<select value={platform} onChange={(e) => setPlatform(e.target.value as any)}><option value="threads">Threads (500字)</option><option value="ig">Instagram 貼文 (2200字)</option><option value="redbook">小紅書 (1000字)</option><option value="bio">IG 個人簡介 (150字)</option></select></label>
-      <label>{t(language, "段落格式", "Paragraph spacing")}<select value={spacing} onChange={(event) => setSpacing(event.target.value)}><option value="spacious">{t(language, "舒展留白", "Spacious")}</option><option value="compact">{t(language, "緊湊排列", "Compact")}</option><option value="list">{t(language, "自動項目符號", "Auto bullets")}</option></select></label>
-      <label>{t(language, "標題裝飾", "Title decoration")}<select value={decoration} onChange={(event) => setDecoration(event.target.value)}><option value="sparkle">✦ {t(language, "星光分隔", "Sparkle divider")}</option><option value="soft">୨୧ {t(language, "柔和框線", "Soft frame")}</option><option value="quote">『 {t(language, "日系雙角括", "CJK Quotes")} 』</option><option value="minimal">─── {t(language, "極簡細線", "Minimal line")}</option><option value="wave">〰︎ {t(language, "波浪紋", "Wave")}</option><option value="none">{t(language, "無裝飾", "None")}</option></select></label>
-      <label>{t(language, "空行樣式", "Blank-line style")}<select value={style} onChange={(event) => setStyle(event.target.value)}><option value="invisible">{t(language, "隱形空白（推薦）", "Invisible blank (recommended)")}</option><option value="dot">{t(language, "中間點 ·", "Middle dot ·")}</option><option value="line">{t(language, "分隔線 ─", "Divider ─")}</option><option value="plain">{t(language, "一般換行", "Regular line break")}</option></select></label>
-    </div>
+  return (
+    <>
+      <ToolIntro tool={tools.find((t) => t.id === "layout")!} language={language} />
+      <section className="layout-templates">
+        <div className="section-title-row">
+          <div>
+            <span className="section-kicker">START WITH A TEMPLATE</span>
+            <h2>{t(language, "選一個排版範本", "Choose a formatting template")}</h2>
+          </div>
+          <span>{t(language, "選擇後仍可自由修改", "You can edit it after selecting")}</span>
+        </div>
+        <div>
+          {templates.map((template) => (
+            <button key={template.id} onClick={() => setText(t(language, template.text, template.textEn))}>
+              <span>{template.icon}</span>
+              <strong>{t(language, template.name, template.nameEn)}</strong>
+            </button>
+          ))}
+        </div>
+      </section>
 
-    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "10px", margin: "-4px 0 16px", padding: "10px 14px", border: "1px solid var(--line)", borderRadius: "12px", background: "var(--paper)" }}>
-      <label style={{ display: "inline-flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "var(--ink)", cursor: "pointer", userSelect: "none" }}>
-        <input type="checkbox" checked={cjkSpacing} onChange={(e) => setCjkSpacing(e.target.checked)} style={{ accentColor: "var(--purple)", width: "16px", height: "16px" }} />
-        <strong>{t(language, "自動補齊中英 / Emoji 呼吸空格", "Auto-space CJK, English & Emoji")}</strong>
-      </label>
-      <div style={{ fontSize: "11px", color: isOverLimit ? "#d9534f" : "var(--muted)", fontWeight: 600, display: "flex", alignItems: "center", gap: "10px" }}>
-        <span>{text.length} / {currentLimit.limit} {t(language, "字", "chars")}</span>
-        {isFolded && <span style={{ color: "#d97724", background: "rgba(217, 119, 36, 0.12)", padding: "2px 7px", borderRadius: "6px" }}>⚠️ {t(language, ">125字：IG將在此處摺疊顯示「...更多」", ">125 chars: IG will fold here")}</span>}
+      {/* 爆款吸睛診斷雷達 */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "10px", margin: "14px 0" }}>
+        <div style={{ padding: "12px 14px", borderRadius: "12px", background: "var(--paper)", border: "1px solid var(--line)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <span style={{ fontSize: "11px", color: "var(--muted)", display: "block" }}>⚡ 前 3 秒鉤子評分</span>
+            <strong style={{ fontSize: "18px", color: viralStats.hookScore >= 75 ? "#16a34a" : "#d97706" }}>{viralStats.hookScore} / 100</strong>
+          </div>
+          <span style={{ fontSize: "10px", background: "var(--purple-soft)", color: "var(--purple)", padding: "2px 6px", borderRadius: "4px", fontWeight: 700 }}>高爆發潛力</span>
+        </div>
+        <div style={{ padding: "12px 14px", borderRadius: "12px", background: "var(--paper)", border: "1px solid var(--line)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <span style={{ fontSize: "11px", color: "var(--muted)", display: "block" }}>📱 行動端呼吸感</span>
+            <strong style={{ fontSize: "16px", color: viralStats.readability === "極致呼吸感" ? "#16a34a" : "#ea580c" }}>{viralStats.readability}</strong>
+          </div>
+          <span style={{ fontSize: "10px", color: "var(--muted)" }}>{viralStats.readability === "極致呼吸感" ? "段落分明好閱讀" : "文字塊過厚"}</span>
+        </div>
       </div>
-    </div>
 
-    <div className="editor-grid">
-      <div className="input-card">
-        <div className="field-label"><label htmlFor="layout-input">{t(language, "原始文字", "Original text")}</label><span>{text.length} {t(language, "字", "characters")}</span></div>
-        <textarea id="layout-input" value={text} onChange={(e) => setText(e.target.value)} />
+      {/* 一鍵風格神仙四變 */}
+      <div style={{ margin: "12px 0", padding: "12px 14px", borderRadius: "12px", background: "var(--paper)", border: "1px solid var(--line)" }}>
+        <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--purple)", display: "block", marginBottom: "8px" }}>
+          🪄 一鍵風格神仙四變（貼上任何草稿，瞬間變換語感）：
+        </span>
+        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+          <button
+            type="button"
+            onClick={() => handleTransformTone("threads")}
+            style={{ padding: "6px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
+          >
+            🔥 轉為 Threads 爆款體
+          </button>
+          <button
+            type="button"
+            onClick={() => handleTransformTone("cozy")}
+            style={{ padding: "6px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
+          >
+            ☁️ 轉為日系文青感
+          </button>
+          <button
+            type="button"
+            onClick={() => handleTransformTone("deal")}
+            style={{ padding: "6px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
+          >
+            🛒 轉為電商開團促銷
+          </button>
+          <button
+            type="button"
+            onClick={() => handleTransformTone("clean")}
+            style={{ padding: "6px 12px", borderRadius: "8px", border: "1.5px solid var(--purple)", background: "var(--purple-soft)", color: "var(--purple)", fontSize: "12px", fontWeight: 700, cursor: "pointer" }}
+          >
+            🇹🇼 一鍵去大陸支語・法規避雷
+          </button>
+        </div>
       </div>
-      <div className="input-card result-card">
-        <div className="field-label"><span>{t(language, "排版後預覽", "Formatted preview")}</span><span className="changed-badge">{t(language, "已套用格式", "Format applied")}</span></div>
-        <div className="preview-text formatted-preview">{result.split("\n").map((line, index) => line === "⠀" ? <span className="invisible-line" key={`${line}-${index}`}>{t(language, "隱形空白 · 貼上後看不見", "Invisible blank · hidden after pasting")}</span> : <span key={`${line}-${index}`}>{line || " "}</span>)}</div>
-      </div>
-    </div>
 
-    <div style={{ margin: "14px 0", padding: "12px 16px", border: "1px solid var(--line)", borderRadius: "12px", background: "var(--paper)", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-      <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--muted)" }}>{t(language, "一鍵快捷落款：", "Quick Footer / Tags:")}</span>
-      {[
-        "#Threads #日常 #質感排版",
-        "#日常記錄 #生活隨筆",
-        "—— Follow for more ✨",
-        "─── ♡ ───",
-        "📌 歡迎追蹤分享"
-      ].map((tag) => (
-        <button
-          key={tag}
-          onClick={() => insertTag(tag)}
-          style={{ border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--purple)", borderRadius: "8px", padding: "4px 9px", fontSize: "11px", cursor: "pointer" }}
-        >
-          + {tag}
+      <div className="layout-controls">
+        <label>{t(language, "目標平台與字數", "Target Platform & Limit")}<select value={platform} onChange={(e) => setPlatform(e.target.value as any)}><option value="threads">Threads (500字)</option><option value="ig">Instagram 貼文 (2200字)</option><option value="redbook">小紅書 (1000字)</option><option value="bio">IG 個人簡介 (150字)</option></select></label>
+        <label>{t(language, "段落格式", "Paragraph spacing")}<select value={spacing} onChange={(event) => setSpacing(event.target.value)}><option value="spacious">{t(language, "舒展留白", "Spacious")}</option><option value="compact">{t(language, "緊湊排列", "Compact")}</option><option value="list">{t(language, "自動項目符號", "Auto bullets")}</option></select></label>
+        <label>{t(language, "標題裝飾", "Title decoration")}<select value={decoration} onChange={(event) => setDecoration(event.target.value)}><option value="sparkle">✦ {t(language, "星光分隔", "Sparkle divider")}</option><option value="soft">୨୧ {t(language, "柔和框線", "Soft frame")}</option><option value="quote">『 {t(language, "日系雙角括", "CJK Quotes")} 』</option><option value="minimal">─── {t(language, "極簡細線", "Minimal line")}</option><option value="wave">〰︎ {t(language, "波浪紋", "Wave")}</option><option value="none">{t(language, "無裝飾", "None")}</option></select></label>
+        <label>{t(language, "預覽模式切換", "Preview Mode")}<select value={previewMode} onChange={(e) => setPreviewMode(e.target.value as any)}><option value="clean">📋 雙欄預覽</option><option value="iphone">📱 iPhone 16 真機發文模擬</option></select></label>
+      </div>
+
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "10px", margin: "-4px 0 16px", padding: "10px 14px", border: "1px solid var(--line)", borderRadius: "12px", background: "var(--paper)" }}>
+        <label style={{ display: "inline-flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "var(--ink)", cursor: "pointer", userSelect: "none" }}>
+          <input type="checkbox" checked={cjkSpacing} onChange={(e) => setCjkSpacing(e.target.checked)} style={{ accentColor: "var(--purple)", width: "16px", height: "16px" }} />
+          <strong>{t(language, "自動補齊中英 / Emoji 呼吸空格", "Auto-space CJK, English & Emoji")}</strong>
+        </label>
+        <div style={{ fontSize: "11px", color: isOverLimit ? "#d9534f" : "var(--muted)", fontWeight: 600, display: "flex", alignItems: "center", gap: "10px" }}>
+          <span>{text.length} / {currentLimit.limit} {t(language, "字", "chars")}</span>
+          {isFolded && <span style={{ color: "#d97724", background: "rgba(217, 119, 36, 0.12)", padding: "2px 7px", borderRadius: "6px" }}>⚠️ {t(language, ">125字：IG將在此處摺疊顯示「...更多」", ">125 chars: IG will fold here")}</span>}
+        </div>
+      </div>
+
+      {previewMode === "clean" ? (
+        <div className="editor-grid">
+          <div className="input-card">
+            <div className="field-label"><label htmlFor="layout-input">{t(language, "原始文字", "Original text")}</label><span>{text.length} {t(language, "字", "characters")}</span></div>
+            <textarea id="layout-input" value={text} onChange={(e) => setText(e.target.value)} />
+          </div>
+          <div className="input-card result-card">
+            <div className="field-label"><span>{t(language, "排版後預覽", "Formatted preview")}</span><span className="changed-badge">{t(language, "已套用格式", "Format applied")}</span></div>
+            <div className="preview-text formatted-preview">{result.split("\n").map((line, index) => line === "⠀" ? <span className="invisible-line" key={`${line}-${index}`}>{t(language, "隱形空白 · 貼上後看不見", "Invisible blank · hidden after pasting")}</span> : <span key={`${line}-${index}`}>{line || " "}</span>)}</div>
+          </div>
+        </div>
+      ) : (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "16px", marginBottom: "16px" }}>
+          <div className="input-card">
+            <div className="field-label"><label htmlFor="layout-input-iphone">{t(language, "文案草稿", "Draft text")}</label><span>{text.length} 字</span></div>
+            <textarea id="layout-input-iphone" rows={12} value={text} onChange={(e) => setText(e.target.value)} style={{ width: "100%", height: "380px" }} />
+          </div>
+          {/* iPhone 16 真機模擬視窗 */}
+          <div className="iphone-simulator">
+            <div className="iphone-notch"></div>
+            <div className="iphone-post-header">
+              <div className="iphone-user-meta">
+                <div className="iphone-avatar">字</div>
+                <div>
+                  <strong style={{ fontSize: "12px", display: "block" }}>your_brand_id</strong>
+                  <small style={{ fontSize: "10px", color: "var(--muted)" }}>Taipei, Taiwan</small>
+                </div>
+              </div>
+              <span style={{ fontSize: "14px", color: "var(--muted)" }}>•••</span>
+            </div>
+            <div className="iphone-post-body">
+              {result.slice(0, 125)}
+              {result.length > 125 && (
+                <>
+                  <div className="iphone-fold-alert">
+                    <span className="iphone-fold-badge">⚠️ IG / Threads 在此處摺疊「...更多」</span>
+                  </div>
+                  <span style={{ color: "var(--muted)" }}>{result.slice(125)}</span>
+                </>
+              )}
+            </div>
+            <div className="iphone-post-footer">
+              <div style={{ display: "flex", gap: "12px" }}>
+                <span>❤️</span>
+                <span>💬</span>
+                <span>✈️</span>
+              </div>
+              <span>🔖</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div style={{ margin: "14px 0", padding: "12px 16px", border: "1px solid var(--line)", borderRadius: "12px", background: "var(--paper)", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+        <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--muted)" }}>{t(language, "一鍵快捷落款：", "Quick Footer / Tags:")}</span>
+        {[
+          "#Threads #日常 #質感排版",
+          "#日常記錄 #生活隨筆",
+          "—— Follow for more ✨",
+          "─── ♡ ───",
+          "📌 歡迎追蹤分享"
+        ].map((tag) => (
+          <button
+            key={tag}
+            onClick={() => insertTag(tag)}
+            style={{ border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--purple)", borderRadius: "8px", padding: "4px 9px", fontSize: "11px", cursor: "pointer" }}
+          >
+            + {tag}
+          </button>
+        ))}
+      </div>
+
+      <div className="layout-action">
+        <div>
+          <strong>{t(language, "看得見的預覽，看不見的空白", "Visible preview, invisible blank lines")}</strong>
+          <p>{t(language, "紫色提示只用來標示空行，複製到 IG／Threads 時不會出現。", "The purple guide only marks blank lines here. It will not appear on Instagram or Threads.")}</p>
+        </div>
+        <button className="primary-button" onClick={() => { copyText(result, setCopied); trackCopyAction("layout"); }}>
+          {copied === result ? t(language, "已複製 ✓", "Copied ✓") : t(language, "⚡ 一鍵複製排版完成文字", "Copy formatted text")}
         </button>
-      ))}
-    </div>
-
-    <div className="layout-action">
-      <div>
-        <strong>{t(language, "看得見的預覽，看不見的空白", "Visible preview, invisible blank lines")}</strong>
-        <p>{t(language, "紫色提示只用來標示空行，複製到 IG／Threads 時不會出現。", "The purple guide only marks blank lines here. It will not appear on Instagram or Threads.")}</p>
       </div>
-      <button className="primary-button" onClick={() => copyText(result, setCopied)}>{copied === result ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製排版文字", "Copy formatted text")}</button>
-    </div>
-  </>;
+    </>
+  );
 }
 
 function NicknameTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
