@@ -5,7 +5,7 @@ const jsonHeaders = {
 };
 
 const TOOLS = [
-  "layout", "ai", "deal", "hook", "title", "bio",
+  "layout", "ai", "deal", "swipe", "localize", "hook", "title", "bio",
   "symbols", "emoji", "kaomoji", "fonts",
   "hashtags", "blank", "nickname"
 ];

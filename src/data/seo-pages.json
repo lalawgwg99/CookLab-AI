@@ -102,5 +102,21 @@
     "descriptionZh": "專為電商賣家、團購主、KOL 帶貨設計的商業爆單文案引擎！自動試算現省金額與折扣、生成痛點急迫感、防客訴退換貨規格。",
     "titleEn": "E-Commerce Group-Buy & Sales Copy Engine | TextLab Pro",
     "descriptionEn": "Generate high-converting e-commerce group-buy copy, price calculation, and dispute-proof terms for Instagram, LINE, and Facebook."
+  },
+  "swipe": {
+    "nameZh": "實戰爆款文案庫",
+    "nameEn": "Viral Social Swipe File",
+    "titleZh": "實戰爆款文案庫｜Threads 破萬讚・團購破百萬現成模板直接抄｜字研所 TextLab",
+    "descriptionZh": "精選台灣 IG、Threads、團媽開團真實爆單模板庫！破萬愛心熱門架構、留言私訊轉單餌、開團促銷現成抄，一鍵套用生成。",
+    "titleEn": "Viral Social Swipe File | Proven High-Converting Copy Templates | TextLab",
+    "descriptionEn": "Proven high-converting copy templates for Instagram, Threads, and e-commerce group-buys. Copy and customize viral posts in seconds."
+  },
+  "localize": {
+    "nameZh": "台灣用語與法規避雷器",
+    "nameEn": "Taiwan Voice & Legal Sanitizer",
+    "titleZh": "台灣用語與法規避雷器｜大陸用語轉正統繁體・衛福部廣告法規防罰鍰｜字研所 TextLab",
+    "descriptionZh": "一鍵將大陸用語（質量、視頻、立馬等）轉為 100% 正統台灣繁體語感，同時自動掃描衛福部食品/化粧品廣告法規違規詞，替換合法詞省下 4 萬罰單。",
+    "titleEn": "Taiwan Voice & Ad Legal Sanitizer | Localize Copy & Compliance | TextLab",
+    "descriptionEn": "Clean mainland buzzwords into natural Taiwanese phrasing and detect illegal advertising claim terms to avoid regulatory fines."
   }
 }

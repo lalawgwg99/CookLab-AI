@@ -5,7 +5,7 @@ import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 import seoPages from "./data/seo-pages.json";
 
-type ToolId = "layout" | "ai" | "deal" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "hashtags" | "blank" | "nickname";
+type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "hashtags" | "blank" | "nickname";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -34,6 +34,8 @@ type Tool = {
 
 const tools: Tool[] = [
   { id: "layout", name: "社群排版換行", nameEn: "Social Formatter", short: "IG／Threads 換行與縮排", shortEn: "Instagram / Threads spacing", icon: "¶" },
+  { id: "swipe", name: "實戰爆款文案庫", nameEn: "Viral Swipe File", short: "破萬讚模板直接抄", shortEn: "Proven viral templates", icon: "📚" },
+  { id: "localize", name: "台灣用語與法規避雷", nameEn: "Taiwan Voice Sanitizer", short: "去大陸支語・衛福部防罰", shortEn: "Localize phrasing & safety", icon: "🇹🇼" },
   { id: "deal", name: "電商開團爆單機", nameEn: "Group-Buy Deal Studio", short: "團購帶貨與防客訴規格", shortEn: "High-converting sales copy", icon: "🛒" },
   { id: "ai", name: "AI 發文助手", nameEn: "AI Post Assistant", short: "智慧生成社群貼文", shortEn: "Social copywriting assistant", icon: "🪄" },
   { id: "hook", name: "爆款 Hook 產生器", nameEn: "Viral Hook Studio", short: "吸引點擊的開頭第一句", shortEn: "Caption hook formulas", icon: "⚡" },
@@ -1477,28 +1479,28 @@ function ProPaywallModal({ language, onClose, onRedeemSuccess }: { language: Lan
 
   return (
     <div className="guide-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <section className="guide-modal" role="dialog" aria-modal="true" style={{ maxWidth: "480px", textAlign: "center" }}>
+      <section className="guide-modal" role="dialog" aria-modal="true" style={{ maxWidth: "500px", textAlign: "center" }}>
         <button className="guide-close" onClick={onClose}>×</button>
-        <div style={{ width: "52px", height: "52px", borderRadius: "14px", background: "var(--purple-soft)", color: "var(--purple)", fontSize: "24px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
-          🔒
+        <div style={{ width: "52px", height: "52px", borderRadius: "14px", background: "linear-gradient(135deg, var(--purple), var(--purple-dark))", color: "#ffffff", fontSize: "24px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
+          👑
         </div>
         <h2 style={{ fontSize: "20px", fontWeight: 700, margin: "0 0 6px", color: "var(--ink)" }}>
-          {t(language, "訂閱 TextLab Pro 專業版", "Subscribe to TextLab Pro")}
+          {t(language, "解鎖 TextLab Pro 商業專屬特權", "Unlock TextLab Pro Pass")}
         </h2>
-        <p style={{ fontSize: "13px", color: "var(--muted)", margin: "0 0 20px" }}>
-          {t(language, "開通專業電商爆單、品牌專屬聲線與無限制高效創作。", "Unlock high-converting e-commerce copy, brand personas, and unlimited creation.")}
+        <p style={{ fontSize: "13px", color: "var(--muted)", margin: "0 0 18px" }}>
+          {t(language, "省下 40,000 元衛生局法規罰單、杜絕大陸支語爭議、現成爆款直接抄！", "Save $40,000 regulatory fines, cleanse mainland buzzwords, swipe viral posts.")}
         </p>
 
         {/* 核心專業特權清單 */}
-        <div style={{ textAlign: "left", display: "flex", flexDirection: "column", gap: "10px", marginBottom: "22px", background: "var(--canvas)", padding: "16px", borderRadius: "14px", border: "1px solid var(--line)" }}>
+        <div style={{ textAlign: "left", display: "flex", flexDirection: "column", gap: "10px", marginBottom: "20px", background: "var(--canvas)", padding: "16px", borderRadius: "14px", border: "1px solid var(--line)" }}>
           {[
-            { title: "🛍️ 電商開團爆單文案與防客訴規格機", desc: "自動計算折扣比率、急迫感倒數與完整下單規則排版" },
-            { title: "💼 品牌專屬聲線檔案室 (Brand Persona)", desc: "自訂受眾、Slogan 與必帶標籤，每篇貼文都貼合品牌調性" },
-            { title: "📑 IG 輪播字卡切分器 (Carousel Formatter)", desc: "長文自動切成 10 張投影片字卡，附帶頁碼與滑動指引" },
-            { title: "⚡ 無限制極速 AI 深度生成", desc: "跳過每日 3 次限制與冷卻保護，享有優先運算通道" }
+            { icon: "🛡️", title: "衛福部廣告法規避雷針", desc: "自動掃描食安法/化粧品法違規詞，一鍵替換合法合規詞，免遭 4~40 萬罰鍰" },
+            { icon: "🇹🇼", title: "台灣在地用語一鍵過濾器", desc: "自動將視頻、質量、立馬等大陸用語轉為正統台灣繁體質感，杜絕社群公關災難" },
+            { icon: "📚", title: "實戰爆款文案庫 (直接抄作業)", desc: "Threads 破萬愛心熱門架構、團購開團破百萬催購模板，點擊直接套用" },
+            { icon: "🛒", title: "電商開團爆單機與私訊轉單腳本", desc: "即時折扣試算、防客訴售後條款、IG/Threads 留言「+1」3 步驟轉單腳本" }
           ].map((item, i) => (
             <div key={i} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-              <span style={{ color: "var(--purple)", fontWeight: 700 }}>✓</span>
+              <span style={{ fontSize: "15px" }}>{item.icon}</span>
               <div>
                 <strong style={{ fontSize: "12px", color: "var(--ink)", display: "block" }}>{item.title}</strong>
                 <span style={{ fontSize: "11px", color: "var(--muted)" }}>{item.desc}</span>
@@ -1507,46 +1509,46 @@ function ProPaywallModal({ language, onClose, onRedeemSuccess }: { language: Lan
           ))}
         </div>
 
-        {/* 方案選擇按鈕（直接付款結帳） */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "20px" }}>
+        {/* 方案選擇按鈕（早鳥終身買斷 NT$ 399 與年繳 NT$ 499） */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "18px" }}>
           <button
             type="button"
             className="primary-button"
-            style={{ width: "100%", padding: "14px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "14px", fontWeight: 650 }}
+            style={{ width: "100%", padding: "14px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "14px", fontWeight: 700, borderRadius: "12px", background: "var(--purple)", color: "#fff", border: "none", cursor: "pointer" }}
             onClick={() => {
-              alert(t(language, "即將前往綠界 / Stripe 安全付款結帳頁面（NT$ 199 / 月）。付款完成後將由系統自動發送開通序號！", "Redirecting to secure checkout (NT$ 199 / month). License key will be issued upon payment!"));
+              alert(t(language, "即將前往綠界 / Stripe 結帳頁面（早鳥終身買斷 NT$ 399）。一次付費，永久免費享用未來所有商業爆款更新！", "Redirecting to checkout (Early Bird Lifetime NT$ 399). Pay once, own forever!"));
             }}
           >
-            <span>{t(language, "月繳方案（隨時可退訂）", "Monthly Pass")}</span>
-            <span>NT$ 199 / 月 ➔</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <span>👑 早鳥終身買斷方案</span>
+              <span style={{ fontSize: "10px", background: "#f59e0b", color: "#fff", padding: "2px 6px", borderRadius: "6px", fontWeight: 700 }}>限量前200名</span>
+            </div>
+            <span>NT$ 399 終身買斷 ➔</span>
           </button>
 
           <button
             type="button"
-            style={{ width: "100%", padding: "14px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "14px", fontWeight: 650, borderRadius: "12px", border: "1px solid var(--purple)", background: "var(--purple-soft)", color: "var(--purple-dark)", cursor: "pointer" }}
+            style={{ width: "100%", padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "13px", fontWeight: 650, borderRadius: "12px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", cursor: "pointer" }}
             onClick={() => {
-              alert(t(language, "即將前往綠界 / Stripe 安全付款結帳頁面（NT$ 1,490 / 年）。享有年繳 63 折特惠！", "Redirecting to secure checkout (NT$ 1,490 / year). 37% off!"));
+              alert(t(language, "即將前往綠界 / Stripe 結帳頁面（年度暢通方案 NT$ 499 / 年）。平均一天不到 1.4 元！", "Redirecting to checkout (Annual Pass NT$ 499 / year). Less than NT$ 1.4 / day!"));
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span>{t(language, "年繳方案", "Annual Pass")}</span>
-              <span style={{ fontSize: "10px", background: "var(--purple)", color: "white", padding: "2px 6px", borderRadius: "6px" }}>省 37%</span>
-            </div>
-            <span>NT$ 1,490 / 年 ➔</span>
+            <span>🌟 年度暢通方案</span>
+            <span>NT$ 499 / 年 ➔</span>
           </button>
         </div>
 
         {/* 授權序號驗證區 */}
-        <div style={{ borderTop: "1px solid var(--line)", paddingTop: "16px" }}>
-          <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "8px" }}>
-            {t(language, "付款完成後請輸入訂單授權序號直接開通：", "Enter your purchased license key to activate:")}
+        <div style={{ borderTop: "1px solid var(--line)", paddingTop: "14px" }}>
+          <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "6px" }}>
+            {t(language, "付款完成後請輸入訂單授權序號直接開通（如 LIFETIME-399）：", "Enter your purchased license key to activate:")}
           </span>
           <div style={{ display: "flex", gap: "6px" }}>
             <input
               type="text"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              placeholder="例: PRO-MONTHLY-2026 或 PRO-ANNUAL-2026"
+              placeholder="例: LIFETIME-399 或 TL-8888-9999"
               style={{ flex: 1, padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "12px", color: "var(--ink)" }}
             />
             <button
@@ -1874,6 +1876,287 @@ function DealTool({
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+
+// 實戰爆款庫資料
+const SWIPE_TEMPLATES = [
+  {
+    id: "threads-mindset",
+    category: "Threads 破萬讚",
+    title: "反常識人生體悟",
+    hook: "在職場/生活混了幾年後，我悟出一個很不政治正確的道理：",
+    template: "在職場/生活混了幾年後，我悟出一個很不政治正確的道理：\n\n很多人以為「努力」最重要，但實際上：\n01 / 選擇遠比努力重要 10 倍\n02 / 懂得說「不」的人，往往混得比有求必應的人更好\n03 / 內耗最嚴重的時候，通常是因為你把別人的眼光看得比自己的目標重要\n\n生活不是拿來證明給別人看的，而是拿來讓自己舒服的。✨\n\n💬 你的看法呢？你也在哪一刻突然想通了這件事？👇🏼\n\n#Threads日常 #思考隨筆 #個人成長 #職場觀察"
+  },
+  {
+    id: "threads-burnout",
+    category: "Threads 破萬讚",
+    title: "社畜優雅崩潰共鳴",
+    hook: "改了 5 次草稿之後，我終於明白了一個大人的生存法則：",
+    template: "改了 5 次草稿之後，我終於明白了一個大人的生存法則：\n\n禮貌微笑，點頭稱是，準時下班。🫠\n\n我們不是沒有熱情，只是把熱情留給真正值得的人事物。今晚麻辣鍋已就位，工作放一邊，快樂第一名！🏃‍♂️💨💼🍻\n\n─── ⋆⋅☆⋅⋆ ───\n#社畜日常 #優雅崩潰 #下班萬歲 #Threads吐嘈"
+  },
+  {
+    id: "groupbuy-urgent",
+    category: "團媽開團爆單",
+    title: "限時結單緊急倒數（催單神文）",
+    hook: "【最後倒數 6 小時】現貨真的快被掃光了！",
+    template: "🔥【最後倒數 6 小時｜限量結單公告】\n\n很多人私訊小編問還能不能追加，真的對不起大家！廠商給的這批特惠現貨已經剩下最後個位數 ⚡️\n\n🛒 團購重點最後確認：\n• 市售原價：NT$ {原價}\n• 本團專屬開團價：NT$ {團購價}（現省 ${現省}）\n• 滿額免運：滿 $1,500 即享免運送到家\n\n⚠️ 今晚 23:59 準時關閉賣場，錯過這檔就要等下一季預購了！\n👇🏼 把握最後現貨下單：\nhttps://deal.cooklabai.com/order/now"
+  },
+  {
+    id: "groupbuy-price",
+    category: "團媽開團爆單",
+    title: "原價 vs 團購價極致對比（算給你看）",
+    hook: "算給你看！為什麼這檔團購一定要跟？",
+    template: "算給你看！為什麼這檔【{商品品名}】一定要跟？💸\n\n去專櫃/官網單買：NT$ {原價}\n在我們社群跟團：NT$ {團購價}！\n直接現省 NT$ {現省}，相當於打了 {折扣} 折！等於省下一頓大餐的錢 🥹\n\n✨ 3 個必搶理由：\n1. 專利極致輕量，出門無負擔\n2. 經檢驗合格，全台原廠正品保固\n3. 首波下單再加贈專屬收納袋\n\n留言「+1」小編私訊你專屬免運折扣碼！👇🏼"
+  },
+  {
+    id: "ig-cozy",
+    category: "IG 氛圍生活",
+    title: "私藏好店探店提案",
+    hook: "本來私心不想公開的古宅咖啡廳... ☕️",
+    template: "☁️ 找一個下午，把靈魂留給這裡。\n\n本來私心不想公開這間藏在大安區巷弄的古宅咖啡廳，但窗邊灑進來的光線真的太溫柔了。✨\n\n▪ 抹茶戚風：甜度剛剛好，茶香濃郁\n▪ 窗邊座位：適合獨處看書，陽光極致治癒\n\n在這個快節奏的城市裡，留給自己一段清空大腦的微光時刻。🌸\n\n─── ♡ ───\n#日常美學 #探店提案 #生活紀錄 #質感隨筆"
+  }
+];
+
+function SwipeFileTool({ copied, setCopied, language, isPro, onRequirePro }: { copied: string; setCopied: (v: string) => void; language: Language; isPro: boolean; onRequirePro: () => void }) {
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [selectedTemplate, setSelectedTemplate] = useState(SWIPE_TEMPLATES[0]);
+
+  const categories = ["all", "Threads 破萬讚", "團媽開團爆單", "IG 氛圍生活"];
+  const filtered = activeCategory === "all" ? SWIPE_TEMPLATES : SWIPE_TEMPLATES.filter(t => t.category === activeCategory);
+
+  const handleCopy = (text: string) => {
+    if (!isPro) {
+      onRequirePro();
+      return;
+    }
+    copyText(text, setCopied);
+    trackCopyAction("swipe");
+  };
+
+  return (
+    <div className="tool-card">
+      <div className="tool-header">
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span className="tool-icon">📚</span>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <h2>{t(language, "實戰爆款文案庫（直接抄作業）", "Viral Social Swipe File")}</h2>
+              <span style={{ fontSize: "10px", background: "linear-gradient(135deg, #f59e0b, #d97706)", color: "#ffffff", padding: "2px 6px", borderRadius: "4px", fontWeight: 700 }}>PRO</span>
+            </div>
+            <p>{t(language, "精選台灣 Threads 破萬愛心熱門架構、團購破百萬爆單模板，不需從零發想，一鍵直接套用！", "Proven viral copy templates for Threads, Instagram, and group-buys.")}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 分類篩選 */}
+      <div style={{ display: "flex", gap: "8px", margin: "14px 0", flexWrap: "wrap" }}>
+        {categories.map((c) => (
+          <button
+            key={c}
+            onClick={() => setActiveCategory(c)}
+            style={{ padding: "6px 12px", borderRadius: "8px", border: activeCategory === c ? "1.5px solid var(--purple)" : "1px solid var(--line)", background: activeCategory === c ? "var(--purple-soft)" : "var(--canvas)", color: activeCategory === c ? "var(--purple)" : "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
+          >
+            {c === "all" ? "全部精選" : c}
+          </button>
+        ))}
+      </div>
+
+      {/* 模板網格與預覽 */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "12px", marginBottom: "16px" }}>
+        {filtered.map((item) => (
+          <div
+            key={item.id}
+            onClick={() => setSelectedTemplate(item)}
+            style={{ padding: "14px", borderRadius: "12px", background: selectedTemplate.id === item.id ? "var(--purple-soft)" : "var(--canvas)", border: selectedTemplate.id === item.id ? "1.5px solid var(--purple)" : "1px solid var(--line)", cursor: "pointer", transition: "all 0.15s ease" }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
+              <span style={{ fontSize: "10px", color: "var(--purple)", fontWeight: 700, background: "var(--paper)", padding: "2px 6px", borderRadius: "4px" }}>{item.category}</span>
+            </div>
+            <strong style={{ fontSize: "13px", color: "var(--ink)", display: "block", marginBottom: "4px" }}>{item.title}</strong>
+            <p style={{ fontSize: "11px", color: "var(--muted)", margin: 0, lineClamp: 2, overflow: "hidden", display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: 2 }}>
+              {item.hook}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* 展開編輯與套用 */}
+      <div style={{ padding: "16px", borderRadius: "14px", background: "var(--paper)", border: "1px solid var(--line)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+          <strong style={{ fontSize: "13px", color: "var(--ink)" }}>📋 目前選擇：{selectedTemplate.title}</strong>
+          <span style={{ fontSize: "11px", color: "var(--muted)" }}>可直接複製或替換主詞後發文</span>
+        </div>
+        <textarea
+          rows={9}
+          value={selectedTemplate.template}
+          onChange={(e) => setSelectedTemplate({ ...selectedTemplate, template: e.target.value })}
+          style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.6, resize: "vertical" }}
+        />
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "12px", flexWrap: "wrap", gap: "8px" }}>
+          {!isPro ? (
+            <span style={{ fontSize: "12px", color: "var(--purple)", fontWeight: 600 }}>👑 Pro 商業版解鎖完整爆款庫一鍵複製</span>
+          ) : (
+            <span style={{ fontSize: "12px", color: "#16a34a", fontWeight: 600 }}>✓ 已開通 Pro 授權</span>
+          )}
+          <button
+            onClick={() => handleCopy(selectedTemplate.template)}
+            style={{ padding: "10px 20px", borderRadius: "10px", border: "none", background: "var(--purple)", color: "#fff", fontSize: "13px", fontWeight: 650, cursor: "pointer" }}
+          >
+            {isPro ? (copied === selectedTemplate.template ? "✓ 已複製到剪貼簿" : "⚡ 一鍵複製爆款文案") : "🔒 升級 Pro 一鍵複製"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// 台灣在地用語與法規避雷器
+const MAINLAND_WORDS: { from: string; to: string; note: string }[] = [
+  { from: "視頻", to: "影片", note: "台灣慣用「影片 / 短影音」" },
+  { from: "質量", to: "品質", note: "台灣物體特質慣用「品質 / 質感」" },
+  { from: "立馬", to: "立刻", note: "台灣慣用「立刻 / 馬上」" },
+  { from: "走心", to: "用心", note: "台灣慣用「用心 / 觸動人心」" },
+  { from: "給力", to: "很罩", note: "台灣慣用「很棒 / 超罩」" },
+  { from: "網紅", to: "KOL", note: "台灣社群多用「創作者 / KOL」" },
+  { from: "忽悠", to: "糊弄", note: "台灣慣用「糊弄 / 欺騙」" },
+  { from: "打call", to: "支持", note: "台灣慣用「大力支持 / 加油」" },
+  { from: "拔草", to: "退坑", note: "台灣慣用「滅火 / 滅坑」" },
+  { from: "種草", to: "被燒到", note: "台灣慣用「被推坑 / 被燒到」" },
+  { from: "接地氣", to: "在地親民", note: "台灣慣用「親民 / 在地」" },
+  { from: "貓膩", to: "蹊蹺", note: "台灣慣用「蹊蹺 / 古怪」" },
+  { from: "軟件", to: "軟體", note: "台灣科技用語「軟體」" },
+  { from: "硬件", to: "硬體", note: "台灣科技用語「硬體」" },
+  { from: "高清", to: "高畫質", note: "台灣影音用語「高畫質 / HD」" },
+  { from: "硬盤", to: "硬碟", note: "台灣用語「硬碟」" },
+  { from: "屏幕", to: "螢幕", note: "台灣用語「螢幕」" },
+  { from: "鏈接", to: "連結", note: "台灣網址用語「連結」" },
+  { from: "打印", to: "列印", note: "台灣辦公用語「列印」" },
+  { from: "信息", to: "訊息", note: "台灣訊息用語「訊息」" },
+  { from: "項目", to: "專案", note: "台灣商業用語「專案 / 計畫」" },
+  { from: "立項", to: "啟動", note: "台灣商業用語「啟動 / 立案」" },
+  { from: "充電寶", to: "行動電源", note: "台灣生活用語「行動電源」" },
+  { from: "U盤", to: "隨身碟", note: "台灣生活用語「隨身碟」" },
+  { from: "雙肩包", to: "後背包", note: "台灣生活用語「後背包」" },
+  { from: "衛衣", to: "帽T", note: "台灣服飾用語「帽T / 大學T」" },
+  { from: "外賣", to: "外送", note: "台灣生活用語「外送」" },
+  { from: "盒飯", to: "便當", note: "台灣飲食用語「便當」" },
+];
+
+function LocalizeTool({ copied, setCopied, language, isPro, onRequirePro }: { copied: string; setCopied: (v: string) => void; language: Language; isPro: boolean; onRequirePro: () => void }) {
+  const [input, setInput] = useState("這款質量極佳的視頻神器，立馬讓你的項目走心又給力！保證見效還能排毒瘦身，消炎效果絕頂，鏈接在下方！");
+  const [output, setOutput] = useState("");
+
+  const detectedMainland = useMemo(() => {
+    return MAINLAND_WORDS.filter(w => input.includes(w.from));
+  }, [input]);
+
+  const detectedLegal = useMemo(() => {
+    return LEGAL_RISKS.filter(r => input.includes(r.term));
+  }, [input]);
+
+  const handleConvert = () => {
+    let result = input;
+    // Replace mainland terms
+    for (const w of MAINLAND_WORDS) {
+      result = result.split(w.from).join(w.to);
+    }
+    // Replace legal risks
+    for (const r of LEGAL_RISKS) {
+      result = result.split(r.term).join(r.replace);
+    }
+    setOutput(result);
+  };
+
+  const handleCopy = () => {
+    if (!isPro) {
+      onRequirePro();
+      return;
+    }
+    copyText(output || input, setCopied);
+    trackCopyAction("localize");
+  };
+
+  return (
+    <div className="tool-card">
+      <div className="tool-header">
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span className="tool-icon">🇹🇼</span>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <h2>{t(language, "台灣用語與法規避雷器", "Taiwan Voice & Legal Sanitizer")}</h2>
+              <span style={{ fontSize: "10px", background: "linear-gradient(135deg, #f59e0b, #d97706)", color: "#ffffff", padding: "2px 6px", borderRadius: "4px", fontWeight: 700 }}>PRO</span>
+            </div>
+            <p>{t(language, "自動過濾大陸支語（視頻、質量、立馬等），並掃描衛福部食品/化粧品廣告法規違規詞，一鍵轉為 100% 台灣正統繁體美學文案！", "Cleanse mainland buzzwords and illegal advertising terms into natural Taiwanese.")}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 掃描狀態儀表板 */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px", margin: "14px 0" }}>
+        <div style={{ padding: "12px 14px", borderRadius: "10px", background: detectedMainland.length > 0 ? "#fef3c7" : "var(--canvas)", border: "1px solid var(--line)" }}>
+          <span style={{ fontSize: "11px", color: "var(--muted)", display: "block" }}>🇨🇳 大陸用語偵測</span>
+          <strong style={{ fontSize: "18px", color: detectedMainland.length > 0 ? "#d97706" : "var(--ink)" }}>
+            {detectedMainland.length} 處用語
+          </strong>
+        </div>
+        <div style={{ padding: "12px 14px", borderRadius: "10px", background: detectedLegal.length > 0 ? "#fee2e2" : "var(--canvas)", border: "1px solid var(--line)" }}>
+          <span style={{ fontSize: "11px", color: "var(--muted)", display: "block" }}>⚠️ 衛福部罰鍰風險詞 (4萬~40萬)</span>
+          <strong style={{ fontSize: "18px", color: detectedLegal.length > 0 ? "#dc2626" : "var(--ink)" }}>
+            {detectedLegal.length} 處違規風險
+          </strong>
+        </div>
+      </div>
+
+      <div style={{ marginBottom: "12px" }}>
+        <label style={{ fontSize: "12px", color: "var(--ink)", fontWeight: 600, display: "block", marginBottom: "6px" }}>
+          貼入待檢測文案（支援 ChatGPT、小紅書或草稿內容）：
+        </label>
+        <textarea
+          rows={5}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="貼上文字，系統將自動標記大陸支語與廣告違法詞彙..."
+          style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.5 }}
+        />
+      </div>
+
+      <button
+        onClick={handleConvert}
+        style={{ width: "100%", padding: "12px", borderRadius: "10px", background: "var(--purple)", color: "#fff", border: "none", fontSize: "14px", fontWeight: 650, cursor: "pointer", marginBottom: "16px" }}
+      >
+        ⚡ 一鍵轉為 100% 正統台灣繁體質感合規文案
+      </button>
+
+      {/* 成果與一鍵複製 */}
+      {!!output && (
+        <div style={{ padding: "14px", borderRadius: "12px", background: "var(--paper)", border: "1px solid var(--line)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: "#16a34a" }}>✓ 轉換完成：已完全消除大陸支語與法規罰款雷區</span>
+          </div>
+          <textarea
+            readOnly
+            rows={5}
+            value={output}
+            style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.5 }}
+          />
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10px" }}>
+            {!isPro ? (
+              <span style={{ fontSize: "12px", color: "var(--purple)", fontWeight: 600 }}>👑 Pro 商業版解鎖一鍵複製</span>
+            ) : (
+              <span style={{ fontSize: "12px", color: "#16a34a", fontWeight: 600 }}>✓ 已開通 Pro 授權</span>
+            )}
+            <button
+              onClick={handleCopy}
+              style={{ padding: "8px 18px", borderRadius: "8px", border: "none", background: "var(--purple)", color: "#fff", fontSize: "13px", fontWeight: 650, cursor: "pointer" }}
+            >
+              {isPro ? (copied === output ? "✓ 已複製文案" : "⚡ 一鍵複製合規文案") : "🔒 升級 Pro 一鍵複製"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -2932,9 +3215,9 @@ export default function App() {
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {[
             {
-              title: "💼 商業變現 (PRO)",
+              title: "👑 商業與爆款 (PRO)",
               titleEn: "MONETIZATION (PRO)",
-              ids: ["deal"] as ToolId[]
+              ids: ["swipe", "localize", "deal"] as ToolId[]
             },
             {
               title: "📝 社群創作",
@@ -2961,7 +3244,7 @@ export default function App() {
                     <span style={{ flex: 1 }}>
                       <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                         <strong>{t(language, tool.name, tool.nameEn)}</strong>
-                        {tool.id === "deal" && (
+                        {["deal", "swipe", "localize"].includes(tool.id) && (
                           <span style={{ fontSize: "9px", background: "linear-gradient(135deg, #f59e0b, #d97706)", color: "#fff", padding: "1px 5px", borderRadius: "4px", fontWeight: 700 }}>
                             PRO
                           </span>
@@ -2997,6 +3280,8 @@ export default function App() {
         </div>
         <div className="tool-surface">
           {active === "layout" && <LayoutTool {...toolProps} />}
+          {active === "swipe" && <SwipeFileTool {...toolProps} isPro={entitlements.isPro} onRequirePro={() => setPaywallOpen(true)} />}
+          {active === "localize" && <LocalizeTool {...toolProps} isPro={entitlements.isPro} onRequirePro={() => setPaywallOpen(true)} />}
           {active === "deal" && <DealTool {...toolProps} isPro={entitlements.isPro} onRequirePro={() => setPaywallOpen(true)} />}
           {active === "ai" && <AIPostTool {...toolProps} selectTool={selectTool} isPro={entitlements.isPro} onRequirePro={() => setPaywallOpen(true)} />}
           {active === "hook" && <HookTool {...toolProps} />}

@@ -11,19 +11,20 @@ const STORAGE_KEY = "textlab.user_entitlements";
 
 // Payment links for direct checkout (can be configured via localStorage or environment)
 export const CHECKOUT_CONFIG = {
-  monthlyUrl: "https://cooklabai.com/checkout?plan=monthly",
+  lifetimeUrl: "https://cooklabai.com/checkout?plan=lifetime",
   yearlyUrl: "https://cooklabai.com/checkout?plan=yearly",
-  priceMonthly: "NT$ 199",
-  priceYearly: "NT$ 1,490"
+  priceLifetime: "NT$ 399",
+  priceYearly: "NT$ 499"
 };
 
-// Valid purchased license keys (30 days, 365 days, lifetime)
+// Valid purchased license keys (365 days, lifetime)
 const PURCHASED_LICENSES: Record<string, number> = {
-  "PRO-MONTHLY-2026": 30,
-  "PRO-ANNUAL-2026": 365,
+  "LIFETIME-399": 3650,
+  "EARLYBIRD-399": 3650,
+  "PRO-LIFETIME": 3650,
+  "ANNUAL-499": 365,
   "TEXTLAB-PRO-LIFETIME": 3650,
-  "VIP2026": 365,
-  "PRO888": 30
+  "VIP2026": 365
 };
 
 export function getEntitlements(): UserEntitlements {
@@ -82,8 +83,8 @@ export function verifyLicenseKey(key: string): { success: boolean; message: stri
   return { success: true, message: `授權驗證成功，已開通 Pro 專業會員資格 (${days} 天)！` };
 }
 
-export function directCheckout(plan: "monthly" | "yearly") {
-  const url = plan === "yearly" ? CHECKOUT_CONFIG.yearlyUrl : CHECKOUT_CONFIG.monthlyUrl;
+export function directCheckout(plan: "lifetime" | "yearly") {
+  const url = plan === "yearly" ? CHECKOUT_CONFIG.yearlyUrl : CHECKOUT_CONFIG.lifetimeUrl;
   // If payment gateway URL is active, open it, or alert instructions
   window.open(url, "_blank");
 }
