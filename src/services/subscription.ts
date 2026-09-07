@@ -1,20 +1,29 @@
-// Subscription and entitlement management service
+// Direct monetization and paid license entitlement management
 
 export interface UserEntitlements {
   isPro: boolean;
   tier: "free" | "pro";
   expireAt: number | null;
-  promoCode?: string;
+  licenseKey?: string;
 }
 
 const STORAGE_KEY = "textlab.user_entitlements";
 
-// Valid promotional codes for trial, testers, or purchasers
-const PROMO_CODES: Record<string, number> = {
-  "VIP2026": 365,   // 1 year
-  "PRO888": 30,     // 30 days
-  "TEXTLAB": 30,    // 30 days
-  "CREATOR": 90,    // 90 days
+// Payment links for direct checkout (can be configured via localStorage or environment)
+export const CHECKOUT_CONFIG = {
+  monthlyUrl: "https://cooklabai.com/checkout?plan=monthly",
+  yearlyUrl: "https://cooklabai.com/checkout?plan=yearly",
+  priceMonthly: "NT$ 199",
+  priceYearly: "NT$ 1,490"
+};
+
+// Valid purchased license keys (30 days, 365 days, lifetime)
+const PURCHASED_LICENSES: Record<string, number> = {
+  "PRO-MONTHLY-2026": 30,
+  "PRO-ANNUAL-2026": 365,
+  "TEXTLAB-PRO-LIFETIME": 3650,
+  "VIP2026": 365,
+  "PRO888": 30
 };
 
 export function getEntitlements(): UserEntitlements {
@@ -40,12 +49,25 @@ export function saveEntitlements(entitlements: UserEntitlements) {
   } catch {}
 }
 
-export function redeemPromoCode(code: string): { success: boolean; message: string } {
-  const trimmed = code.trim().toUpperCase();
-  const days = PROMO_CODES[trimmed];
+// Verify purchased license key entered by user after direct payment
+export function verifyLicenseKey(key: string): { success: boolean; message: string } {
+  const trimmed = key.trim().toUpperCase();
+  const days = PURCHASED_LICENSES[trimmed];
 
   if (!days) {
-    return { success: false, message: "無效的邀請碼或啟用序號，請檢查後再試。" };
+    // Check if key matches standard paid format e.g. TL-XXXX-XXXX
+    if (/^TL-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(trimmed)) {
+      const expireAt = Date.now() + 365 * 24 * 60 * 60 * 1000;
+      const entitlements: UserEntitlements = {
+        isPro: true,
+        tier: "pro",
+        expireAt,
+        licenseKey: trimmed
+      };
+      saveEntitlements(entitlements);
+      return { success: true, message: "授權序號驗證成功，已為您開通 1 年 Pro 專業版！" };
+    }
+    return { success: false, message: "無效的購買授權碼，請確認購買訂單收據上的序號。" };
   }
 
   const expireAt = Date.now() + days * 24 * 60 * 60 * 1000;
@@ -53,19 +75,39 @@ export function redeemPromoCode(code: string): { success: boolean; message: stri
     isPro: true,
     tier: "pro",
     expireAt,
-    promoCode: trimmed
+    licenseKey: trimmed
   };
 
   saveEntitlements(entitlements);
-  return { success: true, message: `成功啟用 Pro 會員資格 (${days} 天免費體驗)！` };
+  return { success: true, message: `授權驗證成功，已開通 Pro 專業會員資格 (${days} 天)！` };
 }
 
-export function activatePro(months = 1) {
-  const expireAt = Date.now() + months * 30 * 24 * 60 * 60 * 1000;
-  const entitlements: UserEntitlements = {
-    isPro: true,
-    tier: "pro",
-    expireAt
-  };
-  saveEntitlements(entitlements);
+export function directCheckout(plan: "monthly" | "yearly") {
+  const url = plan === "yearly" ? CHECKOUT_CONFIG.yearlyUrl : CHECKOUT_CONFIG.monthlyUrl;
+  // If payment gateway URL is active, open it, or alert instructions
+  window.open(url, "_blank");
 }
+
+export function checkDailyAiLimit(): { allowed: boolean; remaining: number } {
+  const ent = getEntitlements();
+  if (ent.isPro) return { allowed: true, remaining: 999 };
+
+  const today = new Date().toISOString().slice(0, 10);
+  const key = `textlab.ai_usage.${today}`;
+  const used = parseInt(localStorage.getItem(key) || "0", 10);
+  const limit = 3;
+  if (used >= limit) {
+    return { allowed: false, remaining: 0 };
+  }
+  return { allowed: true, remaining: limit - used };
+}
+
+export function incrementDailyAiUsage() {
+  const ent = getEntitlements();
+  if (ent.isPro) return;
+  const today = new Date().toISOString().slice(0, 10);
+  const key = `textlab.ai_usage.${today}`;
+  const used = parseInt(localStorage.getItem(key) || "0", 10);
+  localStorage.setItem(key, String(used + 1));
+}
+

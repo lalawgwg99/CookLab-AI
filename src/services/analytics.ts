@@ -99,32 +99,45 @@ function recordLocalMetric(type: "pv" | "copy", toolId: string) {
   } catch {}
 }
 
-// Fetch aggregated live stats from backend, fallback to local telemetry
-export async function fetchLiveStats(): Promise<LiveStatsData> {
+// Fetch aggregated live stats with password authorization
+export async function fetchLiveStats(password?: string): Promise<{ success: boolean; data?: LiveStatsData; error?: string }> {
+  const pwd = password || sessionStorage.getItem("textlab.stats_token") || "";
+
+  if (pwd !== "kiss9988") {
+    return { success: false, error: "invalid_password" };
+  }
+
   try {
-    const res = await fetch("/api/stats", { cache: "no-store" });
+    const res = await fetch(`/api/stats?key=${encodeURIComponent(pwd)}`, { cache: "no-store" });
     if (res.ok) {
       const data = await res.json();
       if (data && typeof data === "object" && "pv" in data) {
-        return data as LiveStatsData;
+        sessionStorage.setItem("textlab.stats_token", pwd);
+        return { success: true, data: data as LiveStatsData };
       }
+    } else if (res.status === 401) {
+      return { success: false, error: "invalid_password" };
     }
   } catch {}
 
-  // Fallback to local browser analytics
+  // Fallback to local browser analytics if password is valid
+  sessionStorage.setItem("textlab.stats_token", pwd);
   try {
     const raw = localStorage.getItem("textlab.telemetry");
     if (raw) {
-      return JSON.parse(raw) as LiveStatsData;
+      return { success: true, data: JSON.parse(raw) as LiveStatsData };
     }
   } catch {}
 
   return {
-    date: new Date().toISOString().slice(0, 10),
-    pv: 1,
-    uv: 1,
-    copies: 0,
-    conversionRate: "0%",
-    tools: { layout: 1 }
+    success: true,
+    data: {
+      date: new Date().toISOString().slice(0, 10),
+      pv: 1,
+      uv: 1,
+      copies: 0,
+      conversionRate: "0%",
+      tools: { layout: 1 }
+    }
   };
 }

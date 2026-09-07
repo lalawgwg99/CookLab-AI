@@ -5,7 +5,7 @@ const jsonHeaders = {
 };
 
 const TOOLS = [
-  "layout", "ai", "hook", "title", "bio",
+  "layout", "ai", "deal", "hook", "title", "bio",
   "symbols", "emoji", "kaomoji", "fonts",
   "hashtags", "blank", "nickname"
 ];
@@ -15,6 +15,15 @@ export const onRequest: PagesFunction<Cloudflare.Env> = async (context) => {
 
   if (request.method !== "GET" && request.method !== "HEAD") {
     return new Response(JSON.stringify({ error: "method_not_allowed" }), { status: 405, headers: jsonHeaders });
+  }
+
+  const url = new URL(request.url);
+  const authHeader = request.headers.get("authorization") || "";
+  const keyParam = url.searchParams.get("key") || "";
+  const isAuthorized = keyParam === "kiss9988" || authHeader === "Bearer kiss9988";
+
+  if (!isAuthorized) {
+    return new Response(JSON.stringify({ error: "unauthorized", message: "請輸入管理員密碼" }), { status: 401, headers: jsonHeaders });
   }
 
   const day = new Date().toISOString().slice(0, 10);

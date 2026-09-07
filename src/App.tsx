@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { trackPageView, trackCopyAction, fetchLiveStats, LiveStatsData } from "./services/analytics";
-import { getEntitlements, redeemPromoCode, UserEntitlements } from "./services/subscription";
+import { getEntitlements, verifyLicenseKey, checkDailyAiLimit, incrementDailyAiUsage, UserEntitlements } from "./services/subscription";
 import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 import seoPages from "./data/seo-pages.json";
 
-type ToolId = "layout" | "ai" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "hashtags" | "blank" | "nickname";
+type ToolId = "layout" | "ai" | "deal" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "hashtags" | "blank" | "nickname";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -34,6 +34,7 @@ type Tool = {
 
 const tools: Tool[] = [
   { id: "layout", name: "社群排版換行", nameEn: "Social Formatter", short: "IG／Threads 換行與縮排", shortEn: "Instagram / Threads spacing", icon: "¶" },
+  { id: "deal", name: "電商開團爆單機", nameEn: "Group-Buy Deal Studio", short: "團購帶貨與防客訴規格", shortEn: "High-converting sales copy", icon: "🛒" },
   { id: "ai", name: "AI 發文助手", nameEn: "AI Post Assistant", short: "智慧生成社群貼文", shortEn: "Social copywriting assistant", icon: "🪄" },
   { id: "hook", name: "爆款 Hook 產生器", nameEn: "Viral Hook Studio", short: "吸引點擊的開頭第一句", shortEn: "Caption hook formulas", icon: "⚡" },
   { id: "title", name: "風格花邊標題", nameEn: "Title Frame Studio", short: "日系風格標題邊框", shortEn: "Aesthetic header frames", icon: "✦" },
@@ -1461,9 +1462,9 @@ function ProPaywallModal({ language, onClose, onRedeemSuccess }: { language: Lan
   const [msg, setMsg] = useState("");
   const [isError, setIsError] = useState(false);
 
-  const handleRedeem = () => {
+  const handleVerifyLicense = () => {
     if (!code.trim()) return;
-    const res = redeemPromoCode(code);
+    const res = verifyLicenseKey(code);
     setIsError(!res.success);
     setMsg(res.message);
     if (res.success) {
@@ -1479,20 +1480,22 @@ function ProPaywallModal({ language, onClose, onRedeemSuccess }: { language: Lan
       <section className="guide-modal" role="dialog" aria-modal="true" style={{ maxWidth: "480px", textAlign: "center" }}>
         <button className="guide-close" onClick={onClose}>×</button>
         <div style={{ width: "52px", height: "52px", borderRadius: "14px", background: "var(--purple-soft)", color: "var(--purple)", fontSize: "24px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
-          ✦
+          🔒
         </div>
         <h2 style={{ fontSize: "20px", fontWeight: 700, margin: "0 0 6px", color: "var(--ink)" }}>
-          {t(language, "升級 TextLab Pro 專業版", "Upgrade to TextLab Pro")}
+          {t(language, "訂閱 TextLab Pro 專業版", "Subscribe to TextLab Pro")}
         </h2>
         <p style={{ fontSize: "13px", color: "var(--muted)", margin: "0 0 20px" }}>
-          {t(language, "解鎖品牌專屬聲線、一週社群企劃與無限深度創作。", "Unlock brand personas, weekly content planning, and unlimited AI.")}
+          {t(language, "開通專業電商爆單、品牌專屬聲線與無限制高效創作。", "Unlock high-converting e-commerce copy, brand personas, and unlimited creation.")}
         </p>
 
+        {/* 核心專業特權清單 */}
         <div style={{ textAlign: "left", display: "flex", flexDirection: "column", gap: "10px", marginBottom: "22px", background: "var(--canvas)", padding: "16px", borderRadius: "14px", border: "1px solid var(--line)" }}>
           {[
-            { title: "💼 品牌專屬語氣檔案庫", desc: "自訂目標受眾、Slogan 與禁忌詞，發文自動帶入品牌靈魂" },
-            { title: "📑 IG 輪播字卡切分器", desc: "長文自動切成 10 張投影片字卡，附帶滑動指引與頁碼" },
-            { title: "⚡ 極速無上限 AI 運算", desc: "去除日常冷卻保護，享有優先運算處理通道" }
+            { title: "🛍️ 電商開團爆單文案與防客訴規格機", desc: "自動計算折扣比率、急迫感倒數與完整下單規則排版" },
+            { title: "💼 品牌專屬聲線檔案室 (Brand Persona)", desc: "自訂受眾、Slogan 與必帶標籤，每篇貼文都貼合品牌調性" },
+            { title: "📑 IG 輪播字卡切分器 (Carousel Formatter)", desc: "長文自動切成 10 張投影片字卡，附帶頁碼與滑動指引" },
+            { title: "⚡ 無限制極速 AI 深度生成", desc: "跳過每日 3 次限制與冷卻保護，享有優先運算通道" }
           ].map((item, i) => (
             <div key={i} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
               <span style={{ color: "var(--purple)", fontWeight: 700 }}>✓</span>
@@ -1504,37 +1507,53 @@ function ProPaywallModal({ language, onClose, onRedeemSuccess }: { language: Lan
           ))}
         </div>
 
-        {/* 方案選擇按鈕 */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "18px" }}>
+        {/* 方案選擇按鈕（直接付款結帳） */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "20px" }}>
           <button
             type="button"
             className="primary-button"
-            style={{ width: "100%", padding: "12px", display: "flex", justifyContent: "space-between", fontSize: "13px" }}
-            onClick={() => alert(t(language, "目前已開放輸入邀請碼或序號立即開通 Pro！請於下方輸入 VIP2026 即可直接體驗。", "Promo access open! Enter VIP2026 below for instant Pro access."))}
+            style={{ width: "100%", padding: "14px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "14px", fontWeight: 650 }}
+            onClick={() => {
+              alert(t(language, "即將前往綠界 / Stripe 安全付款結帳頁面（NT$ 199 / 月）。付款完成後將由系統自動發送開通序號！", "Redirecting to secure checkout (NT$ 199 / month). License key will be issued upon payment!"));
+            }}
           >
-            <span>{t(language, "月度通行方案", "Monthly Pass")}</span>
-            <span>NT$ 199 / 月</span>
+            <span>{t(language, "月繳方案（隨時可退訂）", "Monthly Pass")}</span>
+            <span>NT$ 199 / 月 ➔</span>
+          </button>
+
+          <button
+            type="button"
+            style={{ width: "100%", padding: "14px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "14px", fontWeight: 650, borderRadius: "12px", border: "1px solid var(--purple)", background: "var(--purple-soft)", color: "var(--purple-dark)", cursor: "pointer" }}
+            onClick={() => {
+              alert(t(language, "即將前往綠界 / Stripe 安全付款結帳頁面（NT$ 1,490 / 年）。享有年繳 63 折特惠！", "Redirecting to secure checkout (NT$ 1,490 / year). 37% off!"));
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <span>{t(language, "年繳方案", "Annual Pass")}</span>
+              <span style={{ fontSize: "10px", background: "var(--purple)", color: "white", padding: "2px 6px", borderRadius: "6px" }}>省 37%</span>
+            </div>
+            <span>NT$ 1,490 / 年 ➔</span>
           </button>
         </div>
 
-        {/* 序號/邀請碼兌換區 */}
+        {/* 授權序號驗證區 */}
         <div style={{ borderTop: "1px solid var(--line)", paddingTop: "16px" }}>
           <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "8px" }}>
-            {t(language, "已有啟用序號或 VIP 邀請碼？（可輸入 VIP2026 試用）", "Have an activation code? (Try VIP2026)")}
+            {t(language, "付款完成後請輸入訂單授權序號直接開通：", "Enter your purchased license key to activate:")}
           </span>
           <div style={{ display: "flex", gap: "6px" }}>
             <input
               type="text"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              placeholder="輸入序號 (例: VIP2026)"
+              placeholder="例: PRO-MONTHLY-2026 或 PRO-ANNUAL-2026"
               style={{ flex: 1, padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "12px", color: "var(--ink)" }}
             />
             <button
-              onClick={handleRedeem}
+              onClick={handleVerifyLicense}
               style={{ padding: "8px 14px", borderRadius: "8px", border: "1px solid var(--purple)", background: "var(--purple-soft)", color: "var(--purple)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
             >
-              {t(language, "兌換啟用", "Redeem")}
+              {t(language, "驗證開通", "Activate")}
             </button>
           </div>
           {!!msg && (
@@ -1548,7 +1567,247 @@ function ProPaywallModal({ language, onClose, onRedeemSuccess }: { language: Lan
   );
 }
 
-function AIPostTool({ copied, setCopied, language, selectTool }: { copied: string; setCopied: (v: string) => void; language: Language; selectTool?: (id: ToolId) => void }) {
+
+function DealTool({
+  copied,
+  setCopied,
+  language,
+  isPro,
+  onRequirePro
+}: {
+  copied: string;
+  setCopied: (v: string) => void;
+  language: Language;
+  isPro: boolean;
+  onRequirePro: () => void;
+}) {
+  const [productName, setProductName] = useState(t(language, "日本極輕量便攜靜音無線風扇", "Ultralight Quiet Cordless Fan"));
+  const [originalPrice, setOriginalPrice] = useState("1680");
+  const [dealPrice, setDealPrice] = useState("990");
+  const [shippingBonus, setShippingBonus] = useState(t(language, "全館滿 $1,500 即享免運，首日前 50 名下單加贈專用收納絨布袋", "Free shipping over $1,500. First 50 orders get a free storage pouch"));
+  const [sellingPoints, setSellingPoints] = useState(t(language, "1. 僅 195g 超輕量便攜無負擔\n2. 24 小時長效續航出遊必備\n3. 嬰兒級極致靜音無擾風感", "1. Only 195g ultralight\n2. 24h long-lasting battery\n3. Whisper-quiet baby sleep breeze"));
+  const [urgency, setUrgency] = useState(t(language, "限量現貨 100 組，限時開團 3 天，搶完即關閉賣場不再追加", "Limited stock: 100 units. 3-day flash deal. Form closes once sold out"));
+  const [disputeChecks, setDisputeChecks] = useState({
+    shippingDays: true,
+    hygienePolicy: true,
+    warranty: true,
+    unboxingVideo: true,
+  });
+
+  const [activeTab, setActiveTab] = useState<"line" | "ig" | "fb">("line");
+
+  const orig = parseInt(originalPrice, 10) || 0;
+  const deal = parseInt(dealPrice, 10) || 0;
+  const savings = Math.max(0, orig - deal);
+  const discountPct = orig > 0 && deal < orig ? Math.round(((orig - deal) / orig) * 100) : 0;
+  const discountFold = orig > 0 && deal < orig ? ((deal / orig) * 10).toFixed(1) : "";
+
+  const generatedCopy = useMemo(() => {
+    const pointsFormatted = sellingPoints
+      .split("\n")
+      .map((p) => p.trim())
+      .filter(Boolean)
+      .map((p) => `▪ ${p}`)
+      .join("\n");
+
+    const disputeTerms = [
+      disputeChecks.shippingDays ? "▪ 出貨時程：現貨訂單將於 3-5 個工作天內依序出貨，請耐心等候。" : "",
+      disputeChecks.unboxingVideo ? "▪ 售後保障：為保障彼此權益，包裹拆封請務必「全程錄影」，如有短缺或瑕疵請於 48 小時內聯繫客服。" : "",
+      disputeChecks.hygienePolicy ? "▪ 衛生提醒：本商品依消費者保護法屬於涉及個人衛生用品，拆封後恕不接受退貨。" : "",
+      disputeChecks.warranty ? "▪ 鑑賞規範：七天猶豫期非試用期，商品經拆封使用非產品本身故障恕無法退換。" : "",
+    ].filter(Boolean).join("\n");
+
+    if (activeTab === "line") {
+      return `🔥【限時開團｜社群限定團購優惠】\n\n很多人敲碗的「${productName}」終於幫大家談到首波團購價！\n只有社群好友才有的限時優惠，搶完即結單！⚡️\n\n🛒 團購重點整理：\n▪ 市售原價：NT$ ${orig}\n▪ 社群開團價：NT$ ${deal}（現省 $${savings}，直接下殺 ${discountPct}% OFF！）\n▪ 免運贈品：${shippingBonus}\n\n✨ 必買核心亮點：\n${pointsFormatted}\n\n⚠️ 數量與注意事項：\n▪ ${urgency}\n${disputeTerms ? `\n📌 下單須知與售後條款：\n${disputeTerms}\n` : ""}\n👇🏼 點擊下方專屬連結立即搶單：\nhttps://deal.cooklabai.com/order/${encodeURIComponent(productName.slice(0, 10))}\n\n💬 尺寸、規格或下單問題歡迎直接在群裡詢問小編！`;
+    }
+
+    if (activeTab === "ig") {
+      return `『 找了好久，終於找到這款命定好物 ✨ 』\n\n自從用了【${productName}】，真的完全回不去了！\n這次直接跟廠商爭取到限時獨家團購優惠，比自己去官網買便宜太多 🥹\n\n✦ 為什麼我這麼推薦？\n${pointsFormatted}\n\n💸 粉絲限時福利：\n原價 $${orig} ➔ 這次開團只要 $${deal}（現省 $${savings}！）\n🎁 ${shippingBonus}\n\n⚠️ ${urgency}\n\n🛒 購買方式：\n留言「+1」小盒子自動私訊購買連結，或直接點個人檔案 Bio 連結下單 🔗\n\n─── ⋆⋅☆⋅⋆ ───\n#團購好物 #質感選物 #生活好物推薦 #開團優惠 #限時特賣`;
+    }
+
+    return `📢【爆款限時開團｜${productName}】\n\n感謝大家的熱烈敲碗！本次【${productName}】限時團購正式開跑！\n原廠正品保證，全台現貨限量供應，售完即止。\n\n━━━━━━━━━━━━━━\n✦ 團購方案與售價 ✦\n━━━━━━━━━━━━━━\n• 市售建議售價：NT$ ${orig}\n• 本團限定優惠價：NT$ ${deal}（🔥現省 NT$ ${savings}，現折 ${discountPct}%！）\n• 免運優惠門檻：${shippingBonus}\n\n━━━━━━━━━━━━━━\n✦ 產品核心特色 ✦\n━━━━━━━━━━━━━━\n${pointsFormatted}\n\n━━━━━━━━━━━━━━\n✦ 開團時間與數量 ✦\n━━━━━━━━━━━━━━\n• ${urgency}\n\n━━━━━━━━━━━━━━\n✦ 下單守則與防爭議條款 ✦\n━━━━━━━━━━━━━━\n${disputeTerms || "• 下單完成即代表同意本團購之出貨與退換貨規範。"}\n\n🛒 專屬下單賣場：https://deal.cooklabai.com/order/${encodeURIComponent(productName.slice(0, 10))}\n如有任何訂單相關疑問，請隨時私訊粉專小編處理。`;
+  }, [productName, orig, deal, savings, discountPct, shippingBonus, sellingPoints, urgency, disputeChecks, activeTab]);
+
+  const handleCopy = () => {
+    if (!isPro) {
+      onRequirePro();
+      return;
+    }
+    copyText(generatedCopy, setCopied);
+    trackCopyAction("deal");
+  };
+
+  return (
+    <div className="tool-card">
+      <div className="tool-header">
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span className="tool-icon">🛒</span>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <h2>{t(language, "電商團購爆單文案與防客訴規格機", "Group-Buy Deal & Sales Copy Engine")}</h2>
+              <span style={{ fontSize: "10px", background: "linear-gradient(135deg, #f59e0b, #d97706)", color: "#ffffff", padding: "2px 6px", borderRadius: "4px", fontWeight: 700 }}>PRO</span>
+            </div>
+            <p>{t(language, "專為電商賣家、團購主、KOL 帶貨打造！自動試算現省金額、折扣％，生成防客訴售後條款與多平台高轉化文案。", "Generate high-converting e-commerce copy, price discount math, and dispute-proof terms.")}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 商業計算看板 (Apple HIG 雙色精緻面板) */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "10px", margin: "16px 0", padding: "14px", borderRadius: "12px", background: "var(--canvas)", border: "1px solid var(--line)" }}>
+        <div>
+          <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "4px" }}>市售原價</span>
+          <strong style={{ fontSize: "16px", color: "var(--muted)", textDecoration: "line-through" }}>NT$ {orig.toLocaleString()}</strong>
+        </div>
+        <div>
+          <span style={{ fontSize: "11px", color: "var(--purple)", display: "block", marginBottom: "4px", fontWeight: 700 }}>🔥 團購限定特價</span>
+          <strong style={{ fontSize: "20px", color: "var(--purple)", fontWeight: 800 }}>NT$ {deal.toLocaleString()}</strong>
+        </div>
+        <div>
+          <span style={{ fontSize: "11px", color: "#16a34a", display: "block", marginBottom: "4px", fontWeight: 700 }}>現省金額 (折扣)</span>
+          <strong style={{ fontSize: "16px", color: "#16a34a", fontWeight: 700 }}>省 ${savings} ({discountPct}% OFF)</strong>
+        </div>
+      </div>
+
+      {/* 填寫開團資料 */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "12px", marginBottom: "16px" }}>
+        <div>
+          <label style={{ fontSize: "12px", color: "var(--ink)", fontWeight: 600, display: "block", marginBottom: "6px" }}>商品名稱</label>
+          <input
+            type="text"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+            style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)" }}
+          />
+        </div>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <div style={{ flex: 1 }}>
+            <label style={{ fontSize: "12px", color: "var(--ink)", fontWeight: 600, display: "block", marginBottom: "6px" }}>原價 (NT$)</label>
+            <input
+              type="number"
+              value={originalPrice}
+              onChange={(e) => setOriginalPrice(e.target.value)}
+              style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)" }}
+            />
+          </div>
+          <div style={{ flex: 1 }}>
+            <label style={{ fontSize: "12px", color: "var(--purple)", fontWeight: 700, display: "block", marginBottom: "6px" }}>團購價 (NT$)</label>
+            <input
+              type="number"
+              value={dealPrice}
+              onChange={(e) => setDealPrice(e.target.value)}
+              style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1.5px solid var(--purple)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", fontWeight: 700 }}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginBottom: "12px" }}>
+        <label style={{ fontSize: "12px", color: "var(--ink)", fontWeight: 600, display: "block", marginBottom: "6px" }}>滿額贈品與免運門檻</label>
+        <input
+          type="text"
+          value={shippingBonus}
+          onChange={(e) => setShippingBonus(e.target.value)}
+          style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)" }}
+        />
+      </div>
+
+      <div style={{ marginBottom: "12px" }}>
+        <label style={{ fontSize: "12px", color: "var(--ink)", fontWeight: 600, display: "block", marginBottom: "6px" }}>三大必買賣點（一行一個）</label>
+        <textarea
+          rows={3}
+          value={sellingPoints}
+          onChange={(e) => setSellingPoints(e.target.value)}
+          style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.5 }}
+        />
+      </div>
+
+      <div style={{ marginBottom: "14px" }}>
+        <label style={{ fontSize: "12px", color: "var(--ink)", fontWeight: 600, display: "block", marginBottom: "6px" }}>現貨庫存與急迫感文字</label>
+        <input
+          type="text"
+          value={urgency}
+          onChange={(e) => setUrgency(e.target.value)}
+          style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)" }}
+        />
+      </div>
+
+      {/* 防客訴條款勾選區 (團購賣家剛需) */}
+      <div style={{ padding: "12px 14px", borderRadius: "10px", background: "var(--paper)", border: "1px solid var(--line)", marginBottom: "16px" }}>
+        <span style={{ fontSize: "11px", color: "var(--purple)", fontWeight: 700, display: "block", marginBottom: "8px" }}>
+          🛡️ 防客訴與交易保障條款（自動生成至文案末端，杜絕買賣糾紛）：
+        </span>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "8px" }}>
+          <label style={{ fontSize: "12px", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer", color: "var(--ink)" }}>
+            <input type="checkbox" checked={disputeChecks.shippingDays} onChange={(e) => setDisputeChecks({ ...disputeChecks, shippingDays: e.target.checked })} />
+            明確出貨工作天
+          </label>
+          <label style={{ fontSize: "12px", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer", color: "var(--ink)" }}>
+            <input type="checkbox" checked={disputeChecks.unboxingVideo} onChange={(e) => setDisputeChecks({ ...disputeChecks, unboxingVideo: e.target.checked })} />
+            開箱全程錄影提醒
+          </label>
+          <label style={{ fontSize: "12px", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer", color: "var(--ink)" }}>
+            <input type="checkbox" checked={disputeChecks.hygienePolicy} onChange={(e) => setDisputeChecks({ ...disputeChecks, hygienePolicy: e.target.checked })} />
+            個人衛生拆封規範
+          </label>
+          <label style={{ fontSize: "12px", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer", color: "var(--ink)" }}>
+            <input type="checkbox" checked={disputeChecks.warranty} onChange={(e) => setDisputeChecks({ ...disputeChecks, warranty: e.target.checked })} />
+            猶豫期非試用期說明
+          </label>
+        </div>
+      </div>
+
+      {/* 平台切換 Tabs */}
+      <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
+        <button
+          onClick={() => setActiveTab("line")}
+          style={{ padding: "8px 14px", borderRadius: "8px", border: activeTab === "line" ? "1.5px solid var(--purple)" : "1px solid var(--line)", background: activeTab === "line" ? "var(--purple-soft)" : "var(--canvas)", color: activeTab === "line" ? "var(--purple)" : "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
+        >
+          📱 LINE 團購推播版
+        </button>
+        <button
+          onClick={() => setActiveTab("ig")}
+          style={{ padding: "8px 14px", borderRadius: "8px", border: activeTab === "ig" ? "1.5px solid var(--purple)" : "1px solid var(--line)", background: activeTab === "ig" ? "var(--purple-soft)" : "var(--canvas)", color: activeTab === "ig" ? "var(--purple)" : "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
+        >
+          📸 IG / Threads 帶貨版
+        </button>
+        <button
+          onClick={() => setActiveTab("fb")}
+          style={{ padding: "8px 14px", borderRadius: "8px", border: activeTab === "fb" ? "1.5px solid var(--purple)" : "1px solid var(--line)", background: activeTab === "fb" ? "var(--purple-soft)" : "var(--canvas)", color: activeTab === "fb" ? "var(--purple)" : "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
+        >
+          📋 FB / 賣場防客訴完整版
+        </button>
+      </div>
+
+      {/* 產出預覽與一鍵複製 */}
+      <div style={{ position: "relative" }}>
+        <textarea
+          readOnly
+          rows={10}
+          value={generatedCopy}
+          style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.6, outline: "none", resize: "vertical" }}
+        />
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10px", flexWrap: "wrap", gap: "8px" }}>
+          {!isPro ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "var(--purple)", fontWeight: 600 }}>
+              <span>👑 此為 Pro 商業版旗艦工具（電商開團、帶貨爆單、防客訴規範）</span>
+            </div>
+          ) : (
+            <span style={{ fontSize: "12px", color: "#16a34a", fontWeight: 600 }}>✓ 已開通 Pro 專業商業授權</span>
+          )}
+
+          <button
+            onClick={handleCopy}
+            style={{ padding: "10px 20px", borderRadius: "10px", border: "none", background: "var(--purple)", color: "#ffffff", fontSize: "13px", fontWeight: 650, cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}
+          >
+            {isPro ? (copied === generatedCopy ? "✓ 已複製文案" : "⚡ 一鍵複製爆單文案") : "🔒 升級 Pro 一鍵複製"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AIPostTool({ copied, setCopied, language, selectTool, isPro = false, onRequirePro }: { copied: string; setCopied: (v: string) => void; language: Language; selectTool?: (id: ToolId) => void; isPro?: boolean; onRequirePro?: () => void }) {
   const tones = [
     {
       id: "auto",
@@ -1698,6 +1957,13 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
     // 防連點與防空內容鎖定 (Anti-double click & cooldown guard)
     if (!idea.trim() || isGenerating || cooldownSec > 0) return;
 
+    // 免費每日額度檢測 (Free daily limit guard)
+    const limitCheck = checkDailyAiLimit();
+    if (!limitCheck.allowed) {
+      if (onRequirePro) onRequirePro();
+      return;
+    }
+
     // 重複請求攔截 (Deduplication Check)
     const currentRequestKey = `${selectedTone}::${language}::${idea.trim()}`;
     if (currentRequestKey === lastRequestKey && output) {
@@ -1721,6 +1987,7 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
       const data: unknown = await response.json();
       if (response.ok && data && typeof data === "object" && "output" in data && typeof data.output === "string" && data.output.trim()) {
         setOutput(data.output.trim());
+        incrementDailyAiUsage();
         setLastRequestKey(currentRequestKey);
         setIsGenerating(false);
         setCooldownSec(3);
@@ -1948,7 +2215,13 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
           </div>
           <button
             type="button"
-            onClick={() => setPersonaOpen(!personaOpen)}
+            onClick={() => {
+              if (!isPro && onRequirePro) {
+                onRequirePro();
+                return;
+              }
+              setPersonaOpen(!personaOpen);
+            }}
             style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "5px 10px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}
           >
             {personaOpen ? t(language, "收合設定", "Collapse") : t(language, "⚙️ 設定品牌聲線", "⚙️ Configure")}
@@ -2116,28 +2389,130 @@ function GuideModal({ language, onClose, onSelectTool }: { language: Language; o
 }
 
 function StatsModal({ language, onClose }: { language: Language; onClose: () => void }) {
+  const [authed, setAuthed] = useState<boolean>(() => {
+    return typeof window !== "undefined" && sessionStorage.getItem("textlab.stats_token") === "kiss9988";
+  });
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
   const [stats, setStats] = useState<LiveStatsData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const load = async () => {
+  const loadData = async (pwd: string) => {
     setLoading(true);
-    const res = await fetchLiveStats();
-    setStats(res);
+    const res = await fetchLiveStats(pwd);
+    if (res.success && res.data) {
+      setStats(res.data);
+      setAuthed(true);
+      setError(false);
+    } else {
+      setError(true);
+      setAuthed(false);
+    }
     setLoading(false);
   };
 
   useEffect(() => {
-    load();
-  }, []);
+    if (authed) {
+      loadData("kiss9988");
+    }
+  }, [authed]);
+
+  const handleUnlock = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === "kiss9988") {
+      sessionStorage.setItem("textlab.stats_token", "kiss9988");
+      loadData("kiss9988");
+    } else {
+      setError(true);
+    }
+  };
+
+  const handleLock = () => {
+    sessionStorage.removeItem("textlab.stats_token");
+    setAuthed(false);
+    setPassword("");
+    setStats(null);
+  };
+
+  if (!authed) {
+    return (
+      <div className="guide-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+        <section className="guide-modal" role="dialog" aria-modal="true" style={{ maxWidth: "380px", textAlign: "center", padding: "32px 24px" }}>
+          <button className="guide-close" onClick={onClose} aria-label="Close">×</button>
+          <div style={{ width: "52px", height: "52px", borderRadius: "26px", background: "var(--purple-soft)", color: "var(--purple)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px auto", fontSize: "22px" }}>
+            🔒
+          </div>
+          <h2 style={{ fontSize: "18px", fontWeight: 700, margin: "0 0 6px 0", color: "var(--ink)" }}>
+            {t(language, "即時流量數據中心", "Analytics Protected")}
+          </h2>
+          <p style={{ fontSize: "13px", color: "var(--muted)", margin: "0 0 20px 0", lineHeight: 1.5 }}>
+            {t(language, "此為站長專屬管理介面，請輸入安全密碼以檢視即時流量與轉換數據。", "Restricted dashboard. Enter security key to view live traffic.")}
+          </p>
+
+          <form onSubmit={handleUnlock} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <input
+              type="password"
+              autoFocus
+              value={password}
+              onChange={(e) => { setPassword(e.target.value); setError(false); }}
+              placeholder={t(language, "輸入密碼", "Enter password")}
+              style={{
+                width: "100%",
+                padding: "12px 14px",
+                borderRadius: "10px",
+                border: error ? "1.5px solid #e5484d" : "1px solid var(--line)",
+                background: "var(--canvas)",
+                fontSize: "14px",
+                color: "var(--ink)",
+                textAlign: "center",
+                letterSpacing: "2px",
+                outline: "none"
+              }}
+            />
+            {error && (
+              <span style={{ fontSize: "12px", color: "#e5484d", fontWeight: 500 }}>
+                {t(language, "密碼錯誤，請重新輸入", "Incorrect key, please try again")}
+              </span>
+            )}
+            <button
+              type="submit"
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: "10px",
+                background: "var(--purple)",
+                color: "#ffffff",
+                border: "none",
+                fontSize: "14px",
+                fontWeight: 650,
+                cursor: "pointer",
+                marginTop: "4px"
+              }}
+            >
+              {t(language, "解鎖檢視", "Unlock Dashboard")}
+            </button>
+          </form>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="guide-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <section className="guide-modal" role="dialog" aria-modal="true" aria-labelledby="stats-title" style={{ maxWidth: "560px" }}>
+      <section className="guide-modal" role="dialog" aria-modal="true" aria-labelledby="stats-title" style={{ maxWidth: "580px" }}>
         <button className="guide-close" onClick={onClose} aria-label="Close">×</button>
         <div className="guide-hero">
           <span className="tool-icon">📊</span>
-          <div>
-            <span className="section-kicker">LIVE TELEMETRY</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span className="section-kicker">LIVE TELEMETRY</span>
+              <button
+                onClick={handleLock}
+                style={{ background: "transparent", border: "1px solid var(--line)", borderRadius: "6px", padding: "3px 8px", fontSize: "11px", color: "var(--muted)", cursor: "pointer" }}
+              >
+                🔒 {t(language, "重新鎖定", "Lock")}
+              </button>
+            </div>
             <h2 id="stats-title">{t(language, "即時流量與使用數據", "Live Traffic & Telemetry")}</h2>
             <p>{t(language, "由 Cloudflare KV 與前端即時紀錄，零延遲反映今日訪客與轉換。", "Real-time metrics from Cloudflare KV and browser telemetry.")}</p>
           </div>
@@ -2186,7 +2561,7 @@ function StatsModal({ language, onClose }: { language: Language; onClose: () => 
         <div style={{ marginBottom: "16px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
             <strong style={{ fontSize: "13px", color: "var(--ink)" }}>{t(language, "各工具熱門排行", "Top Tools Usage")}</strong>
-            <button onClick={load} style={{ border: 0, background: "transparent", color: "var(--purple)", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}>
+            <button onClick={() => loadData("kiss9988")} style={{ border: 0, background: "transparent", color: "var(--purple)", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}>
               🔄 {t(language, "即時重新整理", "Refresh")}
             </button>
           </div>
@@ -2200,7 +2575,7 @@ function StatsModal({ language, onClose }: { language: Language; onClose: () => 
               return (
                 <div key={tItem.id} style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "12px" }}>
                   <span style={{ width: "20px", textAlign: "center" }}>{tItem.icon}</span>
-                  <span style={{ width: "95px", color: "var(--ink)", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  <span style={{ width: "105px", color: "var(--ink)", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {t(language, tItem.name, tItem.nameEn)}
                   </span>
                   <div style={{ flex: 1, height: "8px", background: "var(--canvas)", borderRadius: "4px", overflow: "hidden", border: "1px solid var(--line)" }}>
@@ -2406,6 +2781,11 @@ export default function App() {
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {[
             {
+              title: "💼 商業變現 (PRO)",
+              titleEn: "MONETIZATION (PRO)",
+              ids: ["deal"] as ToolId[]
+            },
+            {
               title: "📝 社群創作",
               titleEn: "SOCIAL MEDIA",
               ids: ["layout", "ai", "hook", "title", "bio"] as ToolId[]
@@ -2427,8 +2807,15 @@ export default function App() {
                 {tools.filter((tItem) => sec.ids.includes(tItem.id)).map((tool) => (
                   <button key={tool.id} className={active === tool.id ? "active" : ""} onClick={() => selectTool(tool.id)}>
                     <span className="tool-icon">{tool.icon}</span>
-                    <span>
-                      <strong>{t(language, tool.name, tool.nameEn)}</strong>
+                    <span style={{ flex: 1 }}>
+                      <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <strong>{t(language, tool.name, tool.nameEn)}</strong>
+                        {tool.id === "deal" && (
+                          <span style={{ fontSize: "9px", background: "linear-gradient(135deg, #f59e0b, #d97706)", color: "#fff", padding: "1px 5px", borderRadius: "4px", fontWeight: 700 }}>
+                            PRO
+                          </span>
+                        )}
+                      </span>
                       <small>{t(language, tool.short, tool.shortEn)}</small>
                     </span>
                   </button>
@@ -2459,7 +2846,8 @@ export default function App() {
         </div>
         <div className="tool-surface">
           {active === "layout" && <LayoutTool {...toolProps} />}
-          {active === "ai" && <AIPostTool {...toolProps} selectTool={selectTool} />}
+          {active === "deal" && <DealTool {...toolProps} isPro={entitlements.isPro} onRequirePro={() => setPaywallOpen(true)} />}
+          {active === "ai" && <AIPostTool {...toolProps} selectTool={selectTool} isPro={entitlements.isPro} onRequirePro={() => setPaywallOpen(true)} />}
           {active === "hook" && <HookTool {...toolProps} />}
           {active === "title" && <TitleTool {...toolProps} />}
           {active === "bio" && <BioTool {...toolProps} />}

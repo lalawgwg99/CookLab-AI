@@ -94,5 +94,13 @@
     "descriptionZh": "免費複製隱形空白文字字元，適用於 LINE、IG 名稱、Threads 排版、遊戲 ID 留白與社群文章縮排。",
     "titleEn": "Invisible Text & Blank Character Copy | TextLab",
     "descriptionEn": "Copy invisible Unicode blank characters for social spacing, empty usernames, Instagram, Threads and gaming IDs."
+  },
+  "deal": {
+    "nameZh": "電商開團爆單文案機",
+    "nameEn": "Group-Buy Deal Copy Engine",
+    "titleZh": "電商開團爆單文案機｜團購主・KOL 帶貨・防客訴規格一鍵生成｜字研所 TextLab",
+    "descriptionZh": "專為電商賣家、團購主、KOL 帶貨設計的商業爆單文案引擎！自動試算現省金額與折扣、生成痛點急迫感、防客訴退換貨規格。",
+    "titleEn": "E-Commerce Group-Buy & Sales Copy Engine | TextLab Pro",
+    "descriptionEn": "Generate high-converting e-commerce group-buy copy, price calculation, and dispute-proof terms for Instagram, LINE, and Facebook."
   }
 }
