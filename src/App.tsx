@@ -1668,46 +1668,46 @@ function ProPaywallModal({ language, onClose, onRedeemSuccess }: { language: Lan
           ))}
         </div>
 
-        {/* 方案選擇按鈕（早鳥終身買斷 NT$ 399 與年繳 NT$ 499） */}
+        {/* 方案選擇按鈕（早鳥終身買斷 NT$ 49 與年繳 NT$ 99） */}
         <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "18px" }}>
           <button
             type="button"
             className="primary-button"
             style={{ width: "100%", padding: "14px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "14px", fontWeight: 700, borderRadius: "12px", background: "var(--purple)", color: "var(--paper)", border: "none", cursor: "pointer" }}
             onClick={() => {
-              alert(t(language, "即將前往綠界 / Stripe 結帳頁面（早鳥終身買斷 NT$ 399）。一次付費，永久免費享用未來所有商業爆款更新！", "Redirecting to checkout (Early Bird Lifetime NT$ 399). Pay once, own forever!"));
+              alert(t(language, "即將前往綠界 / Stripe 結帳頁面（早鳥終身買斷 NT$ 49）。一杯飲料錢，永久免費享用未來所有商業爆款更新！", "Redirecting to checkout (Early Bird Lifetime NT$ 49). Pay once, own forever!"));
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <span>👑 早鳥終身買斷方案</span>
               <span style={{ fontSize: "10px", background: "#f59e0b", color: "#fff", padding: "2px 6px", borderRadius: "6px", fontWeight: 700 }}>限量前200名</span>
             </div>
-            <span>NT$ 399 終身買斷 ➔</span>
+            <span>NT$ 49 終身買斷 ➔</span>
           </button>
 
           <button
             type="button"
             style={{ width: "100%", padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "13px", fontWeight: 650, borderRadius: "12px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", cursor: "pointer" }}
             onClick={() => {
-              alert(t(language, "即將前往綠界 / Stripe 結帳頁面（年度暢通方案 NT$ 499 / 年）。平均一天不到 1.4 元！", "Redirecting to checkout (Annual Pass NT$ 499 / year). Less than NT$ 1.4 / day!"));
+              alert(t(language, "即將前往綠界 / Stripe 結帳頁面（年度暢通方案 NT$ 99 / 年）。平均一天不到 0.3 元！", "Redirecting to checkout (Annual Pass NT$ 99 / year). Less than NT$ 0.3 / day!"));
             }}
           >
             <span>🌟 年度暢通方案</span>
-            <span>NT$ 499 / 年 ➔</span>
+            <span>NT$ 99 / 年 ➔</span>
           </button>
         </div>
 
         {/* 授權序號驗證區 */}
         <div style={{ borderTop: "1px solid var(--line)", paddingTop: "14px" }}>
           <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "6px" }}>
-            {t(language, "付款完成後請輸入訂單授權序號直接開通（如 LIFETIME-399）：", "Enter your purchased license key to activate:")}
+            {t(language, "付款完成後請輸入訂單授權序號直接開通（如 LIFETIME-49）：", "Enter your purchased license key to activate:")}
           </span>
           <div style={{ display: "flex", gap: "6px" }}>
             <input
               type="text"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              placeholder="例: LIFETIME-399 或 TL-8888-9999"
+              placeholder="例: LIFETIME-49 或 TL-8888-9999"
               style={{ flex: 1, padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "12px", color: "var(--ink)" }}
             />
             <button

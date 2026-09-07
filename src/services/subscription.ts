@@ -13,16 +13,19 @@ const STORAGE_KEY = "textlab.user_entitlements";
 export const CHECKOUT_CONFIG = {
   lifetimeUrl: "https://cooklabai.com/checkout?plan=lifetime",
   yearlyUrl: "https://cooklabai.com/checkout?plan=yearly",
-  priceLifetime: "NT$ 399",
-  priceYearly: "NT$ 499"
+  priceLifetime: "NT$ 49",
+  priceYearly: "NT$ 99"
 };
 
 // Valid purchased license keys (365 days, lifetime)
 const PURCHASED_LICENSES: Record<string, number> = {
+  "LIFETIME-49": 3650,
+  "EARLYBIRD-49": 3650,
   "LIFETIME-399": 3650,
   "EARLYBIRD-399": 3650,
   "PRO-LIFETIME": 3650,
   "ANNUAL-499": 365,
+  "ANNUAL-99": 365,
   "TEXTLAB-PRO-LIFETIME": 3650,
   "VIP2026": 365
 };
