@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { trackPageView, trackCopyAction, fetchLiveStats, LiveStatsData } from "./services/analytics";
 import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 import seoPages from "./data/seo-pages.json";
@@ -389,9 +390,12 @@ const fontVariants = (text: string) => [
   { name: "⋆⋅☆⋅⋆ 璀璨星光標題", value: `⋆⋅☆⋅⋆  ${text}  ⋆⋅☆⋅⋆` },
 ];
 
+let currentActiveTool = "layout";
+
 function copyText(value: string, onCopied: (value: string) => void) {
   const done = () => {
     onCopied(value);
+    trackCopyAction(currentActiveTool);
     window.setTimeout(() => onCopied(""), 1500);
   };
   if (navigator.clipboard?.writeText) {
@@ -1844,6 +1848,115 @@ function GuideModal({ language, onClose, onSelectTool }: { language: Language; o
   </div>;
 }
 
+function StatsModal({ language, onClose }: { language: Language; onClose: () => void }) {
+  const [stats, setStats] = useState<LiveStatsData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    setLoading(true);
+    const res = await fetchLiveStats();
+    setStats(res);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  return (
+    <div className="guide-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <section className="guide-modal" role="dialog" aria-modal="true" aria-labelledby="stats-title" style={{ maxWidth: "560px" }}>
+        <button className="guide-close" onClick={onClose} aria-label="Close">×</button>
+        <div className="guide-hero">
+          <span className="tool-icon">📊</span>
+          <div>
+            <span className="section-kicker">LIVE TELEMETRY</span>
+            <h2 id="stats-title">{t(language, "即時流量與使用數據", "Live Traffic & Telemetry")}</h2>
+            <p>{t(language, "由 Cloudflare KV 與前端即時紀錄，零延遲反映今日訪客與轉換。", "Real-time metrics from Cloudflare KV and browser telemetry.")}</p>
+          </div>
+        </div>
+
+        {/* 4 個 Apple HIG 數據卡片 */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px", margin: "20px 0" }}>
+          <div style={{ padding: "16px", borderRadius: "14px", background: "var(--canvas)", border: "1px solid var(--line)" }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "4px" }}>
+              👤 {t(language, "今日獨立訪客 (UV)", "Unique Visitors")}
+            </span>
+            <strong style={{ fontSize: "24px", color: "var(--ink)", fontWeight: 700 }}>
+              {loading ? "..." : (stats?.uv || 0).toLocaleString()}
+            </strong>
+          </div>
+
+          <div style={{ padding: "16px", borderRadius: "14px", background: "var(--canvas)", border: "1px solid var(--line)" }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "4px" }}>
+              👁️ {t(language, "今日頁面瀏覽 (PV)", "Page Views")}
+            </span>
+            <strong style={{ fontSize: "24px", color: "var(--purple)", fontWeight: 700 }}>
+              {loading ? "..." : (stats?.pv || 0).toLocaleString()}
+            </strong>
+          </div>
+
+          <div style={{ padding: "16px", borderRadius: "14px", background: "var(--canvas)", border: "1px solid var(--line)" }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "4px" }}>
+              📋 {t(language, "複製轉換次數", "Copy Conversions")}
+            </span>
+            <strong style={{ fontSize: "24px", color: "var(--ink)", fontWeight: 700 }}>
+              {loading ? "..." : (stats?.copies || 0).toLocaleString()}
+            </strong>
+          </div>
+
+          <div style={{ padding: "16px", borderRadius: "14px", background: "var(--canvas)", border: "1px solid var(--line)" }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "4px" }}>
+              ⚡ {t(language, "使用轉換率 (Copy/PV)", "Conversion Rate")}
+            </span>
+            <strong style={{ fontSize: "24px", color: "var(--purple)", fontWeight: 700 }}>
+              {loading ? "..." : (stats?.conversionRate || "0%")}
+            </strong>
+          </div>
+        </div>
+
+        {/* 各工具使用排行 */}
+        <div style={{ marginBottom: "16px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+            <strong style={{ fontSize: "13px", color: "var(--ink)" }}>{t(language, "各工具熱門排行", "Top Tools Usage")}</strong>
+            <button onClick={load} style={{ border: 0, background: "transparent", color: "var(--purple)", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}>
+              🔄 {t(language, "即時重新整理", "Refresh")}
+            </button>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            {tools.map((tItem) => {
+              const count = stats?.tools?.[tItem.id] || 0;
+              const maxCount = Math.max(...Object.values(stats?.tools || { a: 1 }), 1);
+              const pct = Math.min(100, Math.round((count / maxCount) * 100));
+
+              return (
+                <div key={tItem.id} style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "12px" }}>
+                  <span style={{ width: "20px", textAlign: "center" }}>{tItem.icon}</span>
+                  <span style={{ width: "95px", color: "var(--ink)", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {t(language, tItem.name, tItem.nameEn)}
+                  </span>
+                  <div style={{ flex: 1, height: "8px", background: "var(--canvas)", borderRadius: "4px", overflow: "hidden", border: "1px solid var(--line)" }}>
+                    <div style={{ width: `${pct}%`, height: "100%", background: "var(--purple)", borderRadius: "4px", transition: "width 0.3s ease" }} />
+                  </div>
+                  <span style={{ width: "35px", textAlign: "right", color: "var(--muted)", fontSize: "11px", fontWeight: 600 }}>
+                    {count}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div style={{ borderTop: "1px solid var(--line)", paddingTop: "14px", marginTop: "14px", fontSize: "11px", color: "var(--subtle)", display: "flex", justifyContent: "space-between" }}>
+          <span>{t(language, "紀錄日期：", "Date: ")}{stats?.date || new Date().toISOString().slice(0, 10)}</span>
+          <span>{t(language, "💡 亦可在網址後加上 ?stats=1 隨時開啟", "Tip: Append ?stats=1 to URL anytime")}</span>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 function BrandLogo() {
   return (
     <svg width="38" height="38" viewBox="0 0 128 128" style={{ borderRadius: "10px", flexShrink: 0, display: "block" }}>
@@ -1888,6 +2001,17 @@ export default function App() {
   }, []);
   const [copied, setCopied] = useState("");
   const [guideOpen, setGuideOpen] = useState(false);
+  const [statsOpen, setStatsOpen] = useState(() => {
+    if (typeof window !== "undefined") {
+      return new URLSearchParams(window.location.search).get("stats") === "1";
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    currentActiveTool = active;
+    trackPageView(active);
+  }, [active]);
   const [language, setLanguage] = useState<Language>(() => {
     const pathParts = window.location.pathname.split("/").filter(Boolean);
     if (pathParts[0] === "en") return "en";
@@ -1982,6 +2106,7 @@ export default function App() {
         <span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span>
       </a>
       <nav>
+        <button className="guide-nav-button" onClick={() => setStatsOpen(true)}>📊 {t(language, "流量數據", "Stats")}</button>
         <button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button>
         <button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>
           {theme === "dark" ? "🌙 深色" : theme === "light" ? "☀️ 淺色" : "🌗 自動"}
@@ -2063,11 +2188,34 @@ export default function App() {
           {active === "blank" && <BlankTool {...toolProps} />}
           {active === "nickname" && <NicknameTool {...toolProps} />}
         </div>
-        <footer><span>{t(language, "字研所", "TEXTLAB")} TEXT LAB</span><p>{t(language, "讓每一段文字，都剛剛好。", "Make every word feel just right.")}</p><small>© 2026 · Made for everyday expression</small></footer>
+        <footer>
+          <span>{t(language, "字研所", "TEXTLAB")} TEXT LAB</span>
+          <p>{t(language, "讓每一段文字，都剛剛好。", "Make every word feel just right.")}</p>
+          <div style={{ display: "flex", gap: "10px", justifyContent: "center", alignItems: "center", marginTop: "6px" }}>
+            <small>© 2026 · Made for everyday expression</small>
+            <span style={{ color: "var(--subtle)" }}>·</span>
+            <button
+              onClick={() => setStatsOpen(true)}
+              style={{
+                background: "transparent",
+                border: 0,
+                color: "var(--muted)",
+                cursor: "pointer",
+                fontSize: "11px",
+                padding: "2px 6px",
+                borderRadius: "4px",
+                textDecoration: "underline"
+              }}
+            >
+              📊 {t(language, "即時流量與轉換數據", "Live Traffic & Telemetry")}
+            </button>
+          </div>
+        </footer>
       </main>
     </div>
 
     {guideOpen && <GuideModal language={language} onClose={() => setGuideOpen(false)} onSelectTool={(id) => { selectTool(id); setGuideOpen(false); }} />}
+    {statsOpen && <StatsModal language={language} onClose={() => setStatsOpen(false)} />}
     {!!copied && <div className="toast"  role="status"><span>✓</span> {t(language, "已複製到剪貼簿", "Copied to clipboard")}</div>}
   </div>;
 }

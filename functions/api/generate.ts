@@ -1,28 +1,4 @@
 // Text-generation-only, entry-level 8B model. No image model or image endpoint is configured.
-declare global {
-  namespace Cloudflare {
-    type Env = {
-      AI: {
-        run: (model: string, input: Record<string, unknown>) => Promise<unknown>;
-      };
-      AI_RATE_LIMITS: {
-        get: (key: string) => Promise<string | null>;
-        put: (key: string, value: string, options?: { expirationTtl?: number }) => Promise<void>;
-      };
-    };
-  }
-  type PagesFunction<Env = unknown> = (
-    context: {
-      request: Request;
-      env: Env;
-      params: Record<string, string | string[]>;
-      data: Record<string, unknown>;
-      next: (input?: Request | string, init?: RequestInit) => Promise<Response>;
-      waitUntil: (promise: Promise<unknown>) => void;
-    }
-  ) => Response | Promise<Response>;
-}
-
 const MODEL = "@cf/meta/llama-3.1-8b-instruct-fp8" as const;
 const USER_DAILY_LIMIT = 10;
 const GLOBAL_DAILY_LIMIT = 200;
