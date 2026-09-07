@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { trackPageView, trackCopyAction, fetchLiveStats, LiveStatsData } from "./services/analytics";
+import { getEntitlements, redeemPromoCode, UserEntitlements } from "./services/subscription";
 import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 import seoPages from "./data/seo-pages.json";
@@ -1374,6 +1375,179 @@ function TitleTool({ copied, setCopied, language }: { copied: string; setCopied:
   );
 }
 
+interface BrandPersona {
+  enabled: boolean;
+  brandName: string;
+  targetAudience: string;
+  customSlogan: string;
+  customHashtags: string;
+}
+
+function CarouselModal({ text, language, onClose, onCopy }: { text: string; language: Language; onClose: () => void; onCopy: (v: string) => void }) {
+  const slides = useMemo(() => {
+    if (!text.trim()) return [];
+    // Split by double newlines or sentences, target 70-130 chars per slide
+    const paragraphs = text.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
+    const rawSlides: string[] = [];
+    let currentChunk = "";
+
+    for (const p of paragraphs) {
+      if ((currentChunk + "\n\n" + p).length > 140 && currentChunk) {
+        rawSlides.push(currentChunk.trim());
+        currentChunk = p;
+      } else {
+        currentChunk = currentChunk ? `${currentChunk}\n\n${p}` : p;
+      }
+    }
+    if (currentChunk) rawSlides.push(currentChunk.trim());
+
+    const total = Math.max(rawSlides.length, 1);
+    return rawSlides.map((s, idx) => {
+      const pageNum = `[ ${idx + 1} / ${total} ]`;
+      const footerHint = idx < total - 1 ? "（滑動看更多 ➔）" : "（歡迎收藏與分享 ✦）";
+      return `${pageNum}\n\n${s}\n\n${footerHint}`;
+    });
+  }, [text]);
+
+  const copyAll = () => {
+    const combined = slides.join("\n\n───────────────\n\n");
+    onCopy(combined);
+  };
+
+  return (
+    <div className="guide-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <section className="guide-modal" role="dialog" aria-modal="true" style={{ maxWidth: "600px" }}>
+        <button className="guide-close" onClick={onClose}>×</button>
+        <div className="guide-hero">
+          <span className="tool-icon">📑</span>
+          <div>
+            <span className="section-kicker">CAROUSEL SLIDES</span>
+            <h2>{t(language, "IG 輪播字卡分頁器", "Instagram Carousel Formatter")}</h2>
+            <p>{t(language, `已自動切分為 ${slides.length} 張簡報式字卡，可直接複製貼入設計軟體或圖文。`, `Formatted into ${slides.length} slide-ready text cards.`)}</p>
+          </div>
+        </div>
+
+        <div style={{ margin: "16px 0", display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+          <button className="primary-button" onClick={copyAll} style={{ fontSize: "12px", padding: "8px 14px" }}>
+            📋 {t(language, "一鍵複製全部字卡", "Copy All Slides")}
+          </button>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxHeight: "400px", overflowY: "auto" }}>
+          {slides.map((slide, idx) => (
+            <div key={idx} style={{ padding: "14px", borderRadius: "12px", background: "var(--canvas)", border: "1px solid var(--line)", position: "relative" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                <strong style={{ fontSize: "12px", color: "var(--purple)" }}>Slide {idx + 1}</strong>
+                <button
+                  onClick={() => onCopy(slide)}
+                  style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "6px", padding: "4px 8px", fontSize: "11px", cursor: "pointer" }}
+                >
+                  複製此卡
+                </button>
+              </div>
+              <div style={{ fontSize: "13px", lineHeight: 1.6, whiteSpace: "pre-wrap", color: "var(--ink)" }}>
+                {slide}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function ProPaywallModal({ language, onClose, onRedeemSuccess }: { language: Language; onClose: () => void; onRedeemSuccess: () => void }) {
+  const [code, setCode] = useState("");
+  const [msg, setMsg] = useState("");
+  const [isError, setIsError] = useState(false);
+
+  const handleRedeem = () => {
+    if (!code.trim()) return;
+    const res = redeemPromoCode(code);
+    setIsError(!res.success);
+    setMsg(res.message);
+    if (res.success) {
+      setTimeout(() => {
+        onRedeemSuccess();
+        onClose();
+      }, 1200);
+    }
+  };
+
+  return (
+    <div className="guide-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <section className="guide-modal" role="dialog" aria-modal="true" style={{ maxWidth: "480px", textAlign: "center" }}>
+        <button className="guide-close" onClick={onClose}>×</button>
+        <div style={{ width: "52px", height: "52px", borderRadius: "14px", background: "var(--purple-soft)", color: "var(--purple)", fontSize: "24px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
+          ✦
+        </div>
+        <h2 style={{ fontSize: "20px", fontWeight: 700, margin: "0 0 6px", color: "var(--ink)" }}>
+          {t(language, "升級 TextLab Pro 專業版", "Upgrade to TextLab Pro")}
+        </h2>
+        <p style={{ fontSize: "13px", color: "var(--muted)", margin: "0 0 20px" }}>
+          {t(language, "解鎖品牌專屬聲線、一週社群企劃與無限深度創作。", "Unlock brand personas, weekly content planning, and unlimited AI.")}
+        </p>
+
+        <div style={{ textAlign: "left", display: "flex", flexDirection: "column", gap: "10px", marginBottom: "22px", background: "var(--canvas)", padding: "16px", borderRadius: "14px", border: "1px solid var(--line)" }}>
+          {[
+            { title: "💼 品牌專屬語氣檔案庫", desc: "自訂目標受眾、Slogan 與禁忌詞，發文自動帶入品牌靈魂" },
+            { title: "📑 IG 輪播字卡切分器", desc: "長文自動切成 10 張投影片字卡，附帶滑動指引與頁碼" },
+            { title: "⚡ 極速無上限 AI 運算", desc: "去除日常冷卻保護，享有優先運算處理通道" }
+          ].map((item, i) => (
+            <div key={i} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
+              <span style={{ color: "var(--purple)", fontWeight: 700 }}>✓</span>
+              <div>
+                <strong style={{ fontSize: "12px", color: "var(--ink)", display: "block" }}>{item.title}</strong>
+                <span style={{ fontSize: "11px", color: "var(--muted)" }}>{item.desc}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* 方案選擇按鈕 */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "18px" }}>
+          <button
+            type="button"
+            className="primary-button"
+            style={{ width: "100%", padding: "12px", display: "flex", justifyContent: "space-between", fontSize: "13px" }}
+            onClick={() => alert(t(language, "目前已開放輸入邀請碼或序號立即開通 Pro！請於下方輸入 VIP2026 即可直接體驗。", "Promo access open! Enter VIP2026 below for instant Pro access."))}
+          >
+            <span>{t(language, "月度通行方案", "Monthly Pass")}</span>
+            <span>NT$ 199 / 月</span>
+          </button>
+        </div>
+
+        {/* 序號/邀請碼兌換區 */}
+        <div style={{ borderTop: "1px solid var(--line)", paddingTop: "16px" }}>
+          <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "8px" }}>
+            {t(language, "已有啟用序號或 VIP 邀請碼？（可輸入 VIP2026 試用）", "Have an activation code? (Try VIP2026)")}
+          </span>
+          <div style={{ display: "flex", gap: "6px" }}>
+            <input
+              type="text"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="輸入序號 (例: VIP2026)"
+              style={{ flex: 1, padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "12px", color: "var(--ink)" }}
+            />
+            <button
+              onClick={handleRedeem}
+              style={{ padding: "8px 14px", borderRadius: "8px", border: "1px solid var(--purple)", background: "var(--purple-soft)", color: "var(--purple)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
+            >
+              {t(language, "兌換啟用", "Redeem")}
+            </button>
+          </div>
+          {!!msg && (
+            <div style={{ marginTop: "8px", fontSize: "11px", color: isError ? "#e5484d" : "var(--purple)", fontWeight: 600 }}>
+              {msg}
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}
+
 function AIPostTool({ copied, setCopied, language, selectTool }: { copied: string; setCopied: (v: string) => void; language: Language; selectTool?: (id: ToolId) => void }) {
   const tones = [
     {
@@ -1453,6 +1627,23 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
   const [selectedTone, setSelectedTone] = useState("auto");
   const [idea, setIdea] = useState(() => t(language, "今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書", "I visited a vintage café today. The matcha latte was fragrant, the window light was beautiful, and it felt perfect for reading alone."));
   const [output, setOutput] = useState("");
+  const [carouselOpen, setCarouselOpen] = useState(false);
+  const [personaOpen, setPersonaOpen] = useState(false);
+  const [persona, setPersona] = useState<BrandPersona>(() => {
+    try {
+      const raw = localStorage.getItem("textlab.brand_persona");
+      return raw ? JSON.parse(raw) : { enabled: false, brandName: "", targetAudience: "", customSlogan: "", customHashtags: "" };
+    } catch {
+      return { enabled: false, brandName: "", targetAudience: "", customSlogan: "", customHashtags: "" };
+    }
+  });
+
+  const savePersona = (updated: BrandPersona) => {
+    setPersona(updated);
+    try {
+      localStorage.setItem("textlab.brand_persona", JSON.stringify(updated));
+    } catch {}
+  };
 
   const handleInsertDecoration = () => {
     if (!output) return;
@@ -1524,7 +1715,7 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ task: "post", input: idea.trim(), tone: selectedTone, language }),
+        body: JSON.stringify({ task: "post", input: persona.enabled && persona.brandName ? `【品牌設定：${persona.brandName}｜受眾：${persona.targetAudience}｜Slogan：${persona.customSlogan}】\n${idea.trim()}` : idea.trim(), tone: selectedTone, language }),
         signal: controller.signal
       });
       const data: unknown = await response.json();
@@ -1742,6 +1933,78 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
           </div>
         </div>
 
+        {/* 💼 品牌專屬聲線檔案室 */}
+        <div style={{ marginBottom: "14px", padding: "10px 14px", borderRadius: "10px", background: persona.enabled ? "var(--purple-soft)" : "var(--canvas)", border: "1px solid var(--line)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontSize: "16px" }}>💼</span>
+            <div>
+              <strong style={{ fontSize: "12px", color: persona.enabled ? "var(--purple)" : "var(--ink)", display: "block" }}>
+                {t(language, "品牌專屬聲線", "Brand Voice Persona")}: {persona.enabled ? (persona.brandName || t(language, "已啟用", "Enabled")) : t(language, "未啟用 (點擊設定)", "Off (Click to setup)")}
+              </strong>
+              <span style={{ fontSize: "10px", color: "var(--muted)" }}>
+                {persona.enabled ? t(language, "發文將自動帶入品牌調性、受眾與專屬 Slogan", "Posts adapt to brand tone & audience") : t(language, "設定一次品牌受眾與語氣，AI 發文更有靈魂", "Personalize AI output with your voice")}
+              </span>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setPersonaOpen(!personaOpen)}
+            style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "5px 10px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}
+          >
+            {personaOpen ? t(language, "收合設定", "Collapse") : t(language, "⚙️ 設定品牌聲線", "⚙️ Configure")}
+          </button>
+        </div>
+
+        {personaOpen && (
+          <div style={{ padding: "14px", borderRadius: "12px", background: "var(--paper)", border: "1px solid var(--line)", marginBottom: "16px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+              <strong style={{ fontSize: "12px", color: "var(--ink)" }}>{t(language, "品牌檔案設定", "Brand Persona Settings")}</strong>
+              <label style={{ fontSize: "11px", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}>
+                <input
+                  type="checkbox"
+                  checked={persona.enabled}
+                  onChange={(e) => savePersona({ ...persona, enabled: e.target.checked })}
+                />
+                <span style={{ fontWeight: 600, color: persona.enabled ? "var(--purple)" : "var(--muted)" }}>
+                  {t(language, "啟用此品牌聲線", "Enable Brand Persona")}
+                </span>
+              </label>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px", marginBottom: "10px" }}>
+              <div>
+                <label style={{ fontSize: "10px", color: "var(--muted)", display: "block", marginBottom: "4px" }}>{t(language, "品牌 / 帳號名稱", "Brand Name")}</label>
+                <input
+                  type="text"
+                  value={persona.brandName}
+                  onChange={(e) => savePersona({ ...persona, brandName: e.target.value })}
+                  placeholder="例：拾光手作、小編日常"
+                  style={{ width: "100%", padding: "6px 10px", borderRadius: "6px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "12px", color: "var(--ink)" }}
+                />
+              </div>
+              <div>
+                <label style={{ fontSize: "10px", color: "var(--muted)", display: "block", marginBottom: "4px" }}>{t(language, "目標受眾群 (Audience)", "Target Audience")}</label>
+                <input
+                  type="text"
+                  value={persona.targetAudience}
+                  onChange={(e) => savePersona({ ...persona, targetAudience: e.target.value })}
+                  placeholder="例：注重生活儀式感的上班族"
+                  style={{ width: "100%", padding: "6px 10px", borderRadius: "6px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "12px", color: "var(--ink)" }}
+                />
+              </div>
+            </div>
+            <div style={{ marginBottom: "10px" }}>
+              <label style={{ fontSize: "10px", color: "var(--muted)", display: "block", marginBottom: "4px" }}>{t(language, "專屬結尾 Slogan 或金句", "Custom Slogan")}</label>
+              <input
+                type="text"
+                value={persona.customSlogan}
+                onChange={(e) => savePersona({ ...persona, customSlogan: e.target.value })}
+                placeholder="例：生活很難，但文字可以很溫柔。"
+                style={{ width: "100%", padding: "6px 10px", borderRadius: "6px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "12px", color: "var(--ink)" }}
+              />
+            </div>
+          </div>
+        )}
+
         <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "16px" }}>
           <span style={{ fontSize: "11px", color: "var(--muted)", width: "100%", fontWeight: 650 }}>
             {t(language, "💡 點選範例快速試用：", "💡 Try a sample idea:")}
@@ -1813,6 +2076,9 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
               <button type="button" onClick={handleAppendHashtags} style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", borderRadius: "8px", padding: "5px 9px", fontSize: "11px", cursor: "pointer" }}>
                 #️⃣ 加熱門標籤
               </button>
+                            <button type="button" onClick={() => setCarouselOpen(true)} style={{ border: "1px solid var(--purple)", background: "var(--purple-soft)", color: "var(--purple)", borderRadius: "8px", padding: "5px 9px", fontSize: "11px", cursor: "pointer", fontWeight: 650 }}>
+                📑 切為 IG 輪播字卡
+              </button>
               <button type="button" onClick={handleSendToLayout} style={{ border: "1px solid var(--purple)", background: "var(--purple-soft)", color: "var(--purple-dark)", borderRadius: "8px", padding: "5px 9px", fontSize: "11px", cursor: "pointer", fontWeight: 650 }}>
                 ¶ 送去排版換行 ➔
               </button>
@@ -1824,6 +2090,7 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
           </button>
         </div>
       )}
+{carouselOpen && <CarouselModal text={output} language={language} onClose={() => setCarouselOpen(false)} onCopy={(val) => copyText(val, setCopied)} />}
     </>
   );
 }
@@ -2001,6 +2268,15 @@ export default function App() {
   }, []);
   const [copied, setCopied] = useState("");
   const [guideOpen, setGuideOpen] = useState(false);
+  const [entitlements, setEntitlements] = useState<UserEntitlements>(getEntitlements);
+  const [paywallOpen, setPaywallOpen] = useState(false);
+
+  useEffect(() => {
+    const handleEntitlementUpdate = () => setEntitlements(getEntitlements());
+    window.addEventListener("textlab-entitlement-updated", handleEntitlementUpdate);
+    return () => window.removeEventListener("textlab-entitlement-updated", handleEntitlementUpdate);
+  }, []);
+
   const [statsOpen, setStatsOpen] = useState(() => {
     if (typeof window !== "undefined") {
       return new URLSearchParams(window.location.search).get("stats") === "1";
@@ -2106,6 +2382,13 @@ export default function App() {
         <span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span>
       </a>
       <nav>
+        <button
+          className="guide-nav-button"
+          onClick={() => setPaywallOpen(true)}
+          style={entitlements.isPro ? { border: "1px solid var(--purple)", color: "var(--purple)", fontWeight: 700 } : { color: "var(--purple)" }}
+        >
+          {entitlements.isPro ? "✦ Pro 會員" : "✦ 升級 Pro"}
+        </button>
         <button className="guide-nav-button" onClick={() => setStatsOpen(true)}>📊 {t(language, "流量數據", "Stats")}</button>
         <button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button>
         <button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>
@@ -2216,6 +2499,7 @@ export default function App() {
 
     {guideOpen && <GuideModal language={language} onClose={() => setGuideOpen(false)} onSelectTool={(id) => { selectTool(id); setGuideOpen(false); }} />}
     {statsOpen && <StatsModal language={language} onClose={() => setStatsOpen(false)} />}
+    {paywallOpen && <ProPaywallModal language={language} onClose={() => setPaywallOpen(false)} onRedeemSuccess={() => setEntitlements(getEntitlements())} />}
     {!!copied && <div className="toast"  role="status"><span>✓</span> {t(language, "已複製到剪貼簿", "Copied to clipboard")}</div>}
   </div>;
 }
