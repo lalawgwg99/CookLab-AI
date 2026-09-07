@@ -1568,6 +1568,20 @@ function ProPaywallModal({ language, onClose, onRedeemSuccess }: { language: Lan
 }
 
 
+const LEGAL_RISKS: { term: string; risk: string; replace: string; law: string }[] = [
+  { term: "消炎", risk: "宣稱醫療效能", replace: "舒緩修護、安撫敏弱", law: "化粧品衛生安全法 §10" },
+  { term: "抗敏", risk: "宣稱醫療效能", replace: "穩定敏弱膚況", law: "化粧品衛生安全法 §10" },
+  { term: "排毒", risk: "涉及改變生理機能", replace: "促進新陳代謝、排便順暢", law: "食品安全衛生管理法 §28" },
+  { term: "瘦身", risk: "宣稱減肥減脂", replace: "維持窈窕體態、促進代謝", law: "食品安全衛生管理法 §28 (最高罰400萬)" },
+  { term: "減肥", risk: "宣稱減肥減脂", replace: "輕盈順暢、調節生理機能", law: "食品安全衛生管理法 §28" },
+  { term: "燃脂", risk: "涉及醫療減脂效能", replace: "運動好幫手、活力代謝", law: "食品安全衛生管理法 §28" },
+  { term: "生髮", risk: "宣稱毛囊再生", replace: "強韌髮根、豐盈亮麗", law: "化粧品衛生安全法 §10" },
+  { term: "保證見效", risk: "誇大不實/絕對化", replace: "眾多好評熱烈推薦", law: "公平交易法 §21" },
+  { term: "消除疲勞", risk: "涉及生理機能宣稱", replace: "精神旺盛、滋補強身", law: "食品安全衛生管理法 §28" },
+  { term: "根治", risk: "醫療療效宣稱", replace: "全面溫和調理", law: "醫療法 §84" },
+  { term: "美白淡斑", risk: "特定宣稱限制", replace: "勻亮暗沉、展現透亮光澤", law: "化粧品衛生安全法 §10" },
+];
+
 function DealTool({
   copied,
   setCopied,
@@ -1594,13 +1608,29 @@ function DealTool({
     unboxingVideo: true,
   });
 
-  const [activeTab, setActiveTab] = useState<"line" | "ig" | "fb">("line");
+  const [activeTab, setActiveTab] = useState<"line" | "ig" | "fb" | "dm">("line");
 
   const orig = parseInt(originalPrice, 10) || 0;
   const deal = parseInt(dealPrice, 10) || 0;
   const savings = Math.max(0, orig - deal);
   const discountPct = orig > 0 && deal < orig ? Math.round(((orig - deal) / orig) * 100) : 0;
-  const discountFold = orig > 0 && deal < orig ? ((deal / orig) * 10).toFixed(1) : "";
+
+  // 台灣廣告法規避雷掃描
+  const detectedRisks = useMemo(() => {
+    const fullText = `${productName} ${sellingPoints}`;
+    return LEGAL_RISKS.filter((r) => fullText.includes(r.term));
+  }, [productName, sellingPoints]);
+
+  const handleAutoFixRisks = () => {
+    let fixedName = productName;
+    let fixedPoints = sellingPoints;
+    for (const r of detectedRisks) {
+      fixedName = fixedName.split(r.term).join(r.replace);
+      fixedPoints = fixedPoints.split(r.term).join(r.replace);
+    }
+    setProductName(fixedName);
+    setSellingPoints(fixedPoints);
+  };
 
   const generatedCopy = useMemo(() => {
     const pointsFormatted = sellingPoints
@@ -1625,6 +1655,10 @@ function DealTool({
       return `『 找了好久，終於找到這款命定好物 ✨ 』\n\n自從用了【${productName}】，真的完全回不去了！\n這次直接跟廠商爭取到限時獨家團購優惠，比自己去官網買便宜太多 🥹\n\n✦ 為什麼我這麼推薦？\n${pointsFormatted}\n\n💸 粉絲限時福利：\n原價 $${orig} ➔ 這次開團只要 $${deal}（現省 $${savings}！）\n🎁 ${shippingBonus}\n\n⚠️ ${urgency}\n\n🛒 購買方式：\n留言「+1」小盒子自動私訊購買連結，或直接點個人檔案 Bio 連結下單 🔗\n\n─── ⋆⋅☆⋅⋆ ───\n#團購好物 #質感選物 #生活好物推薦 #開團優惠 #限時特賣`;
     }
 
+    if (activeTab === "dm") {
+      return `💬【IG / Threads 留言轉單自動私訊腳本 (DM Flow)】\n\n📌 貼文底端引導鉤子（吸引粉絲留言互動）：\n──────────────────────\n想要這檔限時【${productName}】團購現省 $${savings} 專屬優惠？\n在下方留言「+1」，小編在 5 秒內把隱藏折扣碼和下單連結私訊給你！👇🏼\n\n💬 步驟 1：首發自動私訊（秒回增加好感）：\n──────────────────────\n嗨嗨！這是你專屬的【${productName}】團購優惠碼 🎉\n\n▪ 原價：NT$ ${orig} ➔ 團購只要：NT$ ${deal}（🔥現省 $${savings}）\n▪ 滿額優惠：${shippingBonus}\n▪ 專屬下單連結：https://deal.cooklabai.com/order/${encodeURIComponent(productName.slice(0, 10))}\n\n⚠️ ${urgency}，搶完賣場就會提早關閉喔！\n\n⏰ 步驟 2：3 小時後溫馨催單（大幅提升結帳率）：\n──────────────────────\n貼心提醒～【${productName}】現貨庫存倒數中 ⚡️\n很多人已經下單卡位，這批現貨出完就要等下一季預購了，記得在結單前完成下單唷！`;
+    }
+
     return `📢【爆款限時開團｜${productName}】\n\n感謝大家的熱烈敲碗！本次【${productName}】限時團購正式開跑！\n原廠正品保證，全台現貨限量供應，售完即止。\n\n━━━━━━━━━━━━━━\n✦ 團購方案與售價 ✦\n━━━━━━━━━━━━━━\n• 市售建議售價：NT$ ${orig}\n• 本團限定優惠價：NT$ ${deal}（🔥現省 NT$ ${savings}，現折 ${discountPct}%！）\n• 免運優惠門檻：${shippingBonus}\n\n━━━━━━━━━━━━━━\n✦ 產品核心特色 ✦\n━━━━━━━━━━━━━━\n${pointsFormatted}\n\n━━━━━━━━━━━━━━\n✦ 開團時間與數量 ✦\n━━━━━━━━━━━━━━\n• ${urgency}\n\n━━━━━━━━━━━━━━\n✦ 下單守則與防爭議條款 ✦\n━━━━━━━━━━━━━━\n${disputeTerms || "• 下單完成即代表同意本團購之出貨與退換貨規範。"}\n\n🛒 專屬下單賣場：https://deal.cooklabai.com/order/${encodeURIComponent(productName.slice(0, 10))}\n如有任何訂單相關疑問，請隨時私訊粉專小編處理。`;
   }, [productName, orig, deal, savings, discountPct, shippingBonus, sellingPoints, urgency, disputeChecks, activeTab]);
 
@@ -1647,7 +1681,7 @@ function DealTool({
               <h2>{t(language, "電商團購爆單文案與防客訴規格機", "Group-Buy Deal & Sales Copy Engine")}</h2>
               <span style={{ fontSize: "10px", background: "linear-gradient(135deg, #f59e0b, #d97706)", color: "#ffffff", padding: "2px 6px", borderRadius: "4px", fontWeight: 700 }}>PRO</span>
             </div>
-            <p>{t(language, "專為電商賣家、團購主、KOL 帶貨打造！自動試算現省金額、折扣％，生成防客訴售後條款與多平台高轉化文案。", "Generate high-converting e-commerce copy, price discount math, and dispute-proof terms.")}</p>
+            <p>{t(language, "專為電商賣家、團購主打造！自動試算現省折扣、台灣廣告法規避雷審查、私訊轉單腳本與防客訴條款。", "Generate high-converting e-commerce copy, Taiwan legal risk shield, DM conversion flow.")}</p>
           </div>
         </div>
       </div>
@@ -1667,6 +1701,37 @@ function DealTool({
           <strong style={{ fontSize: "16px", color: "#16a34a", fontWeight: 700 }}>省 ${savings} ({discountPct}% OFF)</strong>
         </div>
       </div>
+
+      {/* 🛡️ 台灣廣告法規避雷審查提示條 */}
+      {detectedRisks.length > 0 ? (
+        <div style={{ padding: "12px 14px", borderRadius: "10px", background: "#fef2f2", border: "1px solid #fecaca", marginBottom: "16px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>
+            <span style={{ fontSize: "12px", color: "#b91c1c", fontWeight: 700 }}>
+              ⚠️ 偵測到 {detectedRisks.length} 處潛在法規違規詞（衛生局開罰風險 NT$ 40,000 起）：
+            </span>
+            <button
+              type="button"
+              onClick={handleAutoFixRisks}
+              style={{ padding: "4px 10px", borderRadius: "6px", border: "1px solid #b91c1c", background: "#b91c1c", color: "#fff", fontSize: "11px", fontWeight: 650, cursor: "pointer" }}
+            >
+              ⚡ 一鍵替換為衛福部安全合規詞
+            </button>
+          </div>
+          <div style={{ marginTop: "8px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
+            {detectedRisks.map((r) => (
+              <span key={r.term} style={{ fontSize: "11px", background: "#fff", padding: "2px 8px", borderRadius: "4px", border: "1px solid #fca5a5", color: "#991b1b" }}>
+                「{r.term}」➔ 建議改為「{r.replace}」（{r.law}）
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div style={{ padding: "8px 12px", borderRadius: "8px", background: "#f0fdf4", border: "1px solid #bbf7d0", marginBottom: "14px", display: "flex", alignItems: "center", gap: "6px" }}>
+          <span style={{ fontSize: "12px", color: "#15803d", fontWeight: 600 }}>
+            ✓ 台灣廣告法規審查通過：未發現療效宣稱或違反食安法、化粧品法之高危險字詞
+          </span>
+        </div>
+      )}
 
       {/* 填寫開團資料 */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "12px", marginBottom: "16px" }}>
@@ -1731,7 +1796,7 @@ function DealTool({
         />
       </div>
 
-      {/* 防客訴條款勾選區 (團購賣家剛需) */}
+      {/* 防客訴條款勾選區 */}
       <div style={{ padding: "12px 14px", borderRadius: "10px", background: "var(--paper)", border: "1px solid var(--line)", marginBottom: "16px" }}>
         <span style={{ fontSize: "11px", color: "var(--purple)", fontWeight: 700, display: "block", marginBottom: "8px" }}>
           🛡️ 防客訴與交易保障條款（自動生成至文案末端，杜絕買賣糾紛）：
@@ -1756,25 +1821,31 @@ function DealTool({
         </div>
       </div>
 
-      {/* 平台切換 Tabs */}
-      <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
+      {/* 平台切換 Tabs (含全新 DM Flow 轉單腳本) */}
+      <div style={{ display: "flex", gap: "8px", marginBottom: "12px", flexWrap: "wrap" }}>
         <button
           onClick={() => setActiveTab("line")}
-          style={{ padding: "8px 14px", borderRadius: "8px", border: activeTab === "line" ? "1.5px solid var(--purple)" : "1px solid var(--line)", background: activeTab === "line" ? "var(--purple-soft)" : "var(--canvas)", color: activeTab === "line" ? "var(--purple)" : "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
+          style={{ padding: "8px 12px", borderRadius: "8px", border: activeTab === "line" ? "1.5px solid var(--purple)" : "1px solid var(--line)", background: activeTab === "line" ? "var(--purple-soft)" : "var(--canvas)", color: activeTab === "line" ? "var(--purple)" : "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
         >
           📱 LINE 團購推播版
         </button>
         <button
           onClick={() => setActiveTab("ig")}
-          style={{ padding: "8px 14px", borderRadius: "8px", border: activeTab === "ig" ? "1.5px solid var(--purple)" : "1px solid var(--line)", background: activeTab === "ig" ? "var(--purple-soft)" : "var(--canvas)", color: activeTab === "ig" ? "var(--purple)" : "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
+          style={{ padding: "8px 12px", borderRadius: "8px", border: activeTab === "ig" ? "1.5px solid var(--purple)" : "1px solid var(--line)", background: activeTab === "ig" ? "var(--purple-soft)" : "var(--canvas)", color: activeTab === "ig" ? "var(--purple)" : "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
         >
           📸 IG / Threads 帶貨版
         </button>
         <button
           onClick={() => setActiveTab("fb")}
-          style={{ padding: "8px 14px", borderRadius: "8px", border: activeTab === "fb" ? "1.5px solid var(--purple)" : "1px solid var(--line)", background: activeTab === "fb" ? "var(--purple-soft)" : "var(--canvas)", color: activeTab === "fb" ? "var(--purple)" : "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
+          style={{ padding: "8px 12px", borderRadius: "8px", border: activeTab === "fb" ? "1.5px solid var(--purple)" : "1px solid var(--line)", background: activeTab === "fb" ? "var(--purple-soft)" : "var(--canvas)", color: activeTab === "fb" ? "var(--purple)" : "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
         >
           📋 FB / 賣場防客訴完整版
+        </button>
+        <button
+          onClick={() => setActiveTab("dm")}
+          style={{ padding: "8px 12px", borderRadius: "8px", border: activeTab === "dm" ? "1.5px solid #059669" : "1px solid var(--line)", background: activeTab === "dm" ? "#ecfdf5" : "var(--canvas)", color: activeTab === "dm" ? "#059669" : "var(--ink)", fontSize: "12px", fontWeight: 650, cursor: "pointer" }}
+        >
+          💬 留言轉單私訊腳本 (DM Flow)
         </button>
       </div>
 
@@ -1789,7 +1860,7 @@ function DealTool({
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10px", flexWrap: "wrap", gap: "8px" }}>
           {!isPro ? (
             <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "var(--purple)", fontWeight: 600 }}>
-              <span>👑 此為 Pro 商業版旗艦工具（電商開團、帶貨爆單、防客訴規範）</span>
+              <span>👑 此為 Pro 商業版旗艦工具（電商開團、法規避雷、私訊轉單腳本）</span>
             </div>
           ) : (
             <span style={{ fontSize: "12px", color: "#16a34a", fontWeight: 600 }}>✓ 已開通 Pro 專業商業授權</span>
@@ -2645,6 +2716,7 @@ export default function App() {
   const [guideOpen, setGuideOpen] = useState(false);
   const [entitlements, setEntitlements] = useState<UserEntitlements>(getEntitlements);
   const [paywallOpen, setPaywallOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleEntitlementUpdate = () => setEntitlements(getEntitlements());
@@ -2756,9 +2828,11 @@ export default function App() {
         <BrandLogo />
         <span><strong>{t(language, "字研所", "TextLab")}</strong><small>TEXT LAB</small></span>
       </a>
-      <nav>
+
+      {/* 桌面端完整導覽列 */}
+      <nav className="desktop-nav">
         <button
-          className="guide-nav-button"
+          className="guide-nav-button pro-nav-btn"
           onClick={() => setPaywallOpen(true)}
           style={entitlements.isPro ? { border: "1px solid var(--purple)", color: "var(--purple)", fontWeight: 700 } : { color: "var(--purple)" }}
         >
@@ -2774,7 +2848,84 @@ export default function App() {
           <button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button>
         </div>
       </nav>
+
+      {/* 手機端極簡控制項：只有升級按鈕與折疊選單 */}
+      <div className="mobile-top-actions">
+        <button
+          className="mobile-pro-pill"
+          onClick={() => setPaywallOpen(true)}
+          style={entitlements.isPro ? { background: "var(--purple)", color: "#fff" } : {}}
+        >
+          {entitlements.isPro ? "✦ Pro" : "✦ 升級"}
+        </button>
+        <button
+          className={`mobile-menu-trigger ${mobileMenuOpen ? "active" : ""}`}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? "✕" : "☰"}
+        </button>
+      </div>
     </header>
+
+    {/* 手機端 Apple 原生毛玻璃折疊抽屜 */}
+    {mobileMenuOpen && (
+      <div className="mobile-drawer-backdrop" onClick={() => setMobileMenuOpen(false)}>
+        <div className="mobile-drawer-sheet" onClick={(e) => e.stopPropagation()}>
+          <div className="mobile-drawer-header">
+            <span>{t(language, "系統選單與設定", "Menu & Settings")}</span>
+            <button onClick={() => setMobileMenuOpen(false)}>✕</button>
+          </div>
+
+          <div className="mobile-drawer-section">
+            <button
+              className="drawer-action-row"
+              onClick={() => { setMobileMenuOpen(false); setStatsOpen(true); }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <span className="drawer-icon">📊</span>
+                <div style={{ textAlign: "left" }}>
+                  <strong>{t(language, "即時流量數據中心", "Live Traffic & Telemetry")}</strong>
+                  <small style={{ display: "block", color: "var(--muted)", fontSize: "11px" }}>{t(language, "密碼保護，檢視即時 PV / UV", "Password protected stats")}</small>
+                </div>
+              </div>
+              <span style={{ color: "var(--subtle)" }}>➔</span>
+            </button>
+
+            <button
+              className="drawer-action-row"
+              onClick={() => { setMobileMenuOpen(false); setGuideOpen(true); }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <span className="drawer-icon">📖</span>
+                <div style={{ textAlign: "left" }}>
+                  <strong>{t(language, "30 秒快速上手指南", "Quick Start Guide")}</strong>
+                  <small style={{ display: "block", color: "var(--muted)", fontSize: "11px" }}>{t(language, "各項社群文字工具使用技巧", "Tips and tutorials")}</small>
+                </div>
+              </div>
+              <span style={{ color: "var(--subtle)" }}>➔</span>
+            </button>
+          </div>
+
+          <div className="mobile-drawer-section">
+            <div className="drawer-control-label">{t(language, "主題外觀", "Appearance")}</div>
+            <div className="segmented-control">
+              <button className={theme === "light" ? "active" : ""} onClick={() => setTheme("light")}>☀️ 淺色</button>
+              <button className={theme === "dark" ? "active" : ""} onClick={() => setTheme("dark")}>🌙 深色</button>
+              <button className={theme === "system" ? "active" : ""} onClick={() => setTheme("system")}>🌗 自動</button>
+            </div>
+          </div>
+
+          <div className="mobile-drawer-section">
+            <div className="drawer-control-label">{t(language, "顯示語言", "Language")}</div>
+            <div className="segmented-control">
+              <button className={language === "zh-TW" ? "active" : ""} onClick={() => changeLanguage("zh-TW")}>繁體中文</button>
+              <button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>English</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
     <div className="layout">
       <aside className="sidebar">
         <p className="sidebar-label" style={{ marginBottom: "10px" }}>{t(language, "文字工具箱", "TEXT LAB TOOLS")}</p>

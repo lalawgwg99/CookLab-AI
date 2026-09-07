@@ -77,7 +77,7 @@ const buildPage = (id, language) => {
     .replace(/<link rel="alternate" hreflang="zh-Hant" href="[^"]+" \/>/, `<link rel="alternate" hreflang="zh-Hant" href="${zhUrl}" />`)
     .replace(/<link rel="alternate" hreflang="en" href="[^"]+" \/>/, `<link rel="alternate" hreflang="en" href="${enUrl}" />`)
     .replace(/<link rel="alternate" hreflang="x-default" href="[^"]+" \/>/, `<link rel="alternate" hreflang="x-default" href="${zhUrl}" />`)
-    .replace(/<div id="root"><\/div>/, `<div id="root">${fallback}</div>`)
+    .replace(/<div id="root">/, `<div id="root">${fallback}`)
     .replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, `<script type="application/ld+json">${JSON.stringify(structuredData(id, language, canonical, item))}</script>`);
 
   html = replaceMeta(html, /<meta name="description"[^>]*>/, description);
