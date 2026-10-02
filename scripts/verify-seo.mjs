@@ -21,7 +21,21 @@ for (const id of Object.keys(pages)) {
     const jsonLd = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
     if (!jsonLd) failures.push(`${route}: missing JSON-LD`);
     else {
-      try { JSON.parse(jsonLd); } catch { failures.push(`${route}: invalid JSON-LD`); }
+      try {
+        const data = JSON.parse(jsonLd);
+        const types = (data["@graph"] || []).map((n) => n["@type"]);
+        const faqKey = language === "zh-TW" ? "faqZh" : "faqEn";
+        if (pages[id][faqKey]?.length && !types.includes("FAQPage")) {
+          failures.push(`${route}: missing FAQPage schema (has ${faqKey})`);
+        }
+        if (pages[id][faqKey]?.length) {
+          const faqNode = (data["@graph"] || []).find((n) => n["@type"] === "FAQPage");
+          const expected = pages[id][faqKey].length;
+          const actual = faqNode?.mainEntity?.length || 0;
+          if (actual !== expected) failures.push(`${route}: FAQPage mainEntity ${actual} != ${expected}`);
+          if (!html.includes("常見問題") && language === "zh-TW") failures.push(`${route}: missing FAQ section heading`);
+        }
+      } catch { failures.push(`${route}: invalid JSON-LD`); }
     }
   }
 }

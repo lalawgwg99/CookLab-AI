@@ -29,9 +29,10 @@ const navigationHtml = (language) => {
   return `<nav aria-label="${language === "en" ? "TextLab tools" : "字研所工具"}">${links}</nav>`;
 };
 
-const structuredData = (id, language, canonical, item) => ({
-  "@context": "https://schema.org",
-  "@graph": [
+const structuredData = (id, language, canonical, item) => {
+  const isEnglish = language === "en";
+  const faq = isEnglish ? item.faqEn : item.faqZh;
+  const graph = [
     {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
@@ -43,8 +44,8 @@ const structuredData = (id, language, canonical, item) => ({
       "@type": "WebApplication",
       "@id": `${canonical}#app`,
       url: canonical,
-      name: language === "en" ? item.nameEn : item.nameZh,
-      description: language === "en" ? item.descriptionEn : item.descriptionZh,
+      name: isEnglish ? item.nameEn : item.nameZh,
+      description: isEnglish ? item.descriptionEn : item.descriptionZh,
       applicationCategory: "UtilitiesApplication",
       operatingSystem: "Any",
       inLanguage: language,
@@ -52,11 +53,42 @@ const structuredData = (id, language, canonical, item) => ({
       offers: {
         "@type": "Offer",
         price: "0",
-        priceCurrency: language === "en" ? "USD" : "TWD"
+        priceCurrency: isEnglish ? "USD" : "TWD"
       }
     }
-  ]
-});
+  ];
+  if (faq && faq.length) {
+    graph.push({
+      "@type": "FAQPage",
+      "@id": `${canonical}#faq`,
+      inLanguage: language,
+      mainEntity: faq.map(({ q, a }) => ({
+        "@type": "Question",
+        name: q,
+        acceptedAnswer: { "@type": "Answer", text: a }
+      }))
+    });
+  }
+  return { "@context": "https://schema.org", "@graph": graph };
+};
+
+const guideSectionHtml = (isEnglish, item) => {
+  const guide = isEnglish ? item.guideEn : item.guideZh;
+  if (!guide || !guide.length) return "";
+  const blocks = guide
+    .map((s) => `<h3>${escapeHtml(s.h)}</h3><p>${escapeHtml(s.p)}</p>`)
+    .join("");
+  return `<section aria-label="${isEnglish ? "How to use" : "使用指南"}"><h2>${isEnglish ? "How to use" : "使用指南"}</h2>${blocks}</section>`;
+};
+
+const faqSectionHtml = (isEnglish, item) => {
+  const faq = isEnglish ? item.faqEn : item.faqZh;
+  if (!faq || !faq.length) return "";
+  const blocks = faq
+    .map((f) => `<h3>${escapeHtml(f.q)}</h3><p>${escapeHtml(f.a)}</p>`)
+    .join("");
+  return `<section aria-label="${isEnglish ? "FAQ" : "常見問題"}"><h2>${isEnglish ? "FAQ" : "常見問題"}</h2>${blocks}</section>`;
+};
 
 const buildPage = (id, language) => {
   const item = seoPages[id];
@@ -68,7 +100,7 @@ const buildPage = (id, language) => {
   const title = isEnglish ? item.titleEn : item.titleZh;
   const description = isEnglish ? item.descriptionEn : item.descriptionZh;
   const heading = isEnglish ? item.nameEn : item.nameZh;
-  const fallback = `<main class="seo-fallback"><h1>${escapeHtml(heading)}</h1><p>${escapeHtml(description)}</p><h2>${isEnglish ? "Free TextLab tools" : "更多免費字研所工具"}</h2>${navigationHtml(language)}</main>`;
+  const fallback = `<main class="seo-fallback"><h1>${escapeHtml(heading)}</h1><p>${escapeHtml(description)}</p>${guideSectionHtml(isEnglish, item)}${faqSectionHtml(isEnglish, item)}<h2>${isEnglish ? "Free TextLab tools" : "更多免費字研所工具"}</h2>${navigationHtml(language)}</main>`;
 
   let html = baseHtml
     .replace(/<html lang="[^"]+">/, `<html lang="${language}">`)

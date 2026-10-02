@@ -69,7 +69,63 @@
     "titleZh": "日系顏文字大全 2026｜可愛、委屈、開心、搞笑顏文字一鍵複製｜字研所 TextLab",
     "descriptionZh": "收錄超過 1000 款日系顏文字，包含可愛、開心、委屈、生氣、貓咪與特殊顏文字，支援搜尋、收藏與一鍵複製。",
     "titleEn": "Japanese Kaomoji Library 2026 | Cute Emoticons | TextLab",
-    "descriptionEn": "Search, save and copy more than 1,000 Japanese kaomoji, including cute, happy, sad, angry and animal emoticons."
+    "descriptionEn": "Search, save and copy more than 1,000 Japanese kaomoji, including cute, happy, sad, angry and animal emoticons.",
+    "guideZh": [
+      {
+        "h": "什麼是顏文字？",
+        "p": "顏文字（Kaomoji）是用標點符號與文字拼成的表情，不用轉頭就能看懂，例如 (´・ω・`)。源自日本 BBS 文化，比西方的 :-) 更早流行，至今仍是 Threads、IG、Discord 上愛用的可愛表達方式。"
+      },
+      {
+        "h": "顏文字怎麼複製到 IG / Threads？",
+        "p": "點一下顏文字即自動複製，開啟 App 貼上即可。顏文字由純文字組成，任何平台、任何裝置顯示都一致，不會有 Emoji 在不同系統長得不一樣的問題。"
+      },
+      {
+        "h": "顏文字有哪些情緒分類？",
+        "p": "本站收錄開心、委屈、哭泣、搞笑、生氣、害羞、驚訝等多種情緒分類，可以用關鍵字搜尋，也能把常用的加入收藏，隨時一鍵複製。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "顏文字和 Emoji 有什麼不同？",
+        "a": "顏文字是純文字符號拼成的表情，任何裝置顯示都一致；Emoji 是圖片字元，在 iPhone 和 Android 上長相不同，有時還會顯示成方框。"
+      },
+      {
+        "q": "顏文字在 iPhone 上會變成亂碼嗎？",
+        "a": "不會。顏文字只用到常見的標點與文字，iOS、Android 和電腦都能正常顯示。"
+      },
+      {
+        "q": "顏文字可以用在遊戲 ID 或暱稱嗎？",
+        "a": "可以，但部分遊戲會擋特殊符號；如果被擋，可以改用本站的花式風格暱稱產生器或 Unicode 特殊字體轉換器。"
+      },
+      {
+        "q": "顏文字複製是免費的嗎？",
+        "a": "免費，一鍵複製，不需註冊。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "What are kaomoji?",
+        "p": "Kaomoji are emoticons built from punctuation and text, readable without tilting your head, like (´・ω・`). Born in Japanese BBS culture, they remain a beloved cute expression on Threads, Instagram, and Discord."
+      },
+      {
+        "h": "How to copy kaomoji to Instagram or Threads?",
+        "p": "Tap any kaomoji to copy it automatically, then paste it into the app. Because kaomoji are plain text, they look identical on every platform and device."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "How are kaomoji different from emoji?",
+        "a": "Kaomoji are plain-text emoticons that look the same everywhere. Emoji are image characters that render differently on iPhone and Android, and sometimes show as boxes."
+      },
+      {
+        "q": "Will kaomoji break on iPhone?",
+        "a": "No. Kaomoji only use common punctuation and letters, which display correctly on iOS, Android, and desktop."
+      },
+      {
+        "q": "Is it free?",
+        "a": "Yes. One-tap copy, no sign-up required."
+      }
+    ]
   },
   "fonts": {
     "nameZh": "Unicode 特殊字體轉換器",
@@ -77,7 +133,63 @@
     "titleZh": "Unicode 特殊字體轉換器｜IG 英文字體、花式草寫一鍵轉換｜字研所 TextLab",
     "descriptionZh": "免費將一般英文字母轉換為花式手寫體、圈圈字、哥德體、雙線體與草寫 Unicode 字體，一鍵複製到 IG 個人檔案。",
     "titleEn": "Unicode Fancy Text Converter | Instagram Fonts | TextLab",
-    "descriptionEn": "Convert plain text into cursive, gothic, circled and double-struck Unicode fonts for Instagram and social profiles."
+    "descriptionEn": "Convert plain text into cursive, gothic, circled and double-struck Unicode fonts for Instagram and social profiles.",
+    "guideZh": [
+      {
+        "h": "特殊字體是怎麼運作的？",
+        "p": "特殊字體並不是真的更換字體，而是把英文字母換成 Unicode 裡長得很像的數學符號、全形字或花式字母（如 𝓪𝓫𝓬、ａｂｃ）。因為是純文字，貼到 IG、Threads、FB 個人檔案或貼文都能顯示。"
+      },
+      {
+        "h": "IG 英文字體怎麼換？",
+        "p": "在本站輸入英文，點喜歡的風格即自動複製，貼到 IG 個人簡介、貼文或限動文字即可。只有英文字母和數字會轉換，中文不受影響。"
+      },
+      {
+        "h": "花式字體會變成亂碼或方框嗎？",
+        "p": "極少數裝置對罕見的數學符號支援不完整，可能顯示方框。建議優先選常見風格（如粗體、斜體、全形）；如果對方看不到，換一種風格即可。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "特殊字體在 iPhone / Android 都看得到嗎？",
+        "a": "常見風格（粗體、斜體、全形、草寫）在兩大系統都支援；極冷門的裝飾字體在部分舊裝置可能顯示為方框。"
+      },
+      {
+        "q": "IG 名字用特殊字體會被鎖帳號嗎？",
+        "a": "不會。這些是合法的 Unicode 字元，不是違規內容；但過度裝飾可能影響別人搜尋到你的機率。"
+      },
+      {
+        "q": "特殊字體可以轉換中文嗎？",
+        "a": "不行，特殊字體只轉換英文字母與數字。中文美化請用本站的日系花邊標題組裝器或特殊符號工具。"
+      },
+      {
+        "q": "字體轉換要錢嗎？",
+        "a": "免費，不需註冊，在瀏覽器端即時轉換。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "How do fancy fonts work?",
+        "p": "Fancy fonts do not change the actual font. They swap Latin letters for look-alike Unicode symbols, fullwidth characters, or styled alphabets (like 𝓪𝓫𝓬 or ａｂｃ). Because they are plain text, they display in Instagram, Threads, and Facebook bios and posts."
+      },
+      {
+        "h": "How to change fonts on Instagram?",
+        "p": "Type English text on this page, tap a style to copy it, then paste it into your IG bio, post, or story text. Only Latin letters and numbers are converted."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Do fancy fonts work on iPhone and Android?",
+        "a": "Common styles (bold, italic, fullwidth, script) work on both. Very rare decorative styles may show as boxes on some older devices."
+      },
+      {
+        "q": "Will Instagram ban me for using fancy fonts?",
+        "a": "No. These are legitimate Unicode characters, not policy violations. Overly decorated names may just be harder to search for."
+      },
+      {
+        "q": "Is it free?",
+        "a": "Yes. Instant conversion in your browser, no sign-up required."
+      }
+    ]
   },
   "nickname": {
     "nameZh": "花式風格暱稱產生器",
@@ -93,7 +205,71 @@
     "titleZh": "透明空白文字複製｜隱形空白字元產生器 (IG/Threads/遊戲 ID)｜字研所 TextLab",
     "descriptionZh": "免費複製隱形空白文字字元，適用於 LINE、IG 名稱、Threads 排版、遊戲 ID 留白與社群文章縮排。",
     "titleEn": "Invisible Text & Blank Character Copy | TextLab",
-    "descriptionEn": "Copy invisible Unicode blank characters for social spacing, empty usernames, Instagram, Threads and gaming IDs."
+    "descriptionEn": "Copy invisible Unicode blank characters for social spacing, empty usernames, Instagram, Threads and gaming IDs.",
+    "guideZh": [
+      {
+        "h": "什麼是透明空白文字？",
+        "p": "透明空白文字是由 Unicode 空白字元（如 U+3164 諺文填充字元、U+2800 點字空格）組成的「看不見的字」。它們佔據字元位置卻不顯示任何符號，可以在 IG、Threads、LINE、遊戲 ID 等不接受純空格的地方製造留白、分段或空白名稱。"
+      },
+      {
+        "h": "IG 精選動態的空白怎麼複製？",
+        "p": "在本頁點一下空白字元卡片即自動複製，接著開啟 IG → 個人檔案 → 精選 → 編輯精選 → 在名稱欄位貼上即可。哀居精選名稱不接受一般空格，用 Unicode 空白字元就能做出乾淨的留白效果。"
+      },
+      {
+        "h": "遊戲 ID 的空白名字怎麼打？",
+        "p": "許多手遊的暱稱不允許純空格或全空白名字。複製本站的空白字元貼到遊戲 ID 欄位，即可做出隱形名字；如果某個字元被系統擋下，換另一種空白字元再試一次。"
+      },
+      {
+        "h": "LINE、Threads 排版換行，貼上會消失怎麼辦？",
+        "p": "直接打的空格在送出時常被平台吃掉。先在本頁複製空白字元，再貼到貼文的換行處，就能保留段落留白；也可以搭配本站的 IG 換行排版工具先預覽再複製。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "空白複製後貼上，別人看得到嗎？",
+        "a": "看不到任何符號，但字元確實存在。對方看到的是留白或空白名稱，這正是透明空白文字的用途。"
+      },
+      {
+        "q": "為什麼我複製的空格在 IG 貼上會消失？",
+        "a": "一般半形空格會被 IG 自動清除。本站提供的是 Unicode 特殊空白字元（如 U+3164、U+2800），系統會將它們視為有效字元而保留下來。"
+      },
+      {
+        "q": "iPhone 和 Android 都能用嗎？",
+        "a": "可以。這幾種空白字元在 iOS、Android、Windows、macOS 的主流 App 都能正常顯示為留白；極少數老舊系統可能顯示為方框，換一種字元即可。"
+      },
+      {
+        "q": "空白文字可以用在 Discord、LINE 名字嗎？",
+        "a": "可以。Discord 暱稱、LINE 顯示名稱、Threads 個人檔案都接受這些 Unicode 空白字元，做法都是複製後貼上。"
+      },
+      {
+        "q": "複製空白文字要錢嗎？需要註冊嗎？",
+        "a": "完全免費，不需註冊。點一下卡片即複製，全程在瀏覽器端完成，不會上傳任何內容。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "What is invisible text?",
+        "p": "Invisible text is made of Unicode blank characters (such as U+3164 Hangul Filler and U+2800 Braille Pattern Blank) that take up space without showing any glyph. Use them for spacing, line breaks, and empty usernames where regular spaces are stripped, including Instagram, Threads, LINE, and gaming IDs."
+      },
+      {
+        "h": "How to make a blank Instagram highlight name?",
+        "p": "Tap a blank character card on this page to copy it, then open Instagram, go to your profile, edit a highlight, and paste it into the name field. Instagram removes normal spaces, but keeps these Unicode blank characters."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Will others see the blank characters I paste?",
+        "a": "No visible glyph appears, but the characters are really there. Others see clean spacing or an empty name, which is exactly the point of invisible text."
+      },
+      {
+        "q": "Why does a normal space disappear on Instagram?",
+        "a": "Instagram strips regular spaces. This page provides Unicode blank characters (like U+3164 and U+2800) that the system treats as valid characters and keeps."
+      },
+      {
+        "q": "Does it work on iPhone and Android?",
+        "a": "Yes. These blank characters display as spacing in mainstream apps on iOS, Android, Windows, and macOS."
+      }
+    ]
   },
   "deal": {
     "nameZh": "電商開團爆單文案機",
