@@ -29,7 +29,63 @@
     "titleZh": "IG 換行、Threads 排版工具｜空白文字與特殊符號一鍵複製｜字研所",
     "descriptionZh": "免費 IG 換行與 Threads 排版工具：整理段落留白、隱形空白文字、分隔線與特殊符號，複製後可直接貼上社群貼文。",
     "titleEn": "Instagram & Threads Formatter | Line Breaks & Invisible Text | TextLab",
-    "descriptionEn": "Format Instagram and Threads posts with line breaks, invisible text, dividers and Unicode symbols. Copy and paste directly into social posts."
+    "descriptionEn": "Format Instagram and Threads posts with line breaks, invisible text, dividers and Unicode symbols. Copy and paste directly into social posts.",
+    "guideZh": [
+      {
+        "h": "IG 貼文換行為什麼會被吃掉？",
+        "p": "IG 會自動清除貼文中的連續換行與行首空格，精心排好的版貼出去常變成一整坨。在本站的排版工具先排好、用預覽確認手機上的樣子，再一鍵複製貼上，就能保留段落留白。"
+      },
+      {
+        "h": "Threads 貼文怎麼排版好看？",
+        "p": "Threads 適合短段落加空行分隔重點：一段一個想法，段與段之間留空行，重點句可以用特殊符號或顏文字點綴。本站排版工具可即時預覽，避免發出去才發現擠成一團。"
+      },
+      {
+        "h": "排版時空白字元怎麼用？",
+        "p": "單純按 Enter 的空行有時會被平台吃掉。在需要強制留白的地方插入透明空白字元，換行就不會消失；空白字元可到本站「透明空白文字產生器」一鍵複製。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "IG 限動的文字可以換行排版嗎？",
+        "a": "可以。先在本工具排好版、複製，再到 IG 限動的文字框貼上；建議分段不要太多，限動版面較小，段落太長會被截斷。"
+      },
+      {
+        "q": "複製過去的排版在 Android 和 iPhone 看起來一樣嗎？",
+        "a": "基本一致。兩大系統對換行與空白字元的處理相同；若排版中用了特殊符號，極少數舊裝置可能顯示為方框。"
+      },
+      {
+        "q": "排版工具是免費的嗎？",
+        "a": "免費，不需註冊，所有操作都在瀏覽器端完成，不會上傳你的文字內容。"
+      },
+      {
+        "q": "可以排好直接發佈到 IG 嗎？",
+        "a": "不行，本站是排版輔助工具。排好後一鍵複製，到 IG App 手動貼上發佈。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "Why does Instagram eat my line breaks?",
+        "p": "Instagram strips consecutive line breaks and leading spaces, turning a nicely formatted caption into a wall of text. Format it in this tool first, check the preview, then copy and paste to keep your paragraph spacing."
+      },
+      {
+        "h": "How to format Threads posts?",
+        "p": "Threads reads best with short paragraphs separated by blank lines: one idea per paragraph, with key lines accented by symbols or kaomoji. Use the preview here to avoid posting a cramped block of text."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Can I format text for Instagram Stories?",
+        "a": "Yes. Format it here, copy it, then paste into the Story text box. Keep paragraphs short, as Story space is limited."
+      },
+      {
+        "q": "Does the formatting look the same on Android and iPhone?",
+        "a": "Mostly yes. Both systems handle line breaks and blank characters the same way; very old devices may show boxes for rare symbols."
+      },
+      {
+        "q": "Is it free?",
+        "a": "Yes. Free, no sign-up, everything runs in your browser."
+      }
+    ]
   },
   "bio": {
     "nameZh": "IG / Threads Bio 排版工具",
