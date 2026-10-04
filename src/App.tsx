@@ -4,8 +4,9 @@ import { incrementDailyAiUsage } from "./services/subscription";
 import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 import seoPages from "./data/seo-pages.json";
+import { bopomofoOf, BPMF_COUNT } from "./data/bopomofo";
 
-type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "hashtags" | "blank" | "nickname";
+type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "hashtags" | "blank" | "nickname";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -45,6 +46,7 @@ const tools: Tool[] = [
   { id: "emoji", name: "Emoji 實驗室", nameEn: "Emoji Lab", short: "分類與經典情境連發", shortEn: "Browse & emoji combos", icon: "☺" },
   { id: "kaomoji", name: "日系顏文字", nameEn: "Kaomoji", short: "精選日系顏文字庫", shortEn: "Japanese emoticons", icon: "◡̈" },
   { id: "fonts", name: "特殊字體", nameEn: "Fancy Text", short: "Unicode 特殊字體轉換", shortEn: "Unicode font converter", icon: "Aa" },
+  { id: "bopomofo", name: "注音文轉換器", nameEn: "Bopomofo Converter", short: "中文轉注音符號 ㄅㄆㄇㄈ", shortEn: "Chinese to bopomofo", icon: "ㄅ" },
   { id: "hashtags", name: "熱門標籤", nameEn: "Hashtags", short: "Threads / IG 導流標籤", shortEn: "Trending hashtag sets", icon: "#" },
   { id: "blank", name: "空白文字", nameEn: "Invisible Text", short: "隱形空白字元複製", shortEn: "Invisible blank character", icon: "□" },
   { id: "nickname", name: "風格暱稱產生器", nameEn: "Nickname Generator", short: "快速找到專屬風格", shortEn: "Find your online style", icon: "@" },
@@ -2864,6 +2866,110 @@ function BrandLogo() {
   );
 }
 
+const stripBopomofoTone = (syllable: string) => syllable.replace(/[ˊˇˋ]/g, "");
+
+function BopomofoTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const [text, setText] = useState("你好，歡迎使用字研所！");
+  const [spaced, setSpaced] = useState(true);
+  const [showTone, setShowTone] = useState(true);
+
+  const pairs = useMemo(() => [...text].map((ch) => ({ ch, bpmf: bopomofoOf(ch) })), [text]);
+
+  const plain = useMemo(() => {
+    const tokens: { t: string; s: boolean }[] = [];
+    for (const { ch, bpmf } of pairs) {
+      if (ch === "\n") { tokens.push({ t: "\n", s: false }); continue; }
+      if (/\s/.test(ch)) { tokens.push({ t: ch, s: false }); continue; }
+      if (bpmf) tokens.push({ t: showTone ? bpmf : stripBopomofoTone(bpmf), s: true });
+      else tokens.push({ t: ch, s: false });
+    }
+    let out = "";
+    tokens.forEach((tok, i) => {
+      if (i > 0 && spaced && tok.s && tokens[i - 1].s) out += " ";
+      out += tok.t;
+    });
+    return out;
+  }, [pairs, spaced, showTone]);
+
+  const convertedCount = pairs.filter((p) => p.bpmf).length;
+  const unknownCount = pairs.filter((p) => !p.bpmf && /\p{Script=Han}/u.test(p.ch)).length;
+
+  const renderRubyLine = (linePairs: { ch: string; bpmf: string | undefined }[], keyPrefix: string) => (
+    <span key={keyPrefix} style={{ display: "block" }}>
+      {linePairs.map(({ ch, bpmf }, i) => bpmf ? (
+        <ruby key={`${keyPrefix}-${i}`} className="bpmf-ruby">{ch}<rt>{showTone ? bpmf : stripBopomofoTone(bpmf)}</rt></ruby>
+      ) : (
+        <span key={`${keyPrefix}-${i}`}>{ch}</span>
+      ))}
+    </span>
+  );
+
+  const lines: { ch: string; bpmf: string | undefined }[][] = [[]];
+  for (const p of pairs) {
+    if (p.ch === "\n") lines.push([]);
+    else lines[lines.length - 1].push(p);
+  }
+
+  return <><ToolIntro tool={tools.find((t) => t.id === "bopomofo")!} language={language} />
+    <div className="editor-grid">
+      <div className="input-card">
+        <div className="field-label">
+          <label htmlFor="bopomofo-input">{t(language, "輸入中文", "Enter Chinese text")}</label>
+          <span>{text.length} {t(language, "字", "chars")}</span>
+        </div>
+        <textarea id="bopomofo-input" value={text} maxLength={2000} onChange={(e) => setText(e.target.value)} placeholder={t(language, "貼上中文，自動轉成注音…", "Paste Chinese text to convert…")} />
+        <div style={{ marginTop: "10px", display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
+          <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--muted)" }}>{t(language, "選項：", "Options:")}</span>
+          {[
+            { id: "spaced", label: t(language, "字間空格", "Spacing"), on: spaced, set: setSpaced },
+            { id: "tone", label: t(language, "聲調符號", "Tone marks"), on: showTone, set: setShowTone },
+          ].map((item) => (
+            <button
+              key={item.id}
+              onClick={() => item.set(!item.on)}
+              style={{ border: "1px solid var(--line)", background: item.on ? "var(--purple)" : "var(--canvas)", color: item.on ? "#fff" : "var(--ink)", borderRadius: "6px", padding: "4px 10px", fontSize: "11px", cursor: "pointer" }}
+            >{item.on ? "✓ " : ""}{item.label}</button>
+          ))}
+        </div>
+        <div style={{ marginTop: "10px", display: "flex", flexWrap: "wrap", gap: "6px", alignItems: "center" }}>
+          <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--muted)" }}>{t(language, "試試看：", "Try:")}</span>
+          {["早安，今天天氣真好！", "台灣加油！", "祝你生日快樂", "謝謝你的喜歡"].map((preset) => (
+            <button
+              key={preset}
+              onClick={() => setText(preset)}
+              style={{ border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--purple)", borderRadius: "6px", padding: "3px 8px", fontSize: "10px", cursor: "pointer" }}
+            >+ {preset}</button>
+          ))}
+        </div>
+      </div>
+      <div className="input-card result-card">
+        <div className="field-label">
+          <span>{t(language, "逐字注音對照", "Character-by-character bopomofo")}</span>
+          <span>{t(language, `已轉換 ${convertedCount} 字`, `${convertedCount} converted`)}</span>
+        </div>
+        <div className="preview-text bpmf-output">
+          {lines.map((linePairs, li) => linePairs.length ? renderRubyLine(linePairs, `l${li}`) : <span key={`l${li}`} style={{ display: "block" }}>&nbsp;</span>)}
+        </div>
+      </div>
+    </div>
+
+    <div className="result-header"><h2>{t(language, "純注音文字（可複製）", "Plain bopomofo text")}</h2><span>{t(language, "一鍵複製貼到教材或社群", "Copy to worksheets or social posts")}</span></div>
+    <div className="input-card">
+      <div className="preview-text" style={{ minHeight: "80px", whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{plain || t(language, "在左側輸入中文…", "Type Chinese on the left…")}</div>
+      <div style={{ marginTop: "10px", display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
+        <button className="primary-button" onClick={() => copyText(plain, setCopied)}>
+          {copied === plain && plain ? t(language, "已複製 ✓", "Copied ✓") : t(language, "一鍵複製注音", "Copy bopomofo")}
+        </button>
+        <span style={{ fontSize: "11px", color: "var(--muted)" }}>
+          {t(language,
+            `資料庫收錄 ${BPMF_COUNT.toLocaleString()} 個漢字讀音；多音字取最常用讀音${unknownCount ? `，${unknownCount} 個罕見字無收錄（保留原字）` : ""}。`,
+            `Database covers ${BPMF_COUNT.toLocaleString()} characters; most-common reading used for polyphones${unknownCount ? `; ${unknownCount} rare char(s) not covered (kept as-is)` : ""}.`)}
+        </span>
+      </div>
+    </div>
+  </>;
+}
+
 export default function App() {
   const parseCurrentTool = (): ToolId => {
     if (typeof window === "undefined") return "layout";
@@ -3168,6 +3274,7 @@ export default function App() {
           {active === "emoji" && <EmojiTool {...toolProps} />}
           {active === "kaomoji" && <KaomojiTool {...toolProps} />}
           {active === "fonts" && <FontsTool {...toolProps} />}
+          {active === "bopomofo" && <BopomofoTool {...toolProps} />}
           {active === "hashtags" && <HashtagTool {...toolProps} />}
           {active === "blank" && <BlankTool {...toolProps} />}
           {active === "nickname" && <NicknameTool {...toolProps} />}

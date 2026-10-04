@@ -191,6 +191,70 @@
       }
     ]
   },
+  "bopomofo": {
+    "nameZh": "注音文轉換器",
+    "nameEn": "Bopomofo Converter",
+    "titleZh": "注音文轉換器｜中文轉注音符號 ㄅㄆㄇㄈ 線上免費工具｜字研所 TextLab",
+    "descriptionZh": "免費中文轉注音工具：貼上中文一鍵轉成注音符號（ㄅㄆㄇㄈ），支援聲調標示、字間空格與逐字對照，製作注音教材、兒童學習單超方便，免安裝免註冊。",
+    "titleEn": "Chinese to Bopomofo Converter | Zhuyin Phonetic Symbols Tool | TextLab",
+    "descriptionEn": "Free Chinese to bopomofo (zhuyin) converter: turn Chinese text into ㄅㄆㄇㄈ phonetic symbols with tone marks, spacing options and character-by-character ruby view. No sign-up needed.",
+    "guideZh": [
+      {
+        "h": "怎麼用：三步驟轉出注音",
+        "p": "在左側輸入框貼上或輸入中文，右側即時顯示每個字的注音對照。可切換「字間空格」讓注音更好讀，或關閉「聲調符號」做成無調注音文；下方的純注音文字可一鍵複製，貼到教材、學習單或社群貼文。"
+      },
+      {
+        "h": "多音字與罕見字怎麼處理",
+        "p": "多音字（如行、重、長、得）預設取最常用讀音，特殊讀音請手動微調；資料庫共收錄 44,354 個漢字，極罕見字若無收錄會保留原字顯示，並在按鈕旁統計提示未收錄字數。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "中文轉注音是免費的嗎？需要註冊嗎？",
+        "a": "完全免費、不需註冊。所有轉換都在你的瀏覽器內即時完成，輸入的文字不會上傳到任何伺服器。"
+      },
+      {
+        "q": "轉出來的注音準確嗎？",
+        "a": "讀音資料來自 Unicode 官方 Unihan 資料庫的國語讀音，共收錄 44,354 個漢字。多音字取最常用讀音；若用於正式教材或考試，建議再人工校對一次。"
+      },
+      {
+        "q": "可以做成沒有聲調符號的注音文嗎？",
+        "a": "可以。關閉「聲調符號」選項，就會輸出 ㄋㄧˇ→ㄋㄧ 這種無調注音，適合做注音文迷因、裝飾文字或社群哏圖。"
+      },
+      {
+        "q": "簡體中文也可以轉注音嗎？",
+        "a": "與繁體字形相同的簡體字可以直接轉；字形不同的簡體字只要資料庫有收錄讀音也會轉換。為確保正確，建議先轉為繁體中文再使用。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "How it works in 3 steps",
+        "p": "Type or paste Chinese text on the left and see bopomofo readings for every character on the right instantly. Toggle word spacing for readability or turn off tone marks for toneless bopomofo memes; the plain-text result below copies in one click for worksheets or social posts."
+      },
+      {
+        "h": "Polyphonic and rare characters",
+        "p": "Characters with multiple readings (like 行, 重, 長) use the most common reading — adjust manually for special cases. The database covers 44,354 characters; rare characters without a reading are kept as-is and counted next to the copy button."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Is the Chinese to bopomofo converter free? Do I need an account?",
+        "a": "Yes, completely free with no sign-up. All conversion runs locally in your browser; your text is never uploaded to any server."
+      },
+      {
+        "q": "How accurate are the bopomofo readings?",
+        "a": "Readings come from the official Unicode Unihan database (Mandarin readings) covering 44,354 characters. Polyphonic characters use the most common reading; proofread once more for formal teaching materials."
+      },
+      {
+        "q": "Can I get bopomofo without tone marks?",
+        "a": "Yes. Turn off the tone-marks option to output toneless bopomofo (ㄋㄧ instead of ㄋㄧˇ), handy for memes, decorative text and social posts."
+      },
+      {
+        "q": "Does it work with Simplified Chinese?",
+        "a": "Simplified characters identical in shape to Traditional ones convert directly; others convert when the database has their reading. For best accuracy, convert to Traditional Chinese first."
+      }
+    ]
+  },
   "nickname": {
     "nameZh": "花式風格暱稱產生器",
     "nameEn": "Aesthetic Nickname Generator",

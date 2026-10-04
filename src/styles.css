@@ -1081,3 +1081,7 @@ footer small { text-align: right; color: var(--subtle); }
 }
 
 
+/* Bopomofo tool: ruby annotation for character-by-character readings */
+.bpmf-output { line-height: 2.4; }
+.bpmf-ruby { ruby-position: over; }
+.bpmf-ruby rt { font-size: 10px; color: var(--purple); font-weight: 600; line-height: 1.2; }
