@@ -6,7 +6,7 @@ import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 import seoPages from "./data/seo-pages.json";
 import { bopomofoOf, BPMF_COUNT } from "./data/bopomofo";
 
-type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "hashtags" | "blank" | "nickname";
+type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "hashtags" | "blank" | "blank-id" | "nickname";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -49,6 +49,7 @@ const tools: Tool[] = [
   { id: "bopomofo", name: "注音文轉換器", nameEn: "Bopomofo Converter", short: "中文轉注音符號 ㄅㄆㄇㄈ", shortEn: "Chinese to bopomofo", icon: "ㄅ" },
   { id: "hashtags", name: "熱門標籤", nameEn: "Hashtags", short: "Threads / IG 導流標籤", shortEn: "Trending hashtag sets", icon: "#" },
   { id: "blank", name: "空白文字", nameEn: "Invisible Text", short: "隱形空白字元複製", shortEn: "Invisible blank character", icon: "□" },
+  { id: "blank-id", name: "空白ID產生器", nameEn: "Invisible Name Generator", short: "遊戲隱形名字一鍵產生", shortEn: "Blank game name maker", icon: "◌" },
   { id: "nickname", name: "風格暱稱產生器", nameEn: "Nickname Generator", short: "快速找到專屬風格", shortEn: "Find your online style", icon: "@" },
 ];
 
@@ -1001,6 +1002,55 @@ function BlankTool({ copied, setCopied, language }: { copied: string; setCopied:
     <div className="blank-workbench"><div className="blank-main"><div className="blank-type-list"><span className="field-title">1. {t(language, "選擇空白類型", "Choose a blank type")}</span>{blankTypes.map((item) => <button className={type === item.id ? "active" : ""} key={item.id} onClick={() => setType(item.id)}><span className="blank-swatch">{item.value}</span><span><strong>{t(language, item.name, item.nameEn)}</strong><small>{item.code} · {t(language, `適合 ${item.best}`, `Best for ${item.bestEn}`)}</small></span><i>{type === item.id ? "✓" : ""}</i></button>)}</div><div className="blank-count"><span className="field-title">2. {t(language, "選擇長度", "Choose a length")}</span><div className="blank-presets">{[1, 3, 5, 10].map((value) => <button className={count === value ? "active" : ""} key={value} onClick={() => setCount(value)}>{value} {t(language, "個", "chars")}</button>)}</div><div className="stepper"><button onClick={() => setCount(Math.max(1, count - 1))}>−</button><strong>{count}</strong><button onClick={() => setCount(Math.min(30, count + 1))}>＋</button></div></div><button className="primary-button wide" onClick={() => copyText(blank, setCopied)}>{copied === blank ? t(language, "空白文字已複製 ✓", "Invisible text copied ✓") : t(language, `複製 ${count} 個${selectedType.name}`, `Copy ${count} ${selectedType.nameEn}`)}</button></div>
       <aside className="blank-guide"><span className="section-kicker">HOW TO USE</span><h2>{t(language, "使用方式", "How to use")}</h2><ol><li><span>1</span>{t(language, "選擇適合的平台類型", "Choose the best character type")}</li><li><span>2</span>{t(language, "按下「複製空白文字」", "Tap the copy button")}</li><li><span>3</span>{t(language, "到目標欄位長按貼上", "Paste it into your target field")}</li></ol><div className="blank-example"><small>{t(language, "使用範例", "Example")}</small><p>{t(language, "原本：小安", "Before: Mia")}</p><p>{t(language, "貼上後：小安", "After: Mia")}<span>{selectedType.value.repeat(3)}</span>{t(language, "日記", "Diary")}</p></div><p className="compatibility-note">{t(language, "提示：不同平台的過濾規則可能改變；如果第一種無效，可改用「段落空白」。", "Tip: Platform filters change. If the first type fails, try Paragraph blank instead.")}</p></aside></div>
     <section className="blank-tester"><div><span className="section-kicker">PASTE TEST</span><h2>{t(language, "貼上測試區", "Paste test")}</h2><p>{t(language, "複製後貼到下方，游標有移動就代表空白字元存在。", "Paste below. If the cursor moves, the invisible characters are there.")}</p></div><input value={testText} onChange={(event) => setTestText(event.target.value)} placeholder={t(language, "在這裡貼上空白文字測試…", "Paste invisible text here to test…")} /><span>{Array.from(testText).length} {t(language, "個字元", "characters")}</span></section></>;
+}
+
+function BlankIdTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const recipes = [
+    { id: "universal", chars: ["\u3164"], name: "通用配方", nameEn: "Universal", code: "U+3164 諺文填充字元", codeEn: "Hangul filler U+3164", best: "傳說對決、Free Fire、IG 暱稱", bestEn: "Arena of Valor, Free Fire, IG names" },
+    { id: "paragraph", chars: ["\u2800"], name: "段落配方", nameEn: "Paragraph", code: "U+2800 點字空格", codeEn: "Braille space U+2800", best: "長留白、聊天室", bestEn: "Long blanks and chats" },
+    { id: "zerowidth", chars: ["\u200B"], name: "零寬配方", nameEn: "Zero-width", code: "U+200B 零寬空格", codeEn: "Zero-width space U+200B", best: "嚴格過濾的平台", bestEn: "Strict filters" },
+    { id: "mixed", chars: ["\u3164", "\u2800", "\u200B", "\u2060"], name: "混合配方", nameEn: "Mixed", code: "4 種字元交錯", codeEn: "4 blank characters interleaved", best: "被擋下時換這個再試", bestEn: "Retry this if blocked" },
+  ];
+  const [length, setLength] = useState(4);
+  const [recipe, setRecipe] = useState("universal");
+  const [round, setRound] = useState(0);
+  const [testName, setTestName] = useState("");
+  const selected = recipes.find((item) => item.id === recipe) || recipes[0];
+  const generated = useMemo(() => {
+    let seed = (round * 2654435761 + 12345) >>> 0;
+    const next = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+    let result = "";
+    for (let i = 0; i < length; i++) result += selected.chars[Math.floor(next() * selected.chars.length)];
+    return result;
+  }, [selected, length, round]);
+  const codePoints = useMemo(() => Array.from(generated).map((ch) => `U+${ch.codePointAt(0)!.toString(16).toUpperCase().padStart(4, "0")}`), [generated]);
+  return <><ToolIntro tool={tools.find((tItem) => tItem.id === "blank-id")!} language={language} />
+    <div className="blank-workbench"><div className="blank-main">
+      <div className="blank-type-list"><span className="field-title">1. {t(language, "選擇配方", "Choose a recipe")}</span>
+        {recipes.map((item) => <button className={recipe === item.id ? "active" : ""} key={item.id} onClick={() => setRecipe(item.id)}>
+          <span><strong>{t(language, item.name, item.nameEn)}</strong><small>{t(language, item.code, item.codeEn)} · {t(language, `適合 ${item.best}`, `Best for ${item.bestEn}`)}</small></span><i>{recipe === item.id ? "✓" : ""}</i></button>)}
+      </div>
+      <div className="blank-count"><span className="field-title">2. {t(language, "選擇長度", "Choose a length")}</span>
+        <div className="blank-presets">{[2, 4, 8, 12].map((value) => <button className={length === value ? "active" : ""} key={value} onClick={() => setLength(value)}>{value} {t(language, "個", "chars")}</button>)}</div>
+        <div className="stepper"><button onClick={() => setLength(Math.max(1, length - 1))}>−</button><strong>{length}</strong><button onClick={() => setLength(Math.min(12, length + 1))}>＋</button></div>
+      </div>
+      <div className="blank-example" style={{ borderStyle: "dashed" }}>
+        <small>{t(language, "產生的隱形名字（看起來是空的，但實際有字元）", "Generated invisible name (looks empty, but holds characters)")}</small>
+        <p style={{ fontSize: "20px", minHeight: "28px", border: "1px dashed var(--line)", borderRadius: "8px", padding: "6px" }} aria-label="generated invisible name">{generated}</p>
+        <small style={{ display: "block", marginTop: "6px" }}>{codePoints.join(" · ")} · {length} {t(language, "個字元", "characters")}</small>
+      </div>
+      <div style={{ display: "flex", gap: "8px" }}>
+        <button className="primary-button wide" style={{ flex: 2 }} onClick={() => copyText(generated, setCopied)}>{copied === generated && generated ? t(language, "隱形名字已複製 ✓", "Invisible name copied ✓") : t(language, "複製隱形名字", "Copy invisible name")}</button>
+        <button className="primary-button wide" style={{ flex: 1 }} onClick={() => setRound((x) => x + 1)}>↻ {t(language, "再產生一組", "Regenerate")}</button>
+      </div>
+    </div>
+    <aside className="blank-guide"><span className="section-kicker">HOW TO USE</span><h2>{t(language, "使用方式", "How to use")}</h2>
+      <ol><li><span>1</span>{t(language, "選配方與長度，產生隱形名字", "Pick a recipe and length, then generate")}</li><li><span>2</span>{t(language, "複製後貼到下方測試：游標有移動就代表字元存在", "Paste into the test box below: if the cursor moves, the characters are there")}</li><li><span>3</span>{t(language, "到遊戲暱稱欄位長按貼上", "Paste it into the game's nickname field")}</li></ol>
+      <p className="compatibility-note">{t(language, "提示：各遊戲的過濾規則不同，被擋下就換「混合配方」再試一次。", "Tip: Game filters differ. If blocked, retry with the Mixed recipe.")}</p>
+    </aside></div>
+    <section className="blank-tester"><div><span className="section-kicker">PASTE TEST</span><h2>{t(language, "貼上測試區", "Paste test")}</h2><p>{t(language, "把複製的隱形名字貼到下方，字元數會顯示出來。", "Paste the generated name below; the character count will show.")}</p></div>
+      <input value={testName} onChange={(event) => setTestName(event.target.value)} placeholder={t(language, "在這裡貼上隱形名字測試…", "Paste the invisible name here to test…")} /><span>{Array.from(testName).length} {t(language, "個字元", "characters")}</span></section>
+  </>;
 }
 
 function BioTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
@@ -3219,7 +3269,7 @@ export default function App() {
             {
               title: "實用輔助工具",
               titleEn: "UTILITY TOOLS",
-              ids: ["hashtags", "blank", "nickname"] as ToolId[]
+              ids: ["hashtags", "blank", "blank-id", "nickname"] as ToolId[]
             }
           ].map((sec) => (
             <div key={sec.title}>
@@ -3277,6 +3327,7 @@ export default function App() {
           {active === "bopomofo" && <BopomofoTool {...toolProps} />}
           {active === "hashtags" && <HashtagTool {...toolProps} />}
           {active === "blank" && <BlankTool {...toolProps} />}
+          {active === "blank-id" && <BlankIdTool {...toolProps} />}
           {active === "nickname" && <NicknameTool {...toolProps} />}
         </div>
         <footer>

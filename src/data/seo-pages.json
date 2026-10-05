@@ -414,5 +414,69 @@
     "descriptionZh": "一鍵將大陸用語（質量、視頻、立馬等）轉為 100% 正統台灣繁體語感，同時自動掃描衛福部食品/化粧品廣告法規違規詞，替換合法詞省下 4 萬罰單。",
     "titleEn": "Taiwan Voice & Ad Legal Sanitizer | Localize Copy & Compliance | TextLab",
     "descriptionEn": "Clean mainland buzzwords into natural Taiwanese phrasing and detect illegal advertising claim terms to avoid regulatory fines."
+  },
+  "blank-id": {
+    "nameZh": "空白ID產生器",
+    "nameEn": "Invisible Name Generator",
+    "titleZh": "空白ID產生器｜遊戲隱形名字・空白暱稱一鍵複製（傳說對決、Free Fire）｜字研所 TextLab",
+    "descriptionZh": "免費空白ID產生器：一鍵產生遊戲隱形名字與空白暱稱，適用傳說對決、Free Fire、王者榮耀等手遊。選長度、挑配方、直接複製貼上，免安裝免註冊。",
+    "titleEn": "Invisible Game Name Generator | Blank ID Maker for Mobile Games | TextLab",
+    "descriptionEn": "Free invisible name generator for games: create blank IDs and invisible nicknames for mobile games like Arena of Valor and Free Fire. Pick a length, choose a recipe, copy and paste. No signup needed.",
+    "guideZh": [
+      {
+        "h": "什麼是空白 ID？",
+        "p": "空白 ID 就是用「看不見的 Unicode 字元」組成的遊戲暱稱，在遊戲裡看起來像是沒有名字或只有空白。常用字元有諺文填充字元（U+3164）、點字空格（U+2800）、零寬空格（U+200B）等——它們都是真正的字元，所以能通過暱稱「不能為空」的檢查，眼睛卻看不到。"
+      },
+      {
+        "h": "三步驟做出隱形名字",
+        "p": "1. 選擇想要的長度（1–12 個字元，建議 4–8 個）；2. 挑一種配方——「通用配方」相容性最廣，「混合配方」把多種空白字元交錯組合，被平台擋下時換配方再試；3. 按「產生隱形名字」→ 複製 → 貼到遊戲暱稱欄位。如果遊戲提示名稱不合法，換另一個配方或縮短長度再試一次。"
+      },
+      {
+        "h": "各遊戲的暱稱規則差很大",
+        "p": "傳說對決、Free Fire、王者榮耀等手遊對特殊字元的過濾規則都不同，而且官方可能隨時更新。有的遊戲接受諺文字元但擋零寬字元，有的反過來。建議一次產生多個版本，用不同配方輪流測試，把能成功改名的那個留下來。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "空白ID產生器是免費的嗎？需要註冊嗎？",
+        "a": "完全免費、不需註冊。所有產生與複製都在你的瀏覽器內完成，輸入與產生的名字不會上傳到任何伺服器。"
+      },
+      {
+        "q": "為什麼貼到遊戲裡名字還是顯示不出來或被擋下？",
+        "a": "每款遊戲對空白字元的過濾規則不同，有些字元在 A 遊戲能用、在 B 遊戲會被判定為非法名稱。換一個配方（通用／段落／混合）或縮短長度再試，通常就能找到該遊戲接受的組合。"
+      },
+      {
+        "q": "隱形名字會不會被官方封號？",
+        "a": "空白字元本身只是 Unicode 符號，不屬於外掛或修改程式，多數遊戲把它視為普通暱稱。但部分遊戲的賽事規章可能要求暱稱「可辨識」，參賽或開實況前建議先換回普通名字。"
+      },
+      {
+        "q": "手機和電腦都能用嗎？",
+        "a": "可以。這個工具是網頁版，手機、平板、電腦的瀏覽器都能開；產生後長按（或右鍵）複製，貼到遊戲的暱稱輸入框即可。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "What is a blank ID?",
+        "p": "A blank ID is a game nickname made of invisible Unicode characters (like U+3164 Hangul filler, U+2800 braille space, U+200B zero-width space). They are real characters, so they pass the \"name cannot be empty\" check while looking completely empty in-game."
+      },
+      {
+        "h": "Make an invisible name in 3 steps",
+        "p": "1. Choose a length (1–12 characters, 4–8 works well). 2. Pick a recipe — the Universal recipe has the widest compatibility, the Mixed recipe interleaves several blank characters to beat platform filters. 3. Hit generate, copy, and paste into your game's nickname field. If the game rejects it, switch recipes or shorten the length and try again."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Is the invisible name generator free? Do I need an account?",
+        "a": "Yes, completely free and no account needed. Everything runs in your browser; nothing you generate is uploaded anywhere."
+      },
+      {
+        "q": "Why does my game reject the generated name?",
+        "a": "Every game filters blank characters differently — a character accepted in one game may be rejected in another. Switch to another recipe or try a shorter length until the game accepts it."
+      },
+      {
+        "q": "Can using an invisible name get me banned?",
+        "a": "Blank characters are plain Unicode symbols, not hacks or mods, and most games treat them as normal nicknames. Some tournaments require readable names, so switch back to a normal name before competitive events."
+      }
+    ]
   }
 }
