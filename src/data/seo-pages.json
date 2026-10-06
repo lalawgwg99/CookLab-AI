@@ -109,7 +109,87 @@
     "titleZh": "特殊符號大全 2026｜愛心、星星、箭頭、日系花樣符號一鍵複製｜字研所 TextLab",
     "descriptionZh": "收錄超過 2000 款特殊符號：星星、愛心、箭頭、框線、日系花紋與標題括號，支援搜尋、分類與一鍵複製。",
     "titleEn": "Unicode Symbols Library 2026 | Search & Copy Symbols | TextLab",
-    "descriptionEn": "Search and copy more than 2,000 Unicode symbols, stars, hearts, arrows, brackets, borders and dividers."
+    "descriptionEn": "Search and copy more than 2,000 Unicode symbols, stars, hearts, arrows, brackets, borders and dividers.",
+    "guideZh": [
+      {
+        "h": "IG、Threads 個人檔案的特殊符號怎麼用？",
+        "p": "在上方搜尋框輸入關鍵字（例如：愛心、星星、箭頭），或直接瀏覽分類，點一下符號即自動複製。接著貼到 IG 個人檔案、精選名稱或 Threads 貼文即可。IG、Threads 對 Unicode 特殊符號相容度很高，極少數舊款手機可能把罕見符號顯示成方框，換一個常見符號就好。"
+      },
+      {
+        "h": "遊戲暱稱加特殊符號，有什麼要注意？",
+        "p": "多數手遊暱稱接受 ★ ♪ ✿ ❀ 這類常見符號，但部分遊戲會擋下太罕見的字元或判定為非法字元。建議先用常用符號組合，進遊戲實際測試能正常顯示再定案；另外暱稱有字數上限，符號太多可能被截斷。"
+      },
+      {
+        "h": "日系花樣符號、標題裝飾框怎麼排？",
+        "p": "♡・゜・。這類日系花紋適合放在貼文標題前後當裝飾，例如「♡・゜・本日穿搭・゜・♡」。本站收錄括號、框線、分隔線分類，可以把多個符號組合起來，先在本頁拼好再一次複製，貼文排版一次到位。"
+      },
+      {
+        "h": "符號貼上後變成方框 □ 或問號怎麼辦？",
+        "p": "這表示該裝置的字型沒有收錄這個字元（缺字），不是複製失敗。解法是換一個更常見的符號：愛心、星星、箭頭、音符這類基本符號幾乎所有手機和電腦都支援；越冷門的符號，缺字機率越高。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "特殊符號複製到 IG，會顯示不出來嗎？",
+        "a": "絕大多數情況下可以。IG、Threads、LINE 都完整支援 Unicode，愛心、星星、箭頭這類常用符號在 iPhone 和 Android 都能正常顯示；只有極冷門的符號在舊裝置上可能變成方框。"
+      },
+      {
+        "q": "這些特殊符號可以用在遊戲 ID 或暱稱嗎？",
+        "a": "可以，但要看遊戲規定。多數手遊接受常見符號，少數會擋罕見字元；建議先用 ★ ♪ ✿ 等熱門符號測試，確認顯示正常再正式使用。"
+      },
+      {
+        "q": "iPhone 內建鍵盤打不出特殊符號怎麼辦？",
+        "a": "iPhone 鍵盤本來就沒有特殊符號區，這正是這類工具存在的理由：在本站點一下符號即複製，再貼到任何 App，不需要安裝額外鍵盤。"
+      },
+      {
+        "q": "特殊符號和 emoji 有什麼不一樣？",
+        "a": "特殊符號是純文字字元（Unicode），在任何字型下都顯示同一種樣式、不會變色，也不會被平台自動轉成圖片；emoji 則是彩色圖形，在不同手機上長相可能不同。想要風格統一的排版，特殊符號更可靠。"
+      },
+      {
+        "q": "複製特殊符號要錢嗎？需要註冊嗎？",
+        "a": "完全免費，不需註冊。點一下即複製，全程在瀏覽器端完成，不會上傳任何內容。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "How do I use these symbols on Instagram and Threads?",
+        "p": "Type a keyword (e.g. heart, star, arrow) in the search box or browse the categories, then click a symbol to copy it instantly. Paste it into your Instagram bio, highlight names, or Threads posts. Instagram and Threads support Unicode symbols well; very rare symbols may show as boxes on older phones—just pick a more common one."
+      },
+      {
+        "h": "Can I use symbols in game nicknames?",
+        "p": "Most mobile games accept common symbols like ★ ♪ ✿ ❀, but some block rare characters as invalid. Test your nickname in-game first with popular symbols, and keep it short—nicknames have character limits and long symbol strings may get cut off."
+      },
+      {
+        "h": "How do I build decorative Japanese-style frames?",
+        "p": "Combine ornaments like ♡・゜・ around your headings, for example \"♡・゜・Today's outfit・゜・♡\". This page includes brackets, borders, and divider categories—compose your decoration here, copy it once, and paste it into your post."
+      },
+      {
+        "h": "A symbol pastes as a box □ or question mark. What now?",
+        "p": "That means the device's font doesn't include the character (a missing glyph), not a copy failure. Switch to a more common symbol: hearts, stars, arrows, and music notes render on virtually every phone and computer, while obscure symbols are more likely to break."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Will copied symbols display correctly on Instagram?",
+        "a": "In almost all cases, yes. Instagram, Threads, and LINE fully support Unicode; common symbols like hearts, stars, and arrows render fine on iPhone and Android. Only very obscure symbols may appear as boxes on older devices."
+      },
+      {
+        "q": "Can I use these symbols in my game ID?",
+        "a": "Yes, depending on the game. Most mobile games accept common symbols, though a few block rare characters. Start with popular ones like ★ ♪ ✿, test in-game, then finalize."
+      },
+      {
+        "q": "My iPhone keyboard has no symbol section. What should I do?",
+        "a": "That's normal—the iPhone keyboard doesn't include special symbols. Click any symbol on this page to copy it, then paste into any app. No extra keyboard app needed."
+      },
+      {
+        "q": "What's the difference between symbols and emoji?",
+        "a": "Symbols are plain text characters (Unicode) that render in a single style everywhere and never turn into images. Emoji are colorful graphics that can look different on each phone. For consistent styling, symbols are more reliable."
+      },
+      {
+        "q": "Is copying symbols free? Do I need an account?",
+        "a": "Completely free, no sign-up required. One click copies the symbol, everything runs in your browser, and nothing is uploaded."
+      }
+    ]
   },
   "emoji": {
     "nameZh": "Emoji 視覺實驗室",
