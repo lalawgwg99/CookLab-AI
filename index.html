@@ -215,6 +215,9 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       // Non-blocking telemetry loading
+      // Default GA4 measurement ID (public by design); override via
+      // localStorage "textlab.ga_id" or window.__GA_ID__ if needed.
+      window.__GA_ID__ = window.__GA_ID__ || "G-GCE2DNXPF1";
       window.addEventListener("load", () => {
         try {
           const savedGaId = localStorage.getItem("textlab.ga_id") || window.__GA_ID__;
