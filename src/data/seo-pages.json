@@ -422,6 +422,18 @@
       {
         "h": "LINE、Threads 排版換行，貼上會消失怎麼辦？",
         "p": "直接打的空格在送出時常被平台吃掉。先在本頁複製空白字元，再貼到貼文的換行處，就能保留段落留白；也可以搭配本站的 IG 換行排版工具先預覽再複製。"
+      },
+      {
+        "h": "哀居精選封面空白名稱怎麼做？",
+        "p": "想讓 IG 精選動態的名稱完全留白？在本頁複製一組 U+3164 空白字元，接著開啟 IG → 個人檔案 → 長按該精選 → 編輯精選 → 在名稱欄位貼上空白字元並儲存。哀居精選名稱不接受一般空格，但會把 Unicode 空白字元當成有效文字保留，做出乾淨的無字封面效果。"
+      },
+      {
+        "h": "三種空白字元怎麼選？U+3164、U+2800、U+200B 差在哪？",
+        "p": "U+3164（諺文填充字元）幾乎不佔視覺寬度、最通用，適合 IG 精選名稱、遊戲 ID 這種「塞進名字裡」的場景；U+2800（點字空格）有固定寬度，適合 LINE、Threads 貼文的段落留白與換行排版；U+200B（零寬空格）完全隱形，但少數平台會把它當作空字串過濾掉，被擋下時就換 U+3164 再試。不知道選哪個，先從本站標示「通用」的卡片開始。"
+      },
+      {
+        "h": "IG 個人檔案簡介怎麼置中排版？",
+        "p": "IG 簡介編輯框會自動把文字靠左對齊，想做出置中效果：在文字前面貼上數個 U+2800 點字空格，利用它的固定寬度把文字往右推；換行處也用空白字元代替一般空格，避免送出時被吃掉。可以搭配本站的 IG 換行排版工具先預覽、再一次複製貼上。"
       }
     ],
     "faqZh": [
@@ -444,6 +456,18 @@
       {
         "q": "複製空白文字要錢嗎？需要註冊嗎？",
         "a": "完全免費，不需註冊。點一下卡片即複製，全程在瀏覽器端完成，不會上傳任何內容。"
+      },
+      {
+        "q": "哀居精選名字可以全空白嗎？",
+        "a": "可以。複製本站的 U+3164 空白字元，貼到精選的「編輯精選」名稱欄位即可。IG 不接受純空格，但 Unicode 空白字元會被視為有效字元而保留，名稱就會顯示為全空白。"
+      },
+      {
+        "q": "U+3164 跟 U+2800 貼到 IG 效果有什麼不同？",
+        "a": "U+3164 幾乎不佔視覺寬度，適合塞在名稱或 ID 裡做隱形效果；U+2800 有固定寬度，適合做段落留白或簡介置中排版。兩個在 IG 都能正常保留，看你的使用場景選擇。"
+      },
+      {
+        "q": "空白文字會被平台偵測或封鎖嗎？",
+        "a": "不會。這些都是合法的 Unicode 字元，不是外掛或漏洞。不過極少數遊戲或 App 會把零寬字元（U+200B）過濾掉，遇到時換成 U+3164 或 U+2800 通常就能解決。"
       }
     ],
     "guideEn": [
@@ -454,6 +478,14 @@
       {
         "h": "How to make a blank Instagram highlight name?",
         "p": "Tap a blank character card on this page to copy it, then open Instagram, go to your profile, edit a highlight, and paste it into the name field. Instagram removes normal spaces, but keeps these Unicode blank characters."
+      },
+      {
+        "h": "How to make a blank Instagram highlight cover name?",
+        "p": "Want a highlight with no name at all? Copy a set of U+3164 blank characters on this page, then open Instagram → profile → long-press the highlight → Edit Highlight → paste the blank characters into the name field and save. Instagram rejects plain spaces but keeps Unicode blanks as valid text, giving you a clean nameless cover."
+      },
+      {
+        "h": "U+3164 vs U+2800 vs U+200B: which blank character should I use?",
+        "p": "U+3164 (Hangul filler) is nearly zero-width and the most universal pick — ideal for highlight names and game IDs where the blank sits inside a name. U+2800 (braille pattern blank) has a fixed width, better for paragraph spacing and bio centering on LINE or Threads. U+200B (zero-width space) is fully invisible, but a few platforms filter it out as empty — if it gets stripped, switch to U+3164 and try again."
       }
     ],
     "faqEn": [
@@ -468,6 +500,14 @@
       {
         "q": "Does it work on iPhone and Android?",
         "a": "Yes. These blank characters display as spacing in mainstream apps on iOS, Android, Windows, and macOS."
+      },
+      {
+        "q": "Can my Instagram highlight name be completely blank?",
+        "a": "Yes. Copy U+3164 blank characters from this page and paste them into the highlight's Edit Highlight name field. Instagram won't accept plain spaces, but Unicode blanks count as valid characters, so the name renders as fully blank."
+      },
+      {
+        "q": "What's the difference between U+3164 and U+2800 on Instagram?",
+        "a": "U+3164 is nearly zero-width, best for hiding inside names or IDs; U+2800 has a fixed width, better for paragraph spacing or centering your bio. Both are kept by Instagram — pick based on your use case."
       }
     ]
   },
