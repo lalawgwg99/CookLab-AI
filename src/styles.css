@@ -1166,3 +1166,22 @@ footer small { text-align: right; color: var(--subtle); }
 .blank-example { margin: 20px 0; padding: 16px; }
 .blank-guide ol { padding-left: 20px; line-height: 2; }
 .blank-guide ol li { margin-bottom: 8px; }
+
+/* 手機版全站疏鬆：行距與區塊間距放大 */
+@media (max-width: 768px) {
+  body { line-height: 1.8; }
+  .tool-surface { padding: 16px 14px; }
+  .input-card { padding: 16px 14px; margin-bottom: 16px; }
+  .input-card textarea { line-height: 1.8; padding: 16px 14px; }
+  .field-label { margin-bottom: 10px; }
+  .generator-card { padding: 18px 16px; }
+  .generator-card label { margin-bottom: 14px; display: block; }
+  .category-tabs { gap: 8px; }
+  .category-tabs button { padding: 10px 14px; line-height: 1.6; }
+  .primary-button { padding: 14px; line-height: 1.6; }
+  p, li { line-height: 1.9; }
+  .tool-heading { margin-bottom: 20px; }
+  .tool-heading p { line-height: 1.8; margin-top: 8px; }
+  section { margin-bottom: 20px; }
+  h2 { line-height: 1.6; margin-bottom: 12px; }
+}
