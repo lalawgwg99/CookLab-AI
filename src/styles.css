@@ -1146,17 +1146,23 @@ footer small { text-align: right; color: var(--subtle); }
 .slot-options button { width: 36px; height: 36px; font-size: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); cursor: pointer; }
 .slot-options button.active { border-color: var(--purple); background: var(--purple); color: #fff; }
 
-/* ===== 夜間手機 QA 修復（2026-10-09 Agent A）===== */
-/* 觸控目標至少 44px：emoji 分類按鈕、漢堡按鈕（AI chips 在 FloatingAssistant 內已 44px） */
-.emoji-category-tabs button { min-height: 44px; }
-.mobile-menu-trigger { width: 44px; height: 44px; }
-
-/* /symbols 三欄統計區：手機版改兩欄＋說明另起一行，不再擠壓 */
-@media (max-width: 640px) {
-  .symbol-summary { grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px 14px; }
-  .symbol-summary > div { white-space: normal; }
-  .symbol-summary p { grid-column: 1 / -1; padding-left: 0; border-left: 0; border-top: 1px solid var(--line); padding-top: 10px; }
-}
-
-/* 顏文字極長內容：允許換行，不再被裁切 */
-.kaomoji-copy strong { white-space: normal; overflow-wrap: anywhere; line-height: 1.5; }
+/* 空白ID產生器：手機版疏鬆排版 */
+.blank-type-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.blank-type-list .field-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.blank-type-list button { display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); cursor: pointer; text-align: left; line-height: 1.6; }
+.blank-type-list button.active { border-color: var(--purple); background: color-mix(in srgb, var(--purple) 8%, var(--paper)); }
+.blank-type-list button span { flex: 1; }
+.blank-type-list button strong { display: block; font-size: 15px; margin-bottom: 4px; }
+.blank-type-list button small { display: block; font-size: 12px; color: var(--muted); line-height: 1.7; }
+.blank-type-list button i { font-style: normal; color: var(--purple); font-weight: 700; flex-shrink: 0; }
+.blank-count { margin-bottom: 20px; }
+.blank-count .field-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; display: block; }
+.blank-presets { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+.blank-presets button { padding: 10px 18px; font-size: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); cursor: pointer; }
+.blank-presets button.active { border-color: var(--purple); background: var(--purple); color: #fff; }
+.stepper { display: inline-flex; align-items: center; gap: 16px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+.stepper button { width: 36px; height: 36px; font-size: 18px; border: none; border-radius: 8px; background: var(--canvas); cursor: pointer; }
+.stepper strong { font-size: 16px; min-width: 24px; text-align: center; }
+.blank-example { margin: 20px 0; padding: 16px; }
+.blank-guide ol { padding-left: 20px; line-height: 2; }
+.blank-guide ol li { margin-bottom: 8px; }
