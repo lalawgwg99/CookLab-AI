@@ -1145,3 +1145,18 @@ footer small { text-align: right; color: var(--subtle); }
 .slot-options { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .slot-options button { width: 36px; height: 36px; font-size: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); cursor: pointer; }
 .slot-options button.active { border-color: var(--purple); background: var(--purple); color: #fff; }
+
+/* ===== 夜間手機 QA 修復（2026-10-09 Agent A）===== */
+/* 觸控目標至少 44px：emoji 分類按鈕、漢堡按鈕（AI chips 在 FloatingAssistant 內已 44px） */
+.emoji-category-tabs button { min-height: 44px; }
+.mobile-menu-trigger { width: 44px; height: 44px; }
+
+/* /symbols 三欄統計區：手機版改兩欄＋說明另起一行，不再擠壓 */
+@media (max-width: 640px) {
+  .symbol-summary { grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px 14px; }
+  .symbol-summary > div { white-space: normal; }
+  .symbol-summary p { grid-column: 1 / -1; padding-left: 0; border-left: 0; border-top: 1px solid var(--line); padding-top: 10px; }
+}
+
+/* 顏文字極長內容：允許換行，不再被裁切 */
+.kaomoji-copy strong { white-space: normal; overflow-wrap: anywhere; line-height: 1.5; }

@@ -6,6 +6,7 @@ import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 import seoPages from "./data/seo-pages.json";
 import { bopomofoOf, BPMF_COUNT } from "./data/bopomofo";
 import AiPolish from "./components/AiPolish";
+import FloatingAssistant from "./components/FloatingAssistant";
 
 type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "blank" | "blank-id" | "nickname";
 type Language = "zh-TW" | "en";
@@ -3177,5 +3178,6 @@ export default function App() {
       </div>
     )}
     {!!copied && <div className="toast"  role="status"><span>✓</span> {t(language, "已複製到剪貼簿", "Copied to clipboard")}</div>}
+    <FloatingAssistant />
   </div>;
 }
