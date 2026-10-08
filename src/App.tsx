@@ -2081,6 +2081,10 @@ function LocalizeTool({ copied, setCopied, language }: { copied: string; setCopi
   }, [input]);
 
   const handleConvert = () => {
+    if (!input.trim()) {
+      setOutput(t(language, "請先輸入要轉換的文字。", "Please enter text to convert first."));
+      return;
+    }
     let result = input;
     // Replace mainland terms
     for (const w of MAINLAND_WORDS) {
@@ -2324,7 +2328,11 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
 
   const generatePost = async () => {
     // 防連點與防空內容鎖定 (Anti-double click & cooldown guard)
-    if (!idea.trim() || isGenerating || cooldownSec > 0) return;
+    if (!idea.trim()) {
+      setErrorMessage(t(language, "請先輸入主題，再點產生貼文。", "Please enter a topic first."));
+      return;
+    }
+    if (isGenerating || cooldownSec > 0) return;
 
 
     // 重複請求攔截 (Deduplication Check)
@@ -2839,6 +2847,11 @@ function BopomofoTool({ copied, setCopied, language }: { copied: string; setCopi
           <span>{t(language, "逐字注音對照", "Character-by-character bopomofo")}</span>
           <span>{t(language, `已轉換 ${convertedCount} 字`, `${convertedCount} converted`)}</span>
         </div>
+        {text.trim() && convertedCount === 0 && (
+          <div style={{ padding: "12px", color: "var(--muted)", fontSize: "13px" }}>
+            {t(language, "沒有偵測到中文字，請輸入中文來轉換注音。", "No Chinese characters detected. Please enter Chinese text.")}
+          </div>
+        )}
         <div className="preview-text bpmf-output">
           {lines.map((linePairs, li) => linePairs.length ? renderRubyLine(linePairs, `l${li}`) : <span key={`l${li}`} style={{ display: "block" }}>&nbsp;</span>)}
         </div>
