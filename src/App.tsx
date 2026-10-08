@@ -3293,7 +3293,9 @@ export default function App() {
                     <span style={{ flex: 1 }}>
                       <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                         <strong>{t(language, tool.name, tool.nameEn)}</strong>
-
+                        {(tool.id === "layout" || tool.id === "localize" || tool.id === "bio") && (
+                          <span style={{ fontSize: "10px", fontWeight: 700, color: "#fff", background: "var(--purple)", borderRadius: "999px", padding: "2px 7px", whiteSpace: "nowrap" }}>✨ AI</span>
+                        )}
                       </span>
                       <small>{t(language, tool.short, tool.shortEn)}</small>
                     </span>
