@@ -620,7 +620,7 @@ function SymbolsTool({ copied, setCopied, language }: { copied: string; setCopie
       <section className="symbol-section"><div className="section-title-row"><div><span className="section-kicker">QUICK PICKS</span><h2>{t(language, "熱門符號", "Popular symbols")}</h2></div></div><SymbolTiles items={popularSymbols} favorites={favorites} copied={copied} onCopy={choose} onFavorite={toggleFavorite} /></section>
     </div>}
     <div className="symbol-sections">{groups.map((group) => <section className="symbol-section" id={`symbol-${group.id}`} key={group.id}><div className="section-title-row symbol-title"><div><span className="section-kicker">{group.items.length} SYMBOLS</span><h2>{t(language, group.name, symbolEnglish[group.id].name)}</h2><p>{t(language, group.description, symbolEnglish[group.id].description)}</p></div><button className="share-category" onClick={() => copyText(`${window.location.origin}${language === "en" ? "/en" : ""}/symbols?category=${group.id}`, setCopied)}>⌁ {t(language, "複製分類連結", "Copy category link")}</button></div><SymbolTiles items={group.items} favorites={favorites} copied={copied} onCopy={choose} onFavorite={toggleFavorite} /></section>)}</div>
-    {!!selected && <aside className="symbol-detail" aria-label={t(language, "已選符號資訊", "Selected symbol info")}><div className="selected-symbol">{selected}</div><div><span className="section-kicker">SYMBOL INFO</span><strong>{selectedGroup ? t(language, selectedGroup.name, symbolEnglish[selectedGroup.id].name) : t(language, "特殊符號", "Symbol")}</strong><code>{symbolCodePoints(selected)}</code></div><button onClick={() => choose(selected)}>{t(language, "再次複製", "Copy again")}</button><button className={favorites.includes(selected) ? "saved" : ""} onClick={() => toggleFavorite(selected)}>{favorites.includes(selected) ? t(language, "♥ 已收藏", "♥ Saved") : t(language, "♡ 收藏", "♡ Save")}</button><button className="detail-close" onClick={() => setSelected("")} aria-label={t(language, "關閉符號資訊", "Close symbol info")}>×</button></aside>}
+    {!!selected && <aside className="symbol-detail" aria-label={t(language, "已選符號資訊", "Selected symbol info")}><div className="selected-symbol">{selected}</div><div><span className="section-kicker">SYMBOL INFO</span><strong>{selectedGroup ? t(language, selectedGroup.name, symbolEnglish[selectedGroup.id].name) : t(language, "特殊符號", "Symbol")}</strong><code>{symbolCodePoints(selected)}</code></div><button onClick={() => choose(selected)}>{copied === selected ? t(language, "已複製 ✓", "Copied ✓") : t(language, "再次複製", "Copy again")}</button><button className={favorites.includes(selected) ? "saved" : ""} onClick={() => toggleFavorite(selected)}>{favorites.includes(selected) ? t(language, "♥ 已收藏", "♥ Saved") : t(language, "♡ 收藏", "♡ Save")}</button><button className="detail-close" onClick={() => setSelected("")} aria-label={t(language, "關閉符號資訊", "Close symbol info")}>×</button></aside>}
     {!groups.length && <EmptyState text={t(language, "找不到這個符號，換個關鍵字試試看。", "No matching symbol. Try another keyword.")} />}</>;
 }
 
@@ -1677,7 +1677,7 @@ function DealTool({ copied, setCopied, language }: { copied: string; setCopied: 
     ].filter(Boolean).join("\n");
 
     if (activeTab === "line") {
-      return `🔥【限時開團｜社群限定團購優惠】\n\n很多人敲碗的「${productName}」終於幫大家談到首波團購價！\n只有社群好友才有的限時優惠，搶完即結單！⚡️\n\n🛒 團購重點整理：\n▪ 市售原價：NT$ ${orig}\n▪ 社群開團價：NT$ ${deal}（現省 $${savings}，直接下殺 ${discountPct}% OFF！）\n▪ 免運贈品：${shippingBonus}\n\n✨ 必買核心亮點：\n${pointsFormatted}\n\n⚠️ 數量與注意事項：\n▪ ${urgency}\n${disputeTerms ? `\n📌 下單須知與售後條款：\n${disputeTerms}\n` : ""}\n👇🏼 點擊下方專屬連結立即搶單：\nhttps://deal.cooklabai.com/order/${encodeURIComponent([...productName].slice(0, 10).join(""))}\n\n💬 尺寸、規格或下單問題歡迎直接在群裡詢問小編！`;
+      return `🔥【限時開團｜社群限定團購優惠】\n\n很多人敲碗的「${productName}」終於幫大家談到首波團購價！\n只有社群好友才有的限時優惠，搶完即結單！⚡️\n\n🛒 團購重點整理：\n▪ 市售原價：NT$ ${orig}\n▪ 社群開團價：NT$ ${deal}（現省 $${savings}，直接下殺 ${discountPct}% OFF！）\n▪ 免運贈品：${shippingBonus}\n\n✨ 必買核心亮點：\n${pointsFormatted}\n\n⚠️ 數量與注意事項：\n▪ ${urgency}\n${disputeTerms ? `\n📌 下單須知與售後條款：\n${disputeTerms}\n` : ""}\n👇🏼 點擊下方專屬連結立即搶單：\n[請貼上你的賣場連結]\n\n💬 尺寸、規格或下單問題歡迎直接在群裡詢問小編！`;
     }
 
     if (activeTab === "ig") {
@@ -1685,10 +1685,10 @@ function DealTool({ copied, setCopied, language }: { copied: string; setCopied: 
     }
 
     if (activeTab === "dm") {
-      return `💬【IG / Threads 留言轉單自動私訊腳本 (DM Flow)】\n\n📌 貼文底端引導鉤子（吸引粉絲留言互動）：\n──────────────────────\n想要這檔限時【${productName}】團購現省 $${savings} 專屬優惠？\n在下方留言「+1」，小編在 5 秒內把隱藏折扣碼和下單連結私訊給你！👇🏼\n\n💬 步驟 1：首發自動私訊（秒回增加好感）：\n──────────────────────\n嗨嗨！這是你專屬的【${productName}】團購優惠碼 🎉\n\n▪ 原價：NT$ ${orig} ➔ 團購只要：NT$ ${deal}（🔥現省 $${savings}）\n▪ 滿額優惠：${shippingBonus}\n▪ 專屬下單連結：https://deal.cooklabai.com/order/${encodeURIComponent([...productName].slice(0, 10).join(""))}\n\n⚠️ ${urgency}，搶完賣場就會提早關閉喔！\n\n⏰ 步驟 2：3 小時後溫馨催單（大幅提升結帳率）：\n──────────────────────\n貼心提醒～【${productName}】現貨庫存倒數中 ⚡️\n很多人已經下單卡位，這批現貨出完就要等下一季預購了，記得在結單前完成下單唷！`;
+      return `💬【IG / Threads 留言轉單自動私訊腳本 (DM Flow)】\n\n📌 貼文底端引導鉤子（吸引粉絲留言互動）：\n──────────────────────\n想要這檔限時【${productName}】團購現省 $${savings} 專屬優惠？\n在下方留言「+1」，小編在 5 秒內把隱藏折扣碼和下單連結私訊給你！👇🏼\n\n💬 步驟 1：首發自動私訊（秒回增加好感）：\n──────────────────────\n嗨嗨！這是你專屬的【${productName}】團購優惠碼 🎉\n\n▪ 原價：NT$ ${orig} ➔ 團購只要：NT$ ${deal}（🔥現省 $${savings}）\n▪ 滿額優惠：${shippingBonus}\n▪ 專屬下單連結：[請貼上你的賣場連結]\n\n⚠️ ${urgency}，搶完賣場就會提早關閉喔！\n\n⏰ 步驟 2：3 小時後溫馨催單（大幅提升結帳率）：\n──────────────────────\n貼心提醒～【${productName}】現貨庫存倒數中 ⚡️\n很多人已經下單卡位，這批現貨出完就要等下一季預購了，記得在結單前完成下單唷！`;
     }
 
-    return `📢【爆款限時開團｜${productName}】\n\n感謝大家的熱烈敲碗！本次【${productName}】限時團購正式開跑！\n原廠正品保證，全台現貨限量供應，售完即止。\n\n━━━━━━━━━━━━━━\n✦ 團購方案與售價 ✦\n━━━━━━━━━━━━━━\n• 市售建議售價：NT$ ${orig}\n• 本團限定優惠價：NT$ ${deal}（🔥現省 NT$ ${savings}，現折 ${discountPct}%！）\n• 免運優惠門檻：${shippingBonus}\n\n━━━━━━━━━━━━━━\n✦ 產品核心特色 ✦\n━━━━━━━━━━━━━━\n${pointsFormatted}\n\n━━━━━━━━━━━━━━\n✦ 開團時間與數量 ✦\n━━━━━━━━━━━━━━\n• ${urgency}\n\n━━━━━━━━━━━━━━\n✦ 下單守則與防爭議條款 ✦\n━━━━━━━━━━━━━━\n${disputeTerms || "• 下單完成即代表同意本團購之出貨與退換貨規範。"}\n\n🛒 專屬下單賣場：https://deal.cooklabai.com/order/${encodeURIComponent([...productName].slice(0, 10).join(""))}\n如有任何訂單相關疑問，請隨時私訊粉專小編處理。`;
+    return `📢【爆款限時開團｜${productName}】\n\n感謝大家的熱烈敲碗！本次【${productName}】限時團購正式開跑！\n原廠正品保證，全台現貨限量供應，售完即止。\n\n━━━━━━━━━━━━━━\n✦ 團購方案與售價 ✦\n━━━━━━━━━━━━━━\n• 市售建議售價：NT$ ${orig}\n• 本團限定優惠價：NT$ ${deal}（🔥現省 NT$ ${savings}，現折 ${discountPct}%！）\n• 免運優惠門檻：${shippingBonus}\n\n━━━━━━━━━━━━━━\n✦ 產品核心特色 ✦\n━━━━━━━━━━━━━━\n${pointsFormatted}\n\n━━━━━━━━━━━━━━\n✦ 開團時間與數量 ✦\n━━━━━━━━━━━━━━\n• ${urgency}\n\n━━━━━━━━━━━━━━\n✦ 下單守則與防爭議條款 ✦\n━━━━━━━━━━━━━━\n${disputeTerms || "• 下單完成即代表同意本團購之出貨與退換貨規範。"}\n\n🛒 專屬下單賣場：[請貼上你的賣場連結]\n如有任何訂單相關疑問，請隨時私訊粉專小編處理。`;
   }, [productName, orig, deal, savings, discountPct, shippingBonus, sellingPoints, urgency, disputeChecks, activeTab]);
 
   const handleCopy = () => {
@@ -1918,7 +1918,7 @@ const SWIPE_TEMPLATES = [
     category: "團媽開團爆單",
     title: "限時結單緊急倒數（催單神文）",
     hook: "【最後倒數 6 小時】現貨真的快被掃光了！",
-    template: "🔥【最後倒數 6 小時｜限量結單公告】\n\n很多人私訊小編問還能不能追加，真的對不起大家！廠商給的這批特惠現貨已經剩下最後個位數 ⚡️\n\n🛒 團購重點最後確認：\n• 市售原價：NT$ {原價}\n• 本團專屬開團價：NT$ {團購價}（現省 ${現省}）\n• 滿額免運：滿 $1,500 即享免運送到家\n\n⚠️ 今晚 23:59 準時關閉賣場，錯過這檔就要等下一季預購了！\n👇🏼 把握最後現貨下單：\nhttps://deal.cooklabai.com/order/now"
+    template: "🔥【最後倒數 6 小時｜限量結單公告】\n\n很多人私訊小編問還能不能追加，真的對不起大家！廠商給的這批特惠現貨已經剩下最後個位數 ⚡️\n\n🛒 團購重點最後確認：\n• 市售原價：NT$ {原價}\n• 本團專屬開團價：NT$ {團購價}（現省 ${現省}）\n• 滿額免運：滿 $1,500 即享免運送到家\n\n⚠️ 今晚 23:59 準時關閉賣場，錯過這檔就要等下一季預購了！\n👇🏼 把握最後現貨下單：\n[請貼上你的賣場連結]"
   },
   {
     id: "groupbuy-price",
