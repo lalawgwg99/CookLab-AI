@@ -1711,7 +1711,7 @@ function DealTool({ copied, setCopied, language }: { copied: string; setCopied: 
       </div>
 
       {/* 商業計算看板 (Apple HIG 雙色精緻面板) */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "10px", margin: "16px 0", padding: "14px", borderRadius: "12px", background: "var(--canvas)", border: "1px solid var(--line)" }}>
+      <div className="deal-price-board" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "10px", margin: "16px 0", padding: "14px", borderRadius: "12px", background: "var(--canvas)", border: "1px solid var(--line)" }}>
         <div>
           <span style={{ fontSize: "11px", color: "var(--muted)", display: "block", marginBottom: "4px" }}>市售原價</span>
           <strong style={{ fontSize: "16px", color: "var(--muted)", textDecoration: "line-through" }}>NT$ {orig.toLocaleString()}</strong>

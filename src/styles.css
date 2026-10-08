@@ -1085,3 +1085,15 @@ footer small { text-align: right; color: var(--subtle); }
 .bpmf-output { line-height: 2.4; }
 .bpmf-ruby { ruby-position: over; }
 .bpmf-ruby rt { font-size: 10px; color: var(--purple); font-weight: 600; line-height: 1.2; }
+
+/* iOS Safari 自動縮放修正：輸入框字級 <16px 會觸發畫面放大，手機版統一 16px */
+@media (max-width: 768px) {
+  input[type="text"], input[type="search"], input[type="number"], textarea, select {
+    font-size: 16px !important;
+  }
+}
+
+/* deal 價格看板手機版改單欄 */
+@media (max-width: 640px) {
+  .deal-price-board { grid-template-columns: 1fr !important; }
+}
