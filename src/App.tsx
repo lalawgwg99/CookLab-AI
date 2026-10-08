@@ -5,6 +5,7 @@ import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 import seoPages from "./data/seo-pages.json";
 import { bopomofoOf, BPMF_COUNT } from "./data/bopomofo";
+import AiPolish from "./components/AiPolish";
 
 type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "hashtags" | "blank" | "blank-id" | "nickname";
 type Language = "zh-TW" | "en";
@@ -917,6 +918,7 @@ function LayoutTool({ copied, setCopied, language }: { copied: string; setCopied
             <span>{text.length} {t(language, "字", "characters")}</span>
           </div>
           <textarea id="layout-input" value={text} onChange={(e) => setText(e.target.value)} />
+          <AiPolish text={text} onApply={setText} language={language} />
         </div>
         <div className="input-card result-card">
           <div className="field-label">
@@ -1135,6 +1137,7 @@ function BioTool({ copied, setCopied, language }: { copied: string; setCopied: (
         <button className="primary-button wide" onClick={() => copyText(builtBio, setCopied)}>
           {copied === builtBio ? t(language, "Bio 已複製 ✓", "Bio Copied ✓") : t(language, "複製 Bio 個人簡介", "Copy Bio Text")}
         </button>
+        <AiPolish text={tagline} onApply={setTagline} language={language} />
 
         <div style={{ marginTop: "20px" }}>
           <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--muted)", display: "block", marginBottom: "8px" }}>
@@ -2095,6 +2098,7 @@ function LocalizeTool({ copied, setCopied, language }: { copied: string; setCopi
           placeholder="貼上文字，系統將自動標記大陸支語與廣告違法詞彙..."
           style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.5 }}
         />
+        <AiPolish text={input} onApply={setInput} language={language} />
       </div>
 
       <button
