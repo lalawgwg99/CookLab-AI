@@ -218,6 +218,18 @@
       {
         "h": "顏文字有哪些情緒分類？",
         "p": "本站收錄開心、委屈、哭泣、搞笑、生氣、害羞、驚訝等多種情緒分類，可以用關鍵字搜尋，也能把常用的加入收藏，隨時一鍵複製。"
+      },
+      {
+        "h": "哀居限時動態、Threads 回文：顏文字這樣放才好看",
+        "p": "IG 限時動態用「打字」功能貼上顏文字後，先把字級拉大、避開上下邊緣的安全區，顏文字才不會被頭像和回覆框擋住。Threads 回文則建議把顏文字放在句尾、單獨一行，避免跟文字擠在同一行被自動換行切斷。這兩個場景都適合本站一鍵複製：點一下自動複製，切換到 App 貼上即可。"
+      },
+      {
+        "h": "手機打顏文字太慢？設成輸入法捷徑一鍵打出",
+        "p": "重度使用者不需要每次都來複製：iOS 到「設定→一般→鍵盤→文字取代」，把輸入碼設成例如 kk、cry，對應的內容貼上常用顏文字；Android 的 Gboard 在「個人字典」加捷徑也一樣。設好之後在 LINE、IG、Threads、Dcard 打字時輸入捷徑碼就會自動展開，任何 App 都能用。"
+      },
+      {
+        "h": "顏文字在 Android 上變成方框、排版跑掉怎麼辦",
+        "p": "看到方框 □ 代表目前的字型缺少那個字元，不是顏文字壞掉：換一套字型通常就解決，真的不行就改用常見標點組成的顏文字，任何裝置都支援。左右不對稱、眼睛歪一邊，多半是全形半形字元混用造成的，從本站點選複製的版本都經過整理，比自己手打組合更穩。"
       }
     ],
     "faqZh": [
@@ -236,6 +248,18 @@
       {
         "q": "顏文字複製是免費的嗎？",
         "a": "免費，一鍵複製，不需註冊。"
+      },
+      {
+        "q": "顏文字貼到 LINE 對話框會變形嗎？",
+        "a": "不會變形，但 LINE 的訊息字級比較小，太長的顏文字在手機上容易被換行切開、變成兩行。建議選擇短版顏文字，或把顏文字和文字分行貼，排版最穩。"
+      },
+      {
+        "q": "顏文字可以用在 IG 精選名稱或 Threads 個人檔案簡介嗎？",
+        "a": "可以。IG 精選名稱最多 16 個字，挑短一點的顏文字塞進去剛好；Threads 簡介和 IG 個人檔案簡介都支援純文字顏文字，不會像 Emoji 那樣被系統重新渲染，iPhone 和 Android 看到的一模一樣。"
+      },
+      {
+        "q": "遊戲暱稱有字數限制，顏文字太長放不下怎麼辦？",
+        "a": "遊戲暱稱通常限制 6 到 12 個字，先從短版顏文字挑起；如果連短版都被擋，代表該遊戲擋特殊字元，這時改用本站的「空白ID產生器」或花式暱稱工具會更適合。"
       }
     ],
     "guideEn": [
@@ -246,6 +270,14 @@
       {
         "h": "How to copy kaomoji to Instagram or Threads?",
         "p": "Tap any kaomoji to copy it automatically, then paste it into the app. Because kaomoji are plain text, they look identical on every platform and device."
+      },
+      {
+        "h": "Using Kaomoji in Instagram Stories and Threads Replies",
+        "p": "In Instagram Stories, paste the kaomoji with the text tool, then enlarge the font and keep it away from the top and bottom safe zones so profile icons and reply bars don't cover it. In Threads replies, place the kaomoji at the end of your sentence on its own line so auto line-wrapping never cuts it in half. Tap any kaomoji here to copy it instantly, then switch to the app and paste."
+      },
+      {
+        "h": "Save Frequently Used Kaomoji as Keyboard Shortcuts",
+        "p": "Heavy users don't need to copy every time: on iOS go to Settings > General > Keyboard > Text Replacement and map a short code like kk or cry to your favorite kaomoji; on Android add shortcuts in Gboard's personal dictionary. Once set, typing the shortcut expands to the kaomoji in LINE, Instagram, Threads, or any app."
       }
     ],
     "faqEn": [
@@ -260,6 +292,14 @@
       {
         "q": "Is it free?",
         "a": "Yes. One-tap copy, no sign-up required."
+      },
+      {
+        "q": "Do kaomoji break or wrap strangely when pasted into chat apps?",
+        "a": "They don't deform, but long kaomoji may wrap mid-face in small chat bubbles. Use a short kaomoji or paste it on its own line for the most stable layout."
+      },
+      {
+        "q": "Why do some kaomoji show as boxes on Android?",
+        "a": "A box means the current font is missing that character, not that the kaomoji is broken. Switching fonts usually fixes it; otherwise choose kaomoji made of common punctuation, which every device supports."
       }
     ]
   },
