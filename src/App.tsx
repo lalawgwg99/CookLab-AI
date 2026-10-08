@@ -874,6 +874,29 @@ function FontsTool({ copied, setCopied, language }: { copied: string; setCopied:
         );
       })}
     </div>
+
+    {/* 平台相容表：特殊字體貼上前先看 */}
+    <div style={{ marginTop: "18px", border: "1px solid var(--line)", borderRadius: "12px", padding: "14px 16px", background: "var(--canvas)" }}>
+      <div style={{ fontSize: "14px", fontWeight: 800, marginBottom: "8px" }}>{t(language, "貼上前先看：各平台支援狀況", "Compatibility: where will it display correctly?")}</div>
+      <table style={{ width: "100%", fontSize: "13px", borderCollapse: "collapse" }}>
+        <tbody>
+          {[
+            [t(language, "IG／Threads（貼文、簡介）", "IG / Threads (posts, bio)"), t(language, "可用", "Works")],
+            [t(language, "LINE／Discord", "LINE / Discord"), t(language, "可用", "Works")],
+            [t(language, "遊戲 ID（傳說、PUBG 等）", "Game IDs"), t(language, "部分字體可能變方框，建議先貼到記事本測試", "Some styles may show as boxes — test in Notes first")],
+            [t(language, "銀行 App／公家表單", "Bank apps / official forms"), t(language, "可能不支援，請用原字", "May not support — use plain text")],
+          ].map(([platform, status], i) => (
+            <tr key={i} style={{ borderTop: i ? "1px solid var(--line)" : "none" }}>
+              <td style={{ padding: "7px 4px", color: "var(--ink)" }}>{platform}</td>
+              <td style={{ padding: "7px 4px", color: "var(--muted)", textAlign: "right" }}>{status}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div style={{ marginTop: "8px", fontSize: "12px", color: "var(--muted)" }}>
+        {t(language, "小提醒：圓圈、方框、顛倒字等裝飾性字體，在部分 App 會顯示為方框 □，重要場合先用小帳測試。", "Note: decorative styles (circled, squared, upside-down) may render as boxes □ in some apps — test with a spare account first.")}
+      </div>
+    </div>
   </>;
 }
 
