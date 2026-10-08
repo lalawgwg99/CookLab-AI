@@ -20,7 +20,10 @@ export const onRequest: PagesFunction<Cloudflare.Env> = async (context) => {
   const url = new URL(request.url);
   const authHeader = request.headers.get("authorization") || "";
   const keyParam = url.searchParams.get("key") || "";
-  const isAuthorized = keyParam === "kiss9988" || authHeader === "Bearer kiss9988";
+  // 密碼改由 Cloudflare Pages 環境變數 STATS_PASSWORD 設定，不再硬編碼在程式碼內。
+  // 未設定時沿用舊密碼（相容過渡期，設定環境變數後舊密碼即失效）。
+  const expected = (env as unknown as Record<string, string | undefined>).STATS_PASSWORD || "kiss9988";
+  const isAuthorized = keyParam === expected || authHeader === `Bearer ${expected}`;
 
   if (!isAuthorized) {
     return new Response(JSON.stringify({ error: "unauthorized", message: "請輸入管理員密碼" }), { status: 401, headers: jsonHeaders });

@@ -26,26 +26,57 @@ const VERSION_ORDER: Array<{ key: Version["key"]; match: RegExp; label: string; 
 ];
 
 function parseVersions(raw: string, language: AiPolishLang): Version[] {
-  const lines = raw
-    .split("\n")
-    .map((l) => l.trim())
-    .filter(Boolean);
+  const labelFor = (key: Version["key"]) => {
+    const def = VERSION_ORDER.find((d) => d.key === key)!;
+    return language === "zh-TW" ? def.label : def.labelEn;
+  };
+  const neutralLabel = (i: number) => (language === "zh-TW" ? `版本${i + 1}` : `Version ${i + 1}`);
+
+  const lines = raw.split("\n").map((l) => l.trim());
   const found: Version[] = [];
+  let current: Version | null = null;
+
   for (const line of lines) {
+    if (!line) continue;
     const def = VERSION_ORDER.find((d) => d.match.test(line));
-    if (!def) continue;
-    if (found.some((f) => f.key === def.key)) continue;
-    const text = line.replace(def.match, "").trim();
-    if (!text) continue;
-    found.push({ key: def.key, label: language === "zh-TW" ? def.label : def.labelEn, text });
+    if (def) {
+      const after = line.replace(def.match, "").trim();
+      const existing = found.find((f) => f.key === def.key);
+      if (existing) {
+        // 重複標頭：併入同一版本
+        current = existing;
+        if (after) current.text += (current.text ? "\n" : "") + after;
+      } else {
+        current = { key: def.key, label: labelFor(def.key), text: after };
+        found.push(current);
+      }
+    } else if (current) {
+      // 非標頭行：併入當前版本（多行內文不再丟棄）
+      current.text += (current.text ? "\n" : "") + line;
+    }
+    // 尚未遇到標頭的行視為模型前言，直接丟棄
   }
-  if (found.length > 0) {
-    return VERSION_ORDER.map((d) => found.find((f) => f.key === d.key)).filter((v): v is Version => !!v);
+
+  const nonEmpty = found.filter((v) => v.text.trim().length > 0);
+  if (nonEmpty.length > 0) {
+    return VERSION_ORDER.map((d) => nonEmpty.find((f) => f.key === d.key)).filter((v): v is Version => !!v);
   }
-  return lines.slice(0, 3).map((text, i) => {
-    const def = VERSION_ORDER[i];
-    return { key: def.key, label: language === "zh-TW" ? def.label : def.labelEn, text };
-  });
+
+  // 備援：模型沒照格式回。以空行分段，最多取三段，標籤中性化避免誤導。
+  const blocks = raw
+    .split(/\n\s*\n/)
+    .map((b) => b.trim())
+    .filter(Boolean)
+    .slice(0, 3);
+  if (blocks.length === 0) return [];
+  if (blocks.length === 1) {
+    return [{ key: "casual", label: language === "zh-TW" ? "潤飾結果" : "Polished", text: blocks[0] }];
+  }
+  return blocks.map((text, i) => ({
+    key: VERSION_ORDER[i].key,
+    label: neutralLabel(i),
+    text,
+  }));
 }
 
 export default function AiPolish({ text, onApply, language = "zh-TW" }: Props) {

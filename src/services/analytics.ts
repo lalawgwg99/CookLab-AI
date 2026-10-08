@@ -100,10 +100,12 @@ function recordLocalMetric(type: "pv" | "copy", toolId: string) {
 }
 
 // Fetch aggregated live stats with password authorization
+// 密碼驗證交給後端 /api/stats（比對 Cloudflare 環境變數 STATS_PASSWORD），
+// 前端不再硬編碼密碼，避免密碼出現在公開 bundle。
 export async function fetchLiveStats(password?: string): Promise<{ success: boolean; data?: LiveStatsData; error?: string }> {
   const pwd = password || sessionStorage.getItem("textlab.stats_token") || "";
 
-  if (pwd !== "kiss9988") {
+  if (!pwd) {
     return { success: false, error: "invalid_password" };
   }
 
@@ -112,16 +114,16 @@ export async function fetchLiveStats(password?: string): Promise<{ success: bool
     if (res.ok) {
       const data = await res.json();
       if (data && typeof data === "object" && "pv" in data) {
-        sessionStorage.setItem("textlab.stats_token", pwd);
+        try { sessionStorage.setItem("textlab.stats_token", pwd); } catch {}
         return { success: true, data: data as LiveStatsData };
       }
     } else if (res.status === 401) {
+      try { sessionStorage.removeItem("textlab.stats_token"); } catch {}
       return { success: false, error: "invalid_password" };
     }
   } catch {}
 
-  // Fallback to local browser analytics if password is valid
-  sessionStorage.setItem("textlab.stats_token", pwd);
+  // API 連不上時，退回本機遙測資料（不寫入 token，避免把錯誤密碼存起來）
   try {
     const raw = localStorage.getItem("textlab.telemetry");
     if (raw) {
