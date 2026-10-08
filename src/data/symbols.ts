@@ -194,7 +194,7 @@ export const symbolGroups: SymbolGroup[] = [
     shortName: "幾何",
     keywords: "幾何 裝飾極簡 菱形 圓圈 geometric decor minimalist",
     description: "極簡風與日系風格常用之點綴幾何符號。",
-    items: ["⟡", "✧", "⊹", "₊", "◌", "⌁", "ꔛ", "ꕤ", "◡̎", ".ᐟ.ᐟ", "✦", "✧", "◈", "◇", "◈", "◆"]
+    items: ["⟡", "✧", "⊹", "₊", "◌", "⌁", "ꔛ", "ꕤ", "◡̎", ".ᐟ.ᐟ", "✦", "◈", "◇", "◆"]
   },
   {
     id: "math-units",

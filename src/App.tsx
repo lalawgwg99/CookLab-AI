@@ -448,7 +448,7 @@ function SearchInput({ value, onChange, placeholder }: { value: string; onChange
 }
 
 function SymbolTiles({ items, favorites, copied, onCopy, onFavorite }: { items: string[]; favorites: string[]; copied: string; onCopy: (item: string) => void; onFavorite: (item: string) => void }) {
-  return <div className="symbol-grid">{items.map((item) => <div className="symbol-card" key={item}>
+  return <div className="symbol-grid">{items.map((item, i) => <div className="symbol-card" key={`${item}-${i}`}>
     <button className="symbol-cell" onClick={() => onCopy(item)} aria-label={`複製 ${item}`}><span>{item}</span><small>{copied === item ? "已複製" : "COPY"}</small></button>
     <button className={`symbol-favorite ${favorites.includes(item) ? "saved" : ""}`} onClick={() => onFavorite(item)} aria-label={`${favorites.includes(item) ? "取消收藏" : "收藏"} ${item}`}>{favorites.includes(item) ? "♥" : "♡"}</button>
   </div>)}</div>;
@@ -637,7 +637,7 @@ function EmojiTool({ copied, setCopied, language }: { copied: string; setCopied:
     )}
     <div className="emoji-category-tabs">{emojiCategories.map((item) => <button className={category === item.id && !query ? "active" : ""} key={item.id} onClick={() => { setCategory(item.id); setQuery(""); }}><span>{item.icon}</span>{t(language, item.name, emojiEnglish[item.id])}<small>{item.items.length}</small></button>)}</div>
     <div className="emoji-result-row"><strong>{query ? t(language, `搜尋「${query}」`, `Search: “${query}”`) : t(language, activeCategory.name, emojiEnglish[activeCategory.id])}</strong><span>{source.length} {t(language, "個結果", "results")}</span></div>
-    <div className="emoji-grid large-grid">{source.map((emoji) => <button key={emoji} onClick={() => choose(emoji)} aria-label={`${t(language, "複製", "Copy")} ${emoji}`}>{emoji}<small>{copied === emoji ? "✓" : ""}</small></button>)}</div>{!source.length && <EmptyState text={t(language, "找不到這個 Emoji，試試其他中文或英文關鍵字。", "No matching emoji. Try another English or Chinese keyword.")} />}</>;
+    <div className="emoji-grid large-grid">{source.map((emoji, i) => <button key={`${emoji}-${i}`} onClick={() => choose(emoji)} aria-label={`${t(language, "複製", "Copy")} ${emoji}`}>{emoji}<small>{copied === emoji ? "✓" : ""}</small></button>)}</div>{!source.length && <EmptyState text={t(language, "找不到這個 Emoji，試試其他中文或英文關鍵字。", "No matching emoji. Try another English or Chinese keyword.")} />}</>;
 }
 
 function KaomojiTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
@@ -826,7 +826,7 @@ function LayoutTool({ copied, setCopied, language }: { copied: string; setCopied
       raw = raw.replace(/([\u4e00-\u9fa5])(\p{Extended_Pictographic})/gu, "$1 $2");
       raw = raw.replace(/(\p{Extended_Pictographic})([\u4e00-\u9fa5])/gu, "$1 $2");
     }
-    const lines = raw.trim().split("\n").map((line) => line.trim()).filter(Boolean);
+    const lines = raw.trim().split("\n").map((line) => line.replace(/\s+$/, "")).filter(Boolean);
     let formatted = spacing === "spacious" ? lines.join("\n\n") : spacing === "list" ? lines.map((line, index) => index === 0 ? line : `・${line}`).join("\n") : lines.join("\n");
     const firstBreak = formatted.indexOf("\n");
     const title = firstBreak >= 0 ? formatted.slice(0, firstBreak) : formatted;
@@ -1992,7 +1992,8 @@ const MAINLAND_WORDS: { from: string; to: string; note: string }[] = [
   { from: "質量", to: "品質", note: "台灣物體特質慣用「品質 / 質感」" },
   { from: "立馬", to: "立刻", note: "台灣慣用「立刻 / 馬上」" },
   { from: "走心", to: "用心", note: "台灣慣用「用心 / 觸動人心」" },
-  { from: "給力", to: "很罩", note: "台灣慣用「很棒 / 超罩」" },
+  { from: "很給力", to: "很罩", note: "台灣慣用「很罩 / 超讚」" },
+  { from: "給力", to: "罩", note: "台灣慣用「很罩 / 超讚」" },
   { from: "網紅", to: "KOL", note: "台灣社群多用「創作者 / KOL」" },
   { from: "忽悠", to: "糊弄", note: "台灣慣用「糊弄 / 欺騙」" },
   { from: "打call", to: "支持", note: "台灣慣用「大力支持 / 加油」" },
@@ -2016,6 +2017,8 @@ const MAINLAND_WORDS: { from: string; to: string; note: string }[] = [
   { from: "衛衣", to: "帽T", note: "台灣服飾用語「帽T / 大學T」" },
   { from: "外賣", to: "外送", note: "台灣生活用語「外送」" },
   { from: "盒飯", to: "便當", note: "台灣飲食用語「便當」" },
+  { from: "親們", to: "各位", note: "台灣直播/社群慣用「各位 / 大家」" },
+  { from: "衝鴨", to: "衝啊", note: "台灣慣用語氣詞「衝啊」" },
 ];
 
 function LocalizeTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
@@ -2023,7 +2026,9 @@ function LocalizeTool({ copied, setCopied, language }: { copied: string; setCopi
   const [output, setOutput] = useState("");
 
   const detectedMainland = useMemo(() => {
-    return MAINLAND_WORDS.filter(w => input.includes(w.from));
+    const hits = MAINLAND_WORDS.filter(w => input.includes(w.from));
+    // 若某詞是另一命中詞的子字串（如「給力」之於「很給力」），只計較長者，避免重複計數
+    return hits.filter(w => !hits.some(o => o !== w && o.from.includes(w.from)));
   }, [input]);
 
   const detectedLegal = useMemo(() => {
@@ -2637,6 +2642,9 @@ function AIPostTool({ copied, setCopied, language, selectTool }: { copied: strin
               ✨ 小紅書標題：{output.split("\n")[0]?.length || 0}/20 字 (建議)
             </span>
           </div>
+
+          {/* 📝 貼文正文預覽 */}
+          <div className="preview-text" style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", marginBottom: "12px", maxHeight: "320px", overflowY: "auto" }}>{output}</div>
 
           {/* ⚡ 跨工具一鍵強化快捷工具列 */}
           <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px dashed var(--line)", marginBottom: "14px" }}>
