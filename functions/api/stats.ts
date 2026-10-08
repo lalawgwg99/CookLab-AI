@@ -22,6 +22,7 @@ export const onRequest: PagesFunction<Cloudflare.Env> = async (context) => {
   const keyParam = url.searchParams.get("key") || "";
   // 密碼改由 Cloudflare Pages 環境變數 STATS_PASSWORD 設定，不再硬編碼在程式碼內。
   // 未設定時沿用舊密碼（相容過渡期，設定環境變數後舊密碼即失效）。
+  // 2026-10-08: 環境變數已在 Cloudflare 後台設定完成。
   const expected = (env as unknown as Record<string, string | undefined>).STATS_PASSWORD || "kiss9988";
   const isAuthorized = keyParam === expected || authHeader === `Bearer ${expected}`;
 
