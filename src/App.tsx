@@ -8,7 +8,7 @@ import { bopomofoOf, BPMF_COUNT } from "./data/bopomofo";
 import AiPolish from "./components/AiPolish";
 import FloatingAssistant from "./components/FloatingAssistant";
 
-type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "blank" | "blank-id" | "nickname";
+type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "blank" | "blank-id" | "nickname" | "counter" | "horror" | "limbs";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -52,6 +52,9 @@ const tools: Tool[] = [
   { id: "blank", name: "空白文字", nameEn: "Invisible Text", short: "隱形空白字元複製", shortEn: "Invisible blank character", icon: "□" },
   { id: "blank-id", name: "空白ID產生器", nameEn: "Invisible Name Generator", short: "遊戲隱形名字一鍵產生", shortEn: "Blank game name maker", icon: "◌" },
   { id: "nickname", name: "風格暱稱產生器", nameEn: "Nickname Generator", short: "快速找到專屬風格", shortEn: "Find your online style", icon: "@" },
+  { id: "counter", name: "字數計數器", nameEn: "Character Counter", short: "IG 字數限制即時檢查", shortEn: "Live check for platform limits", icon: "123" },
+  { id: "horror", name: "恐怖文字", nameEn: "Glitch Text", short: "Zalgo 故障風格文字", shortEn: "Zalgo glitch-style text", icon: "👻" },
+  { id: "limbs", name: "手腳文字", nameEn: "Limb Text", short: "給每個字加上小手", shortEn: "Add little arms to text", icon: "🙌" },
 ];
 
 const t = (language: Language, zh: string, en: string) => language === "zh-TW" ? zh : en;
@@ -468,22 +471,25 @@ function ToolIntro({ tool, language }: { tool: Tool; language: Language }) {
 
 /** 工具間導流（學韓國 SNS Keyboard）：相關工具交叉連結 */
 const RELATED_TOOLS: Record<string, string[]> = {
-  layout: ["ai", "hook", "blank"],
+  layout: ["ai", "hook", "blank", "counter"],
   swipe: ["hook", "ai", "deal"],
   localize: ["ai", "layout"],
   deal: ["ai", "hook", "swipe"],
   ai: ["hook", "layout", "localize"],
   hook: ["ai", "title", "swipe"],
   title: ["fonts", "symbols", "hook"],
-  bio: ["fonts", "symbols", "nickname"],
+  bio: ["fonts", "symbols", "nickname", "counter"],
   symbols: ["emoji", "fonts", "kaomoji"],
   emoji: ["kaomoji", "symbols", "fonts"],
-  kaomoji: ["emoji", "symbols"],
-  fonts: ["symbols", "title", "nickname"],
+  kaomoji: ["emoji", "symbols", "limbs"],
+  fonts: ["symbols", "title", "nickname", "horror"],
   bopomofo: ["fonts", "layout"],
   blank: ["layout", "blank-id"],
   "blank-id": ["blank", "nickname"],
   nickname: ["fonts", "symbols", "blank-id"],
+  counter: ["layout", "bio", "hook"],
+  horror: ["fonts", "nickname", "symbols"],
+  limbs: ["nickname", "kaomoji", "fonts"],
 };
 
 function RelatedTools({ toolId, language, onSelect }: { toolId: string; language: Language; onSelect: (id: ToolId) => void }) {
@@ -882,14 +888,15 @@ function FontsTool({ copied, setCopied, language }: { copied: string; setCopied:
       <table style={{ width: "100%", fontSize: "13px", borderCollapse: "collapse" }}>
         <tbody>
           {[
-            [t(language, "IG／Threads（貼文、簡介）", "IG / Threads (posts, bio)"), t(language, "可用", "Works")],
-            [t(language, "LINE／Discord", "LINE / Discord"), t(language, "可用", "Works")],
-            [t(language, "遊戲 ID（傳說、PUBG 等）", "Game IDs"), t(language, "部分字體可能變方框，建議先貼到記事本測試", "Some styles may show as boxes — test in Notes first")],
-            [t(language, "銀行 App／公家表單", "Bank apps / official forms"), t(language, "可能不支援，請用原字", "May not support — use plain text")],
-          ].map(([platform, status], i) => (
+            [t(language, "IG／Threads（貼文、簡介）", "IG / Threads (posts, bio)"), t(language, "可用", "Works"), t(language, "Meta 系 App 對 Unicode 支援完整", "Meta apps have full Unicode support")],
+            [t(language, "Facebook", "Facebook"), t(language, "可用", "Works"), t(language, "同為 Meta 系，顯示正常", "Also Meta — renders fine")],
+            [t(language, "LINE／Discord", "LINE / Discord"), t(language, "可用", "Works"), t(language, "聊天 App 字型覆蓋範圍廣", "Chat apps ship broad font coverage")],
+            [t(language, "遊戲 ID（傳說對決、原神等）", "Game IDs"), t(language, "部分字體可能變方框", "Some styles may show as boxes"), t(language, "遊戲字型檔精簡，罕見符號會變方框 □", "Games use trimmed fonts; rare symbols become □")],
+            [t(language, "銀行 App／公家表單", "Bank apps / official forms"), t(language, "建議用原字", "Use plain text"), t(language, "金融與公家系統字型保守，只認基本字", "Finance and official systems only accept basic characters")],
+          ].map(([platform, status, why], i) => (
             <tr key={i} style={{ borderTop: i ? "1px solid var(--line)" : "none" }}>
-              <td style={{ padding: "7px 4px", color: "var(--ink)" }}>{platform}</td>
-              <td style={{ padding: "7px 4px", color: "var(--muted)", textAlign: "right" }}>{status}</td>
+              <td style={{ padding: "7px 4px", color: "var(--ink)" }}>{platform}<div style={{ fontSize: "11px", color: "var(--muted)" }}>{why}</div></td>
+              <td style={{ padding: "7px 4px", color: "var(--muted)", textAlign: "right", whiteSpace: "nowrap" }}>{status}</td>
             </tr>
           ))}
         </tbody>
@@ -897,6 +904,118 @@ function FontsTool({ copied, setCopied, language }: { copied: string; setCopied:
       <div style={{ marginTop: "8px", fontSize: "12px", color: "var(--muted)" }}>
         {t(language, "小提醒：圓圈、方框、顛倒字等裝飾性字體，在部分 App 會顯示為方框 □，重要場合先用小帳測試。", "Note: decorative styles (circled, squared, upside-down) may render as boxes □ in some apps — test with a spare account first.")}
       </div>
+    </div>
+  </>;
+}
+
+/* ---------- 新增工具：字數計數器 / 恐怖文字 / 手腳文字 ---------- */
+
+/** Zalgo combining marks（node 實測：全部為 Unicode Mark，無重複） */
+const ZALGO_UP = [0x0300,0x0301,0x0302,0x0303,0x0304,0x0305,0x0306,0x0307,0x0308,0x0309,0x030a,0x030b,0x030c,0x030d,0x030e,0x030f,0x0310,0x0311,0x0312,0x0313,0x0314,0x033d,0x033e,0x033f,0x0340,0x0341,0x0342,0x0343,0x0344,0x0345,0x0346,0x0347,0x0348,0x0349,0x034a,0x0350,0x0351,0x0352,0x0353,0x0354,0x0355,0x0356,0x0357,0x0358,0x0359,0x035a,0x035d,0x035e,0x035f,0x0360,0x0361,0x0362,0x0363,0x0364,0x0365,0x0366,0x0367,0x0368,0x0369,0x036a,0x036b,0x036c,0x036d,0x036e,0x036f];
+const ZALGO_MID = [0x0315,0x031b,0x0334,0x0335,0x0336,0x0337,0x0338,0x034c,0x035c];
+const ZALGO_DOWN = [0x0316,0x0317,0x0318,0x0319,0x031a,0x031c,0x031d,0x031e,0x031f,0x0320,0x0321,0x0322,0x0323,0x0324,0x0325,0x0326,0x0327,0x0328,0x0329,0x032a,0x032b,0x032c,0x032d,0x032e,0x032f,0x0330,0x0331,0x0332,0x0333,0x0339,0x033a,0x033b,0x033c,0x034d,0x034e,0x0353,0x0354,0x0355,0x0356,0x0359,0x035a,0x035b,0x035d,0x035e,0x035f,0x0360,0x0361,0x0362];
+
+function zalgoize(text: string, level: "light" | "medium" | "heavy"): string {
+  const cfg = { light: [1, 0, 1], medium: [3, 1, 3], heavy: [6, 2, 6] }[level];
+  const pick = (arr: number[]) => arr[Math.floor(Math.random() * arr.length)];
+  return Array.from(text).map((ch) => {
+    if (/\s/.test(ch)) return ch;
+    let s = ch;
+    for (let i = 0; i < cfg[0]; i++) s += String.fromCodePoint(pick(ZALGO_UP));
+    for (let i = 0; i < cfg[1]; i++) s += String.fromCodePoint(pick(ZALGO_MID));
+    for (let i = 0; i < cfg[2]; i++) s += String.fromCodePoint(pick(ZALGO_DOWN));
+    return s;
+  }).join("");
+}
+
+function CounterTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const [text, setText] = useState("");
+  const len = Array.from(text).length;
+  const tagCount = (text.match(/#[^\s#.,!?;:，。！？；：、]+/gu) || []).length;
+  const rows: { name: string; value: number; limit: number | null; hint: string }[] = [
+    { name: t(language, "總字數", "Total characters"), value: len, limit: null, hint: t(language, "含標點與空格", "Including punctuation and spaces") },
+    { name: "IG 貼文", value: len, limit: 2200, hint: t(language, "超過會被截斷", "Gets cut off when exceeded") },
+    { name: t(language, "IG 自介", "IG bio"), value: len, limit: 150, hint: t(language, "個人檔案簡介上限", "Profile bio limit") },
+    { name: "Hashtag", value: tagCount, limit: 30, hint: t(language, "只計算 # 開頭的詞", "Only counts words starting with #") },
+  ];
+  return <><ToolIntro tool={tools.find((t) => t.id === "counter")!} language={language} />
+    <div className="input-card">
+      <div className="field-label"><label htmlFor="counter-input">{t(language, "貼上要檢查的文字", "Paste your text")}</label><span>{len} {t(language, "字", "chars")}</span></div>
+      <textarea id="counter-input" value={text} onChange={(e) => setText(e.target.value)} placeholder={t(language, "在這裡輸入或貼上…", "Type or paste here…")} rows={5} />
+    </div>
+    <div style={{ marginTop: "14px", border: "1px solid var(--line)", borderRadius: "12px", background: "var(--canvas)", overflow: "hidden" }}>
+      {rows.map((row, i) => {
+        const over = row.limit != null && row.value > row.limit;
+        return <div key={row.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "11px 16px", borderTop: i ? "1px solid var(--line)" : "none" }}>
+          <div><div style={{ fontSize: "14px", fontWeight: 700, color: "var(--ink)" }}>{row.name}</div>
+          <div style={{ fontSize: "12px", color: "var(--muted)" }}>{row.hint}</div></div>
+          <div className="layout-char-count"><span className={over ? "count-warning" : ""} style={{ fontSize: "16px", fontWeight: 800 }}>
+            {row.value}{row.limit != null ? ` / ${row.limit}` : ""}
+          </span></div>
+        </div>;
+      })}
+    </div>
+    <p style={{ marginTop: "10px", fontSize: "12px", color: "var(--muted)" }}>
+      {t(language, "小提醒：IG 貼文超過 125 字會在動態被摺疊，要點「…更多」才看得到全文。", "Note: IG folds posts longer than 125 chars in the feed — readers must tap \"…more\".")}
+    </p>
+  </>;
+}
+
+function HorrorTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const [text, setText] = useState(t(language, "萬聖節快樂", "Happy Halloween"));
+  const [level, setLevel] = useState<"light" | "medium" | "heavy">("medium");
+  const [nonce, setNonce] = useState(0);
+  const out = useMemo(() => zalgoize(text || "Preview", level), [text, level, nonce]);
+  const levels = [
+    { id: "light", name: t(language, "輕微", "Light") },
+    { id: "medium", name: t(language, "中度", "Medium") },
+    { id: "heavy", name: t(language, "重度", "Heavy") },
+  ] as const;
+  return <><ToolIntro tool={tools.find((t) => t.id === "horror")!} language={language} />
+    <section className="blank-explainer"><span className="explainer-icon">?</span><div><h2>{t(language, "恐怖文字是什麼？", "What is glitch text?")}</h2><p>{t(language, "在每個字上下疊加 Unicode 組合符號，讓文字看起來像被干擾、腐蝕一樣。適合萬聖節、迷因圖、遊戲暱稱嚇人，或任何想營造詭異氣氛的地方。", "Stacks Unicode combining marks above and below each character for a corrupted, haunted look. Great for Halloween, memes, scary game names, or any eerie vibe.")}</p></div></section>
+    <div className="input-card">
+      <div className="field-label"><label htmlFor="horror-input">{t(language, "輸入文字", "Enter text")}</label></div>
+      <input id="horror-input" className="large-input" value={text} onChange={(e) => setText(e.target.value)} placeholder="Type something…" />
+      <div style={{ marginTop: "12px", display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
+        <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--muted)" }}>{t(language, "恐怖強度：", "Intensity:")}</span>
+        {levels.map((l) => <button key={l.id} onClick={() => setLevel(l.id)} style={{ minHeight: "44px", border: "1px solid var(--line)", background: level === l.id ? "var(--purple)" : "var(--canvas)", color: level === l.id ? "#fff" : "var(--ink)", borderRadius: "8px", padding: "8px 16px", fontSize: "14px", cursor: "pointer" }}>{l.name}</button>)}
+        <button onClick={() => setNonce((n) => n + 1)} style={{ minHeight: "44px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--purple)", borderRadius: "8px", padding: "8px 16px", fontSize: "14px", cursor: "pointer" }}>🎲 {t(language, "換一種", "Shuffle")}</button>
+      </div>
+    </div>
+    <div className="input-card result-card" style={{ marginTop: "14px" }}>
+      <div className="field-label"><span>{t(language, "結果", "Result")}</span></div>
+      <div className="preview-text" style={{ fontSize: "20px", lineHeight: 2.2, overflowWrap: "break-word" }}>{out}</div>
+      <button className="primary-button wide" style={{ marginTop: "12px" }} onClick={() => copyText(out, setCopied, "horror")}>{copied === out ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製恐怖文字", "Copy glitch text")}</button>
+    </div>
+    <p style={{ marginTop: "10px", fontSize: "12px", color: "var(--muted)" }}>
+      {t(language, "小提醒：疊加符號太多時，部分舊手機可能顯示不全；正式使用前先貼到目標 App 看一眼。", "Note: very heavy glitch may not render fully on old phones — preview it in your target app first.")}
+    </p>
+  </>;
+}
+
+function LimbsTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const [text, setText] = useState(t(language, "加油", "Fighting"));
+  const [style, setStyle] = useState<"perchar" | "whole">("perchar");
+  const out = useMemo(() => {
+    const src = text || "Preview";
+    if (style === "whole") return `୧${src}୨`;
+    return Array.from(src).map((ch) => /\s/.test(ch) ? ch : `୧${ch}୨`).join("");
+  }, [text, style]);
+  return <><ToolIntro tool={tools.find((t) => t.id === "limbs")!} language={language} />
+    <section className="blank-explainer"><span className="explainer-icon">?</span><div><h2>{t(language, "手腳文字是什麼？", "What is limb text?")}</h2><p>{t(language, "概念來自韓國 SNS 的 팔다리 글씨（原版是韓文子音替換，只支援韓文）。中文版用看起來像舉起小手的符號 ୧ ୨，幫每個字加上手腳，整句話看起來像在跳舞。適合遊戲暱稱、IG 簡介、留言裝可愛。", "Inspired by Korea's 팔다리 글씨 (the original swaps Korean consonants, Korean-only). This Chinese version wraps each character in ୧ ୨ — little raised arms — so your text looks like it's dancing. Great for game names, IG bios and cute comments.")}</p></div></section>
+    <div className="input-card">
+      <div className="field-label"><label htmlFor="limbs-input">{t(language, "輸入文字", "Enter text")}</label></div>
+      <input id="limbs-input" className="large-input" value={text} onChange={(e) => setText(e.target.value)} placeholder="Type something…" />
+      <div style={{ marginTop: "12px", display: "flex", gap: "8px", flexWrap: "wrap" }}>
+        {[{ id: "perchar", name: t(language, "每字舉手", "Arms per char") }, { id: "whole", name: t(language, "整句擁抱", "Hug the sentence") }].map((s) => (
+          <button key={s.id} onClick={() => setStyle(s.id as any)} style={{ minHeight: "44px", border: "1px solid var(--line)", background: style === s.id ? "var(--purple)" : "var(--canvas)", color: style === s.id ? "#fff" : "var(--ink)", borderRadius: "8px", padding: "8px 16px", fontSize: "14px", cursor: "pointer" }}>{s.name}</button>
+        ))}
+      </div>
+    </div>
+    <div className="input-card result-card" style={{ marginTop: "14px" }}>
+      <div className="field-label"><span>{t(language, "結果", "Result")}</span></div>
+      <div className="preview-text" style={{ fontSize: "20px", overflowWrap: "break-word" }}>{out}</div>
+      <button className="primary-button wide" style={{ marginTop: "12px" }} onClick={() => copyText(out, setCopied, "limbs")}>{copied === out ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製手腳文字", "Copy limb text")}</button>
     </div>
   </>;
 }
@@ -1144,6 +1263,9 @@ function BlankTool({ copied, setCopied, language }: { copied: string; setCopied:
     { id: "hangul", value: "ㅤ", name: "通用空白", nameEn: "Universal blank", code: "U+3164", best: "IG、遊戲暱稱", bestEn: "Instagram and game names" },
     { id: "braille", value: "⠀", name: "段落空白", nameEn: "Paragraph blank", code: "U+2800", best: "社群貼文、聊天室", bestEn: "Social posts and chats" },
     { id: "zero", value: "​", name: "零寬空白", nameEn: "Zero-width space", code: "U+200B", best: "文字斷點、隱形分隔", bestEn: "Invisible breaks and separators" },
+    { id: "zwnj", value: "‌", name: "零寬不斷字", nameEn: "Zero-width non-joiner", code: "U+200C", best: "IG 換行、防止斷字黏合", bestEn: "IG line breaks, prevent joining" },
+    { id: "zwj", value: "‍", name: "零寬連字", nameEn: "Zero-width joiner", code: "U+200D", best: "隱形連接、emoji 組合", bestEn: "Invisible joins, emoji combos" },
+    { id: "feff", value: "﻿", name: "零寬空格", nameEn: "Zero-width no-break space", code: "U+FEFF", best: "暱稱間隔、隱形分隔", bestEn: "Name spacing, hidden separators" },
   ];
   const [count, setCount] = useState(1);
   const [type, setType] = useState("hangul");
@@ -3139,6 +3261,9 @@ export default function App() {
           {active === "blank" && <BlankTool {...toolProps} />}
           {active === "blank-id" && <BlankIdTool {...toolProps} />}
           {active === "nickname" && <NicknameTool {...toolProps} />}
+          {active === "counter" && <CounterTool {...toolProps} />}
+          {active === "horror" && <HorrorTool {...toolProps} />}
+          {active === "limbs" && <LimbsTool {...toolProps} />}
           <RelatedTools toolId={active} language={language} onSelect={selectTool} />
         </div>
         <footer>
