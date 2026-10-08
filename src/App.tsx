@@ -2917,7 +2917,7 @@ function StatsModal({ language, onClose }: { language: Language; onClose: () => 
 function BrandLogo() {
   return (
     <svg width="38" height="38" viewBox="0 0 128 128" style={{ borderRadius: "10px", flexShrink: 0, display: "block" }}>
-      <rect width="128" height="128" rx="28" fill="#1d1d1f" />
+      <rect width="128" height="128" rx="28" fill="#6e56cf" />
       <text x="64" y="86" textAnchor="middle" fontFamily="'Noto Sans TC', system-ui, sans-serif" fontWeight="900" fontSize="64" fill="#ffffff">字</text>
       <path d="M 96 24 Q 96 32 104 32 Q 96 32 96 40 Q 96 32 88 32 Q 96 32 96 24 Z" fill="#e5e5ea" />
     </svg>

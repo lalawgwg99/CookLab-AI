@@ -7,9 +7,9 @@
   --line: #e5e5ea;
   --paper: #ffffff;
   --canvas: #f5f5f7;
-  --purple: #1d1d1f;
-  --purple-dark: #000000;
-  --purple-soft: #e5e5ea;
+  --purple: #6e56cf;
+  --purple-dark: #4c3699;
+  --purple-soft: #f0ebfd;
   --shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Noto Sans TC", system-ui, sans-serif;
   color: var(--ink);
@@ -27,9 +27,9 @@
     --line: #2c2c2e;
     --paper: #1c1c1e;
     --canvas: #000000;
-    --purple: #f5f5f7;
-    --purple-dark: #ffffff;
-    --purple-soft: #2c2c2e;
+    --purple: #9d8bf0;
+    --purple-dark: #c4b0f7;
+    --purple-soft: #292147;
     --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   }
 }
@@ -41,9 +41,9 @@
   --line: #2c2c2e;
   --paper: #1c1c1e;
   --canvas: #000000;
-  --purple: #f5f5f7;
-  --purple-dark: #ffffff;
-  --purple-soft: #2c2c2e;
+  --purple: #9d8bf0;
+  --purple-dark: #c4b0f7;
+  --purple-soft: #292147;
   --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
@@ -54,9 +54,9 @@
   --line: #e5e5ea;
   --paper: #ffffff;
   --canvas: #f5f5f7;
-  --purple: #1d1d1f;
-  --purple-dark: #000000;
-  --purple-soft: #e5e5ea;
+  --purple: #6e56cf;
+  --purple-dark: #4c3699;
+  --purple-soft: #f0ebfd;
   --shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
 }
 
