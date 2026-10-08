@@ -1102,3 +1102,46 @@ footer small { text-align: right; color: var(--subtle); }
 @media (max-width: 640px) {
   .deal-price-board { grid-template-columns: 1fr !important; }
 }
+
+/* 情境例句 Hero（學日本顔文字屋） */
+.scenario-hero { margin: 0 0 24px; }
+.scenario-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
+.scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.scenario-card { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); cursor: pointer; text-align: left; transition: border-color 0.15s ease, transform 0.15s ease; }
+.scenario-card:hover { border-color: var(--purple); transform: translateY(-1px); }
+.scenario-scene { font-size: 11px; font-weight: 700; color: var(--purple); }
+.scenario-text { font-size: 12px; color: var(--muted); }
+.scenario-kao { font-size: 16px; color: var(--ink); }
+.scenario-hint { font-size: 11px; color: var(--purple); }
+@media (max-width: 640px) { .scenario-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* 最近複製抽屜（學韓國 LOVELETTER） */
+.history-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000; display: flex; justify-content: flex-end; }
+.history-drawer { width: 360px; max-width: 90vw; height: 100%; background: var(--paper); padding: 20px; overflow-y: auto; animation: slideIn 0.2s ease; }
+@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+.history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.history-header strong { font-size: 16px; }
+.history-header > div { display: flex; gap: 8px; align-items: center; }
+.history-empty { color: var(--muted); font-size: 14px; line-height: 1.6; }
+.history-list { display: flex; flex-direction: column; gap: 8px; }
+.history-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--canvas); cursor: pointer; text-align: left; }
+.history-item:hover { border-color: var(--purple); }
+.history-text { font-size: 13px; color: var(--ink); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.history-copy { font-size: 12px; color: var(--purple); font-weight: 600; flex-shrink: 0; }
+
+/* 工具間導流 */
+.related-tools { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); }
+.related-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+.related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.related-card { display: flex; align-items: center; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); cursor: pointer; transition: border-color 0.15s ease; }
+.related-card:hover { border-color: var(--purple); }
+.related-icon { font-size: 20px; }
+.related-name { font-size: 13px; font-weight: 600; }
+@media (max-width: 640px) { .related-grid { grid-template-columns: 1fr; } }
+
+/* 暱稱拼裝模式 */
+.build-preview { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px; background: var(--canvas); border-radius: 12px; margin-bottom: 16px; }
+.build-preview strong { font-size: 20px; }
+.slot-options { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.slot-options button { width: 36px; height: 36px; font-size: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); cursor: pointer; }
+.slot-options button.active { border-color: var(--purple); background: var(--purple); color: #fff; }

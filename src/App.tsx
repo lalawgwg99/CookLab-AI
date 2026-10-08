@@ -7,7 +7,7 @@ import seoPages from "./data/seo-pages.json";
 import { bopomofoOf, BPMF_COUNT } from "./data/bopomofo";
 import AiPolish from "./components/AiPolish";
 
-type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "hashtags" | "blank" | "blank-id" | "nickname";
+type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "blank" | "blank-id" | "nickname";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -48,7 +48,6 @@ const tools: Tool[] = [
   { id: "kaomoji", name: "日系顏文字", nameEn: "Kaomoji", short: "精選日系顏文字庫", shortEn: "Japanese emoticons", icon: "◡̈" },
   { id: "fonts", name: "特殊字體", nameEn: "Fancy Text", short: "Unicode 特殊字體轉換", shortEn: "Unicode font converter", icon: "Aa" },
   { id: "bopomofo", name: "注音文轉換器", nameEn: "Bopomofo Converter", short: "中文轉注音符號 ㄅㄆㄇㄈ", shortEn: "Chinese to bopomofo", icon: "ㄅ" },
-  { id: "hashtags", name: "熱門標籤", nameEn: "Hashtags", short: "Threads / IG 導流標籤", shortEn: "Trending hashtag sets", icon: "#" },
   { id: "blank", name: "空白文字", nameEn: "Invisible Text", short: "隱形空白字元複製", shortEn: "Invisible blank character", icon: "□" },
   { id: "blank-id", name: "空白ID產生器", nameEn: "Invisible Name Generator", short: "遊戲隱形名字一鍵產生", shortEn: "Blank game name maker", icon: "◌" },
   { id: "nickname", name: "風格暱稱產生器", nameEn: "Nickname Generator", short: "快速找到專屬風格", shortEn: "Find your online style", icon: "@" },
@@ -466,6 +465,44 @@ function ToolIntro({ tool, language }: { tool: Tool; language: Language }) {
   </div>;
 }
 
+/** 工具間導流（學韓國 SNS Keyboard）：相關工具交叉連結 */
+const RELATED_TOOLS: Record<string, string[]> = {
+  layout: ["ai", "hook", "blank"],
+  swipe: ["hook", "ai", "deal"],
+  localize: ["ai", "layout"],
+  deal: ["ai", "hook", "swipe"],
+  ai: ["hook", "layout", "localize"],
+  hook: ["ai", "title", "swipe"],
+  title: ["fonts", "symbols", "hook"],
+  bio: ["fonts", "symbols", "nickname"],
+  symbols: ["emoji", "fonts", "kaomoji"],
+  emoji: ["kaomoji", "symbols", "fonts"],
+  kaomoji: ["emoji", "symbols"],
+  fonts: ["symbols", "title", "nickname"],
+  bopomofo: ["fonts", "layout"],
+  blank: ["layout", "blank-id"],
+  "blank-id": ["blank", "nickname"],
+  nickname: ["fonts", "symbols", "blank-id"],
+};
+
+function RelatedTools({ toolId, language, onSelect }: { toolId: string; language: Language; onSelect: (id: ToolId) => void }) {
+  const related = RELATED_TOOLS[toolId] || [];
+  if (!related.length) return null;
+  return <section className="related-tools">
+    <div className="related-title">⭐ {t(language, "用完這個，試試", "Try next")}</div>
+    <div className="related-grid">
+      {related.map((id) => {
+        const tool = tools.find((x) => x.id === id);
+        if (!tool) return null;
+        return <button key={id} className="related-card" onClick={() => onSelect(id as ToolId)}>
+          <span className="related-icon">{tool.icon}</span>
+          <span className="related-name">{t(language, tool.name, tool.nameEn)}</span>
+        </button>;
+      })}
+    </div>
+  </section>;
+}
+
 function SearchInput({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder: string }) {
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -692,6 +729,28 @@ function KaomojiTool({ copied, setCopied, language }: { copied: string; setCopie
   const toggleFavorite = (item: string) => { const next = favorites.includes(item) ? favorites.filter((x) => x !== item) : [...favorites, item]; setFavorites(next); safeSet("textlab.kaomojiFavorites", JSON.stringify(next)); };
 
   return <><ToolIntro tool={tools.find((t) => t.id === "kaomoji")!} language={language} />
+
+    {/* 情境例句 Hero（學日本顔文字屋）：先給「何時用」 */}
+    <section className="scenario-hero">
+      <div className="scenario-title">{t(language, "不知道用哪個？看情境選", "Pick by situation")}</div>
+      <div className="scenario-grid">
+        {[
+          { scene: t(language, "打招呼", "Greeting"), text: t(language, "早安！今天也要加油喔", "Good morning!"), kao: "(´･ω･`)ﾉ" },
+          { scene: t(language, "感謝", "Thanks"), text: t(language, "謝謝你幫我！", "Thanks for helping!"), kao: "(*´ω`*)" },
+          { scene: t(language, "道歉", "Sorry"), text: t(language, "對不起，我遲到了", "Sorry I'm late"), kao: "(;´･ω･`)" },
+          { scene: t(language, "開心", "Happy"), text: t(language, "太棒了！成功了！", "Yes! It worked!"), kao: "ヽ(´▽`)/" },
+          { scene: t(language, "難過", "Sad"), text: t(language, "好難過…", "So sad…"), kao: "(´；ω；`)" },
+          { scene: t(language, "加油", "Cheer up"), text: t(language, "你可以的！", "You can do it!"), kao: "( •̀ᴗ•́ )و" },
+        ].map((s) => (
+          <button key={s.scene} className="scenario-card" onClick={() => copyText(s.kao, setCopied)}>
+            <span className="scenario-scene">{s.scene}</span>
+            <span className="scenario-text">{s.text}</span>
+            <strong className="scenario-kao">{s.kao}</strong>
+            <span className="scenario-hint">{copied === s.kao ? t(language, "已複製 ✓", "Copied ✓") : t(language, "點我複製", "Tap to copy")}</span>
+          </button>
+        ))}
+      </div>
+    </section>
 
     {!query && (
       <section className="input-card" style={{ marginBottom: "24px" }}>
@@ -1008,16 +1067,52 @@ function LayoutTool({ copied, setCopied, language }: { copied: string; setCopied
 function NicknameTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
   const [seed, setSeed] = useState(() => language === "zh-TW" ? "小安" : "Mia");
   const [style, setStyle] = useState("日系清新");
+  const [purpose, setPurpose] = useState("社群");
   const [round, setRound] = useState(0);
+  const [mode, setMode] = useState<"random" | "build">("random");
+  // 拼裝模式：6 個位置選符號（學美國 CoolSymbol）
+  const [slots, setSlots] = useState<string[]>(["✦", "", "♡", "", "✧", ""]);
+  const slotOptions = ["✦", "✧", "♡", "ෆ", "☁", "𓂃", "₊˚", "୨୧", "☆", "❀", "°", "✿", ""];
+  const builtName = `${slots[0]}${slots[1]}${seed.trim() || "小安"}${slots[2]}${slots[3]}`.trim() || seed;
   const results = useMemo(() => {
     const adjectives = language === "zh-TW" ? nickAdjectives : nickAdjectivesEn;
     const nouns = language === "zh-TW" ? nickNouns : nickNounsEn;
     const base = seed.trim() || (language === "zh-TW" ? "小安" : "Mia"); const offset = round % adjectives.length;
-    const decor = style === "可愛甜系" ? ["ෆ", "♡", "୨୧", "₊˚"] : style === "極簡質感" ? ["", "_", ".", "°"] : ["☁", "﹏", "𓂃", "✦"];
-    return Array.from({ length: 8 }, (_, i) => `${decor[i % 4]}${adjectives[(i + offset) % adjectives.length]}${i % 2 ? base : nouns[(i + offset) % nouns.length]}${decor[(i + 1) % 4]}`);
-  }, [language, seed, style, round]);
+    // 用途影響裝飾密度：遊戲要短好記、社群要好搜尋
+    const decor = purpose === "遊戲"
+      ? ["", "_", ".", "x"]
+      : style === "可愛甜系" ? ["ෆ", "♡", "୨୧", "₊˚"] : style === "極簡質感" ? ["", "_", ".", "°"] : ["☁", "﹏", "𓂃", "✦"];
+    const count = purpose === "遊戲" ? 6 : 8;
+    return Array.from({ length: count }, (_, i) => `${decor[i % 4]}${adjectives[(i + offset) % adjectives.length]}${i % 2 ? base : nouns[(i + offset) % nouns.length]}${decor[(i + 1) % 4]}`);
+  }, [language, seed, style, purpose, round]);
   const styleNames: Record<string, string> = { 日系清新: "Japanese", 可愛甜系: "Cute", 極簡質感: "Minimal" };
-  return <><ToolIntro tool={tools.find((t) => t.id === "nickname")!} language={language} /><div className="generator-card"><label>{t(language, "放入一個名字或關鍵字", "Enter a name or keyword")}<input value={seed} maxLength={12} onChange={(e) => setSeed(e.target.value)} placeholder={t(language, "例如：小安、咖啡、旅行", "e.g. Mia, coffee, travel")} /></label><label>{t(language, "想要的風格", "Choose a style")}<div className="category-tabs left-tabs">{["日系清新", "可愛甜系", "極簡質感"].map((name) => <button key={name} className={style === name ? "active" : ""} onClick={() => setStyle(name)}>{t(language, name, styleNames[name])}</button>)}</div></label><button className="primary-button" onClick={() => setRound((x) => x + 1)}>↻ {t(language, "再產生一組", "Generate more")}</button></div><div className="nickname-grid">{results.map((name) => <button key={name} onClick={() => copyText(name, setCopied)}><strong>{name}</strong><span>{copied === name ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製", "Copy")}</span></button>)}</div></>;
+  const purposeNames: Record<string, string> = { 遊戲: "Gaming", 社群: "Social", 公會: "Guild" };
+  const slotLabels = [t(language, "開頭", "Start"), t(language, "名字前", "Before"), t(language, "名字後", "After"), t(language, "結尾", "End")];
+  return <><ToolIntro tool={tools.find((t) => t.id === "nickname")!} language={language} />
+  <div className="category-tabs" style={{ marginBottom: "16px" }}>
+    <button className={mode === "random" ? "active" : ""} onClick={() => setMode("random")}>🎲 {t(language, "隨機產生", "Random")}</button>
+    <button className={mode === "build" ? "active" : ""} onClick={() => setMode("build")}>🧩 {t(language, "自己拼裝", "Build your own")}</button>
+  </div>
+  {mode === "build" ? (
+    <div className="generator-card">
+      <label>{t(language, "你的名字", "Your name")}<input value={seed} maxLength={12} onChange={(e) => setSeed(e.target.value)} placeholder={t(language, "例如：小安", "e.g. Mia")} /></label>
+      <div className="build-preview">
+        <strong>{builtName}</strong>
+        <button className="primary-button" onClick={() => copyText(builtName, setCopied)}>{copied === builtName ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製暱稱", "Copy name")}</button>
+      </div>
+      {[0, 1, 2, 3].map((pos) => (
+        <label key={pos}>{slotLabels[pos]}<div className="slot-options">
+          {slotOptions.map((opt) => (
+            <button key={opt || "none"} className={slots[pos] === opt ? "active" : ""} onClick={() => setSlots((s) => { const n = [...s]; n[pos] = opt; return n; })}>
+              {opt || "∅"}
+            </button>
+          ))}
+        </div></label>
+      ))}
+    </div>
+  ) : (
+  <><div className="generator-card"><label>{t(language, "放入一個名字或關鍵字", "Enter a name or keyword")}<input value={seed} maxLength={12} onChange={(e) => setSeed(e.target.value)} placeholder={t(language, "例如：小安、咖啡、旅行", "e.g. Mia, coffee, travel")} /></label><label>{t(language, "要用在哪裡？", "Where to use?")}<div className="category-tabs left-tabs">{["遊戲", "社群", "公會"].map((name) => <button key={name} className={purpose === name ? "active" : ""} onClick={() => setPurpose(name)}>{t(language, name, purposeNames[name])}</button>)}</div></label><label>{t(language, "想要的風格", "Choose a style")}<div className="category-tabs left-tabs">{["日系清新", "可愛甜系", "極簡質感"].map((name) => <button key={name} className={style === name ? "active" : ""} onClick={() => setStyle(name)}>{t(language, name, styleNames[name])}</button>)}</div></label><button className="primary-button" onClick={() => setRound((x) => x + 1)}>↻ {t(language, "再產生一組", "Generate more")}</button></div><div className="nickname-grid">{results.map((name) => <button key={name} onClick={() => copyText(name, setCopied)}><strong>{name}</strong><span>{copied === name ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製", "Copy")}</span></button>)}</div></>
+  )}</>;
 }
 
 function BlankTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
@@ -1194,165 +1289,6 @@ function BioTool({ copied, setCopied, language }: { copied: string; setCopied: (
   );
 }
 
-function HashtagTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
-  const hashtagBundles = [
-    {
-      title: "日常紀錄",
-      titleEn: "Daily Life",
-      category: "daily",
-      tags: ["#日常", "#日常紀錄", "#生活碎片", "#生活美學", "#Threads日常"]
-    },
-    {
-      title: "咖啡 & 探店",
-      titleEn: "Coffee & Cafe",
-      category: "cafe",
-      tags: ["#台北咖啡廳", "#咖啡廳探店", "#下午茶", "#CoffeePorn", "#CafeHopping"]
-    },
-    {
-      title: "穿搭 & OOTD",
-      titleEn: "Fashion & OOTD",
-      category: "fashion",
-      tags: ["#今日穿搭", "#OOTD", "#穿搭分享", "#極簡穿搭", "#Outfitoftheday"]
-    },
-    {
-      title: "Threads 創作者",
-      titleEn: "Threads Creator",
-      category: "creator",
-      tags: ["#Threads創作者", "#思考紀錄", "#觀點分享", "#個人成長", "#設計師日常"]
-    },
-    {
-      title: "小紅書氛圍感",
-      titleEn: "Aesthetic Redbook",
-      category: "aesthetic",
-      tags: ["#小紅書文案", "#氛圍感", "#質感生活", "#靈感集", "#美學提案"]
-    },
-    {
-      title: "美食日記",
-      titleEn: "Foodie Notes",
-      category: "food",
-      tags: ["#美食日記", "#台北美食", "#吃貨日常", "#Foodie", "#FoodPorn"]
-    },
-    {
-      title: "旅行記錄",
-      titleEn: "Travel Diary",
-      category: "travel",
-      tags: ["#旅行日記", "#城市散步", "#旅遊攝影", "#TravelGram", "#Explore"]
-    },
-    {
-      title: "溫柔金句",
-      titleEn: "Mood & Quotes",
-      category: "mood",
-      tags: ["#微甜短句", "#治癒系", "#溫柔文字", "#情緒碎片", "#靜心"]
-    }
-  ];
-
-  const [customInput, setCustomInput] = useState("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-
-  const generatedTags = customInput.trim()
-    ? customInput.split(/\s+/).map((word) => word.startsWith("#") ? word : `#${word}`)
-    : [];
-
-  const toggleSelectTag = (tag: string) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter((t) => t !== tag));
-    } else {
-      setSelectedTags([...selectedTags, tag]);
-    }
-  };
-
-  const selectedText = selectedTags.join(" ");
-
-  return (
-    <>
-      <ToolIntro tool={tools.find((t) => t.id === "hashtags")!} language={language} />
-
-      <div className="input-card" style={{ marginBottom: "20px" }}>
-        <div className="field-label">
-          <strong style={{ fontSize: "14px", color: "var(--purple)" }}>
-            {t(language, "✨ 自訂 Hashtag 組合器", "✨ Custom Hashtag Builder")}
-          </strong>
-          <span>{t(language, "輸入關鍵字，自動加 # 號", "Type keywords to add #")}</span>
-        </div>
-
-        <input
-          value={customInput}
-          onChange={(e) => setCustomInput(e.target.value)}
-          placeholder={t(language, "輸入關鍵字，用空格隔開（例：咖啡 台北 下午茶）", "Enter keywords separated by spaces (e.g. coffee Taipei cafe)")}
-          style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "14px", outline: "none", marginBottom: "10px" }}
-        />
-
-        {!!generatedTags.length && (
-          <div style={{ padding: "12px", borderRadius: "10px", background: "var(--paper)", border: "1px dashed var(--line)", marginBottom: "12px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <strong style={{ fontSize: "13px", color: "var(--purple)" }}>{generatedTags.join(" ")}</strong>
-            <button className="primary-button" onClick={() => copyText(generatedTags.join(" "), setCopied)}>
-              {copied === generatedTags.join(" ") ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製標籤", "Copy Tags")}
-            </button>
-          </div>
-        )}
-      </div>
-
-      {!!selectedTags.length && (
-        <div style={{ padding: "14px 16px", borderRadius: "12px", background: "var(--purple-soft)", border: "1px solid var(--line)", marginBottom: "20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <span style={{ fontSize: "11px", color: "var(--purple)", fontWeight: 700, display: "block", marginBottom: "4px" }}>
-              {t(language, `已點選 ${selectedTags.length} 個標籤：`, `Selected ${selectedTags.length} tags:`)}
-            </span>
-            <strong style={{ fontSize: "13px", color: "var(--ink)" }}>{selectedText}</strong>
-          </div>
-          <div style={{ display: "flex", gap: "8px" }}>
-            <button className="primary-button" onClick={() => copyText(selectedText, setCopied)}>
-              {copied === selectedText ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製合集", "Copy Selected")}
-            </button>
-            <button onClick={() => setSelectedTags([])} style={{ border: "1px solid var(--line)", background: "var(--paper)", color: "var(--muted)", borderRadius: "8px", padding: "6px 10px", fontSize: "11px", cursor: "pointer" }}>
-              {t(language, "清除", "Clear")}
-            </button>
-          </div>
-        </div>
-      )}
-
-      <div className="section-title-row" style={{ marginBottom: "14px" }}>
-        <h2>{t(language, "🔥 精選 Threads & IG 熱門標籤包", "🔥 Trending Hashtag Bundles")}</h2>
-        <span style={{ color: "var(--subtle)", fontSize: "10px" }}>{t(language, "點擊單個複製或點選組合", "Click tag to copy or build bundle")}</span>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "14px" }}>
-        {hashtagBundles.map((bundle) => {
-          const bundleText = bundle.tags.join(" ");
-          return (
-            <div key={bundle.title} style={{ border: "1px solid var(--line)", borderRadius: "14px", background: "var(--paper)", padding: "16px", display: "grid", gap: "10px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <strong style={{ fontSize: "13px", color: "var(--purple)" }}>{t(language, bundle.title, bundle.titleEn)}</strong>
-                <button className="text-button" onClick={() => copyText(bundleText, setCopied)}>
-                  {copied === bundleText ? t(language, "整包已複製 ✓", "Bundle Copied ✓") : t(language, "複製整包", "Copy Bundle")}
-                </button>
-              </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                {bundle.tags.map((tag) => (
-                  <button
-                    key={tag}
-                    onClick={() => toggleSelectTag(tag)}
-                    style={{
-                      border: "1px solid var(--line)",
-                      background: selectedTags.includes(tag) ? "var(--purple)" : "var(--canvas)",
-                      color: selectedTags.includes(tag) ? "#fff" : "var(--ink)",
-                      borderRadius: "8px",
-                      padding: "5px 9px",
-                      fontSize: "11px",
-                      cursor: "pointer"
-                    }}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </>
-  );
-}
 
 function toDoubleStruck(str: string) {
   return str.replace(/[A-Za-z0-9]/g, (char) => {
@@ -2910,6 +2846,21 @@ export default function App() {
   const [copied, setCopied] = useState("");
   const [guideOpen, setGuideOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  // 最近複製抽屜（學韓國 LOVELETTER）：記錄全站複製歷史
+  const [copyHistory, setCopyHistory] = useState<string[]>(() => {
+    try { return JSON.parse(localStorage.getItem("textlab.copyHistory") || "[]"); } catch { return []; }
+  });
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const handleCopied = (value: string) => {
+    setCopied(value);
+    if (value) {
+      setCopyHistory((prev) => {
+        const next = [value, ...prev.filter((x) => x !== value)].slice(0, 30);
+        try { localStorage.setItem("textlab.copyHistory", JSON.stringify(next)); } catch {}
+        return next;
+      });
+    }
+  };
 
   useEffect(() => {
     currentActiveTool = active;
@@ -3001,7 +2952,7 @@ export default function App() {
     document.body.style.overflow = "hidden";
     return () => { document.removeEventListener("keydown", closeOnEscape); document.body.style.overflow = ""; };
   }, [guideOpen]);
-  const toolProps = { copied, setCopied, language };
+  const toolProps = { copied, setCopied: handleCopied, language };
   return <div className="app-shell">
     <header className="topbar">
       <a className="brand" href="/layout" onClick={(e) => { e.preventDefault(); selectTool("layout"); }}>
@@ -3013,6 +2964,7 @@ export default function App() {
       <nav className="desktop-nav">
 
         <button className="guide-nav-button" onClick={() => setGuideOpen(true)}>{t(language, "使用指南", "Guide")}</button>
+        <button className="guide-nav-button" onClick={() => setHistoryOpen(true)} title={t(language, "最近複製", "Copy history")}>🕘 {t(language, "複製紀錄", "History")}</button>
         <button className="guide-nav-button" onClick={toggleTheme} title={t(language, "切換主題風格", "Toggle theme")}>
           {theme === "dark" ? t(language, "🌙 深色", "🌙 Dark") : theme === "light" ? t(language, "☀️ 淺色", "☀️ Light") : t(language, "🌗 自動", "🌗 Auto")}
         </button>
@@ -3102,7 +3054,7 @@ export default function App() {
             {
               title: "實用輔助工具",
               titleEn: "UTILITY TOOLS",
-              ids: ["hashtags", "blank", "blank-id", "nickname", "bopomofo"] as ToolId[]
+              ids: ["blank", "blank-id", "nickname", "bopomofo"] as ToolId[]
             }
           ].map((sec) => (
             <div key={sec.title}>
@@ -3160,10 +3112,10 @@ export default function App() {
           {active === "kaomoji" && <KaomojiTool {...toolProps} />}
           {active === "fonts" && <FontsTool {...toolProps} />}
           {active === "bopomofo" && <BopomofoTool {...toolProps} />}
-          {active === "hashtags" && <HashtagTool {...toolProps} />}
           {active === "blank" && <BlankTool {...toolProps} />}
           {active === "blank-id" && <BlankIdTool {...toolProps} />}
           {active === "nickname" && <NicknameTool {...toolProps} />}
+          <RelatedTools toolId={active} language={language} onSelect={selectTool} />
         </div>
         <footer>
           <span>{`${t(language, "字研所", "TEXTLAB")} TEXT LAB`}</span>
@@ -3176,6 +3128,31 @@ export default function App() {
     </div>
 
     {guideOpen && <GuideModal language={language} onClose={() => setGuideOpen(false)} onSelectTool={(id) => { selectTool(id); setGuideOpen(false); }} />}
+    {historyOpen && (
+      <div className="history-overlay" onClick={() => setHistoryOpen(false)}>
+        <aside className="history-drawer" onClick={(e) => e.stopPropagation()}>
+          <div className="history-header">
+            <strong>🕘 {t(language, "最近複製", "Copy history")}</strong>
+            <div>
+              <button className="text-button" onClick={() => { setCopyHistory([]); try { localStorage.removeItem("textlab.copyHistory"); } catch {} }}>{t(language, "清除", "Clear")}</button>
+              <button className="guide-close" onClick={() => setHistoryOpen(false)} aria-label={t(language, "關閉", "Close")}>×</button>
+            </div>
+          </div>
+          {!copyHistory.length ? (
+            <p className="history-empty">{t(language, "還沒有複製紀錄，在任何工具點複製就會出現在這裡。", "No history yet. Anything you copy will appear here.")}</p>
+          ) : (
+            <div className="history-list">
+              {copyHistory.map((item, i) => (
+                <button key={`${i}-${item.slice(0, 10)}`} className="history-item" onClick={() => copyText(item, handleCopied)}>
+                  <span className="history-text">{item.length > 60 ? item.slice(0, 60) + "…" : item}</span>
+                  <span className="history-copy">{t(language, "再複製", "Copy")}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </aside>
+      </div>
+    )}
     {!!copied && <div className="toast"  role="status"><span>✓</span> {t(language, "已複製到剪貼簿", "Copied to clipboard")}</div>}
   </div>;
 }
