@@ -314,6 +314,18 @@
       {
         "h": "花式字體會變成亂碼或方框嗎？",
         "p": "極少數裝置對罕見的數學符號支援不完整，可能顯示方框。建議優先選常見風格（如粗體、斜體、全形）；如果對方看不到，換一種風格即可。"
+      },
+      {
+        "h": "IG 自我介紹排版：特殊字體＋現成英文短句直接套",
+        "p": "本站內建 6 組 IG bio 快速靈感（例如 Coffee & Life ☕️、Taipei, TW 📍、OOTD Inspiration ✦），點一下就填入輸入框，再選粗體、斜體、手寫花體等 19 種風格，一鍵複製貼到 IG 個人簡介。簡介建議控制在兩三行內，裝飾字太多會讓人找不到重點。"
+      },
+      {
+        "h": "顛倒翻轉字怎麼玩？一句話讓留言區炸鍋",
+        "p": "點「🙃 顛倒翻轉字」風格，輸入的英文會變成上下顛倒的樣子（hello 變 ɥǝllo），非常適合留言、限動或 Threads 貼文開場。注意它只轉換英文字母，中文和數字不受影響；極少數舊字型顯示不完整時，改用粗體或全形即可。"
+      },
+      {
+        "h": "哥德體、雙線空心體、手寫花體：怎麼選才不會變方框",
+        "p": "相容性由高到低大致是：全形、粗體、斜體、圓圈、刪除線（幾乎所有裝置都支援）＞ 手寫花體、哥德體、雙線空心體（舊 Android 或部分字型可能顯示方框）。正式場合或要傳給很多人看時，選前段風格最保險；想追求造型感，貼出前先用另一支手機確認一次。"
       }
     ],
     "faqZh": [
@@ -332,6 +344,18 @@
       {
         "q": "字體轉換要錢嗎？",
         "a": "免費，不需註冊，在瀏覽器端即時轉換。"
+      },
+      {
+        "q": "遊戲暱稱可以用特殊字體嗎？",
+        "a": "大多數手遊會擋掉 Unicode 裝飾字，轉好貼進暱稱欄若顯示異常或被拒絕，就是該遊戲不支援。想做隱形或造型暱稱，改用本站的「空白ID產生器」或暱稱工具成功率更高。"
+      },
+      {
+        "q": "Threads 的名字和貼文能用特殊字體嗎？",
+        "a": "可以，都是純文字，貼上即可顯示。不過 Threads 名字建議保留原本可搜尋的拼法，整串都換成花式字會讓朋友搜不到你。"
+      },
+      {
+        "q": "一次可以轉換幾個字？",
+        "a": "本站輸入框上限 80 個字元，足夠應付簡介、標題和短句；長文案建議分段轉換再拼起來。"
       }
     ],
     "guideEn": [
@@ -342,6 +366,14 @@
       {
         "h": "How to change fonts on Instagram?",
         "p": "Type English text on this page, tap a style to copy it, then paste it into your IG bio, post, or story text. Only Latin letters and numbers are converted."
+      },
+      {
+        "h": "Fancy Fonts for Your IG Bio: Presets That Just Work",
+        "p": "This page ships with 6 ready-made IG bio presets (like Coffee & Life ☕️, Taipei, TW 📍, OOTD Inspiration ✦). Tap one to fill the input, pick from 19 styles — bold, italic, script, gothic and more — then copy and paste into your bio. Keep it to two or three lines; too much decoration buries the point."
+      },
+      {
+        "h": "Upside-Down Text: Flip a Sentence in One Click",
+        "p": "Choose the 🙃 Upside Down style and your English text flips vertically (hello becomes ɥǝllo) — perfect for comments, stories, or a Threads opener. It only converts Latin letters; if an old device can't render it, switch to bold or fullwidth."
       }
     ],
     "faqEn": [
@@ -356,6 +388,14 @@
       {
         "q": "Is it free?",
         "a": "Yes. Instant conversion in your browser, no sign-up required."
+      },
+      {
+        "q": "Can I use fancy fonts in game usernames?",
+        "a": "Most mobile games block decorative Unicode characters. If your converted name gets rejected or looks broken in the nickname field, that game doesn't support them — try the Blank ID Generator or nickname tool on this site instead."
+      },
+      {
+        "q": "Is there a character limit?",
+        "a": "The input box accepts up to 80 characters, enough for bios, headlines, and short phrases. Convert long copy in sections and join the results."
       }
     ]
   },
