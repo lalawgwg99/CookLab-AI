@@ -2061,7 +2061,7 @@ function LocalizeTool({ copied, setCopied, language }: { copied: string; setCopi
           </strong>
         </div>
         <div style={{ padding: "12px 14px", borderRadius: "10px", background: detectedLegal.length > 0 ? "#fee2e2" : "var(--canvas)", border: "1px solid var(--line)" }}>
-          <span style={{ fontSize: "11px", color: "var(--muted)", display: "block" }}>⚠️ 衛福部罰鍰風險詞 (4萬~40萬)</span>
+          <span style={{ fontSize: "11px", color: "var(--muted)", display: "block" }}>⚠️ 衛福部罰鍰風險詞 (4萬~400萬)</span>
           <strong style={{ fontSize: "18px", color: detectedLegal.length > 0 ? "#dc2626" : "var(--ink)" }}>
             {detectedLegal.length} 處違規風險
           </strong>
