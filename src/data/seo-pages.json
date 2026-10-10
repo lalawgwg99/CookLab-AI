@@ -469,7 +469,71 @@
     "titleZh": "花式風格暱稱產生器｜遊戲 ID、IG 帳號風格暱稱｜字研所 TextLab",
     "descriptionZh": "一鍵產生文青、日系、可愛或極簡風格暱稱與遊戲 ID，搭配 Unicode 字體與特殊符號建立專屬名稱。",
     "titleEn": "Aesthetic Nickname & Username Generator | TextLab",
-    "descriptionEn": "Generate aesthetic usernames, gaming IDs and nickname ideas with Unicode fonts and decorative symbols."
+    "descriptionEn": "Generate aesthetic usernames, gaming IDs and nickname ideas with Unicode fonts and decorative symbols.",
+    "guideZh": [
+      {
+        "h": "遊戲暱稱的萬用公式：風格詞＋裝飾符號",
+        "p": "好看的暱稱多半是「一個有畫面的詞＋兩側裝飾符號＋短尾英文」。先選風格詞（夜桜、霧眠、貓系、日系漢字都好用），再用特殊符號框起來，最後補一個短尾。例：「₍ᐢ.ˬ.ᐢ₎霧眠」或「夜桜𝕹𝖎𝖌𝖍𝖙」。產生器一次給幾十種組合，直接挑順眼的用。"
+      },
+      {
+        "h": "遊戲 ID 字數限制與符號相容性",
+        "p": "主流手遊暱稱多在 12–16 字以內，太長會被截斷。花式字體在多數遊戲都能顯示，但極冷門的裝飾字在舊手機或特定遊戲可能變方框。建議先把喜歡的暱稱複製到遊戲改名預覽框確認顯示正常，再買改名卡，避免花錢還看不到效果。"
+      },
+      {
+        "h": "IG 帳號名稱怎麼取才好被搜到",
+        "p": "IG 帳號名稱（username）限 30 字，只能用英文字母、數字、底線和句點。花式字體雖然好看卻無法被搜尋，正確做法是：帳號名稱放可搜尋的英文＋關鍵字，顯示名稱（name）再用花式字體或中文暱稱，兩邊分工不打架。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "為什麼暱稱貼到遊戲裡變成方框或問號？",
+        "a": "代表該字元在遊戲字體裡缺字。常見風格（粗體、斜體、全形）在主流遊戲都能顯示；太冷門的裝飾字在部分遊戲或舊手機會變方框。解法是換一個風格再試，或改用 ★↘乂 這類幾乎不會缺字的特殊符號。"
+      },
+      {
+        "q": "遊戲暱稱改名要花錢嗎？",
+        "a": "多數遊戲首次改名免費，之後要買改名卡，價格依遊戲而定。改名前先把喜歡的暱稱複製到遊戲預覽框試貼，確認不缺字、沒被註冊再動手最保險。"
+      },
+      {
+        "q": "暱稱一直顯示已有人使用怎麼辦？",
+        "a": "在原詞前後加底線、數字或句點，或換一種裝飾符號組合，幾乎都能繞過重複。例如「夜桜」被用走，可以試「夜桜_」、「₍夜桜₎」或「夜桜𝕏」。"
+      },
+      {
+        "q": "花式字體可以用在 IG 帳號名稱嗎？",
+        "a": "不行。IG 帳號名稱只能用英文字母、數字、底線和句點，花式字體貼進去會被擋。想在 IG 用花式字體，請放在顯示名稱（name）或個人簡介（bio），那裡沒有限制。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "A formula for aesthetic gaming nicknames",
+        "p": "Most good-looking nicknames follow one pattern: a visual word plus decorative symbols on both sides plus a short English tail. Pick your vibe word first (moon, mist, sakura), frame it with symbols, then add a short suffix. The generator gives you dozens of combos to pick from."
+      },
+      {
+        "h": "Character limits and symbol compatibility in games",
+        "p": "Most mobile games cap nicknames at 12-16 characters; longer names get cut off. Fancy Unicode fonts usually work, but very rare decorative glyphs can render as boxes on older devices or in specific games. Always paste into the rename preview first before spending a rename card."
+      },
+      {
+        "h": "Make your Instagram handle discoverable",
+        "p": "Instagram usernames are limited to 30 characters and only allow letters, numbers, underscores, and periods. Fancy fonts look great but are not searchable, so put searchable keywords in the username and save the fancy styling for the display name and bio."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Why does my nickname show as boxes in games?",
+        "a": "The glyph is missing from the game's font. Common styles (bold, italic, fullwidth) work almost everywhere; very rare decorative fonts may show as boxes on some devices. Switch to another style or use classic decorative symbols like ★ which almost never break."
+      },
+      {
+        "q": "Is renaming in games free?",
+        "a": "Usually the first rename is free, then you need a rename card, and prices vary by game. Paste your favorite nickname into the in-game preview first to check for boxes and availability."
+      },
+      {
+        "q": "My nickname is already taken. What now?",
+        "a": "Add underscores, numbers, or periods around the word, or switch the decorative symbol framing - that almost always works around duplicates."
+      },
+      {
+        "q": "Can I use fancy fonts in my Instagram username?",
+        "a": "No. Usernames only allow letters, numbers, underscores, and periods, so fancy fonts get rejected. Use them in your display name or bio instead, where there are no restrictions."
+      }
+    ]
   },
   "blank": {
     "nameZh": "透明空白文字產生器",
