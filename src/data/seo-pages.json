@@ -93,7 +93,71 @@
     "titleZh": "IG / Threads 個人檔案 Bio 排版美化工具｜字研所 TextLab",
     "descriptionZh": "一鍵生成質感 IG 個人檔案 Bio、Threads 簡介佈置、花式字體、符號與風格排版分隔線。",
     "titleEn": "Instagram & Threads Bio Studio | Profile Designer | TextLab",
-    "descriptionEn": "Design Instagram and Threads bios with Unicode fonts, symbols, dividers and profile layout templates."
+    "descriptionEn": "Design Instagram and Threads bios with Unicode fonts, symbols, dividers and profile layout templates.",
+    "guideZh": [
+      {
+        "h": "IG Bio 黃金四行：名字行、定位行、標籤行、行動呼籲",
+        "p": "好看的 Bio 都是四行結構：第一行姓名或稱呼讓人記住你是誰；第二行身份定位一句話說清楚你分享什麼（例：☁️ Slow living & coffee）；第三行城市或標籤加地區感；第四行動呼籲放 👇🏼 引導點連結。本工具四個欄位正好對應這四行，右上角即時顯示字數（x/150），填完一鍵複製貼上即可。"
+      },
+      {
+        "h": "Threads 簡介可以跟 IG Bio 共用嗎？可以，但語氣要換",
+        "p": "Threads 的氛圍比 IG 更隨性口語，太精緻的 Bio 在那裡反而顯得生硬。建議共用骨架、改寫語氣：IG 版用「🎨 Digital Product Designer」，Threads 版改成「畫圖的，偶爾寫字」。工具內建「Threads 思考紀錄」範本，一鍵套用再微調，比從零寫快得多。連結只留最重要的那一個。"
+      },
+      {
+        "h": "Bio 換行儲存後被吃掉？用空白字元留白",
+        "p": "IG 會把完全空白的行壓掉，這是很多人排好版、儲存後又黏在一起的原因。解法是在想留白的行放一個看不見的 Unicode 字元：ㅤ（U+3164）或 ⠀（U+2800）。先在手機備忘錄把整段 Bio 排好（空行放空白字元），再一次整段複製貼到 IG，比在 IG 輸入框裡直接打穩定得多。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "IG Bio 有字數限制嗎？",
+        "a": "有，150 字。一個 Emoji 約佔 1～2 字，裝飾符號和換行也都算字數，寫太滿會被截斷。本工具右上角即時顯示「x/150」字數，超過就刪減幾句再貼，避免送出後才發現被吃字。"
+      },
+      {
+        "q": "花式字體用在 IG 簡介會變成方框嗎？",
+        "a": "看字體冷門程度。常見的粗體、斜體、全形等風格在主流手機都能正常顯示；太冷門的裝飾字在舊款 Android 或部分裝置可能缺字變方框。建議先用工具的即時預覽看效果，拿不定主意就改用 ★✦ 這類幾乎不會缺字的符號。需要靈感可以去站內的花式字體工具挑。"
+      },
+      {
+        "q": "Bio 排好換行，儲存後又黏在一起怎麼辦？",
+        "a": "通常是空白行被 IG 壓掉了。在空白行貼入空白字元 ㅤ（U+3164），讓那一行「看起來空白但實際有字元」，就能保留留白。如果直接按 Enter 換行已經能正常保留，就不需要加空白字元。"
+      },
+      {
+        "q": "個人帳號的 Bio 跟創作者帳號寫法有什麼不同？",
+        "a": "個人帳號挑 2～3 項最能代表你的興趣就好，Bio 不是履歷，不用把星座、MBTI、工作全塞進去。創作者或工作帳號則要加「分享主題＋聯絡方式」，讓第一次看到的人秒懂這個帳號在做什麼。工具內建「創作者 / 設計師」範本，一鍵套用就有專業骨架。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "The 4-line bio formula that works everywhere",
+        "p": "Good bios follow a four-line structure: line 1 is your name or handle so people remember you; line 2 is your role in one phrase (e.g. ☁️ Slow living & coffee); line 3 is your city or tags; line 4 is a call to action with 👇🏼 pointing to your link. This tool's four fields map exactly to those lines, with a live character counter (x/150) up top — fill them in, copy, and paste."
+      },
+      {
+        "h": "Can I reuse my Instagram bio on Threads? Yes, but change the tone",
+        "p": "Threads feels more casual than Instagram, and a polished IG bio can look stiff there. Keep the same skeleton but rewrite the tone: '🎨 Digital Product Designer' on IG becomes something like 'designer, occasional writer' on Threads. The built-in 'Threads Thoughts' template gives you a one-click starting point to tweak. Keep just your single most important link."
+      },
+      {
+        "h": "Line breaks disappearing? Use invisible characters",
+        "p": "Instagram collapses fully empty lines, which is why a nicely spaced bio turns into one blob after saving. Put an invisible Unicode character on the lines you want to keep blank: ㅤ (U+3164) or ⠀ (U+2800). Compose the whole bio in your phone's notes app first (with invisible characters on the blank lines), then paste it into Instagram in one go — far more reliable than typing in IG's own editor."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "How many characters can an Instagram bio have?",
+        "a": "150 characters. Each emoji counts as roughly 1–2 characters, and decorative symbols and line breaks count too, so an overstuffed bio gets cut off. This tool shows a live 'x/150' counter at the top — trim before you paste instead of discovering missing text after saving."
+      },
+      {
+        "q": "Will fancy Unicode fonts break in my bio?",
+        "a": "It depends on how exotic the font is. Common styles (bold, italic, fullwidth) render fine on mainstream phones; very rare decorative glyphs may show as boxes on older Android devices. Preview your bio in the tool first, and when in doubt use classic symbols like ★✦ that almost never break. The site's fancy-font tool is a good place to pick styles."
+      },
+      {
+        "q": "My bio line breaks collapsed after saving. How do I fix it?",
+        "a": "Instagram usually deletes completely empty lines. Paste an invisible character ㅤ (U+3164) onto the blank lines so each one 'looks empty but technically contains a character', and the spacing survives. If plain Enter line breaks already stick for you, you don't need the invisible characters."
+      },
+      {
+        "q": "Should a creator bio be written differently from a personal bio?",
+        "a": "Yes. A personal bio only needs 2–3 interests that represent you — it's not a CV. A creator or business bio should add your niche plus a contact line so first-time visitors instantly get what the account is about. The built-in 'Creator / Designer' template gives you that professional skeleton in one click."
+      }
+    ]
   },
   "symbols": {
     "nameZh": "特殊符號大全",
