@@ -21,7 +21,71 @@
     "titleZh": "日系花邊標題組裝器｜IG / Threads 標題框與邊框文字美化｜字研所 TextLab",
     "descriptionZh": "輸入文字即時生成日系星閃、蝴蝶結、角括號與花紋標題邊框，快速美化 Threads 與 IG 貼文標題。",
     "titleEn": "Aesthetic Title Frame Builder | Japanese Header Frames | TextLab",
-    "descriptionEn": "Generate aesthetic Japanese header frames, sparkles, brackets and dividers for Instagram and Threads titles."
+    "descriptionEn": "Generate aesthetic Japanese header frames, sparkles, brackets and dividers for Instagram and Threads titles.",
+    "guideZh": [
+      {
+        "h": "IG 貼文標題怎麼裝飾？日系花邊讓第一行停留率翻倍",
+        "p": "滑社群時大家停留的時間不到 3 秒，一個有裝飾的標題行（例：✦ ─── 今日穿搭 ─── ✦）比光禿禿的文字更容易讓人停下來。本工具提供 12 種版式：星閃雙邊、愛心對稱、日系蝴蝶結 ౨ৎ、璀璨星光、角括號『 』、黑大括號【 】等，輸入文字即時預覽 12 種效果，一鍵複製貼到 IG 內文分段標題、Threads 貼文分隔線或限動文字，不用自己一個一個打符號。"
+      },
+      {
+        "h": "花邊標題的排版心法：整篇貼文只用一種風格",
+        "p": "裝飾的最大地雷是混搭——第一行用蝴蝶結、第二行用星閃、第三行用黑大括號，整篇貼文立刻變雜亂。建議一篇貼文鎖定一種風格（可愛風選 ౨ৎ 日系蝴蝶結＋夢幻蕾絲，俐落風選【 】黑大括號＋角括號）。標題字數超過 15 個字時選簡潔框線款，避免手機上換行被切斷；要加強層次感可以去站內花式字體工具把標題字先變形，再套上邊框。"
+      },
+      {
+        "h": "貼到 IG 或遊戲變成方框？選相容性最高的三款",
+        "p": "有些冷門裝飾字（例如奢華星光的組合字元）在舊款 Android 或部分遊戲暱稱欄位會缺字變成方框。最穩的三款是：【 】黑大括號、『 』角括號、[ ] 日系方括號——這幾個是 CJK 常用符號，幾乎所有裝置和平台都能正常顯示。要用的情境如果吃相容性（遊戲 ID、IG Bio、LINE 名稱），直接選這三款；IG 內文和 Threads 則 12 種全都可以用。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "日系花邊標題是什麼？",
+        "a": "就是用特殊符號把標題框起來裝飾的排版方式，常見於日系 IG 貼文和 Threads，例如 ౨ৎ 今日穿搭 ౨ৎ、✦ ─── 好物分享 ─── ✦。功能是讓標題在資訊流中更顯眼、分段更清楚。本工具輸入文字就能即時套用 12 種花邊版式並一鍵複製，不用記符號怎麼打。"
+      },
+      {
+        "q": "複製貼上到 IG 後變成方框 □ 怎麼辦？",
+        "a": "那是缺字：你用的裝飾字元在該裝置或 App 沒有對應的字形。解法是換成相容性最高的三款——【 】黑大括號、『 』角括號、[ ] 日系方括號，它們是 CJK 常用符號，幾乎所有手機和平台都支援。IG 內文和 Threads 比較寬容，12 種版式通常都能正常顯示。"
+      },
+      {
+        "q": "花邊標題可以用在 IG 簡介 Bio 嗎？",
+        "a": "可以，但要克制。Bio 只有 150 字額度，一個花邊框就會吃掉好幾個字，建議只在名字行或第一行用一次簡潔款（例如『 』角括號）。主戰場其實是貼文內文的分段小標和 Threads 的分隔線，那裡字數寬鬆，裝飾效果也最好。"
+      },
+      {
+        "q": "用特殊符號裝飾標題，會影響 IG 搜尋或觸及嗎？",
+        "a": "IG 搜尋主要看帳號名稱、Bio 關鍵字和貼文第一段的實際文字，裝飾符號本身不會被當成關鍵字，也不會降觸及。實務建議是：真正的關鍵字（例如「台北咖啡廳」）用純文字寫在花邊框裡面，這樣搜尋抓得到、視覺又好看，兩邊都顧到。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "How to Decorate Instagram Post Titles: Aesthetic Frames That Stop the Scroll",
+        "p": "People spend less than 3 seconds on a post before scrolling. A decorated title line (e.g., ✦ ─── OUTFIT OF THE DAY ─── ✦) is far more likely to stop the scroll than plain text. This tool offers 12 frame styles — star dividers, heart symmetry, Japanese ribbon ౨ৎ, sparkles, corner brackets 『 』, heavy brackets 【 】 and more — with live previews for each. Type once, copy in one click, and paste into Instagram captions, Threads dividers, or Story text. No need to type each symbol by hand."
+      },
+      {
+        "h": "The Golden Rule of Decorated Titles: One Style Per Post",
+        "p": "The biggest mistake is mixing styles — ribbons on line one, sparkles on line two, heavy brackets on line three — and the post instantly looks chaotic. Lock one style per post: pick the ౨ৎ ribbon + lace for a cute vibe, or 【 】 heavy brackets for a clean look. For titles longer than 15 characters, choose the simpler frame styles so nothing breaks on narrow phone screens. Pair with the fancy fonts tool to stylize the title text before framing it for extra depth."
+      },
+      {
+        "h": "Boxes Instead of Symbols? Use the Three Most Compatible Frames",
+        "p": "Some exotic decorative characters (like the composite glyphs in the luxury sparkle style) can render as boxes on older Android phones or in certain game nickname fields. The three safest frames are: 【 】 heavy brackets, 『 』 corner brackets, and [ ] square brackets — all common CJK punctuation supported by virtually every device and platform. For compatibility-sensitive spots (game IDs, Instagram bios, LINE display names), use these three; for Instagram captions and Threads, all 12 styles work fine."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "What is an aesthetic title frame?",
+        "a": "It's a typography decoration style where the title is wrapped in special symbols, popular in Japanese-style Instagram posts and Threads — e.g., ౨ৎ OUTFIT OF THE DAY ౨ৎ or ✦ ─── HAUL ─── ✦. It makes titles stand out in the feed and clarifies section breaks. This tool applies 12 frame styles to your text instantly with one-click copy, so you never have to memorize the symbols."
+      },
+      {
+        "q": "Why do the frames turn into boxes □ after pasting into Instagram?",
+        "a": "That's a missing-glyph issue: the device or app doesn't have a font for that decorative character. Switch to the three most compatible frames — 【 】 heavy brackets, 『 』 corner brackets, [ ] square brackets — all common CJK punctuation supported on virtually every phone and platform. Instagram captions and Threads are more forgiving, and all 12 styles usually display fine there."
+      },
+      {
+        "q": "Can I use decorated titles in my Instagram bio?",
+        "a": "Yes, but sparingly. Bios have a 150-character limit and each frame eats several characters, so use a simple frame (like 『 』 corner brackets) on the name line or first line only. The real showcase is in caption section headers and Threads divider lines, where character limits are generous and the decoration shines."
+      },
+      {
+        "q": "Do decorative symbols hurt Instagram search or reach?",
+        "a": "Instagram search keys off your account name, bio keywords, and the actual words in the first lines of captions — decorative symbols are not indexed as keywords and don't reduce reach. Best practice: put real keywords (e.g., \"Taipei cafes\") in plain text inside the frame, so search engines can read them while the visuals stay pretty."
+      }
+    ]
   },
   "layout": {
     "nameZh": "IG 換行／Threads 排版工具",
