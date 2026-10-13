@@ -317,7 +317,71 @@
     "titleZh": "Emoji 視覺實驗室｜Emoji 搜尋、分類與組合懶人包｜字研所 TextLab",
     "descriptionZh": "搜尋與複製最新 Unicode Emoji，依表情、手勢、愛心、動物等分類瀏覽，並提供社群常用 Emoji 連發組合。",
     "titleEn": "Emoji Search & Combo Library | Browse and Copy Emoji | TextLab",
-    "descriptionEn": "Search, browse and copy Unicode emoji by category, with curated emoji combinations for social posts and messages."
+    "descriptionEn": "Search, browse and copy Unicode emoji by category, with curated emoji combinations for social posts and messages.",
+    "guideZh": [
+      {
+        "h": "IG 限動、Threads 貼文的 emoji 黃金用法：裝飾不搶戲的三個位置",
+        "p": "Emoji 最好用在三個地方：標題開頭當視覺錨點（例：🔥 本週最熱）、列表項目符號（每行一個 ✅ 讓重點好掃）、文末行動呼籲（👇🏼 連結在這裡）。一篇貼文 3～6 個最剛好，太多會讓版面雜亂、看起來像垃圾訊息。本工具的「連發組合」可以直接整組複製，貼到限動文字框就能用。"
+      },
+      {
+        "h": "電腦上找不到 emoji？三種快速複製法",
+        "p": "Windows 按 Win + .（句號）叫出 emoji 面板；Mac 按 Control + Command + 空白鍵；或直接在本工具用中文關鍵字搜尋（例：打「哭」就找到 😭）。搜到點一下就複製完成，貼到 LINE、Discord、IG 全都通用，免安裝任何東西。"
+      },
+      {
+        "h": "為什麼同一個 emoji 在別人的手機長得不一樣？",
+        "p": "Emoji 的長相是各家系統自己畫的（Apple、Google、三星畫風都不同），而且新 emoji 要新版系統才看得到，對方手機太舊會顯示方框或「?」。傳達重要訊息的符號（如 ✅⚠️）盡量用 Unicode 6.0 以前的老字，支援度最高、最不會出錯。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "Emoji 複製貼上到 IG 簡介會變方框嗎？",
+        "a": "彩色 emoji 在 IG 簡介通常正常顯示，變方框的多半是特殊符號或新版 emoji（對方手機系統太舊）。保險做法：先貼到自己的限動或傳給朋友測試；真的出問題就換成舊版通用款，如 ❤️⭐✅。"
+      },
+      {
+        "q": "一個 emoji 算幾個字？會吃掉 IG 字數嗎？",
+        "a": "大多數 emoji 算 1 個字，但膚色、性別、國旗這類「組合 emoji」可能算 2～4 個字；IG 簡介上限 150 字、貼文 2200 字。貼完後看平台顯示的字數計數，超過就先刪幾個裝飾用的。"
+      },
+      {
+        "q": "新出的 emoji 在舊手機上看不到怎麼辦？",
+        "a": "新 emoji 要搭配新版 iOS／Android 才有圖，舊系統只會顯示「?」或方框。如果受眾可能用舊手機，避開近兩年新出的 emoji，改用存在十年以上的經典款，如 😂❤️👍🔥。"
+      },
+      {
+        "q": "Emoji 用在商業貼文、廣告文案會有版權問題嗎？",
+        "a": "Unicode emoji 本身沒有版權，但「長相」是各系統畫的：在自己手機打字使用通常沒問題；若把 Apple／Google 的 emoji 圖檔拿去做 Logo 或商品販售，就可能踩到各家的使用條款。商業用途建議用文字形式直接打，而非下載圖檔。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "Where to put emoji in IG Stories and Threads posts: 3 spots that work",
+        "p": "Emoji work best in three places: the start of a headline as a visual anchor (e.g. 🔥 this week's hottest), as list bullets (one ✅ per line so key points scan easily), and after your call to action (👇🏼 link here). Three to six per post is the sweet spot — more than that clutters the layout and looks spammy. This tool's combo packs copy as a whole set, ready to paste into a Story text box."
+      },
+      {
+        "h": "Can't find emoji on your computer? Three fast ways to copy them",
+        "p": "On Windows press Win + . (period) to open the emoji panel; on Mac press Control + Command + Space. Or just search this tool with a keyword (type \"cry\" to find 😭) — one click copies it, then paste into LINE, Discord, or Instagram. No installation needed."
+      },
+      {
+        "h": "Why does the same emoji look different on someone else's phone?",
+        "p": "Each system draws its own emoji style (Apple, Google, and Samsung all look different), and new emoji only render on up-to-date systems — older phones show a box or \"?\". For symbols that must be understood (✅⚠️), stick to pre-Unicode-6.0 classics with the widest support."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Will pasted emoji turn into boxes in my Instagram bio?",
+        "a": "Color emoji usually render fine; boxes come from rare symbols or brand-new emoji on outdated phones. Test by posting to your own Story or sending to a friend first — if it breaks, swap in universal classics like ❤️⭐✅."
+      },
+      {
+        "q": "How many characters does one emoji count as?",
+        "a": "Most emoji count as one character, but compound emoji (skin tones, genders, flags) can count as 2–4. Instagram bios cap at 150 characters and captions at 2,200. Paste first, check the platform's counter, and trim decorations if you're over."
+      },
+      {
+        "q": "What if new emoji don't show on older phones?",
+        "a": "New emoji need a current iOS or Android to render; older systems show \"?\" or a box. If your audience may be on old phones, avoid emoji released in the last couple of years and use decade-old classics like 😂❤️👍🔥."
+      },
+      {
+        "q": "Can I use emoji in commercial posts and ads?",
+        "a": "Unicode emoji themselves aren't copyrighted, but each platform's artwork is: typing emoji directly on your phone is generally fine, while downloading Apple or Google's emoji images for logos or merchandise can violate their terms. For commercial use, type emoji as text rather than reusing image files."
+      }
+    ]
   },
   "kaomoji": {
     "nameZh": "日系顏文字大全",
