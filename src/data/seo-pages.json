@@ -909,7 +909,71 @@
     "titleZh": "電商開團爆單文案機｜團購主・KOL 帶貨・防客訴規格一鍵生成｜字研所 TextLab",
     "descriptionZh": "專為電商賣家、團購主、KOL 帶貨設計的商業爆單文案引擎！自動試算現省金額與折扣、生成痛點急迫感、防客訴退換貨規格。",
     "titleEn": "E-Commerce Group-Buy & Sales Copy Engine | TextLab Pro",
-    "descriptionEn": "Generate high-converting e-commerce group-buy copy, price calculation, and dispute-proof terms for Instagram, LINE, and Facebook."
+    "descriptionEn": "Generate high-converting e-commerce group-buy copy, price calculation, and dispute-proof terms for Instagram, LINE, and Facebook.",
+    "guideZh": [
+      {
+        "h": "開團文案黃金結構：價格錨點＋亮點＋截團，三段寫完就好",
+        "p": "一篇會賣的開團文不用長，順序對就好：第一段先亮價格錨點——市售原價多少、這次開團價多少、現省多少，工具會自動算出折扣百分比，不用自己按計算機；第二段列 3 個必買亮點，只寫團友真正會在意的（省錢、省事、獨家）；第三段給截團時間與數量，限時限量寫清楚。把商品名、原價、開團價貼進本工具，選一種文案風格，一鍵生成就能貼到群組。"
+      },
+      {
+        "h": "LINE 群、IG、Threads 開團文怎麼分流：同一檔團，四種寫法",
+        "p": "同一個商品，四個平台要四種語氣：LINE 群組用「正式公告版」——價格、方案、截團、下單須知一次寫齊，團友不用往上翻；IG 貼文用「粉絲推薦版」——口語推薦＋留言「+1」導私訊；IG 限動只放一句價格錨點＋連結；Threads 用「DM 私訊腳本」——貼文底端放留言鉤子，粉絲留言後自動私訊優惠碼，3 小時後再一則溫馨催單。先在工具裡選對風格，再貼到對應平台。"
+      },
+      {
+        "h": "防客訴：下單須知先寫進文案，糾紛少一半",
+        "p": "團購糾紛八成不是商品問題，是規則沒先講：截團後能不能取消、多久取貨、到貨日能不能保證、缺貨怎麼退。把這些寫進文案的「下單須知」，下單就等於同意規則，事後才有依據。注意：寫「售出概不退換」並不能排除瑕疵品依法該有的處理——有瑕疵、與描述不符，還是要處理。規則寫清楚、態度留彈性，才是長期開團的作法。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "開團文案要寫多長？LINE 群和 IG 貼文一樣嗎？",
+        "a": "不一樣。LINE 群組適合完整版：價格、亮點、截團、下單須知一次寫齊，因為團友會往上翻找規則；IG 貼文則要把價格錨點與懸念塞進前 125 字（之後會被折疊成「…更多」），亮點與須知放後面；限動只放一句話＋連結。本工具的四種風格就是按這個分流設計的，選對風格再貼。"
+      },
+      {
+        "q": "「現省多少、打幾折」怎麼算才不會寫錯？",
+        "a": "現省金額＝市售原價 − 開團價；折扣百分比＝現省金額 ÷ 市售原價。本工具輸入原價與開團價就會自動試算，文案裡的數字不會算錯。另一個常見地雷是把「市售價」灌水：請寫商品實際賣過的價格，虛構原價來襯托折扣，可能涉及廣告不實，別為了好看多寫。"
+      },
+      {
+        "q": "團購下單須知一定要寫哪些項目？",
+        "a": "至少五項：①截團時間 ②付款方式與期限 ③取貨／出貨時間 ④退換貨條件（瑕疵、尺寸不合、食品問題各怎麼處理）⑤缺貨、斷貨怎麼退費。寫進文案、下單即視為同意，事後有爭議才有白紙黑字可對。勾選本工具的防客訴選項，就能自動生成一段完整的下單須知。"
+      },
+      {
+        "q": "團友喊單後棄單、已讀不回怎麼辦？",
+        "a": "事前防範勝於事後追討：文案裡先寫明棄單規則，例如結單後不接受取消、多次未取貨列入黑名單；催單則用本工具的 DM 私訊腳本——粉絲留言「+1」後先秒回優惠碼與連結，3 小時後再一則溫馨提醒（庫存倒數、截團時間），比在群組公開點名有效，也保留對話紀錄。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "The group-buy copy formula: price anchor + highlights + deadline",
+        "p": "A group-buy post that sells doesn't need to be long — it needs the right order. First, the price anchor: retail price, group price, and how much buyers save (this tool calculates the discount percentage for you). Second, three highlights buyers actually care about: saving money, saving effort, exclusivity. Third, the deadline and stock limit. Enter the product name, retail price, and group price, pick a style, and paste the result into your group."
+      },
+      {
+        "h": "One deal, four versions: LINE group, IG post, IG Story, Threads",
+        "p": "The same deal needs a different voice per platform. Use the formal announcement version for LINE groups — price, terms, deadline, and ordering rules in one place so members can scroll up and find them. Use the fan-recommendation version for Instagram posts — conversational, with a \"+1 in the comments\" call to action that routes to DMs. Stories get one price-anchor line plus a link. Threads gets the DM script — a comment hook in the post, an instant DM with the discount code, and a gentle 3-hour follow-up nudge."
+      },
+      {
+        "h": "Dispute-proof terms: put the ordering rules in the copy",
+        "p": "Most group-buy disputes aren't about the product — they're about rules nobody stated upfront: can orders be cancelled after the deadline, how long to pick up, whether delivery dates are guaranteed, what happens on stockouts. Put these in the ordering-terms section so ordering counts as agreeing to them. One caution: writing \"no returns, no exceptions\" does not waive your handling of defective or misdescribed items. Clear rules plus a reasonable attitude keep a group-buy running long-term."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "How long should group-buy copy be? Is LINE the same as Instagram?",
+        "a": "No. LINE groups suit the full version — price, highlights, deadline, and ordering terms in one message, since members scroll up to find the rules. Instagram posts need the price anchor and hook inside the first ~125 characters (the rest folds behind \"…more\"), with highlights and terms below. Stories get one line plus a link. This tool's four styles are built for exactly this split."
+      },
+      {
+        "q": "How do I calculate \"you save\" and the discount percentage?",
+        "a": "Savings = retail price − group price; discount % = savings ÷ retail price. Enter both prices and the tool does the math, so the numbers in your copy are never wrong. One common trap: inflating the \"retail price\" to make the discount look bigger. Use the price the product actually sells for — a made-up anchor can count as misleading advertising."
+      },
+      {
+        "q": "What must group-buy ordering terms cover?",
+        "a": "At least five things: ① order deadline ② payment method and cutoff ③ pickup / shipping timing ④ return and exchange rules (defects, wrong size, food issues) ⑤ how stockouts and refunds are handled. When the terms are in the copy, ordering counts as agreeing to them. Tick the dispute-proof options in this tool to auto-generate a complete terms block."
+      },
+      {
+        "q": "What if a member claims an item and then ghosts?",
+        "a": "Prevention beats chasing: state the no-show rule in the copy — for example, no cancellations after the deadline, repeat no-shows go on a blocklist. For nudges, use this tool's DM script: an instant DM with the discount code and link when someone comments \"+1\", then a friendly reminder about 3 hours later (stock countdown, deadline). It converts better than public callouts and keeps a message record."
+      }
+    ]
   },
   "swipe": {
     "nameZh": "實戰爆款文案庫",
