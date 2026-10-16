@@ -5,7 +5,71 @@
     "titleZh": "AI 社群貼文助手｜Threads / IG / FB 爆款文案一鍵生成｜字研所 TextLab",
     "descriptionZh": "專為台灣社群生態設計的 AI 發文助手！輸入想法一鍵生成 IG、FB、Threads、小紅書與 LINE 社群貼文文案，免費免註冊。",
     "titleEn": "AI Social Post Assistant | Instagram & Threads Copywriter | TextLab",
-    "descriptionEn": "Generate social posts for Instagram, Threads, Facebook, LINE and Redbook with a free AI copywriting assistant."
+    "descriptionEn": "Generate social posts for Instagram, Threads, Facebook, LINE and Redbook with a free AI copywriting assistant.",
+    "guideZh": [
+      {
+        "h": "一句話想法變完整貼文：輸入越具體，AI 寫得越像你",
+        "p": "不要只打「咖啡廳」三個字就按產生。把「人、事、地、感覺」四個元素寫進去：誰去、做了什麼、在哪裡、什麼感覺。例如：「今天去大安區古宅咖啡廳，抹茶拿鐵很香，窗邊陽光很美，適合獨處看書」——再選一種體裁，AI 就會照這個素材寫出鉤子＋內文＋結尾＋hashtag。輸入太空泛，產出就只能套罐頭句；輸入有細節，產出才有你的味道。"
+      },
+      {
+        "h": "七種體裁怎麼選：同一句話，IG、Threads、LINE 寫法完全不同",
+        "p": "不確定選什麼就用「自動」，AI 會依主題判斷意圖（開箱、探店、觀點、吐嘈、促銷、討論）再選體裁。自己選也行：IG 美學圖文重排版、氛圍感與 hashtag；FB 品牌粉專文資訊完整、口氣穩重；Threads 爆款討論開頭先丟觀點或衝突；小紅書種草提案口語推薦＋使用場景；LINE 社群特惠把價格、方案、截團、下單須知一次寫齊；職人觀點覆盤條理分明、總結 2～3 點心法。先選對體裁再貼，別把同一篇文案全平台照抄。"
+      },
+      {
+        "h": "去 AI 味三招：餵範本、鎖禁止詞、自己改最後一句",
+        "p": "AI 文案最大的毛病是翻譯腔與罐頭連接詞，例如「在這個快節奏的時代」「讓我們一起探索」。三招破解：①餵一篇自己寫過、互動最好的貼文當風格範本，讓 AI 模仿你的斷句與語氣；②在想法裡寫明禁止詞，例如不要「極致體驗」「不容錯過」；③產出後自己改第一句和最後一句，換成你平常講話的口氣。最後務必核對價格、時間、地點等事實——AI 不會幫你查證。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "AI 貼文助手免費嗎？需要登入或 API 金鑰嗎？",
+        "a": "完全免費，免登入、免 API 金鑰、免信用卡，點「產生貼文」就能用。若免費額度暫時忙碌或今日額度已滿，會自動改用本機產生器繼續產出，不會產生任何費用；內容與風格沒變更時，工具會保留目前成果，避免重複消耗免費額度。"
+      },
+      {
+        "q": "AI 寫的文案可以直接貼到 IG / Threads 嗎？",
+        "a": "可以先貼，但建議花 1 分鐘做三件事：①核對價格、時間、地點等事實；②把第一句改成你自己的口氣；③刪掉罐頭連接詞與過多驚嘆號。AI 擅長搭骨架、給靈感，「像你」的那一層要自己補。發之前也可以先用本站的 IG 換行排版與 Hook 產生器再檢查一次開頭與斷行。"
+      },
+      {
+        "q": "Threads 和 IG 可以用同一篇文案嗎？",
+        "a": "不建議。Threads 吃「開頭觀點＋短句節奏」，前兩行沒鉤子就滑掉了；IG 吃「排版＋氛圍＋hashtag」，第一行要先給畫面感；LINE 群組則要把價格、方案、截團、下單須知一次寫齊，團友才不用往上翻。本工具的七種體裁就是按這個差異設計的——同一句話，選不同體裁，產出就是不同寫法。"
+      },
+      {
+        "q": "我輸入的內容會被儲存或拿去訓練嗎？",
+        "a": "本站不儲存你送出的內容。一般文字工具都在瀏覽器完成；只有 AI 貼文助手會把你送出的內容交由 Cloudflare Workers AI 處理，處理完不留存。最近使用與收藏只保存在目前瀏覽器，不會上傳。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "One idea, one complete post: the more specific your input, the more it sounds like you",
+        "p": "Don't just type “café” and hit generate. Give the AI four ingredients — who, what, where, how it felt. For example: “I visited a vintage café in Da'an District today. The matcha latte was fragrant, the window light was beautiful, and it felt perfect for reading alone.” Pick a format, and the tool returns a hook + body + closing + hashtags built from your material. Vague input gets canned lines; specific input gets your voice."
+      },
+      {
+        "h": "Pick the right format: the same idea reads differently on IG, Threads, and LINE",
+        "p": "Not sure which to pick? Use “Auto” and the AI judges the intent (unboxing, café visit, opinion, rant, promotion, discussion) and picks the format. Or choose yourself: IG aesthetic leans on layout, mood, and hashtags; FB brand page is complete info in a steady tone; Threads hot take leads with a viewpoint or tension; Redbook seeding is a chatty recommendation plus use cases; LINE deal packs price, plan, deadline, and ordering rules into one message; pro reflection is structured with 2–3 takeaways. Choose the format first — don't copy-paste one draft everywhere."
+      },
+      {
+        "h": "De-AI your draft in three moves: feed a sample, ban clichés, rewrite the last line",
+        "p": "AI copy's biggest flaw is translated-sounding filler, like “In this fast-paced era…” or “Let's explore together…”. Three fixes: ① feed it a post you wrote that performed well, as a style sample, so the AI mimics your sentence rhythm and tone; ② list banned phrases in your idea, e.g. no “ultimate experience” or “don't miss out”; ③ rewrite the first and last lines in your own speaking voice. Always verify facts — prices, times, places — the AI won't check them for you."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Is the AI post assistant free? Do I need an API key?",
+        "a": "Completely free — no sign-up, no API key, no credit card. Hit “Generate post” and go. If the free quota is busy or used up for the day, the tool automatically switches to the local generator so you can keep working at no cost; unchanged content and style reuse the current result instead of spending quota again."
+      },
+      {
+        "q": "Can I post the AI draft to Instagram or Threads as-is?",
+        "a": "You can, but spend one minute on three checks: ① verify facts like prices, times, and places; ② rewrite the first line in your own voice; ③ cut canned transitions and stacked exclamation marks. AI is great at structure and ideas — the layer that sounds like you is yours to add. Run the hook and line-break tools here for a final check before posting."
+      },
+      {
+        "q": "Can I use the same copy for Threads and Instagram?",
+        "a": "Not recommended. Threads rewards a strong opening viewpoint and short-sentence rhythm — no hook in the first two lines and readers scroll past. Instagram rewards layout, mood, and hashtags, with the first line setting the scene. A LINE group needs price, plan, deadline, and ordering rules in one message. The tool's formats are built around exactly these differences."
+      },
+      {
+        "q": "Is what I type stored or used for training?",
+        "a": "This site does not store your submitted content. Regular text tools run entirely in your browser; only the AI Post Assistant sends your input to Cloudflare Workers AI for processing, and it is not retained. Recents and favorites stay in this browser and are never uploaded."
+      }
+    ]
   },
   "hook": {
     "nameZh": "社群開頭句工具",
