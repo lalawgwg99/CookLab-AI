@@ -1045,7 +1045,71 @@
     "titleZh": "實戰爆款文案庫｜Threads 破萬讚・團購破百萬現成模板直接抄｜字研所 TextLab",
     "descriptionZh": "精選台灣 IG、Threads、團媽開團真實爆單模板庫！破萬愛心熱門架構、留言私訊轉單餌、開團促銷現成抄，一鍵套用生成。",
     "titleEn": "Viral Social Swipe File | Proven High-Converting Copy Templates | TextLab",
-    "descriptionEn": "Proven high-converting copy templates for Instagram, Threads, and e-commerce group-buys. Copy and customize viral posts in seconds."
+    "descriptionEn": "Proven high-converting copy templates for Instagram, Threads, and e-commerce group-buys. Copy and customize viral posts in seconds.",
+    "guideZh": [
+      {
+        "h": "模板抄架構不抄句子：三個替換點讓爆款變成你的文",
+        "p": "同一個模板幾百個人都在用，直接全文照貼最容易撞文、看起來也像機器人。正確用法是抄「骨架」留「血肉」：第一，把主詞換成你自己的真實情境——模板寫「職場」，你是團媽就改成帶團實況；第二，把數字換成真的——「改了 5 次草稿」這種細節必須是你發生過的事，編出來的數字讀者一看就假；第三，結尾問句改成你真的想聽的回答，不要留罐頭句。骨架相同沒關係，細節是你的，整篇就是你的原創。"
+      },
+      {
+        "h": "三大分類怎麼選：選錯分類，語氣就全錯",
+        "p": "文案庫目前有三個分類，對應三種完全不同的寫法。想衝互動選「Threads 破萬讚」：開頭要丟衝突或反常識觀點，結尾留一個開放問句讓人忍不住回；想賣貨選「團媽開團爆單」：價格對比與結單倒數是核心，少了這兩個就只是漂亮廢話；想經營氛圍選「IG 氛圍生活」：重點是畫面感與排版，文字要像在描述一張照片。先想清楚這篇的目的是互動、賣貨還是養粉，再選分類，不要看到順眼就套。"
+      },
+      {
+        "h": "發文前四問檢查清單：通過了再按發佈",
+        "p": "貼上模板、替換完之後，發佈前先問自己四個問題：一，開頭三秒能不能看懂在講什麼？看不懂就砍掉第一段重寫開頭；二，結尾問句是不是真的想聽回答？敷衍的「你怎麼看」不如不問；三，文裡的數字、價格、名額是不是真的？假數字被抓包一次，帳號信任就歸零；四，還有沒有殘留的大括號佔位符（例如 {原價}）？全文搜尋一次「{」確認清乾淨。發佈後半小時內守著留言區，第一時間回覆每一則留言，互動熱度就是這樣燒起來的。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "直接複製模板發文，會不會被平台降觸及？",
+        "a": "平台罰的是「重複內容」，不是「模板」。同一份模板原封不動被幾十個人同時發出，演算法可能判定為低品質重複內容；但只要照指南把主詞、數字、結尾問句換成你自己的真實經歷，結構相似、內容不同，就屬於正常創作。最忌諱的是什麼都不改、連錯字都一起抄——那不只可能被降觸及，被讀者發現還會丟信任。"
+      },
+      {
+        "q": "Threads 文案有字數限制嗎？模板會不會超長？",
+        "a": "Threads 單篇貼文上限是 500 字，超過就得拆成串文。文案庫的模板都控制在限制內，但你替換內容、加長故事後很容易超標，發佈前務必用本網站的字數計數器確認一次。如果超了，優先砍形容詞與重複的例子，不要砍開頭鉤子與結尾問句——那兩個才是決定互動的關鍵。"
+      },
+      {
+        "q": "團購文案的價格、折扣數字可以寫誇張一點嗎？",
+        "a": "不行。把不存在的原價寫成原價、把沒打過的折扣寫成折扣，都屬於廣告不實，依公平交易法可被公平會處罰，消費者也可以主張退貨求償。正確做法是只寫真實售價與真實折扣，截圖保留售價憑證；「現省」金額要用原價減團購價實際算出來，不要用感覺估。寫法上寧可保守一點，也不要為了衝單寫出之後無法兌現的承諾。"
+      },
+      {
+        "q": "模板裡的 {原價}、{商品品名} 這種大括號要刪掉嗎？",
+        "a": "要，而且要全部替換成真實內容再發。大括號是佔位符，提醒你這裡要填自己的資訊；直接帶著大括號發出去，等於告訴所有人「這篇是抄來的」，還會讓團友搞不清楚價格。發佈前用一個小習慣收尾：全文搜尋一次「{」，確認沒有任何佔位符殘留，再按發佈。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "Copy the structure, not the sentences: three swaps that make a template yours",
+        "p": "Hundreds of people can use the same template, so pasting it verbatim is the fastest way to look like a bot. Keep the skeleton and replace the flesh: first, swap the subject for your own real situation — if the template says 'office life' but you run a group buy, rewrite it around your group buy. Second, replace every number with a real one — details like 'revised the draft 5 times' only work if they actually happened to you; invented numbers read as fake. Third, rewrite the closing question into one you genuinely want answered, not a canned line. Same skeleton plus your own details equals your own original post."
+      },
+      {
+        "h": "Pick the right category: the wrong category means the wrong tone",
+        "p": "The swipe file has three categories for three very different jobs. Pick 'Threads viral' when you want replies: lead with a conflict or counter-intuitive take and end with an open question people cannot resist answering. Pick 'group-buy bestsellers' when you want sales: the price comparison and the closing countdown are the core — without them it is just pretty filler. Pick 'IG cozy life' when you want atmosphere: the words should read like a description of a photo, and layout matters as much as wording. Decide the goal first — replies, sales, or vibe — then pick the category; do not grab whichever template looks nice."
+      },
+      {
+        "h": "The four-question pre-post checklist: pass it before you hit publish",
+        "p": "After pasting a template and swapping in your details, ask four questions before publishing. One: can a stranger understand the point in the first three seconds? If not, rewrite the opening. Two: is the closing question one you actually want answered? A lazy 'what do you think?' is worse than no question. Three: are the numbers, prices, and stock counts real? One caught fake number costs you the account's trust. Four: are there any leftover brace placeholders like {original price}? Search the whole post for '{' to confirm. After publishing, stay in the comments for the first 30 minutes and reply to every comment — that is how early engagement gets built."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Will posting a copied template hurt my reach?",
+        "a": "Platforms penalize duplicate content, not templates. If dozens of people post the same template word for word at the same time, the algorithm may treat it as low-quality repetition. But once you swap in your own subject, numbers, and closing question, the structure may be similar while the content is genuinely yours — that is normal creation. The worst move is changing nothing, typos included: that risks both reduced distribution and lost trust when readers notice."
+      },
+      {
+        "q": "Does Threads have a character limit? Will the templates exceed it?",
+        "a": "A single Threads post allows up to 500 characters; anything longer must be split into a thread. The swipe-file templates all fit within the limit, but once you expand the story with your own details it is easy to go over, so check with this site's character counter before publishing. If you are over, cut adjectives and repeated examples first — never cut the opening hook or the closing question, because those two drive replies."
+      },
+      {
+        "q": "Can I exaggerate prices or discounts in group-buy copy?",
+        "a": "No. Listing a fake original price or a discount you never offered is false advertising: in Taiwan it can draw a Fair Trade Commission penalty under the Fair Trade Act, and buyers can demand returns or compensation. Only state real selling prices and real discounts, keep screenshots as proof, and calculate 'you save' as the actual difference between the original price and the group price — never estimate by feel. When in doubt, write conservatively rather than promising something you cannot deliver."
+      },
+      {
+        "q": "Do I need to remove placeholders like {original price} from the templates?",
+        "a": "Yes — replace every placeholder with your real information before posting. The braces mark spots where your own details go; publishing with them still in place tells everyone the post was copied, and leaves group members confused about the price. Finish with a small habit: search the whole post for '{' to confirm no placeholder remains, then hit publish."
+      }
+    ]
   },
   "localize": {
     "nameZh": "台灣用語與法規避雷器",
