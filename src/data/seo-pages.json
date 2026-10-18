@@ -1117,7 +1117,71 @@
     "titleZh": "台灣用語與法規避雷器｜大陸用語轉正統繁體・衛福部廣告法規防罰鍰｜字研所 TextLab",
     "descriptionZh": "一鍵將大陸用語（質量、視頻、立馬等）轉為 100% 正統台灣繁體語感，同時自動掃描衛福部食品/化粧品廣告法規違規詞，替換合法詞省下 4 萬罰單。",
     "titleEn": "Taiwan Voice & Ad Legal Sanitizer | Localize Copy & Compliance | TextLab",
-    "descriptionEn": "Clean mainland buzzwords into natural Taiwanese phrasing and detect illegal advertising claim terms to avoid regulatory fines."
+    "descriptionEn": "Clean mainland buzzwords into natural Taiwanese phrasing and detect illegal advertising claim terms to avoid regulatory fines.",
+    "guideZh": [
+      {
+        "h": "支語從哪裡漏進來的：ChatGPT、小紅書、剪映字幕是三大來源",
+        "p": "文案裡的大陸用語多半不是故意寫的，而是從三個地方漏進來的：ChatGPT 草稿（訓練語料以簡體為主）、小紅書抄來的爆款文、剪映自動字幕。這些來源都會把「視頻、質量、屏幕」直接留在文案裡，台灣觀眾一看就出戲，品牌帳號還會被留言糾正。本工具內建 31 個常見大陸用語對照，一鍵換成台灣慣用說法：視頻→影片、質量→品質、立馬→立刻、鏈接→連結、軟件→軟體、屏幕→螢幕、信息→訊息、項目→專案、外賣→外送、盒飯→便當、充電寶→行動電源、U盤→隨身碟、雙肩包→後背包、衛衣→帽T、親們→各位、種草→被燒到、拔草→退坑、走心→用心、給力→罩、網紅→KOL。貼上文案，儀表板先顯示抓到幾處，再一鍵轉換。"
+      },
+      {
+        "h": "廣告法規避雷：11 個高風險詞，一句話最高罰 500 萬",
+        "p": "食品廣告依食品安全衛生管理法第 28 條：不實誇張處 4 萬–400 萬罰鍰，宣稱醫療效能處 60 萬–500 萬罰鍰；化粧品依化粧品衛生安全管理法不得宣稱醫療效能；「保證見效」類絕對化承諾涉及公平交易法第 21 條；「根治」類療效宣稱涉及醫療法第 84 條。本工具掃描 11 個常見高風險詞並自動換成合法說法：排毒→促進新陳代謝、瘦身→維持窈窕體態、減肥→輕盈順暢、燃脂→活力代謝、消炎→舒緩修護、抗敏→穩定敏弱膚況、生髮→強韌髮根、保證見效→眾多好評熱烈推薦、消除疲勞→精神旺盛、根治→全面溫和調理、美白淡斑→勻亮暗沉。團購文、直播腳本、KOL 合作 brief 都算廣告，一樣要掃。"
+      },
+      {
+        "h": "發文前 30 秒檢查流程：貼上→看儀表板→一鍵轉換→人工再讀一次",
+        "p": "①貼上文案（ChatGPT 草稿、小紅書抄來的、團購文都行）；②看上方兩格儀表板：大陸用語幾處、違規風險幾處；③按一鍵轉換，複製合規文案；④人工再讀一次：工具只掃文字不掃圖片，圖上文字、限動字幕要另外檢查；同音異義與語境要自己判斷（例如「質量」在物理文章裡是正確用法）；保健食品、醫美這類高風險產品，正式投放前建議再給法務或專業人士看一次。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "支語轉換和簡轉繁有什麼不一樣？",
+        "a": "簡轉繁只換字形——「視頻」轉完還是「視頻」，只是繁體字；支語轉換換的是用詞習慣，「視頻→影片、質量→品質、鏈接→連結」。而且本工具同時掃描廣告法規違規詞，簡轉繁工具不會做這件事。兩件事都要做：先簡轉繁，再做支語＋法規檢查。"
+      },
+      {
+        "q": "工具轉完就保證不會被罰嗎？",
+        "a": "不保證。本工具是發文前的第一道篩檢，掃描內建的 31 個常見大陸用語與 11 個高風險法規詞；法規認定看的是整段文案的整體脈絡與主管機關判斷，不是單一詞彙有沒有出現。保健食品、醫美、藥品相關文案，正式投放前建議再給法務或專業人士確認；文案最終責任在刊登者。"
+      },
+      {
+        "q": "哪些文案最需要先掃一次？",
+        "a": "食品與保健食品、化粧品與保養品、團購帶貨文、直播腳本、KOL 合作 brief——特別是寫了「效果承諾」的句子（瘦了、排毒、見效、根治）。另外，從 ChatGPT 或小紅書抄來的爆款文案最容易混進支語，貼到台灣帳號前先掃一次。"
+      },
+      {
+        "q": "大陸用語一定要改嗎？有些詞台灣人也常用。",
+        "a": "看場景。對台灣受眾的公開文案、品牌帳號建議改——被留言糾正一次，信任就扣一次分；私人聊天、引用原文、討論用語本身時不用改。工具的角色是幫你「看見」文案裡有哪些大陸用語與風險詞，改不改由你決定，不是一律封殺。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "Where mainland phrasing sneaks in: ChatGPT drafts, Xiaohongshu copy, auto subtitles",
+        "p": "Mainland terms in your copy usually aren't written on purpose — they leak in from three places: ChatGPT drafts (trained mostly on Simplified-Chinese corpora), viral Xiaohongshu posts, and auto-generated subtitles. All three leave 視頻, 質量, and 屏幕 sitting in your copy. Taiwanese readers notice instantly, and brand accounts get called out in the comments. This tool maps 31 common mainland terms to Taiwanese usage in one click: 視頻→影片 (video), 質量→品質 (quality), 立馬→立刻 (right away), 鏈接→連結 (link), 軟件→軟體 (software), 屏幕→螢幕 (screen), 信息→訊息 (message), 項目→專案 (project), 外賣→外送 (delivery), 盒飯→便當 (bento), 充電寶→行動電源 (power bank), U盤→隨身碟 (USB drive), 雙肩包→後背包 (backpack), 衛衣→帽T (hoodie), 親們→各位 (everyone), 種草→被燒到 (sold on it), 拔草→退坑 (un-sold), 走心→用心 (heartfelt), 給力→罩 (awesome), 網紅→KOL. Paste your copy, check the dashboard count, then convert."
+      },
+      {
+        "h": "Ad-law minefield: 11 high-risk claims, fines up to NT$5 million",
+        "p": "Under Taiwan's Food Safety Act §28, misleading food ads draw NT$40,000–4,000,000 in fines, and ads claiming medical efficacy draw NT$600,000–5,000,000. Cosmetics may not claim medical efficacy under the Cosmetic Hygiene and Safety Act; absolute guarantees like 保證見效 implicate the Fair Trade Act §21; cure claims like 根治 implicate the Medical Care Act §84. The tool scans 11 common high-risk terms and swaps in compliant phrasing: 排毒→促進新陳代謝 (support metabolism), 瘦身→維持窈窕體態 (stay in shape), 減肥→輕盈順暢, 燃脂→活力代謝, 消炎→舒緩修護 (soothe and repair), 抗敏→穩定敏弱膚況, 生髮→強韌髮根 (stronger roots), 保證見效→眾多好評熱烈推薦 (widely praised), 消除疲勞→精神旺盛, 根治→全面溫和調理, 美白淡斑→勻亮暗沉 (brighten dullness). Group-buy copy, livestream scripts, and KOL briefs all count as advertising — scan them too."
+      },
+      {
+        "h": "The 30-second pre-post check: paste, dashboard, convert, human re-read",
+        "p": "① Paste your draft — a ChatGPT draft, borrowed Xiaohongshu copy, or group-buy post all work. ② Read the two dashboard tiles: how many mainland terms, how many legal risks. ③ Convert and copy the compliant version. ④ Re-read it once yourself: the tool scans text, not images, so check on-image text and Story subtitles separately; judge homonyms and context yourself (質量 is correct in a physics article); for high-risk categories like supplements or medical beauty, get a legal or professional review before paid placement."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "How is this different from Simplified-to-Traditional conversion?",
+        "a": "Simplified-to-Traditional only changes glyphs — 視頻 stays 視頻, just in Traditional characters. This tool changes word choice: 視頻→影片, 質量→品質, 鏈接→連結. It also scans for illegal ad claims, which converters never do. Do both: convert characters first, then run the phrasing and legal check."
+      },
+      {
+        "q": "Does converted copy guarantee no fines?",
+        "a": "No. This is a first-pass screen over 31 mainland terms and 11 high-risk claim terms. Regulators judge the whole copy in context, not single words. For supplements, medical-beauty, or drug-adjacent copy, get legal or professional review before paid placement; the advertiser bears final responsibility."
+      },
+      {
+        "q": "Which copy needs scanning most?",
+        "a": "Food and supplements, cosmetics and skincare, group-buy sales copy, livestream scripts, and KOL briefs — especially any sentence promising an outcome (slimmer, detox, guaranteed results, cure). Copy borrowed from ChatGPT or Xiaohongshu is the most likely to carry mainland phrasing; scan before posting to a Taiwan audience."
+      },
+      {
+        "q": "Must every mainland term be changed? Some are common in Taiwan too.",
+        "a": "It depends on context. For public copy aimed at a Taiwan audience, change them — one callout in the comments costs trust. In private chat, quoted sources, or when discussing the terms themselves, leave them. The tool shows you what is in your copy; you decide what to change."
+      }
+    ]
   },
   "blank-id": {
     "nameZh": "空白ID產生器",
