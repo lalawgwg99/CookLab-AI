@@ -1230,6 +1230,14 @@
       {
         "h": "Make an invisible name in 3 steps",
         "p": "1. Choose a length (1–12 characters, 4–8 works well). 2. Pick a recipe — the Universal recipe has the widest compatibility, the Mixed recipe interleaves several blank characters to beat platform filters. 3. Hit generate, copy, and paste into your game's nickname field. If the game rejects it, switch recipes or shorten the length and try again."
+      },
+      {
+        "h": "Why your blank name gets rejected — and how to fix it",
+        "p": "Games update their name filters all the time, so a recipe that works today can fail after the next update. When a name is rejected: (1) switch recipes — try Universal (U+3164), then Paragraph (U+2800), then Zero-width (U+200B), and finally Mixed, which interleaves four blank characters and is the best fallback when single characters get blocked; (2) change the length — this tool generates 1–12 characters, and some games require a 2–3 character minimum; (3) verify first with the paste-test box and the code-point preview, so you know the characters really copied before you spend a rename card or in-game diamonds on the change."
+      },
+      {
+        "h": "Which games accept invisible names? What players report",
+        "p": "Player communities report that Hangul Filler (U+3164) is the most widely accepted invisible character — used for blank names in Free Fire, PUBG Mobile, Roblox, Fortnite and Discord — while Braille Blank (U+2800) is reported as reliable in PUBG/BGMI, and Zero-width space (U+200B) works on Discord but is rejected by several games. Filters change with every update, so no single character works forever: generate with a different recipe in this tool and test until one passes."
       }
     ],
     "faqEn": [
@@ -1244,6 +1252,10 @@
       {
         "q": "Can using an invisible name get me banned?",
         "a": "Blank characters are plain Unicode symbols, not hacks or mods, and most games treat them as normal nicknames. Some tournaments require readable names, so switch back to a normal name before competitive events."
+      },
+      {
+        "q": "Why does my invisible name show as a box (□) on some devices?",
+        "a": "That box means the device's font has no glyph for the character — it is a font fallback, not a broken name. Switch to a recipe with wider font support: Hangul Filler (U+3164, the Universal recipe) renders correctly on the widest range of phones."
       }
     ]
   },
