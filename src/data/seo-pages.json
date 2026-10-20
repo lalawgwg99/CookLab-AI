@@ -1326,6 +1326,18 @@
       {
         "h": "適合用在哪？",
         "p": "萬聖節貼文、迷因圖配文、恐怖遊戲暱稱、Discord 群組嚇朋友。不建議用在正式文件，對方可能看不懂。"
+      },
+      {
+        "h": "強度選用心法：想貼得出去，先從「輕微」開始",
+        "p": "三個強度（輕微／中度／重度）差的不只是嚇人程度，還有「貼得出去」的成功率。X（Twitter）等平台會過濾疊太多組合符號的文字，強度開太高可能整段被擋或被還原成普通字。實戰心法：IG 自介、Threads 貼文、遊戲暱稱一律先用「輕微」或「中度」測試，貼得出去再調高；「重度」留給萬聖節海報、迷因圖這種一次性的嚇人場合。不滿意可以按「換一種」重新隨機組合。"
+      },
+      {
+        "h": "貼上後被裁掉或變方框？先貼到目標 App 預覽",
+        "p": "同一段恐怖文字，在你的手機和朋友的手機上可能長得不一樣：Android、iOS、Windows 各自的文字渲染引擎處理疊加符號的方式不同，溢出上下行的量也不同。貼到 IG 自介或限動時，超出格子的部分會被直接裁掉——解決方法永遠是「降強度重貼」，不要反向加碼。如果看到方框 □，代表那支手機的字型缺了某些組合符號，通常是舊裝置，換輕微強度或換台新手機看就正常了。"
+      },
+      {
+        "h": "搜尋冷知識：恐怖文字會被當成亂碼",
+        "p": "把恐怖文字貼到 LINE 群組或記事本之後，用普通關鍵字搜尋是找不到它的——搜尋引擎和 App 內搜尋認不出組合符號底下的原字，會把它當成亂碼處理。所以：重要資訊（地址、價格、聯絡方式、約定時間）永遠用普通字寫，恐怖文字只負責嚇人；檔案名也不要用恐怖文字，某些系統會拒絕儲存。想把被「詛咒」的文字還原？做一次 Unicode 正規化、去掉組合符號區段的字元，原字就會回來。"
       }
     ],
     "faqZh": [
@@ -1336,6 +1348,18 @@
       {
         "q": "會影響無障礙閱讀嗎？",
         "a": "會。螢幕報讀軟體會把每個組合符號都念出來，視障朋友會聽到一堆雜音，所以只適合裝飾娛樂用途。"
+      },
+      {
+        "q": "貼到 IG、Threads、X 會不會被擋掉？",
+        "a": "大部分情況貼得上去。X（Twitter）對組合符號數量最敏感，強度開太高可能被過濾或還原；IG、Threads 通常能貼，但重度強度超出自介格子時會被裁掉。建議一律先用「輕微」或「中度」在目標 App 預覽，確認顯示正常再用。重要資訊不要只用恐怖文字寫。"
+      },
+      {
+        "q": "為什麼同一段文字在我的手機和朋友手機上看起來不一樣？",
+        "a": "這是正常的。Android、iOS、Windows 的文字渲染引擎疊加組合符號的方式各不相同，同樣的文字在不同裝置上溢出的高度、裁掉的位置都會有差異。想讓所有人看到差不多的樣子，就用「輕微」或「中度」，重度強度的差異會被放大。"
+      },
+      {
+        "q": "恐怖文字可以用搜尋找到嗎？",
+        "a": "不行。用普通關鍵字搜尋時，搜尋引擎和 App 內搜尋都認不出組合符號底下的原字，會把它當亂碼。所以貼在群組裡的恐怖文字，別人用搜尋是找不到的；寫在貼文裡也不會被當成關鍵字收錄。只拿它做裝飾，別指望它被搜到。"
       }
     ],
     "guideEn": [
@@ -1346,12 +1370,28 @@
       {
         "h": "What are the intensity levels?",
         "p": "Light adds subtle corruption, Medium looks properly eerie, Heavy is barely readable. Hit shuffle to re-roll the combination."
+      },
+      {
+        "h": "Platform playbook: start at Light if you need it to post",
+        "p": "The three intensity levels aren't just about scariness — they decide whether your text survives. X (Twitter) is famous for filtering text with too many combining marks, and heavy glitch may get stripped or flattened back to plain text. Play it safe: bios, Threads posts and game names should start at Light or Medium, preview them in the target app, and only then dial up. Save Heavy for one-off scares like Halloween posters and memes. Hit shuffle to re-roll the combination if you don't like the look."
+      },
+      {
+        "h": "Clipped or boxed? Troubleshoot before you panic",
+        "p": "The same glitch string can look different on your phone and your friend's: Android, iOS and Windows each render stacked marks their own way, and the amount of overflow differs. If Instagram crops the top or bottom of your bio, the fix is always to lower the intensity and repost — never raise it. Seeing boxes □ means the device's fonts are missing some combining marks (usually an old phone); switch to Light or view it on a newer device."
       }
     ],
     "faqEn": [
       {
         "q": "Will it display on phones?",
         "a": "Most modern phones render combining marks fine. On very old devices heavy glitch may break — preview in your target app first."
+      },
+      {
+        "q": "Can people search for glitch text?",
+        "a": "No. Search engines and in-app search can't match the base words under the combining marks, so a zalgo string reads as gibberish to them. Glitch text pasted in a chat can't be found with a normal keyword search, and it won't be indexed as keywords in posts. Use it for decoration only."
+      },
+      {
+        "q": "Can screen readers read glitch text?",
+        "a": "No. Screen readers announce every combining mark one by one, so visually impaired readers hear a wall of noise instead of your message. Keep addresses, prices, contact details and anything important in plain text — glitch text is decoration, not communication."
       }
     ]
   },
