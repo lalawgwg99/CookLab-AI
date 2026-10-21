@@ -1278,6 +1278,18 @@
       {
         "h": "Hashtag 怎麼算？",
         "p": "只計算 # 開頭的詞，例如「#美食」算一個，單獨一個 # 不算。建議 Hashtag 放在留言或文末，不要塞在內文影響閱讀。"
+      },
+      {
+        "h": "超過 125 字會被摺疊：第一行決定生死",
+        "p": "IG 貼文上限 2200 字，但動態牆只顯示前約 125 字，後面全被「…更多」藏起來。所以最重要的鉤子、關鍵數字、行動呼籲都要擠進前兩行：把「限時 3 天」「最後 10 名」放開頭，不要放結尾。寫完用計數器數到 125，確認「更多」之前出現的是不是你最想讓路人看到的話。想系統性練開頭，可以參考爆款 Hook 產生器的開頭公式。"
+      },
+      {
+        "h": "Threads 500 字陷阱：Emoji 和中文會吃掉你的額度",
+        "p": "Threads 官方 API 文件是按 UTF-8 位元組計算字數（一個 Emoji 佔 4 個位元組），不是照你眼睛看到的「幾個字」算；App 端實際怎麼算還可能跟 API 不一樣。實務原則：文中 Emoji 多、或字數接近 500 時，至少留一成緩衝（450 字左右就當上限），否則發出去被退件最麻煩。貼文前先把全文貼進計數器看總字數，超過 450 就先刪。"
+      },
+      {
+        "h": "一稿三發：Threads 500／IG 2200／X 280 的裁剪流程",
+        "p": "同一個消息要發三個平台時，先寫完整版（IG 的 2200 字夠你講故事），再往下裁：Threads 版砍到 450 字內，長列表改成「詳細放留言」；X 版壓到 280 字內，只留一句話加連結。刪的順序是：例子先刪、形容詞次之，核心訊息和連結最後才動。每一版裁完都用計數器驗一次，不要憑感覺。"
       }
     ],
     "faqZh": [
@@ -1288,6 +1300,22 @@
       {
         "q": "超過 IG 上限會怎樣？",
         "a": "IG 貼文超過 2200 字會無法發布；自介超過 150 字會被截掉。發文前先用計數器檢查，比被退件重打更省時間。"
+      },
+      {
+        "q": "為什麼字數明明沒超，貼到 IG 卻發不出去？",
+        "a": "最常見的兇手是看不見的字元：從網頁複製來的零寬空格（U+200B）、不斷行空格會被平台計入字數，但肉眼看不到。另一個可能是全形符號被當成多個字元計算。解法：把文字貼進計數器，逐段刪除測試是哪一段出問題；或先用空白文字工具把可疑字元清掉再重貼。"
+      },
+      {
+        "q": "Emoji 到底算幾個字？",
+        "a": "在這個計數器裡，一個 Emoji 算一個字元；但各平台算法不同：Threads 官方文件以位元組計算，一個 Emoji 佔 4 個位元組，實際吃掉的額度比看起來多。IG 自介只有 150 字，放兩三個 Emoji 就少掉好幾個字的位置，排版時把 Emoji 當成「佔位大戶」來規劃。"
+      },
+      {
+        "q": "Hashtag 放內文跟放留言，效果一樣嗎？",
+        "a": "字數計算上：30 個上限是以「單篇貼文」為單位，內文加留言合併計算，放哪裡都佔額度。閱讀體驗上：塞在內文會打斷句子，放在文末或第一則留言比較乾淨。計數器只算你貼進來的文字，記得把留言那一則也一起算進去。"
+      },
+      {
+        "q": "IG 自介 150 字不夠寫怎麼辦？",
+        "a": "自介 150 字是硬上限，寫不下就用四行公式：第一行你是誰、第二行你提供什麼、第三行證明（數字或經歷）、第四行動呼籲。連結放在專屬的連結欄位，不佔自介字數，不要把網址塞進文字裡。更完整的排版心法可以看 Bio 排版工具的指南。"
       }
     ],
     "guideEn": [
@@ -1298,12 +1326,32 @@
       {
         "h": "What are Instagram's limits?",
         "p": "IG posts: 2200 chars (folds after 125 in feed), IG bio: 150 chars, hashtags: 30 per post. Threads posts: 500 chars."
+      },
+      {
+        "h": "The 125-character fold: your first line decides everything",
+        "p": "IG captions allow 2200 characters, but the feed shows only about the first 125 before \"…more\" hides the rest. Front-load your hook, key numbers and call-to-action into the first two lines — put \"3 days only\" or \"last 10 spots\" up top, not at the end. Paste into the counter, count to 125, and check what a scroller actually sees."
+      },
+      {
+        "h": "Threads' 500-character trap: emoji and CJK eat your budget",
+        "p": "Threads' official API docs count post length in UTF-8 bytes — one emoji costs 4 bytes — not in the characters you see; the app itself may count differently again. Rule of thumb: if your post is emoji-heavy or near the limit, treat ~450 as the real ceiling and keep a 10–15% buffer, or it gets rejected at publish time. Check the total in the counter before posting."
       }
     ],
     "faqEn": [
       {
         "q": "How are hashtags counted?",
         "a": "Only words starting with # count, e.g. #food counts as one. A lone # does not count."
+      },
+      {
+        "q": "Why does my caption fail even though I'm under the limit?",
+        "a": "The usual culprit is invisible characters: zero-width spaces (U+200B) or non-breaking spaces copied from web pages count toward the limit but can't be seen. Fix: paste your text into the counter and delete section by section to find the offender, or strip suspicious characters with the blank-text cleaner on the blank page."
+      },
+      {
+        "q": "How many characters is one emoji?",
+        "a": "In this counter, one emoji is one character — but platforms disagree. Threads' official docs count in bytes, where one emoji costs 4 bytes, so emoji-heavy posts burn through the 500 budget faster than they look. Treat emoji as space-hungry when laying out a tight bio."
+      },
+      {
+        "q": "Do hashtags in comments count toward the 30-hashtag limit?",
+        "a": "The 30-hashtag cap applies per post, combining caption and comments — wherever you put them, they eat the quota. Hashtags stuffed mid-caption also break up your sentences, so put them at the end or in the first comment for cleaner reading. The counter only counts what you paste, so include the comment text too."
       }
     ]
   },
