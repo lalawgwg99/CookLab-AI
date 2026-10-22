@@ -1462,6 +1462,14 @@
       {
         "h": "適合用在哪？",
         "p": "遊戲暱稱、IG / Threads 簡介、留言裝可愛、朋友生日祝福。因為是純文字，各平台顯示都沒問題。"
+      },
+      {
+        "h": "長名字該用哪種模式？",
+        "p": "「每字舉手」會讓每個字都多出 2 個符號：3 字的暱稱會從 3 個字元變成 9 個。2–4 字的短暱稱用每字舉手最可愛；5 字以上、簽名檔或生日祝福這種長句子，改用「整句擁抱」——只在頭尾各加一隻手，整句只多 2 個字元，不會爆掉字數上限。"
+      },
+      {
+        "h": "空格會被手包起來嗎？",
+        "p": "不會。工具會保留空格原樣，只有真正的文字才會長出手。例如「加油 你好」會變成「୧加୨୧油୨ ୧你୨୧好୨」，中間的空格還在，方便你排版斷句。"
       }
     ],
     "faqZh": [
@@ -1472,6 +1480,14 @@
       {
         "q": "跟韓國原版一樣嗎？",
         "a": "不一樣。韓國原版 팔다리 글씨是把韓文字母換成埃及象形文字，只支援韓文；這是專為中文設計的版本。"
+      },
+      {
+        "q": "貼到遊戲暱稱變成方框 □ 怎麼辦？",
+        "a": "୧ ୨ 屬於 Oriya 文區塊，手機和電腦的系統字型大多支援，但有些遊戲的內建字型沒有這個區塊，就會顯示方框。解法：先改用「整句擁抱」，把手臂從每字一對降到整句一對；或者先把結果貼到該遊戲的聊天欄測試，確認顯示正常再改名——遊戲改名多半要花錢，先測試比較保險。"
+      },
+      {
+        "q": "為什麼字數一下就爆了？",
+        "a": "平台算的是「字元數」不是「字數」：୧加油୨ 其實是 4 個字元；每字舉手的「加油」會變成 ୧加୨୧油୨，共 6 個字元。IG 簡介上限 150 字元、遊戲暱稱多半只有 8–12 字元，字數吃緊時就用「整句擁抱」。"
       }
     ],
     "guideEn": [
@@ -1482,12 +1498,32 @@
       {
         "h": "Per-char or whole sentence?",
         "p": "Per-char arms suit short nicknames; hugging the whole sentence suits longer lines and signatures."
+      },
+      {
+        "h": "Per-char or whole sentence for long names?",
+        "p": "Per-char arms add 2 symbols per character: a 3-character name becomes 9 code points. Use per-char for short 2–4 character nicknames where cuteness matters; use whole-sentence hug for anything longer — it adds only 2 code points total, so you won't blow past character limits."
+      },
+      {
+        "h": "What happens to spaces?",
+        "p": "Spaces are left alone — only real characters grow arms. \"Fighting go\" becomes \"୧F୨୧i୨୧g୨୧h୨୧t୨୧i୨୧n୨୧g୨ ୧g୨୧o୨\", keeping the space so you can still break lines naturally."
       }
     ],
     "faqEn": [
       {
         "q": "Will ୧ ୨ display everywhere?",
         "a": "Yes — they are long-used kaomoji arms with near-universal device support."
+      },
+      {
+        "q": "Shows as boxes □ in my game?",
+        "a": "୧ ୨ live in the Oriya Unicode block. Phones and computers render them fine, but some games ship with minimal fonts that lack this block. Fix: switch to whole-sentence hug (one pair of arms instead of one per character), or paste the result into that game's chat box first to test before spending money on a rename."
+      },
+      {
+        "q": "Why did I hit the character limit so fast?",
+        "a": "Platforms count code points, not words: ୧加油୨ is 4 characters, and per-char \"加油\" becomes ୧加୨୧油୨ — 6 code points. IG bios cap at 150 characters and most game names allow only 8–12, so use whole-sentence hug when space is tight."
+      },
+      {
+        "q": "Does it work with English letters?",
+        "a": "Yes. Each letter gets its own arms: \"Hi\" becomes ୧H୨୧i୨. Short English words and names look great in per-char mode."
       }
     ]
   }
