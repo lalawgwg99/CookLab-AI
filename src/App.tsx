@@ -5,10 +5,11 @@ import { popularSymbols, symbolGroups, totalSymbolCount } from "./data/symbols";
 import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 import seoPages from "./data/seo-pages.json";
 import { bopomofoOf, BPMF_COUNT } from "./data/bopomofo";
+import { convertSubtitles, detectSubtitles } from "./lib/subtitleTw";
 import AiPolish from "./components/AiPolish";
 import FloatingAssistant from "./components/FloatingAssistant";
 
-type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "blank" | "blank-id" | "nickname" | "counter" | "horror" | "limbs";
+type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "subtitle-tw" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "blank" | "blank-id" | "nickname" | "counter" | "horror" | "limbs";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -39,6 +40,7 @@ const tools: Tool[] = [
   { id: "layout", name: "社群排版換行", nameEn: "Social Formatter", short: "IG／Threads 換行與縮排", shortEn: "Instagram / Threads spacing", icon: "¶" },
   { id: "swipe", name: "實戰爆款文案庫", nameEn: "Viral Swipe File", short: "破萬讚模板直接抄", shortEn: "Proven viral templates", icon: "📚" },
   { id: "localize", name: "台灣用語與法規避雷", nameEn: "Taiwan Voice Sanitizer", short: "去大陸支語・衛福部防罰", shortEn: "Localize phrasing & safety", icon: "🇹🇼" },
+  { id: "subtitle-tw", name: "字幕台灣用語校正", nameEn: "Subtitle Taiwanizer", short: "剪映 SRT 轉台灣繁體＋用語", shortEn: "SRT to Taiwan Traditional", icon: "幕" },
   { id: "deal", name: "電商開團爆單機", nameEn: "Group-Buy Deal Studio", short: "團購帶貨與防客訴規格", shortEn: "High-converting sales copy", icon: "🛒" },
   { id: "ai", name: "AI 發文助手", nameEn: "AI Post Assistant", short: "智慧生成社群貼文", shortEn: "Social copywriting assistant", icon: "🪄" },
   { id: "hook", name: "爆款 Hook 產生器", nameEn: "Viral Hook Studio", short: "吸引點擊的開頭第一句", shortEn: "Caption hook formulas", icon: "⚡" },
@@ -473,7 +475,8 @@ function ToolIntro({ tool, language }: { tool: Tool; language: Language }) {
 const RELATED_TOOLS: Record<string, string[]> = {
   layout: ["ai", "hook", "blank", "counter"],
   swipe: ["hook", "ai", "deal"],
-  localize: ["ai", "layout"],
+  localize: ["ai", "layout", "subtitle-tw"],
+  "subtitle-tw": ["localize", "layout", "counter"],
   deal: ["ai", "hook", "swipe"],
   ai: ["hook", "layout", "localize"],
   hook: ["ai", "title", "swipe"],
@@ -2241,6 +2244,154 @@ function LocalizeTool({ copied, setCopied, language }: { copied: string; setCopi
   );
 }
 
+function downloadTextFile(filename: string, content: string) {
+  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function SubtitleTwTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const sample = [
+    "1",
+    "00:00:01,000 --> 00:00:04,000",
+    "这个视频的质量很好，大家都在网络上讨论",
+    "",
+    "2",
+    "00:00:04,500 --> 00:00:08,000",
+    "软件下载链接在简介，记得点赞关注",
+  ].join("\n");
+  const [input, setInput] = useState(sample);
+  const [output, setOutput] = useState("");
+  const [lastResult, setLastResult] = useState<ReturnType<typeof convertSubtitles> | null>(null);
+
+  const detection = useMemo(() => detectSubtitles(input), [input]);
+
+  const handleConvert = () => {
+    if (!input.trim()) {
+      setOutput("");
+      setLastResult(null);
+      return;
+    }
+    const result = convertSubtitles(input);
+    setLastResult(result);
+    setOutput(result.output);
+  };
+
+  const handleFile = (file: File | undefined) => {
+    if (!file) return;
+    file.text().then((text) => {
+      setInput(text);
+      setOutput("");
+      setLastResult(null);
+    }).catch(() => undefined);
+  };
+
+  const ext = lastResult?.isSrt ? "srt" : "txt";
+
+  return (
+    <div className="tool-card">
+      <div className="tool-header">
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span className="tool-icon">幕</span>
+          <div>
+            <h2>{t(language, "字幕台灣用語校正器", "Subtitle Taiwanizer")}</h2>
+            <p>{t(language, "貼上剪映／CapCut 匯出的 SRT 字幕或一般文字：簡體字轉台灣繁體、中國用語換成台灣用法（視頻→影片、信息→資訊、網絡→網路）。SRT 時間碼與序號不更動，處理都在你的瀏覽器完成，不上傳。", "Paste SRT subtitles or plain text: Simplified converts to Taiwan Traditional, mainland terms become Taiwanese usage. SRT timecodes stay untouched. Everything runs in your browser.")}</p>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "10px", margin: "14px 0" }}>
+        <div style={{ padding: "12px 14px", borderRadius: "10px", background: "var(--canvas)", border: "1px solid var(--line)" }}>
+          <span style={{ fontSize: "11px", color: "var(--muted)", display: "block" }}>{t(language, "偵測格式", "Format")}</span>
+          <strong style={{ fontSize: "16px", color: "var(--ink)" }}>{detection.isSrt ? "SRT 字幕" : t(language, "純文字", "Plain text")}</strong>
+        </div>
+        <div style={{ padding: "12px 14px", borderRadius: "10px", background: detection.termKinds > 0 ? "#fef3c7" : "var(--canvas)", border: "1px solid var(--line)" }}>
+          <span style={{ fontSize: "11px", color: "var(--muted)", display: "block" }}>{t(language, "待校正用語", "Terms to fix")}</span>
+          <strong style={{ fontSize: "16px", color: detection.termKinds > 0 ? "#d97706" : "var(--ink)" }}>{detection.termKinds} {t(language, "種", "kinds")}</strong>
+        </div>
+        <div style={{ padding: "12px 14px", borderRadius: "10px", background: detection.simpChars > 0 ? "#fef3c7" : "var(--canvas)", border: "1px solid var(--line)" }}>
+          <span style={{ fontSize: "11px", color: "var(--muted)", display: "block" }}>{t(language, "簡體字", "Simplified chars")}</span>
+          <strong style={{ fontSize: "16px", color: detection.simpChars > 0 ? "#d97706" : "var(--ink)" }}>{t(language, `約 ${detection.simpChars} 字`, `~${detection.simpChars}`)}</strong>
+        </div>
+      </div>
+
+      <div style={{ marginBottom: "12px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px", gap: "8px", flexWrap: "wrap" }}>
+          <label style={{ fontSize: "12px", color: "var(--ink)", fontWeight: 600 }}>
+            {t(language, "貼上字幕內容，或開啟 .srt／.txt 檔案：", "Paste subtitle content, or open an .srt / .txt file:")}
+          </label>
+          <label style={{ fontSize: "12px", fontWeight: 650, color: "var(--purple)", cursor: "pointer" }}>
+            {t(language, "開啟檔案", "Open file")}
+            <input type="file" accept=".srt,.txt,text/plain" style={{ display: "none" }} onChange={(e) => handleFile(e.target.files?.[0])} />
+          </label>
+        </div>
+        <textarea
+          rows={9}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder={t(language, "貼上 SRT 字幕或文字…", "Paste SRT subtitles or text...")}
+          style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.6, fontFamily: "ui-monospace, monospace" }}
+        />
+      </div>
+
+      <button
+        onClick={handleConvert}
+        style={{ width: "100%", padding: "12px", borderRadius: "10px", background: "var(--purple)", color: "#fff", border: "none", fontSize: "14px", fontWeight: 650, cursor: "pointer", marginBottom: "16px" }}
+      >
+        {t(language, "開始校正", "Convert")}
+      </button>
+
+      {!!output && lastResult && (
+        <div style={{ padding: "14px", borderRadius: "12px", background: "var(--paper)", border: "1px solid var(--line)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", flexWrap: "wrap", gap: "6px" }}>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: "#16a34a" }}>
+              {t(language, `校正完成：用語 ${lastResult.totalTermFixes} 處、簡轉繁 ${lastResult.charFixes} 字${lastResult.isSrt ? `、時間碼 ${lastResult.timecodeLines} 行原樣保留` : ""}`, `Done: ${lastResult.totalTermFixes} term fixes, ${lastResult.charFixes} chars converted${lastResult.isSrt ? `, ${lastResult.timecodeLines} timecode lines untouched` : ""}`)}
+            </span>
+          </div>
+          {lastResult.hits.length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "10px" }}>
+              {lastResult.hits.map((h) => (
+                <span key={h.from} style={{ fontSize: "11px", padding: "3px 8px", borderRadius: "999px", background: "var(--canvas)", border: "1px solid var(--line)", color: "var(--ink)" }}>
+                  {h.from} → {h.to} ×{h.count}
+                </span>
+              ))}
+            </div>
+          )}
+          <textarea
+            readOnly
+            rows={9}
+            value={output}
+            style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.6, fontFamily: "ui-monospace, monospace" }}
+          />
+          <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", marginTop: "10px", flexWrap: "wrap" }}>
+            <button
+              onClick={() => copyText(output, setCopied, "subtitle-tw")}
+              style={{ padding: "8px 18px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", fontWeight: 650, cursor: "pointer" }}
+            >
+              {copied === output ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製結果", "Copy result")}
+            </button>
+            <button
+              onClick={() => downloadTextFile(`subtitle-tw.${ext}`, output)}
+              style={{ padding: "8px 18px", borderRadius: "8px", border: "none", background: "var(--purple)", color: "#fff", fontSize: "13px", fontWeight: 650, cursor: "pointer" }}
+            >
+              {t(language, `下載 .${ext}`, `Download .${ext}`)}
+            </button>
+          </div>
+          <p style={{ fontSize: "11px", color: "var(--muted)", marginTop: "10px", lineHeight: 1.6 }}>
+            {t(language, "說明：一簡多繁採最常見對應；「質量」在物理語境是正確用法，科學類字幕套用後請再檢查一次。人名與專有名詞也建議掃過一眼。", "Note: one-to-many Simplified mappings use the most common form. Check names and special contexts (e.g. 質量 in physics) after converting.")}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AIPostTool({ copied, setCopied, language, selectTool }: { copied: string; setCopied: (v: string) => void; language: Language; selectTool?: (id: ToolId) => void }) {
   const tones = [
     {
@@ -3164,7 +3315,7 @@ export default function App() {
             {
               title: "常用排版與文案",
               titleEn: "LAYOUT & COPYWRITING",
-              ids: ["layout", "swipe", "localize", "deal"] as ToolId[]
+              ids: ["layout", "swipe", "localize", "subtitle-tw", "deal"] as ToolId[]
             },
             {
               title: "社群創作靈感",
@@ -3227,6 +3378,7 @@ export default function App() {
           {active === "layout" && <LayoutTool {...toolProps} />}
           {active === "swipe" && <SwipeFileTool {...toolProps} />}
           {active === "localize" && <LocalizeTool {...toolProps} />}
+          {active === "subtitle-tw" && <SubtitleTwTool {...toolProps} />}
           {active === "deal" && <DealTool {...toolProps} />}
           {active === "ai" && <AIPostTool {...toolProps} selectTool={selectTool} />}
           {active === "hook" && <HookTool {...toolProps} />}

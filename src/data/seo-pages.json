@@ -1183,6 +1183,78 @@
       }
     ]
   },
+  "subtitle-tw": {
+    "nameZh": "字幕台灣用語校正器",
+    "nameEn": "Subtitle Taiwanizer",
+    "titleZh": "字幕台灣用語校正器｜剪映 SRT 簡體轉台灣繁體・時間碼不變｜字研所 TextLab",
+    "descriptionZh": "貼上剪映／CapCut 匯出的 SRT 字幕，簡體字轉台灣繁體、中國用語換台灣用法（視頻→影片、信息→資訊、網絡→網路），時間碼與序號原樣保留，可匯出 .srt 繼續剪輯。",
+    "titleEn": "Subtitle Taiwanizer | SRT Simplified to Taiwan Traditional, Timecodes Intact | TextLab",
+    "descriptionEn": "Paste SRT subtitles from CapCut: Simplified Chinese converts to Taiwan Traditional and mainland terms become Taiwanese usage, with timecodes untouched. Export as .srt.",
+    "guideZh": [
+      {
+        "h": "剪映字幕為什麼是簡體＋中國用語",
+        "p": "剪映／CapCut 的語音辨識預設輸出簡體中文，用詞也是中國用法：視頻、軟件、質量、信息、網絡。台灣觀眾對這些詞很敏感，留言常直接指出來。本工具處理兩層：先換詞組（視頻→影片、軟件→軟體、信息→資訊、網絡→網路、屏幕→螢幕、登錄→登入、默認→預設、點讚→按讚），再逐字轉換簡體字，詞典與字表都針對字幕語境校對過，歧義字（如「發、干、后、里」）用詞組規則處理，不會把「皇后」「占卜」「摩托車」改壞。"
+      },
+      {
+        "h": "SRT 時間碼不會被動到",
+        "p": "工具逐行判讀 SRT 結構：含「-->」的時間碼行與純數字序號行直接原樣輸出，只有字幕文字行會被轉換。轉完顯示時間碼保留行數，可以對照原始檔檢查。匯出維持 .srt 格式與原始換行，丟回剪映、Premiere 或 YouTube 字幕上傳都能直接用。"
+      },
+      {
+        "h": "純文字也能校正",
+        "p": "輸入不含時間碼時，工具自動切為純文字模式：同樣做用語校正與簡轉繁，匯出為 .txt。適合先把口播稿、逐字稿校正完，再進剪輯軟體上字幕。"
+      },
+      {
+        "h": "轉完請檢查這三類",
+        "p": "第一，人名與專有名詞：一簡多繁採最常見對應，人名用字可能不同。第二，「質量」在物理語境（質量與能量）是台灣正確用法，科普類字幕請改回。第三，中國網路流行語（如「種草」）已對應台灣說法，但語氣是否符合你的頻道風格，還是要自己讀過一次。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "轉換會不會改到 SRT 時間碼，害字幕對不上？",
+        "a": "不會。時間碼行（含 --> 的行）與序號行逐行原樣保留，工具也以測試案例逐行驗證過。轉換結果會顯示保留的時間碼行數。"
+      },
+      {
+        "q": "支援哪些字幕來源？",
+        "a": "剪映、CapCut 匯出的 SRT 直接貼上或開檔都行；YouTube 下載的 SRT 也適用。純文字（口播稿、逐字稿）會自動以純文字模式處理，匯出 .txt。VTT 格式目前不在支援範圍。"
+      },
+      {
+        "q": "簡體字都能轉對嗎？",
+        "a": "內建字表收錄 480 多組常見簡繁對應，詞組詞典 100 多條。一簡多繁的字（如「发」可能是發或髮）用詞組規則先處理頭髮、理髮、髮型等常見組合，其餘採最常見對應。人名、專有名詞建議轉完再掃一次。"
+      },
+      {
+        "q": "字幕內容會被上傳嗎？",
+        "a": "不會。轉換全部在你的瀏覽器裡完成，字幕文字不離開你的裝置。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "Why CapCut subtitles come out in Simplified Chinese",
+        "p": "CapCut's speech recognition defaults to Simplified Chinese with mainland phrasing (視頻, 軟件, 信息, 網絡). This tool fixes both layers: phrase-level swaps to Taiwanese usage (視頻→影片, 信息→資訊, 網絡→網路, 登錄→登入, 默認→預設) and a character table of 480+ common Simplified-to-Traditional mappings tuned for subtitle text. Ambiguous characters are handled by phrase rules so words like 皇后 or 摩托車 are never corrupted."
+      },
+      {
+        "h": "Timecodes are never touched",
+        "p": "The parser works line by line: lines containing '-->' and numeric index lines pass through byte-for-byte. Only subtitle text lines are converted. The result shows how many timecode lines were preserved, and the export keeps the original .srt structure for CapCut, Premiere or YouTube."
+      },
+      {
+        "h": "Plain text mode",
+        "p": "If the input has no timecodes, the tool switches to plain-text mode automatically and exports .txt — handy for cleaning a script before it ever becomes subtitles."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Will conversion break my SRT timing?",
+        "a": "No. Timecode lines and index lines are preserved verbatim, line by line, and the result reports how many timecode lines were kept."
+      },
+      {
+        "q": "Which subtitle sources are supported?",
+        "a": "SRT files from CapCut/Jianying or YouTube work by paste or file open. Plain text is handled in text mode. VTT is not supported yet."
+      },
+      {
+        "q": "Is my subtitle text uploaded anywhere?",
+        "a": "No. All conversion runs locally in your browser."
+      }
+    ]
+  },
   "blank-id": {
     "nameZh": "空白ID產生器",
     "nameEn": "Invisible Name Generator",
