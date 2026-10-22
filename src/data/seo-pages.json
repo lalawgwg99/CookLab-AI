@@ -1323,6 +1323,74 @@
       }
     ]
   },
+  "transcript": {
+    "nameZh": "逐字稿清理器",
+    "nameEn": "Transcript Cleaner",
+    "titleZh": "逐字稿清理器｜去贅詞・自動分段・補標點（規則式）｜字研所 TextLab",
+    "descriptionZh": "貼上語音轉文字的逐字稿，規則式移除嗯、呃、就是說、停頓的那個與重複語氣詞，長句補逗號、自動分段、段末補句號。有語意的詞保留不動，介面明載規則式清理的限制。",
+    "titleEn": "Transcript Cleaner | Remove Fillers, Split Paragraphs, Add Punctuation | TextLab",
+    "descriptionEn": "Paste a speech-to-text transcript to remove fillers, add commas to long clauses, split paragraphs and complete sentence endings — rule-based, with its limits stated upfront.",
+    "guideZh": [
+      {
+        "h": "逐字稿為什麼不能直接用",
+        "p": "Whisper、剪映、手機語音輸入產出的逐字稿有三個共同問題：贅詞（嗯、那個、就是說）密度高、標點常常缺失或亂給、整段不分段黏成一坨。這種稿子直接拿去當會議紀錄、訪談整理或影片文案，讀的人要在腦中自己斷句，編輯要先花半小時清稿。本工具處理的就是這三件事，而且只做這三件：清贅詞、補基本標點、切段落，不改寫、不摘要、不動你的原意。"
+      },
+      {
+        "h": "贅詞怎麼判定：只清標點旁邊的",
+        "p": "「那個」是最容易誤殺的詞：「那個報告我看過了」的那個是指示詞，刪掉句子就壞了；「嗯，那個，我想說」的那個是停頓填充，刪掉完全不影響。本工具的判定規則是位置：只有出現在句首、逗號前後的那個（後面緊跟逗號）才清除，那個＋名詞一律保留。嗯和呃同理，只清獨立出現在標點旁邊的；「他嗯了一聲」的嗯有語意，保留。「我就是說你錯了」的就是說有主詞結構，保留；標點相鄰的「，就是說，」才清。"
+      },
+      {
+        "h": "分段與補標點的規則",
+        "p": "段末沒有結束標點就補句號；超過 30 字的子句若完全沒有逗號，會在第一個轉折詞（但是、所以、然後、因為等）前面補一個逗號，一個子句最多補一處，避免把句子切碎。分段以句子為單位累積，段落超過約 150 字、或新句子以轉折詞開頭且前段已超過 60 字，就另起一段。你原本用空行分好的段落會被保留，不會被合併。"
+      },
+      {
+        "h": "規則式的限制（先講清楚）",
+        "p": "這套清理沒有 AI、不理解語意，所以：同音字錯誤（在、再不分）修不了；該斷句沒斷、斷錯位置的情況一定存在；專有名詞、人名、數字的對錯它無法判斷。它的定位是把一份原始稿從「不能看」清到「可以開始校對」，省下的是機械清理的時間。訪談紀錄、會議決議、要投稿或公開的文字，清完之後請務必人工通讀一次。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "會不會把有意義的句子刪掉？",
+        "a": "規則採保守設計：所有刪除都要求贅詞出現在標點相鄰位置且後接逗號或標點。實測案例包括「那個報告我看過了」（保留）、「他嗯了一聲就走了」（保留）、「對對對，就是這樣」（只收斂重複的對）。清理結果會列出每種贅詞刪了幾處，你可以對照原文檢查。"
+      },
+      {
+        "q": "跟丟給 AI 整理有什麼不同？",
+        "a": "AI 整理會改寫句子、可能增刪內容，長稿還要分段貼；本工具只做規則能確定的事：刪明確贅詞、補標點、分段，原句一字不改、全文一次處理。需要改寫潤稿的場合用 AI，需要忠實原稿的第一輪清理用這個。"
+      },
+      {
+        "q": "英文逐字稿可以用嗎？",
+        "a": "不建議。贅詞、分段與補標點規則都是針對中文設計的，英文稿只會被切段與補句號，效果有限。"
+      },
+      {
+        "q": "文字會被上傳嗎？",
+        "a": "不會。清理全部在你的瀏覽器裡用固定規則完成，沒有伺服器處理。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "Why raw transcripts are unusable",
+        "p": "Speech-to-text output has three recurring problems: dense fillers, missing or random punctuation, and no paragraph breaks. This tool handles exactly those three — removes fillers, adds basic punctuation, splits paragraphs — without rewriting or summarizing your words."
+      },
+      {
+        "h": "Fillers are judged by position",
+        "p": "The Chinese filler 那個 is also a demonstrative (that report), so deletion requires it to sit next to punctuation followed by a comma — the stalling kind. 那個 + noun is always kept; 嗯 inside a meaningful phrase is kept; only standalone fillers by punctuation are removed."
+      },
+      {
+        "h": "Stated limits",
+        "p": "Rule-based means no semantics: homophone errors stay, some breaks will be wrong, names and numbers can't be verified. It takes a raw transcript from unreadable to proofread-able — important documents still need a human pass."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Can it delete meaningful sentences?",
+        "a": "The rules are conservative: deletion only triggers for fillers adjacent to punctuation. The result lists exactly how many of each filler were removed so you can audit against the original."
+      },
+      {
+        "q": "Is my text uploaded?",
+        "a": "No. Everything runs locally in your browser with fixed rules."
+      }
+    ]
+  },
   "blank-id": {
     "nameZh": "空白ID產生器",
     "nameEn": "Invisible Name Generator",

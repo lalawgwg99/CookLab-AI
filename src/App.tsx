@@ -7,10 +7,11 @@ import seoPages from "./data/seo-pages.json";
 import { bopomofoOf, BPMF_COUNT } from "./data/bopomofo";
 import { convertSubtitles, detectSubtitles } from "./lib/subtitleTw";
 import { fixTypesetting } from "./lib/typeset";
+import { cleanTranscript } from "./lib/transcript";
 import AiPolish from "./components/AiPolish";
 import FloatingAssistant from "./components/FloatingAssistant";
 
-type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "subtitle-tw" | "typeset" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "blank" | "blank-id" | "nickname" | "counter" | "horror" | "limbs";
+type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "subtitle-tw" | "typeset" | "transcript" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "blank" | "blank-id" | "nickname" | "counter" | "horror" | "limbs";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -43,6 +44,7 @@ const tools: Tool[] = [
   { id: "localize", name: "台灣用語與法規避雷", nameEn: "Taiwan Voice Sanitizer", short: "去大陸支語・衛福部防罰", shortEn: "Localize phrasing & safety", icon: "🇹🇼" },
   { id: "subtitle-tw", name: "字幕台灣用語校正", nameEn: "Subtitle Taiwanizer", short: "剪映 SRT 轉台灣繁體＋用語", shortEn: "SRT to Taiwan Traditional", icon: "幕" },
   { id: "typeset", name: "中文排版自動校正", nameEn: "Chinese Typesetting Fixer", short: "中英空格・全形標點・清空白", shortEn: "CJK spacing & punctuation", icon: "排" },
+  { id: "transcript", name: "逐字稿清理器", nameEn: "Transcript Cleaner", short: "去贅詞・分段・補標點", shortEn: "Remove fillers & reflow", icon: "稿" },
   { id: "deal", name: "電商開團爆單機", nameEn: "Group-Buy Deal Studio", short: "團購帶貨與防客訴規格", shortEn: "High-converting sales copy", icon: "🛒" },
   { id: "ai", name: "AI 發文助手", nameEn: "AI Post Assistant", short: "智慧生成社群貼文", shortEn: "Social copywriting assistant", icon: "🪄" },
   { id: "hook", name: "爆款 Hook 產生器", nameEn: "Viral Hook Studio", short: "吸引點擊的開頭第一句", shortEn: "Caption hook formulas", icon: "⚡" },
@@ -479,7 +481,8 @@ const RELATED_TOOLS: Record<string, string[]> = {
   swipe: ["hook", "ai", "deal"],
   localize: ["ai", "layout", "subtitle-tw"],
   "subtitle-tw": ["localize", "typeset", "layout"],
-  typeset: ["layout", "subtitle-tw", "counter"],
+  typeset: ["layout", "subtitle-tw", "transcript"],
+  transcript: ["subtitle-tw", "typeset", "counter"],
   deal: ["ai", "hook", "swipe"],
   ai: ["hook", "layout", "localize"],
   hook: ["ai", "title", "swipe"],
@@ -2490,6 +2493,102 @@ function TypesetTool({ copied, setCopied, language }: { copied: string; setCopie
   );
 }
 
+function TranscriptTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const [input, setInput] = useState("嗯，那個，我先講一下今天的結論，就是說，嗯，這次活動報名人數比預期多很多，對對對，現場真的擠不下。那個，我們下次一定要先訂好報名上限，不然又會超過場地負荷。");
+  const [output, setOutput] = useState("");
+  const [lastResult, setLastResult] = useState<ReturnType<typeof cleanTranscript> | null>(null);
+
+  const handleConvert = () => {
+    if (!input.trim()) {
+      setOutput("");
+      setLastResult(null);
+      return;
+    }
+    const result = cleanTranscript(input);
+    setLastResult(result);
+    setOutput(result.output);
+  };
+
+  return (
+    <div className="tool-card">
+      <div className="tool-header">
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span className="tool-icon">稿</span>
+          <div>
+            <h2>{t(language, "逐字稿清理器", "Transcript Cleaner")}</h2>
+            <p>{t(language, "把語音轉文字的逐字稿做第一輪清理：移除標點旁邊的贅詞（嗯、呃、就是說、停頓的那個、重複的對對對），太長的句子補逗號，依長度和轉折詞分段，段末補句號。有語意的詞（那個報告、句尾的啊）不會動。處理都在你的瀏覽器完成。", "First-pass cleanup for speech-to-text transcripts: removes filler words next to punctuation, adds commas to overlong clauses, splits paragraphs, and completes sentence endings. Meaningful words stay. Runs entirely in your browser.")}</p>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ padding: "12px 14px", borderRadius: "10px", background: "#fef3c7", border: "1px solid var(--line)", margin: "14px 0" }}>
+        <span style={{ fontSize: "12px", color: "var(--ink)", lineHeight: 1.6 }}>
+          {t(language, "先說清楚：這是規則式清理，效果有限。贅詞只清標點相鄰、語意明確的那幾種，斷句也是照固定規則，重要稿件（訪談紀錄、會議紀錄、投稿）請務必再人工校對一次。", "Honest note: this is rule-based cleanup with clear limits. Only unambiguous fillers are removed and sentence breaks follow fixed rules — always proofread important transcripts yourself.")}
+        </span>
+      </div>
+
+      <div style={{ marginBottom: "12px" }}>
+        <label style={{ fontSize: "12px", color: "var(--ink)", fontWeight: 600, display: "block", marginBottom: "6px" }}>
+          {t(language, "貼上逐字稿（Whisper、剪映、手機語音輸入的輸出都行）：", "Paste your transcript (Whisper, CapCut, voice typing output):")}
+        </label>
+        <textarea
+          rows={8}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder={t(language, "貼上逐字稿…", "Paste transcript...")}
+          style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.6 }}
+        />
+      </div>
+
+      <button
+        onClick={handleConvert}
+        style={{ width: "100%", padding: "12px", borderRadius: "10px", background: "var(--purple)", color: "#fff", border: "none", fontSize: "14px", fontWeight: 650, cursor: "pointer", marginBottom: "16px" }}
+      >
+        {t(language, "開始清理", "Clean transcript")}
+      </button>
+
+      {!!output && lastResult && (
+        <div style={{ padding: "14px", borderRadius: "12px", background: "var(--paper)", border: "1px solid var(--line)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", flexWrap: "wrap", gap: "6px" }}>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: "#16a34a" }}>
+              {t(language, `清理完成：移除贅詞 ${lastResult.removedFillers} 處、補標點 ${lastResult.addedPunct} 處、共 ${lastResult.paragraphs} 段`, `Done: ${lastResult.removedFillers} fillers removed, ${lastResult.addedPunct} punctuation added, ${lastResult.paragraphs} paragraphs`)}
+            </span>
+          </div>
+          {lastResult.fillerBreakdown.length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "10px" }}>
+              {lastResult.fillerBreakdown.map((b) => (
+                <span key={b.word} style={{ fontSize: "11px", padding: "3px 8px", borderRadius: "999px", background: "var(--canvas)", border: "1px solid var(--line)", color: "var(--ink)" }}>
+                  {b.word} ×{b.count}
+                </span>
+              ))}
+            </div>
+          )}
+          <textarea
+            readOnly
+            rows={8}
+            value={output}
+            style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.6 }}
+          />
+          <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", marginTop: "10px", flexWrap: "wrap" }}>
+            <button
+              onClick={() => downloadTextFile("transcript-clean.txt", output)}
+              style={{ padding: "8px 18px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", fontWeight: 650, cursor: "pointer" }}
+            >
+              {t(language, "下載 .txt", "Download .txt")}
+            </button>
+            <button
+              onClick={() => copyText(output, setCopied, "transcript")}
+              style={{ padding: "8px 18px", borderRadius: "8px", border: "none", background: "var(--purple)", color: "#fff", fontSize: "13px", fontWeight: 650, cursor: "pointer" }}
+            >
+              {copied === output ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製結果", "Copy result")}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AIPostTool({ copied, setCopied, language, selectTool }: { copied: string; setCopied: (v: string) => void; language: Language; selectTool?: (id: ToolId) => void }) {
   const tones = [
     {
@@ -3413,7 +3512,7 @@ export default function App() {
             {
               title: "常用排版與文案",
               titleEn: "LAYOUT & COPYWRITING",
-              ids: ["layout", "swipe", "localize", "subtitle-tw", "typeset", "deal"] as ToolId[]
+              ids: ["layout", "swipe", "localize", "subtitle-tw", "typeset", "transcript", "deal"] as ToolId[]
             },
             {
               title: "社群創作靈感",
@@ -3478,6 +3577,7 @@ export default function App() {
           {active === "localize" && <LocalizeTool {...toolProps} />}
           {active === "subtitle-tw" && <SubtitleTwTool {...toolProps} />}
           {active === "typeset" && <TypesetTool {...toolProps} />}
+          {active === "transcript" && <TranscriptTool {...toolProps} />}
           {active === "deal" && <DealTool {...toolProps} />}
           {active === "ai" && <AIPostTool {...toolProps} selectTool={selectTool} />}
           {active === "hook" && <HookTool {...toolProps} />}
