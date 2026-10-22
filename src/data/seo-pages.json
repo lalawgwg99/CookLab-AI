@@ -1255,6 +1255,74 @@
       }
     ]
   },
+  "typeset": {
+    "nameZh": "中文排版自動校正",
+    "nameEn": "Chinese Typesetting Fixer",
+    "titleZh": "中文排版自動校正｜中英空格・半形標點轉全形・多餘空白清理｜字研所 TextLab",
+    "descriptionZh": "貼上文字，自動補上中文與英文、數字之間的空格，把中文語境的半形標點換成全形，清掉連續空白與多餘空行。程式碼、網址與英文句子受保護不誤改，並列出修正處數。",
+    "titleEn": "Chinese Typesetting Fixer | CJK Spacing & Full-Width Punctuation | TextLab",
+    "descriptionEn": "Paste Chinese text to add CJK–Latin spacing, convert half-width punctuation to full-width in Chinese context, and clean extra spaces and blank lines. Code, URLs and English sentences are protected.",
+    "guideZh": [
+      {
+        "h": "中英之間為什麼要加空格",
+        "p": "中文和英文字、數字直接黏在一起時，眼睛要在兩種字形系統之間硬切換，長段落讀起來明顯比較累。「使用Python寫程式」和「使用 Python 寫程式」的差別在短句不明顯，整篇報告、論文、部落格文章累積下來就是可讀性差距。這套規則源自 pangu（盤古）間距慣例，GitHub 上的 autocorrect 等開源工具也採同一套，本工具把它做成貼上就能用的網頁版，並逐處計數給你看。"
+      },
+      {
+        "h": "半形標點在中文句子裡為什麼刺眼",
+        "p": "中文句子裡混著 , . ? ! 這些半形標點，寬度只有全形的一半，視覺節奏會斷掉，交出去的報告、投稿、公文一看就知道沒整理。本工具只在前後文是中文時才轉換：句點前文是中文才換「。」，所以 3.14 的小數點、example.com 的網域、英文句子的句點都不會被動；冒號前文是數字（12:30）也保留。引號會配對換成「」，括號換成（）。"
+      },
+      {
+        "h": "程式碼和網址怎麼保護",
+        "p": "三種保護機制：反引號包住的行內程式碼整段跳過；縮排四格以上或 Tab 開頭的行視為程式碼行，不處理；``` 圍欄區塊整段保留。網址不需要保護也不會壞：網址內部的 . 與 : 前文都是英文字母，不符合轉換條件，中文側該補的空格與該轉的標點照常處理。"
+      },
+      {
+        "h": "空白清理的範圍",
+        "p": "連續兩個以上的半形空格收成一個，全形空格夾在中文之間直接移除、段落間三行以上的空行收成一行，行尾空白刪除，全形標點前後不留空格。英文單字之間的單一空格、數字小數點、程式碼縮排都不在清理範圍。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "會不會把英文文章改壞？",
+        "a": "不會。所有規則都要求前後文出現中文才觸發：純英文段落貼進來，輸出會和原文相同，修正處數為 0。測試案例包含完整英文句子、小數 3.14、網址與時間 12:30，都驗證不誤改。"
+      },
+      {
+        "q": "「第3名」會被加空格變成「第 3 名」嗎？",
+        "a": "會，這是 pangu 規則的標準行為（中文與數字之間一律加空格）。若你的文體不接受這種寫法，建議校正後全文搜尋「第 」再自行決定保留與否。"
+      },
+      {
+        "q": "程式碼貼進去會被改掉嗎？",
+        "a": "用反引號包住的行內程式碼、縮排四格以上的程式碼行、``` 圍欄區塊都會被跳過。沒有縮排又沒有反引號的程式碼片段，裡面的逗號若前後有中文仍可能被轉換，貼之前請先包好。"
+      },
+      {
+        "q": "文字會被上傳嗎？",
+        "a": "不會。校正全部在你的瀏覽器裡用固定規則完成，沒有 AI、沒有伺服器處理。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "Why spacing between Chinese and Latin text matters",
+        "p": "Chinese characters glued directly to Latin words or digits force the reader's eyes to switch scripts mid-line. The pangu spacing convention — a space between CJK and Latin/digits — is what open-source tools like autocorrect implement; this tool brings it to a paste-and-fix web page and counts every change it makes."
+      },
+      {
+        "h": "Punctuation conversion is context-gated",
+        "p": "Half-width , . ? ! convert to full-width only when surrounded by Chinese context. A period becomes 。 only after Chinese text, so decimals (3.14), domains (example.com) and English sentences are never touched; a colon after digits (12:30) stays as-is. Quotes are paired into 「」 and parentheses into （）."
+      },
+      {
+        "h": "Code and URL protection",
+        "p": "Inline code in backticks, lines indented 4+ spaces, and ``` fenced blocks are skipped entirely. URLs need no protection: their dots and colons follow Latin letters, which never trigger conversion."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Will it damage English text?",
+        "a": "No. Every rule requires Chinese context to trigger. Pure English input comes out identical with zero fixes."
+      },
+      {
+        "q": "Is my text uploaded?",
+        "a": "No. All rules run locally in your browser — no AI, no server."
+      }
+    ]
+  },
   "blank-id": {
     "nameZh": "空白ID產生器",
     "nameEn": "Invisible Name Generator",

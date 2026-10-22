@@ -6,10 +6,11 @@ import { allEmoji, emojiAliases, emojiCategories } from "./data/emoji";
 import seoPages from "./data/seo-pages.json";
 import { bopomofoOf, BPMF_COUNT } from "./data/bopomofo";
 import { convertSubtitles, detectSubtitles } from "./lib/subtitleTw";
+import { fixTypesetting } from "./lib/typeset";
 import AiPolish from "./components/AiPolish";
 import FloatingAssistant from "./components/FloatingAssistant";
 
-type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "subtitle-tw" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "blank" | "blank-id" | "nickname" | "counter" | "horror" | "limbs";
+type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "subtitle-tw" | "typeset" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "blank" | "blank-id" | "nickname" | "counter" | "horror" | "limbs";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -41,6 +42,7 @@ const tools: Tool[] = [
   { id: "swipe", name: "實戰爆款文案庫", nameEn: "Viral Swipe File", short: "破萬讚模板直接抄", shortEn: "Proven viral templates", icon: "📚" },
   { id: "localize", name: "台灣用語與法規避雷", nameEn: "Taiwan Voice Sanitizer", short: "去大陸支語・衛福部防罰", shortEn: "Localize phrasing & safety", icon: "🇹🇼" },
   { id: "subtitle-tw", name: "字幕台灣用語校正", nameEn: "Subtitle Taiwanizer", short: "剪映 SRT 轉台灣繁體＋用語", shortEn: "SRT to Taiwan Traditional", icon: "幕" },
+  { id: "typeset", name: "中文排版自動校正", nameEn: "Chinese Typesetting Fixer", short: "中英空格・全形標點・清空白", shortEn: "CJK spacing & punctuation", icon: "排" },
   { id: "deal", name: "電商開團爆單機", nameEn: "Group-Buy Deal Studio", short: "團購帶貨與防客訴規格", shortEn: "High-converting sales copy", icon: "🛒" },
   { id: "ai", name: "AI 發文助手", nameEn: "AI Post Assistant", short: "智慧生成社群貼文", shortEn: "Social copywriting assistant", icon: "🪄" },
   { id: "hook", name: "爆款 Hook 產生器", nameEn: "Viral Hook Studio", short: "吸引點擊的開頭第一句", shortEn: "Caption hook formulas", icon: "⚡" },
@@ -476,7 +478,8 @@ const RELATED_TOOLS: Record<string, string[]> = {
   layout: ["ai", "hook", "blank", "counter"],
   swipe: ["hook", "ai", "deal"],
   localize: ["ai", "layout", "subtitle-tw"],
-  "subtitle-tw": ["localize", "layout", "counter"],
+  "subtitle-tw": ["localize", "typeset", "layout"],
+  typeset: ["layout", "subtitle-tw", "counter"],
   deal: ["ai", "hook", "swipe"],
   ai: ["hook", "layout", "localize"],
   hook: ["ai", "title", "swipe"],
@@ -2392,6 +2395,101 @@ function SubtitleTwTool({ copied, setCopied, language }: { copied: string; setCo
   );
 }
 
+function TypesetTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const [input, setInput] = useState("使用Python和ChatGPT寫報告,真的很方便!價格是3.14萬元,12:30開會。\n他說\"先把API文件看完\",然後再討論...\n\n\n\n第二段   有很多  空格。");
+  const [output, setOutput] = useState("");
+  const [lastResult, setLastResult] = useState<ReturnType<typeof fixTypesetting> | null>(null);
+
+  const handleConvert = () => {
+    if (!input.trim()) {
+      setOutput("");
+      setLastResult(null);
+      return;
+    }
+    const result = fixTypesetting(input);
+    setLastResult(result);
+    setOutput(result.output);
+  };
+
+  return (
+    <div className="tool-card">
+      <div className="tool-header">
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span className="tool-icon">排</span>
+          <div>
+            <h2>{t(language, "中文排版自動校正", "Chinese Typesetting Fixer")}</h2>
+            <p>{t(language, "中文和英文、數字之間補空格，中文語境的半形標點換全形，連續空白與多餘空行清掉。反引號程式碼、縮排程式碼行、網址與英文句子不會被改動。處理都在你的瀏覽器完成。", "Adds spaces between Chinese and Latin/digits, converts half-width punctuation to full-width in Chinese context, and cleans extra spaces and blank lines. Code spans, URLs and English sentences are left alone. Runs entirely in your browser.")}</p>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginBottom: "12px" }}>
+        <label style={{ fontSize: "12px", color: "var(--ink)", fontWeight: 600, display: "block", marginBottom: "6px" }}>
+          {t(language, "貼上要校正的文字（論文、報告、部落格草稿都行）：", "Paste text to fix (papers, reports, blog drafts):")}
+        </label>
+        <textarea
+          rows={8}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder={t(language, "貼上文字…", "Paste text...")}
+          style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.6 }}
+        />
+      </div>
+
+      <button
+        onClick={handleConvert}
+        style={{ width: "100%", padding: "12px", borderRadius: "10px", background: "var(--purple)", color: "#fff", border: "none", fontSize: "14px", fontWeight: 650, cursor: "pointer", marginBottom: "16px" }}
+      >
+        {t(language, "開始校正", "Fix typesetting")}
+      </button>
+
+      {!!output && lastResult && (
+        <div style={{ padding: "14px", borderRadius: "12px", background: "var(--paper)", border: "1px solid var(--line)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", flexWrap: "wrap", gap: "6px" }}>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: "#16a34a" }}>
+              {lastResult.total > 0
+                ? t(language, `共修正 ${lastResult.total} 處`, `${lastResult.total} fixes`)
+                : t(language, "沒有需要修正的地方", "Nothing to fix")}
+            </span>
+          </div>
+          {lastResult.changes.length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "10px" }}>
+              {lastResult.changes.map((c) => (
+                <span key={c.rule} style={{ fontSize: "11px", padding: "3px 8px", borderRadius: "999px", background: "var(--canvas)", border: "1px solid var(--line)", color: "var(--ink)" }}>
+                  {c.rule} ×{c.count}
+                </span>
+              ))}
+            </div>
+          )}
+          <textarea
+            readOnly
+            rows={8}
+            value={output}
+            style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.6 }}
+          />
+          <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", marginTop: "10px", flexWrap: "wrap" }}>
+            <button
+              onClick={() => downloadTextFile("typeset.txt", output)}
+              style={{ padding: "8px 18px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", fontWeight: 650, cursor: "pointer" }}
+            >
+              {t(language, "下載 .txt", "Download .txt")}
+            </button>
+            <button
+              onClick={() => copyText(output, setCopied, "typeset")}
+              style={{ padding: "8px 18px", borderRadius: "8px", border: "none", background: "var(--purple)", color: "#fff", fontSize: "13px", fontWeight: 650, cursor: "pointer" }}
+            >
+              {copied === output ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製結果", "Copy result")}
+            </button>
+          </div>
+          <p style={{ fontSize: "11px", color: "var(--muted)", marginTop: "10px", lineHeight: 1.6 }}>
+            {t(language, "規則說明：句點只有在前文是中文時才轉「。」」，所以 3.14、example.com、英文句子裡的句點都不會動；冒號前文是數字（12:30）也不轉。程式碼請用反引號包住，或整行縮排四格以上，工具會跳過不處理。", "Rules: a period becomes 。 only after Chinese text, so 3.14, example.com and English sentences are safe. A colon after digits (12:30) is untouched. Wrap code in backticks or indent it 4+ spaces and it will be skipped.")}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AIPostTool({ copied, setCopied, language, selectTool }: { copied: string; setCopied: (v: string) => void; language: Language; selectTool?: (id: ToolId) => void }) {
   const tones = [
     {
@@ -3315,7 +3413,7 @@ export default function App() {
             {
               title: "常用排版與文案",
               titleEn: "LAYOUT & COPYWRITING",
-              ids: ["layout", "swipe", "localize", "subtitle-tw", "deal"] as ToolId[]
+              ids: ["layout", "swipe", "localize", "subtitle-tw", "typeset", "deal"] as ToolId[]
             },
             {
               title: "社群創作靈感",
@@ -3379,6 +3477,7 @@ export default function App() {
           {active === "swipe" && <SwipeFileTool {...toolProps} />}
           {active === "localize" && <LocalizeTool {...toolProps} />}
           {active === "subtitle-tw" && <SubtitleTwTool {...toolProps} />}
+          {active === "typeset" && <TypesetTool {...toolProps} />}
           {active === "deal" && <DealTool {...toolProps} />}
           {active === "ai" && <AIPostTool {...toolProps} selectTool={selectTool} />}
           {active === "hook" && <HookTool {...toolProps} />}
