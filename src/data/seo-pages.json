@@ -734,6 +734,14 @@
       {
         "h": "多音字與罕見字怎麼處理",
         "p": "多音字（如行、重、長、得）預設取最常用讀音，特殊讀音請手動微調；資料庫共收錄 44,354 個漢字，極罕見字若無收錄會保留原字顯示，並在按鈕旁統計提示未收錄字數。"
+      },
+      {
+        "h": "低年級注音學習單：老師家長三分鐘備課",
+        "p": "把課文貼進左側輸入框，右側 ruby 對照會逐字標出注音，先掃一遍多音字——行、重、長、得這類字一律取最常用讀音，正式教材務必人工校對一次。打開「字間空格」讓注音更好讀，再用「一鍵複製注音」把純注音文字貼去列印。單次上限 2000 字，長課文分段貼；動手前先看下方的未收錄字統計，罕見字會保留原字顯示。"
+      },
+      {
+        "h": "看著 ruby 念出來：親子共讀與華語學習",
+        "p": "右側的逐字注音對照本身就是一張朗讀卡：小孩或華語學習者看著字上方的注音符號開口念，家長在旁糾正聲調。學習階段請開著「聲調符號」，聲調是國語辨義的關鍵；讀熟之後再關掉聲調，做成純注音文考驗自己。輸入框下方的四個範例（早安，今天天氣真好！、台灣加油！等）點一下就能直接練習。"
       }
     ],
     "faqZh": [
@@ -762,6 +770,14 @@
       {
         "h": "Polyphonic and rare characters",
         "p": "Characters with multiple readings (like 行, 重, 長) use the most common reading — adjust manually for special cases. The database covers 44,354 characters; rare characters without a reading are kept as-is and counted next to the copy button."
+      },
+      {
+        "h": "Worksheets in minutes: a routine for teachers and parents",
+        "p": "Paste a passage on the left and scan the ruby annotations on the right character by character — polyphones like 行, 重 and 長 always use the most common reading, so proofread once before printing for class. Turn on Spacing for readability, then copy the plain bopomofo text for printing. Each paste handles up to 2,000 characters; split longer texts. Check the uncovered-character count first: rare characters are kept as-is."
+      },
+      {
+        "h": "Read it aloud: ruby annotations as a pronunciation guide",
+        "p": "The character-by-character ruby display doubles as a read-aloud sheet: kids or Mandarin learners read the bopomofo above each character while a parent or teacher corrects the tones. Keep Tone marks ON while learning — tones carry meaning in Mandarin. Once fluent, switch tones off and quiz yourself with toneless bopomofo text. The four built-in sample sentences under the input box are ready-made practice material."
       }
     ],
     "faqEn": [
