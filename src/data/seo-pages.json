@@ -374,6 +374,18 @@
       {
         "h": "符號貼上後變成方框 □ 或問號怎麼辦？",
         "p": "這表示該裝置的字型沒有收錄這個字元（缺字），不是複製失敗。解法是換一個更常見的符號：愛心、星星、箭頭、音符這類基本符號幾乎所有手機和電腦都支援；越冷門的符號，缺字機率越高。"
+      },
+      {
+        "h": "限動、貼文的「分隔線」怎麼挑才好看？",
+        "p": "本站「線條與分隔」「分隔線與邊框」兩個分類就是為這個準備的。限動文字上下適合短裝飾線（例如 ⋆ ˚｡⋆），貼文段落之間適合長一點的虛線或波浪線。一個實用提醒：IG 自介只有 150 個字元，符號、空格、換行全部都算，一條裝飾線可能佔掉十幾個字元——建議在本頁先把整段拼好、數好字數，再一次複製貼上，避免貼上後才發現被截斷。"
+      },
+      {
+        "h": "數字圈圈 ①②③：鍵盤打不出來的序號這樣拿",
+        "p": "① 到 ⑳ 是 Unicode 的「帶圈數字」（U+2460 起），鍵盤本來就打不出來，複製貼上是最正規的用法。本站「數字與序號」分類一次收齊 ①–⑳、羅馬數字 Ⅰ–Ⅹ 和上標 ⁰–⁹，適合教學步驟、排行榜、注意事項的編號。進階用法：在 Word 用「插入 → 符號」也能找到它們；但要注意超過 20 就沒有帶圈數字了，長清單改用一般數字。另外螢幕閱讀器可能會把 ① 念成「circled one」，無障礙考量上重要資訊別只靠圈圈數字傳達。"
+      },
+      {
+        "h": "箭頭＋項目符號：讓 Threads 分點清單更好讀",
+        "p": "Threads 貼文沒有粗體也沒有項目符號功能，想分點只能靠符號排版。本站「箭頭符號」「項目與標記」「打勾與叉號」三個分類就是解法：每行開頭放 ➤、✓ 或 •，一眼就是清單。實戰建議：一行只講一個重點、清單別超過五點、同一篇貼文只用一種開頭符號；混用全形半形符號容易在手機上對不齊，選定一種風格就貫徹到底。"
       }
     ],
     "faqZh": [
@@ -396,6 +408,22 @@
       {
         "q": "複製特殊符號要錢嗎？需要註冊嗎？",
         "a": "完全免費，不需註冊。點一下即複製，全程在瀏覽器端完成，不會上傳任何內容。"
+      },
+      {
+        "q": "特殊符號貼到 LINE，會跑版或變很小嗎？",
+        "a": "LINE 完整支援 Unicode，貼上不會亂碼。但 LINE 的字型把某些裝飾符號畫得比較小，重要資訊（時間、地點、金額）建議用 ★ → ✓ 這類筆畫清楚的常用符號。不確定的組合，先傳給自己或只開一個人的測試群組看一眼再發。"
+      },
+      {
+        "q": "①②③ 貼到 Word、Excel、PPT 能正常顯示和列印嗎？",
+        "a": "可以。Office 全系列完整支援 Unicode，顯示、列印、轉 PDF 都正常。唯一要注意的是排序：Excel 會把 ① 當成文字而不是數字，沒辦法直接按 1、2、3 的數值排序；需要排序的表格，建議另外留一欄純數字。"
+      },
+      {
+        "q": "分隔線裝飾會吃掉 IG 自介的字數嗎？",
+        "a": "會。IG 自介上限 150 個字元，符號、空格、換行全部都算在內，一條裝飾分隔線可能佔掉十幾個字元。排版時先把整段在本頁拼好，數好字數再貼；如果字數爆了，優先刪裝飾線、保留聯絡資訊。"
+      },
+      {
+        "q": "為什麼同一個符號，在朋友手機上看起來不太一樣？",
+        "a": "特殊符號是純文字，長相由每支手機、每台電腦的字型決定，iOS、Android、Windows 畫出來的細節本來就略有不同——但它永遠是文字，不會像 emoji 那樣變色或變成圖片。想要所有人看到完全一樣的樣子，只有截圖成圖片一途。"
       }
     ],
     "guideEn": [
@@ -414,6 +442,18 @@
       {
         "h": "A symbol pastes as a box □ or question mark. What now?",
         "p": "That means the device's font doesn't include the character (a missing glyph), not a copy failure. Switch to a more common symbol: hearts, stars, arrows, and music notes render on virtually every phone and computer, while obscure symbols are more likely to break."
+      },
+      {
+        "h": "How do I pick divider lines for Stories and posts?",
+        "p": "The \"Lines & Dividers\" and \"Dividers & Borders\" categories exist for exactly this. Short decorative lines (like ⋆ ˚｡⋆) suit the top and bottom of Story text, while longer dashes or wavy lines suit breaks between post paragraphs. One practical note: an Instagram bio allows only 150 characters, and symbols, spaces, and line breaks all count — a single decorative divider can eat a dozen or more characters. Compose the whole block here, count the characters, then copy and paste in one go."
+      },
+      {
+        "h": "Circled numbers ①②③: grabbing sequence numbers your keyboard can't type",
+        "p": "① through ⑳ are Unicode \"enclosed numbers\" (starting at U+2460) — no keyboard types them, so copy-paste is the proper way to use them. The \"Numbers & Sequences\" category collects ①–⑳, Roman numerals Ⅰ–Ⅹ, and superscripts ⁰–⁹ in one place, perfect for tutorial steps, rankings, and numbered notes. Power users: Word's Insert → Symbol menu has them too. Note there is no circled number past 20, so long lists should use plain digits. Also, screen readers may announce ① as \"circled one\" — don't rely on circled numbers alone for critical information."
+      },
+      {
+        "h": "Arrows + bullets: making Threads lists scannable",
+        "p": "Threads posts have no bold or bullet-list formatting, so symbols are your only layout tool. The \"Arrows\", \"Bullets & Markers\", and \"Checks & Crosses\" categories are the answer: start each line with ➤, ✓, or • and it reads as a list instantly. Practical tips: one point per line, no more than five items, and stick to a single opener symbol per post. Mixing full-width and half-width symbols can misalign on phones — pick one style and commit."
       }
     ],
     "faqEn": [
@@ -436,6 +476,22 @@
       {
         "q": "Is copying symbols free? Do I need an account?",
         "a": "Completely free, no sign-up required. One click copies the symbol, everything runs in your browser, and nothing is uploaded."
+      },
+      {
+        "q": "Will symbols break the layout or shrink in LINE?",
+        "a": "LINE fully supports Unicode, so pasting won't garble anything. But LINE's font renders some decorative symbols quite small — use clear, common symbols like ★ → ✓ for critical info (time, place, price). Unsure about a combo? Send it to yourself or a one-person test group first."
+      },
+      {
+        "q": "Do ①②③ display and print correctly in Word, Excel, and PowerPoint?",
+        "a": "Yes. Office apps fully support Unicode, so display, printing, and PDF export all work. The one caveat is sorting: Excel treats ① as text, not as the number 1, so you can't sort by numeric value — keep a separate plain-number column if you need to sort."
+      },
+      {
+        "q": "Do decorative dividers eat into my Instagram bio character limit?",
+        "a": "Yes. The bio cap is 150 characters, and symbols, spaces, and line breaks all count — one decorative divider can take a dozen or more. Compose the full block here, check the count, then paste; if you're over, cut dividers first and keep your contact info."
+      },
+      {
+        "q": "Why does the same symbol look slightly different on my friend's phone?",
+        "a": "Symbols are plain text — their exact look comes from each device's font, so iOS, Android, and Windows render slightly different details. But a symbol is always text: it never gets recolored or converted into an image the way emoji do. The only way everyone sees pixel-identical results is a screenshot."
       }
     ]
   },
