@@ -1482,6 +1482,18 @@
       {
         "h": "各遊戲的暱稱規則差很大",
         "p": "傳說對決、Free Fire、王者榮耀等手遊對特殊字元的過濾規則都不同，而且官方可能隨時更新。有的遊戲接受諺文字元但擋零寬字元，有的反過來。建議一次產生多個版本，用不同配方輪流測試，把能成功改名的那個留下來。"
+      },
+      {
+        "h": "四種配方怎麼選：通用、段落、零寬、混合",
+        "p": "產生器提供四種配方，選錯配方是被擋下最常見的原因。通用配方（U+3164 諺文填充字元）相容性最廣，先從它開始，適合傳說對決、Free Fire 與 IG 暱稱；段落配方（U+2800 點字空格）佔位較寬，適合想要長一點留白或貼到聊天室；零寬配方（U+200B 零寬空格）完全不佔寬度，適合過濾嚴格的平台；四種都試過仍被擋，就換混合配方——它把 U+3164、U+2800、U+200B、U+2060 交錯組合，單一字元規則擋不下來。"
+      },
+      {
+        "h": "長度怎麼選：2、4、8、12 個字元的差別",
+        "p": "長度預設是 4 個字元，也可以按 2、4、8、12 快速切換，或用加減號在 1 到 12 之間微調。字元太少時，有些平台會把名字判定為「空白」而退件；字元太多則可能吃掉暱稱的字數上限，或在某些遊戲裡顯示異常。建議先用預設 4 個試，被擋下再往 8 或 12 調，或改換混合配方；每次產生後，下方的碼點預覽會列出每個字元的編號，確認無誤再複製。"
+      },
+      {
+        "h": "改名可能要花錢：先免費試好再確認",
+        "p": "很多遊戲的改名不是免費的，常常要花改名卡或遊戲內貨幣，改下去就不能反悔。正確流程是：先在產生器的貼上測試區貼一次，看到字元數正確顯示，再到遊戲的改名欄位貼上、看預覽——預覽看起來是空白才按確認。如果預覽就顯示方框或被退件，退回來換配方重試，不要先花掉改名卡。改名前也先想好一個正常備用名字，萬一平台日後清掉隱形字元，還能立刻換回來。"
       }
     ],
     "faqZh": [
@@ -1500,6 +1512,18 @@
       {
         "q": "手機和電腦都能用嗎？",
         "a": "可以。這個工具是網頁版，手機、平板、電腦的瀏覽器都能開；產生後長按（或右鍵）複製，貼到遊戲的暱稱輸入框即可。"
+      },
+      {
+        "q": "複製後看起來是空的，怎麼確認真的有複製到？",
+        "a": "把複製的內容貼到產生器下方的貼上測試區：如果字元數顯示大於 0、貼上時游標有往右移動，就代表字元確實存在，只是眼睛看不見。產生畫面下方的碼點預覽（例如 U+3164）也會列出每個字元的編號，可以逐一核對。"
+      },
+      {
+        "q": "為什麼朋友看我的名字是空白，我自己看卻有方框？",
+        "a": "方框是裝置字體缺字元時的替代顯示，代表你的裝置沒有這個隱形字元的字型，不代表名字壞了。換成相容性最廣的通用配方（U+3164）通常就能解決；也可以先貼到另一台手機或電腦確認，別人的裝置顯示正常就沒問題。"
+      },
+      {
+        "q": "空白名字可以跟正常文字混搭嗎？",
+        "a": "可以，但要分兩步做：產生器只產出純空白字元，先複製貼到遊戲欄位，再接著輸入你想顯示的文字，就能做出「前面空白、後面有字」的效果。不過有些遊戲會自動把開頭的空白截掉，貼好後務必看預覽確認，截掉了就改放文字後面或只用純空白名字。"
       }
     ],
     "guideEn": [
@@ -1518,6 +1542,18 @@
       {
         "h": "Which games accept invisible names? What players report",
         "p": "Player communities report that Hangul Filler (U+3164) is the most widely accepted invisible character — used for blank names in Free Fire, PUBG Mobile, Roblox, Fortnite and Discord — while Braille Blank (U+2800) is reported as reliable in PUBG/BGMI, and Zero-width space (U+200B) works on Discord but is rejected by several games. Filters change with every update, so no single character works forever: generate with a different recipe in this tool and test until one passes."
+      },
+      {
+        "h": "Which recipe should you pick? Universal, Paragraph, Zero-width, Mixed",
+        "p": "Picking the wrong recipe is the most common reason a blank name gets rejected. Start with the Universal recipe (U+3164 Hangul filler) — it has the widest compatibility and fits Arena of Valor, Free Fire and Instagram names. The Paragraph recipe (U+2800 Braille blank) takes up more width, good for a longer blank or chat messages. The Zero-width recipe (U+200B) takes no width at all, for platforms with strict filters. If all three fail, switch to Mixed: it interleaves U+3164, U+2800, U+200B and U+2060, so a rule blocking a single character cannot catch it."
+      },
+      {
+        "h": "What length should you choose? 2, 4, 8 or 12 characters",
+        "p": "The default length is 4 characters, with quick presets of 2, 4, 8 and 12, or a stepper to fine-tune anywhere from 1 to 12. Too few characters and some platforms treat the name as empty and reject it; too many and you may eat into the nickname character limit or see odd rendering in some games. Start with the default 4, and if it gets rejected, try 8 or 12, or switch to the Mixed recipe. The codepoint preview below the generated name lists every character so you can verify before copying."
+      },
+      {
+        "h": "Renames can cost money: test free before you confirm",
+        "p": "Many games charge a rename card or in-game currency for a name change, and there is no undo. The safe flow is: paste into the generator's paste-test box first and check the character count, then paste into the game's rename field and look at the preview — only confirm when the preview looks blank. If the preview shows boxes or gets rejected, go back and try another recipe instead of spending the rename card. Also prepare a normal backup name first, so you can switch back quickly if the platform ever cleans up invisible characters."
       }
     ],
     "faqEn": [
@@ -1536,6 +1572,18 @@
       {
         "q": "Why does my invisible name show as a box (□) on some devices?",
         "a": "That box means the device's font has no glyph for the character — it is a font fallback, not a broken name. Switch to a recipe with wider font support: Hangul Filler (U+3164, the Universal recipe) renders correctly on the widest range of phones."
+      },
+      {
+        "q": "I copied it but it looks empty — how do I know it actually copied?",
+        "a": "Paste it into the paste-test box below the generator: if the character count shows more than 0 and the cursor moves right when you paste, the characters are really there — they are just invisible. The codepoint preview under the generated name (for example U+3164) also lists every character so you can check them one by one."
+      },
+      {
+        "q": "Why do my friends see a blank name but I see a box?",
+        "a": "The box is a font fallback: your device lacks a glyph for that invisible character, which does not mean the name is broken. Switching to the most compatible Universal recipe (U+3164) usually fixes it. You can also paste it on another phone or computer to confirm — if it looks blank there, you are fine."
+      },
+      {
+        "q": "Can I mix a blank name with visible text?",
+        "a": "Yes, in two steps: the generator only outputs pure blank characters, so paste those into the game field first, then type the text you want to show after them for a blank-then-text effect. Note that some games trim leading blanks automatically, so always check the preview after pasting — if the blank got trimmed, put it after the text or use a pure blank name instead."
       }
     ]
   },
