@@ -874,6 +874,18 @@
       {
         "h": "IG 帳號名稱怎麼取才好被搜到",
         "p": "IG 帳號名稱（username）限 30 字，只能用英文字母、數字、底線和句點。花式字體雖然好看卻無法被搜尋，正確做法是：帳號名稱放可搜尋的英文＋關鍵字，顯示名稱（name）再用花式字體或中文暱稱，兩邊分工不打架。"
+      },
+      {
+        "h": "自己拼裝四格怎麼拼：開頭、名字前、名字後、結尾各留一格",
+        "p": "工具的「自己拼裝」模式有開頭、名字前、名字後、結尾四格，每格可選一個符號或留空（∅）。原則是先放名字，再決定要不要兩側對稱裝飾；四格全塞符號會又長又亂，通常只填名字前後兩格就夠好看。拼完先看預覽整體長度，太長就先把開頭或結尾那格清掉，別急著縮名字。"
+      },
+      {
+        "h": "遊戲、社群、公會三種用途先分流再取",
+        "p": "隨機產生前先選用途。遊戲：優先看字數上限與會不會缺字，選常見裝飾；社群：顯示名稱可以放花式字體，帳號名稱只能用英文字母、數字、底線和句點，兩邊要分開想；公會：先定一套固定格式，例如全員名字前都放同一個公會標記，成員名字再各取各的，組隊列表一眼就認得出是同隊。"
+      },
+      {
+        "h": "日系清新、可愛甜系、極簡質感三種風格差在哪",
+        "p": "日系清新適合漢字詞加輕裝飾，例如夜桜、霧眠這類有畫面的詞配少量符號；可愛甜系適合顏文字配件與圓潤符號，適合社群與休閒遊戲；極簡質感是少符號、留白多，適合想低調但不想撞名的人。風格選錯不用重想，換一個風格按「再產生一組」，同一關鍵字多刷幾輪再挑。"
       }
     ],
     "faqZh": [
@@ -892,6 +904,22 @@
       {
         "q": "花式字體可以用在 IG 帳號名稱嗎？",
         "a": "不行。IG 帳號名稱只能用英文字母、數字、底線和句點，花式字體貼進去會被擋。想在 IG 用花式字體，請放在顯示名稱（name）或個人簡介（bio），那裡沒有限制。"
+      },
+      {
+        "q": "自己拼裝的暱稱太長，貼到遊戲被截斷怎麼辦？",
+        "a": "裝飾符號也佔字數。先把開頭或結尾那格改回留空（∅），還太長就把名字縮短——工具輸入上限是 12 字，名字本身越短，留給裝飾的空間越大。改完先貼到遊戲改名預覽框確認沒被截斷再存檔。"
+      },
+      {
+        "q": "公會成員的暱稱要怎麼統一格式？",
+        "a": "先約定固定位：例如名字前統一放公會標記、名字後留給個人發揮。用「自己拼裝」模式把名字前那格固定下來，每個人只換中間名字，就能整齊又不撞名。注意有些遊戲禁特殊符號，先拿一個成員的版本進遊戲測試能顯示再全員跟進。"
+      },
+      {
+        "q": "隨機產生的暱稱都不喜歡，要一直重想關鍵字嗎？",
+        "a": "不用。先換風格（日系清新、可愛甜系、極簡質感各刷一輪），再按「再產生一組」多看幾組；還是不合意就改用「自己拼裝」，直接鎖定你喜歡的符號組合，比一直換關鍵字快。"
+      },
+      {
+        "q": "暱稱在自己手機好看，換到別台裝置符號長得不一樣？",
+        "a": "那是字體差異，不是名字壞掉。顏文字與冷門裝飾在不同手機、不同遊戲字體下長相本來就不同。正式定案前，換一台裝置或請朋友截圖確認一次；要穩就選常見符號與粗體、斜體、全形這類幾乎不會缺字的風格。"
       }
     ],
     "guideEn": [
@@ -906,6 +934,18 @@
       {
         "h": "Make your Instagram handle discoverable",
         "p": "Instagram usernames are limited to 30 characters and only allow letters, numbers, underscores, and periods. Fancy fonts look great but are not searchable, so put searchable keywords in the username and save the fancy styling for the display name and bio."
+      },
+      {
+        "h": "Build your own: how to use the four slots",
+        "p": "The \"Build your own\" mode has four slots: Start, Before, After, and End. Each slot takes one symbol or stays blank (∅). Put your name in first, then decide whether to frame it symmetrically; filling all four slots usually looks cluttered. Filling just the Before and After slots is often enough. Check the preview length first — if it is too long, clear the Start or End slot before shortening your name."
+      },
+      {
+        "h": "Pick the purpose first: gaming, social, or guild",
+        "p": "Choose a purpose before generating. For games, watch the character limit and missing-glyph risk, and prefer common decorations. For social profiles, remember the display name can use fancy fonts while the username only allows letters, numbers, underscores, and periods — plan them separately. For guilds, agree on one fixed format first, such as the same guild mark before every member's name, so the roster reads as one team at a glance."
+      },
+      {
+        "h": "Japanese, Cute, or Minimal: what each style is for",
+        "p": "Japanese suits a visual word with light decoration, such as sakura or mist words with a few symbols. Cute suits kaomoji parts and rounded symbols, good for social profiles and casual games. Minimal uses few symbols and more whitespace, good for staying low-key without colliding with taken names. If a style feels wrong, switch styles and hit \"Generate more\" a few rounds with the same keyword instead of starting over."
       }
     ],
     "faqEn": [
@@ -924,6 +964,22 @@
       {
         "q": "Can I use fancy fonts in my Instagram username?",
         "a": "No. Usernames only allow letters, numbers, underscores, and periods, so fancy fonts get rejected. Use them in your display name or bio instead, where there are no restrictions."
+      },
+      {
+        "q": "My built nickname is too long and gets cut off in games. What do I do?",
+        "a": "Decorative symbols count toward the length too. Clear the Start or End slot back to blank (∅) first; if it is still too long, shorten the name itself — the tool caps input at 12 characters, so a shorter name leaves more room for decoration. Paste the result into the game's rename preview to confirm it is not cut off before saving."
+      },
+      {
+        "q": "How should guild members format their nicknames consistently?",
+        "a": "Agree on a fixed slot first: for example, the same guild mark in the Before slot for everyone, with the name itself left to each member. Use \"Build your own\" mode to lock that slot, then only swap the middle name. Some games restrict special symbols, so test one member's version in-game before the whole guild follows."
+      },
+      {
+        "q": "I don't like any of the random nicknames. Do I need a new keyword?",
+        "a": "No. Try each style first (Japanese, Cute, Minimal), then hit \"Generate more\" for more rounds with the same keyword. If nothing fits, switch to \"Build your own\" and lock in the symbol combination you like — that is faster than endlessly swapping keywords."
+      },
+      {
+        "q": "My nickname looks fine on my phone but different on another device. Why?",
+        "a": "That is a font difference, not a broken name. Kaomoji and rare decorations render differently across phones and game fonts. Before finalizing, check it on another device or ask a friend for a screenshot; for the safest result, use common symbols and styles like bold, italic, or fullwidth that almost never go missing."
       }
     ]
   },
