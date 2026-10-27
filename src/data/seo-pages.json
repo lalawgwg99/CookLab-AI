@@ -298,6 +298,18 @@
       {
         "h": "Bio 換行儲存後被吃掉？用空白字元留白",
         "p": "IG 會把完全空白的行壓掉，這是很多人排好版、儲存後又黏在一起的原因。解法是在想留白的行放一個看不見的 Unicode 字元：ㅤ（U+3164）或 ⠀（U+2800）。先在手機備忘錄把整段 Bio 排好（空行放空白字元），再一次整段複製貼到 IG，比在 IG 輸入框裡直接打穩定得多。"
+      },
+      {
+        "h": "名字行不要只寫名字：放「名字＋主題關鍵字」",
+        "p": "本工具第 1 欄對應的是顯示名稱，不是 @ 帳號名稱：顯示名稱可以放中文、符號和主題關鍵字，而且會被搜尋。只寫「米亞」，別人搜「台北美食」找不到你；改成「米亞｜台北美食」，第一眼就知道你是誰、分享什麼。@ 帳號名稱則是全站唯一的識別碼，決定你的個人檔案網址和別人標註你的方式，改了會影響舊連結，所以 @ID 求穩、好記就好，關鍵字補在名字行。"
+      },
+      {
+        "h": "範本套用後三步改寫，才不會跟別人撞款",
+        "p": "工具內建 5 款範本（極簡質感、創作者／設計師、美食＆咖啡日誌、軟萌日系、Threads 思考紀錄），套用只是起點。第一步把名字行換成自己的名字＋主題；第二步把定位行換成你真正分享的內容，不要留範例的「Slow living & coffee」；第三步只留 1～2 個代表你的符號，範例的城市、聯絡信箱一併換掉。套用後直接複製貼上，最容易露餡的就是沒改掉的範例內容。"
+      },
+      {
+        "h": "連結放幾個才對：一般帳號最多 5 個，但行動呼籲只指一個",
+        "p": "現在 IG 個人檔案連結一般帳號最多可以放 5 個，不必為了塞連結另外開連結頁工具；超過 5 個、或想追蹤每個連結的點擊，才需要外部連結頁。重點是順序：把最重要的設為主要連結，Bio 第 4 行的行動呼籲只指那一個，例如「👇🏼 最新食記在連結」。連結換了主題，行動呼籲那行也要跟著換，否則點進去的內容跟 Bio 講的不一樣，人就走了。"
       }
     ],
     "faqZh": [
@@ -316,6 +328,22 @@
       {
         "q": "個人帳號的 Bio 跟創作者帳號寫法有什麼不同？",
         "a": "個人帳號挑 2～3 項最能代表你的興趣就好，Bio 不是履歷，不用把星座、MBTI、工作全塞進去。創作者或工作帳號則要加「分享主題＋聯絡方式」，讓第一次看到的人秒懂這個帳號在做什麼。工具內建「創作者 / 設計師」範本，一鍵套用就有專業骨架。"
+      },
+      {
+        "q": "IG Bio 可以放幾個連結？",
+        "a": "一般帳號最多 5 個（訂閱 Meta One 方案可放更多）。放滿 5 個不代表有效：訪客通常只點第一個看到的主要連結，所以先決定哪一個最重要、設為主要連結，再讓 Bio 第 4 行的行動呼籲指著它，其他連結只是備用。"
+      },
+      {
+        "q": "顯示名稱和 @ 帳號名稱有什麼不同？",
+        "a": "顯示名稱就是 Bio 頂端的名字行，可以放中文、符號和主題關鍵字，也會被搜尋，改寫成本低；@ 帳號名稱是全站唯一的 ID，決定個人檔案網址和別人標註你的方式，改了會影響舊連結和舊標註。本工具第 1 欄填的就是顯示名稱，@ID 另外在 IG 設定裡改，兩者要分開想。"
+      },
+      {
+        "q": "Threads 簡介也是 150 字嗎？",
+        "a": "是，同樣以 150 字為上限，本工具右上角的 x/150 計數器兩邊都適用。差別在語氣：Threads 比 IG 更口語，骨架可以共用，但定位行要重寫成像跟朋友講話的句子，太精緻的 IG 版 Bio 直接搬過去會顯得生硬。"
+      },
+      {
+        "q": "Bio 超過 150 字被截斷，先刪什麼？",
+        "a": "照這個順序刪：先刪重複的裝飾符號，再刪城市／標籤行，最後刪行動呼籲的贅字；名字行和定位行最後才動，因為那兩行決定別人要不要追蹤你。刪到工具計數器顯示 150 以內再貼，不要貼上後才發現結尾被吃掉。"
       }
     ],
     "guideEn": [
@@ -330,6 +358,18 @@
       {
         "h": "Line breaks disappearing? Use invisible characters",
         "p": "Instagram collapses fully empty lines, which is why a nicely spaced bio turns into one blob after saving. Put an invisible Unicode character on the lines you want to keep blank: ㅤ (U+3164) or ⠀ (U+2800). Compose the whole bio in your phone's notes app first (with invisible characters on the blank lines), then paste it into Instagram in one go — far more reliable than typing in IG's own editor."
+      },
+      {
+        "h": "Don't put just your name on line 1: use 'name + niche keyword'",
+        "p": "The tool's first field is your display name, not your @ handle: the display name can hold other languages, symbols and niche keywords, and it is searchable. Just 'Mia' tells nobody what you post; 'Mia | Taipei food' says who you are and what you share at a glance. Your @ handle is the unique ID behind your profile URL and mentions, so keep it stable and memorable — put the keywords in the display name instead."
+      },
+      {
+        "h": "After applying a template, rewrite it in three steps",
+        "p": "The tool ships five templates (Minimalist, Creator / Designer, Food & Coffee, Kawaii & Soft, Threads Thoughts) — applying one is only the starting point. First, swap line 1 for your own name plus niche; second, rewrite line 2 with what you actually post instead of the sample 'Slow living & coffee'; third, keep just one or two signature symbols and replace the sample city and contact email. Pasting a template unchanged is most obvious exactly where the sample text survives."
+      },
+      {
+        "h": "How many links? Up to 5 on a regular account — but point the CTA at one",
+        "p": "A regular Instagram account can now add up to 5 bio links, so you don't need an external link page just to hold a few links; you only need one if you pass 5 links or want per-link click tracking. What matters is order: set your most important link as the primary link, and let line 4 of your bio point at that one only, e.g. '👇🏼 Latest food posts in the link'. If you swap the primary link, rewrite the CTA line too, or visitors will land somewhere your bio didn't promise."
       }
     ],
     "faqEn": [
@@ -348,6 +388,22 @@
       {
         "q": "Should a creator bio be written differently from a personal bio?",
         "a": "Yes. A personal bio only needs 2–3 interests that represent you — it's not a CV. A creator or business bio should add your niche plus a contact line so first-time visitors instantly get what the account is about. The built-in 'Creator / Designer' template gives you that professional skeleton in one click."
+      },
+      {
+        "q": "How many links can I put in my Instagram bio?",
+        "a": "Up to 5 on a regular account (a Meta One subscription allows more). Filling all five doesn't help by itself: visitors usually tap only the primary link they see first. Decide which link matters most, set it as primary, and let your bio's call-to-action line point at it; the rest are backups."
+      },
+      {
+        "q": "What's the difference between a display name and an @ handle?",
+        "a": "The display name is the name line at the top of your bio: it can hold other languages, symbols and niche keywords, it's searchable, and it's cheap to rewrite. The @ handle is your account's unique ID — it sets your profile URL and how others mention you, and changing it breaks old links and mentions. This tool's first field is the display name; the @ handle lives in Instagram's settings, so plan them separately."
+      },
+      {
+        "q": "Is a Threads bio also 150 characters?",
+        "a": "Yes, Threads bios share the same 150-character limit, so this tool's x/150 counter works for both. The difference is tone: Threads reads more conversational than Instagram, so keep the same skeleton but rewrite the role line like you're talking to a friend — a polished IG bio pasted as-is looks stiff there."
+      },
+      {
+        "q": "My bio is over 150 characters and gets cut off. What do I trim first?",
+        "a": "Trim in this order: repeated decorative symbols first, then the city/tag line, then filler words in the call to action — and touch the name and role lines last, because those two decide whether someone follows you. Get the tool's counter to 150 or under before you paste, instead of discovering the ending was eaten afterwards."
       }
     ]
   },
