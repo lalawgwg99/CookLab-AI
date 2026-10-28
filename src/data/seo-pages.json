@@ -570,6 +570,18 @@
       {
         "h": "為什麼同一個 emoji 在別人的手機長得不一樣？",
         "p": "Emoji 的長相是各家系統自己畫的（Apple、Google、三星畫風都不同），而且新 emoji 要新版系統才看得到，對方手機太舊會顯示方框或「?」。傳達重要訊息的符號（如 ✅⚠️）盡量用 Unicode 6.0 以前的老字，支援度最高、最不會出錯。"
+      },
+      {
+        "h": "搜尋不到想要的 emoji？三招找法",
+        "p": "先打中文關鍵字搜尋，例如打「感動」找 🥹、打「咖啡」找 ☕、打「台灣」找 🇹🇼；搜不到就換同義詞（「開心」換成「笑」或「喜歡」），因為每個 emoji 掛的關鍵字有限。還找不到就直接按分類瀏覽：本站分 常用、表情、手勢、愛心、人物、動物、自然、餐飲、活動、旅行、物件、符號、旗幟共 13 類，點分類標籤就能整批掃過，比一個一個翻鍵盤快得多。"
+      },
+      {
+        "h": "精選情境組合包怎麼用：10 組現成情緒直接貼",
+        "p": "本站有 10 組精選情境組合包，例如優雅崩潰 🫠☕️✨、社畜下班 🏃‍♂️💨💼🍻、派對慶祝 🎉🥂✨🥳、被可愛到 🥺🐾💖、放鬆夜晚 🌧️☕️📖。點一下就整組複製，適合放在貼文開頭當情緒定調，或放在文末當收尾。組合是固定整組，貼上後可以自行刪掉不要的單顆；如果只想要其中一顆，改到下方分類區點單顆複製就好。"
+      },
+      {
+        "h": "貼文前先算字數：一個 emoji 在 IG 計數裡算 2 字",
+        "p": "IG 簡介上限 150 字、貼文 2200 字，而 IG 的計數方式把一個 emoji 算成 2 字（本站字數計數器的 IG 列就是這樣算），國旗這類組合 emoji 佔位更大。裝飾用 emoji 一多很容易在不知不覺中超標：貼文前先用本站字數計數器檢查 IG 列，超過就先刪裝飾用的、留傳達意思的，順序是「意思優先、裝飾其次」。"
       }
     ],
     "faqZh": [
@@ -588,6 +600,22 @@
       {
         "q": "Emoji 用在商業貼文、廣告文案會有版權問題嗎？",
         "a": "Unicode emoji 本身沒有版權，但「長相」是各系統畫的：在自己手機打字使用通常沒問題；若把 Apple／Google 的 emoji 圖檔拿去做 Logo 或商品販售，就可能踩到各家的使用條款。商業用途建議用文字形式直接打，而非下載圖檔。"
+      },
+      {
+        "q": "搜尋打了關鍵字卻沒結果怎麼辦？",
+        "a": "先換同義詞再搜一次，例如「難過」換成「哭」或「感動」；或直接按分類標籤瀏覽（表情、手勢、愛心等 13 類）。另一個辦法是直接把 emoji 字元本身貼進搜尋框，本站搜尋也認 emoji 字元。若是近兩年才出的新 emoji，舊系統鍵盤可能根本還沒有，建議改用經典款代替。"
+      },
+      {
+        "q": "情境組合包可以只複製其中一個 emoji 嗎？",
+        "a": "組合包點一下是整組複製，不能只取其中一顆。做法有兩種：貼上後把不要的刪掉；或直接到下方分類區找到那顆單獨點一下複製。常搭的組合也可以複製後存進手機記事本，下次直接貼。"
+      },
+      {
+        "q": "為什麼國旗 emoji 在某些地方顯示成 TW 兩個字母？",
+        "a": "國旗 emoji 其實是由兩個「區域指示字母」組成的，裝置要支援國旗渲染才會顯示成旗幟；不支援的系統（例如部分舊版 Windows 或瀏覽器）就會直接顯示字母碼，如 TW、JP。不是你複製錯了，換一台新一點的手機或瀏覽器通常就正常；非換不可時，改用文字寫「台灣」最保險。"
+      },
+      {
+        "q": "「最近使用」裡的 emoji 為什麼不見了？",
+        "a": "最近使用存在你這台裝置的瀏覽器裡（最多留 12 個），清除瀏覽資料、換瀏覽器、換裝置或用無痕模式都會消失。這是本機紀錄，不會跟著帳號走。常用組合建議複製後存進手機記事本或常用語，才不會換手機就重找。"
       }
     ],
     "guideEn": [
@@ -602,6 +630,18 @@
       {
         "h": "Why does the same emoji look different on someone else's phone?",
         "p": "Each system draws its own emoji style (Apple, Google, and Samsung all look different), and new emoji only render on up-to-date systems — older phones show a box or \"?\". For symbols that must be understood (✅⚠️), stick to pre-Unicode-6.0 classics with the widest support."
+      },
+      {
+        "h": "Can't find the emoji you want? Three search tricks",
+        "p": "Search with a Chinese or English keyword first — type \"touched\" for 🥹, \"coffee\" for ☕, or \"Taiwan\" for 🇹🇼. If nothing matches, try a synonym (\"happy\" → \"smile\" or \"love\"), since each emoji only carries a few keywords. Still stuck? Browse by category: this tool groups everything into 13 categories — Popular, Faces, Gestures, Hearts, People, Animals, Nature, Food, Activities, Travel, Objects, Symbols, and Flags — so scanning a whole category beats flipping through a keyboard one by one."
+      },
+      {
+        "h": "How to use the mood combo packs: 10 ready-made feelings, paste as a set",
+        "p": "This tool ships 10 curated combo packs, such as Elegant Collapse 🫠☕️✨, Off Work 🏃‍♂️💨💼🍻, Party Time 🎉🥂✨🥳, So Cute 🥺🐾💖, and Cozy Night 🌧️☕️📖. One click copies the whole set — drop it at the start of a post to set the mood, or at the end as a sign-off. Combos copy as a fixed set; trim unwanted pieces after pasting, or copy a single emoji from the category grid below if you only need one."
+      },
+      {
+        "h": "Check the character count before posting: Instagram counts one emoji as 2 characters",
+        "p": "Instagram bios cap at 150 characters and captions at 2,200, and Instagram's counting treats one emoji as 2 characters (this site's character counter uses the same rule for its Instagram row) — flag and compound emoji take up even more room. Decorative emoji add up fast: check the Instagram row in this site's counter before posting, and if you're over, cut decorations first and keep the ones that carry meaning."
       }
     ],
     "faqEn": [
@@ -620,6 +660,22 @@
       {
         "q": "Can I use emoji in commercial posts and ads?",
         "a": "Unicode emoji themselves aren't copyrighted, but each platform's artwork is: typing emoji directly on your phone is generally fine, while downloading Apple or Google's emoji images for logos or merchandise can violate their terms. For commercial use, type emoji as text rather than reusing image files."
+      },
+      {
+        "q": "I typed a keyword but got no results. What now?",
+        "a": "Try a synonym first — \"sad\" → \"cry\" or \"touched\" — or browse by category tab (Faces, Gestures, Hearts, and 10 more). You can also paste the emoji character itself into the search box; this tool's search matches emoji characters too. If it's an emoji released in the last couple of years, older keyboards may not have it yet — swap in a classic instead."
+      },
+      {
+        "q": "Can I copy just one emoji from a combo pack?",
+        "a": "Combo packs copy as a whole set, not one piece at a time. Either paste the set and delete the ones you don't want, or find the single emoji in the category grid below and click it to copy. If you reuse a combo often, save the pasted set in your phone's notes so you don't have to hunt for it again."
+      },
+      {
+        "q": "Why does a flag emoji show up as two letters like TW in some places?",
+        "a": "A flag emoji is really two \"regional indicator\" letters put together, and the device has to support flag rendering to draw the flag. Systems without that support (some older Windows versions or browsers, for example) just show the letter code, like TW or JP. Nothing went wrong with your copy — a newer phone or browser usually fixes it, and writing the country name out in words is the safest fallback."
+      },
+      {
+        "q": "Why did my recently used emoji disappear?",
+        "a": "Recently used emoji live in this device's browser storage (up to 12 entries), so clearing browsing data, switching browsers or devices, or using incognito mode wipes them. They don't follow your account. Save combos you reuse into your phone's notes or text shortcuts so a new phone doesn't mean starting over."
       }
     ]
   },
