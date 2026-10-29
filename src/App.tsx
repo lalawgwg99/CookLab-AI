@@ -8,10 +8,11 @@ import { bopomofoOf, BPMF_COUNT } from "./data/bopomofo";
 import { convertSubtitles, detectSubtitles } from "./lib/subtitleTw";
 import { fixTypesetting } from "./lib/typeset";
 import { cleanTranscript } from "./lib/transcript";
+import { dedupLines } from "./lib/dedup";
 import AiPolish from "./components/AiPolish";
 import FloatingAssistant from "./components/FloatingAssistant";
 
-type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "subtitle-tw" | "typeset" | "transcript" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "blank" | "blank-id" | "nickname" | "counter" | "horror" | "limbs";
+type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "subtitle-tw" | "typeset" | "transcript" | "dedup" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "blank" | "blank-id" | "nickname" | "counter" | "horror" | "limbs";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -45,6 +46,7 @@ const tools: Tool[] = [
   { id: "subtitle-tw", name: "字幕台灣用語校正", nameEn: "Subtitle Taiwanizer", short: "剪映 SRT 轉台灣繁體＋用語", shortEn: "SRT to Taiwan Traditional", icon: "幕" },
   { id: "typeset", name: "中文排版自動校正", nameEn: "Chinese Typesetting Fixer", short: "中英空格・全形標點・清空白", shortEn: "CJK spacing & punctuation", icon: "排" },
   { id: "transcript", name: "逐字稿清理器", nameEn: "Transcript Cleaner", short: "去贅詞・分段・補標點", shortEn: "Remove fillers & reflow", icon: "稿" },
+  { id: "dedup", name: "刪除重複行", nameEn: "Remove Duplicate Lines", short: "文字去重・一鍵刪重複行", shortEn: "Dedup lines, keep first occurrence", icon: "重" },
   { id: "deal", name: "電商開團爆單機", nameEn: "Group-Buy Deal Studio", short: "團購帶貨與防客訴規格", shortEn: "High-converting sales copy", icon: "🛒" },
   { id: "ai", name: "AI 發文助手", nameEn: "AI Post Assistant", short: "智慧生成社群貼文", shortEn: "Social copywriting assistant", icon: "🪄" },
   { id: "hook", name: "爆款 Hook 產生器", nameEn: "Viral Hook Studio", short: "吸引點擊的開頭第一句", shortEn: "Caption hook formulas", icon: "⚡" },
@@ -483,6 +485,7 @@ const RELATED_TOOLS: Record<string, string[]> = {
   "subtitle-tw": ["localize", "typeset", "layout"],
   typeset: ["layout", "subtitle-tw", "transcript"],
   transcript: ["subtitle-tw", "typeset", "counter"],
+  dedup: ["typeset", "transcript", "counter"],
   deal: ["ai", "hook", "swipe"],
   ai: ["hook", "layout", "localize"],
   hook: ["ai", "title", "swipe"],
@@ -2589,6 +2592,106 @@ function TranscriptTool({ copied, setCopied, language }: { copied: string; setCo
   );
 }
 
+function DedupTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const [input, setInput] = useState("蘋果\n香蕉\n蘋果\n葡萄\n香蕉\n橘子");
+  const [output, setOutput] = useState("");
+  const [ignoreCase, setIgnoreCase] = useState(false);
+  const [trimWs, setTrimWs] = useState(false);
+  const [lastResult, setLastResult] = useState<ReturnType<typeof dedupLines> | null>(null);
+
+  const handleConvert = () => {
+    if (!input.trim()) {
+      setOutput("");
+      setLastResult(null);
+      return;
+    }
+    const result = dedupLines(input, { ignoreCase, trim: trimWs });
+    setLastResult(result);
+    setOutput(result.output);
+  };
+
+  return (
+    <div className="tool-card">
+      <div className="tool-header">
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span className="tool-icon">重</span>
+          <div>
+            <h2>{t(language, "刪除重複行", "Remove Duplicate Lines")}</h2>
+            <p>{t(language, "貼上清單或文本，一鍵刪除重複行：保留首次出現的順序，可選忽略大小寫、去除每行前後空白，並顯示刪了幾行。文字去重全程在你的瀏覽器完成，不上傳。", "Paste a list or text to remove duplicate lines in one click: first-occurrence order is kept, with optional ignore-case and trim-whitespace, and a count of removed lines. Runs entirely in your browser, nothing is uploaded.")}</p>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ padding: "12px 14px", borderRadius: "10px", background: "#fef3c7", border: "1px solid var(--line)", margin: "14px 0" }}>
+        <span style={{ fontSize: "12px", color: "var(--ink)", lineHeight: 1.6 }}>
+          {t(language, "規則先講清楚：只比對整行文字，不判斷語意。空白行視為一般行（連續多個只留一個）；全形／半形、簡繁差異視為不同行；忽略大小寫只處理英文字母。兩個開關預設都是關，純去重最保險。", "Rules, stated upfront: whole lines are compared, no semantics. Blank lines count as normal lines (consecutive blanks collapse to one); fullwidth/halfwidth and simplified/traditional variants count as different lines; ignore-case only covers Latin letters. Both options default to off.")}
+        </span>
+      </div>
+
+      <div style={{ marginBottom: "12px" }}>
+        <label style={{ fontSize: "12px", color: "var(--ink)", fontWeight: 600, display: "block", marginBottom: "6px" }}>
+          {t(language, "貼上清單或文本（每行一筆）：", "Paste your list or text (one item per line):")}
+        </label>
+        <textarea
+          rows={8}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder={t(language, "貼上要去重的清單…", "Paste the list to deduplicate...")}
+          style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.6 }}
+        />
+      </div>
+
+      <div className="layout-options-bar" style={{ marginBottom: "12px" }}>
+        <label className="layout-checkbox-label">
+          <input type="checkbox" checked={ignoreCase} onChange={(e) => setIgnoreCase(e.target.checked)} />
+          <span>{t(language, "忽略大小寫（Apple 與 apple 視為同一行）", "Ignore case (Apple = apple)")}</span>
+        </label>
+        <label className="layout-checkbox-label">
+          <input type="checkbox" checked={trimWs} onChange={(e) => setTrimWs(e.target.checked)} />
+          <span>{t(language, "去除每行前後空白（比對與輸出都先去空白）", "Trim each line (compare and output trimmed)")}</span>
+        </label>
+      </div>
+
+      <button
+        onClick={handleConvert}
+        style={{ width: "100%", padding: "12px", borderRadius: "10px", background: "var(--purple)", color: "#fff", border: "none", fontSize: "14px", fontWeight: 650, cursor: "pointer", marginBottom: "16px" }}
+      >
+        {t(language, "一鍵去重", "Remove duplicates")}
+      </button>
+
+      {!!output && lastResult && (
+        <div style={{ padding: "14px", borderRadius: "12px", background: "var(--paper)", border: "1px solid var(--line)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", flexWrap: "wrap", gap: "6px" }}>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: "#16a34a" }}>
+              {t(language, `去重完成：原 ${lastResult.originalLines} 行 → 剩 ${lastResult.resultLines} 行，刪了 ${lastResult.removedLines} 行`, `Done: ${lastResult.originalLines} lines → ${lastResult.resultLines} lines, ${lastResult.removedLines} removed`)}
+            </span>
+          </div>
+          <textarea
+            readOnly
+            rows={8}
+            value={output}
+            style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.6 }}
+          />
+          <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", marginTop: "10px", flexWrap: "wrap" }}>
+            <button
+              onClick={() => downloadTextFile("dedup-clean.txt", output)}
+              style={{ padding: "8px 18px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", fontWeight: 650, cursor: "pointer" }}
+            >
+              {t(language, "下載 .txt", "Download .txt")}
+            </button>
+            <button
+              onClick={() => copyText(output, setCopied, "dedup")}
+              style={{ padding: "8px 18px", borderRadius: "8px", border: "none", background: "var(--purple)", color: "#fff", fontSize: "13px", fontWeight: 650, cursor: "pointer" }}
+            >
+              {copied === output ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製結果", "Copy result")}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AIPostTool({ copied, setCopied, language, selectTool }: { copied: string; setCopied: (v: string) => void; language: Language; selectTool?: (id: ToolId) => void }) {
   const tones = [
     {
@@ -3512,7 +3615,7 @@ export default function App() {
             {
               title: "常用排版與文案",
               titleEn: "LAYOUT & COPYWRITING",
-              ids: ["layout", "swipe", "localize", "subtitle-tw", "typeset", "transcript", "deal"] as ToolId[]
+              ids: ["layout", "swipe", "localize", "subtitle-tw", "typeset", "transcript", "dedup", "deal"] as ToolId[]
             },
             {
               title: "社群創作靈感",
@@ -3578,6 +3681,7 @@ export default function App() {
           {active === "subtitle-tw" && <SubtitleTwTool {...toolProps} />}
           {active === "typeset" && <TypesetTool {...toolProps} />}
           {active === "transcript" && <TranscriptTool {...toolProps} />}
+          {active === "dedup" && <DedupTool {...toolProps} />}
           {active === "deal" && <DealTool {...toolProps} />}
           {active === "ai" && <AIPostTool {...toolProps} selectTool={selectTool} />}
           {active === "hook" && <HookTool {...toolProps} />}

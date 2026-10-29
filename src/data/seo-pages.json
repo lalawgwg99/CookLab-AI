@@ -1687,6 +1687,74 @@
       }
     ]
   },
+  "dedup": {
+    "nameZh": "刪除重複行",
+    "nameEn": "Remove Duplicate Lines",
+    "titleZh": "刪除重複行｜文字去重工具：一鍵刪重複行、保留首次順序｜字研所 TextLab",
+    "descriptionZh": "貼上清單或文本，一鍵刪除重複行：保留首次出現順序，可選忽略大小寫、去除每行前後空白，並顯示刪了幾行。文字去重全程在瀏覽器完成，免費免登入。",
+    "titleEn": "Remove Duplicate Lines | Deduplicate Text, Keep First Occurrence | TextLab",
+    "descriptionEn": "Paste a list or text to remove duplicate lines in one click: first-occurrence order is kept, with optional ignore-case and trim-whitespace, and a count of removed lines. Runs entirely in your browser. Free, no sign-up.",
+    "guideZh": [
+      {
+        "h": "什麼時候需要刪除重複行",
+        "p": "整理名單（通訊錄、客戶名單、標籤清單）、問卷回覆、程式 log、書單時，貼上就有一堆重複，人工逐行比對眼睛會花。本工具只做一件事：以整行為單位比對，刪掉後面重複出現的行，保留第一次出現的順序，不排序、不改字。"
+      },
+      {
+        "h": "兩個選項怎麼用",
+        "p": "忽略大小寫：Apple 和 apple 視為同一行，輸出保留第一次出現的寫法。去除每行前後空白：比對前先去頭尾空白，輸出也是去空白後的行。兩個開關預設都是關，純去重不動原文最保險；貼來的清單常帶空白時再打開去空白。"
+      },
+      {
+        "h": "空白行與換行的處理",
+        "p": "空白行視為一般行：連續多個空白行只留一個，單一空白行保留，不會整段清掉。換行輸出統一為換行字元；輸入結尾有沒有換行，輸出會如實保留。"
+      },
+      {
+        "h": "誠實限制",
+        "p": "只比對整行文字，不理解語意：全形Ａ與半形 A、簡體與繁體視為不同行；忽略大小寫只處理英文字母。處理全在本機瀏覽器完成，文字不上傳。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "會不會改變原本的順序？",
+        "a": "不會。只刪除後面重複出現的行，第一次出現的位置與順序完全保留，不排序。"
+      },
+      {
+        "q": "空白行會被清掉嗎？",
+        "a": "不會全部清掉。空白行視為一般行：連續多個空白行只留一個，單一空白行保留；想整段清掉空白行請先用其他方式處理。"
+      },
+      {
+        "q": "大小寫不同算重複嗎？",
+        "a": "預設不算，Apple 和 apple 是兩行；打開「忽略大小寫」才視為同一行，輸出保留第一次出現的寫法。"
+      },
+      {
+        "q": "文字會被上傳嗎？",
+        "a": "不會。去重全部在你的瀏覽器裡用固定規則完成，沒有伺服器處理。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "When you need it",
+        "p": "Cleaning contact lists, survey responses, logs or reading lists often leaves duplicates that are painful to compare by eye. This tool does one job: compare whole lines, drop later duplicates, keep first-occurrence order — no sorting, no rewriting."
+      },
+      {
+        "h": "Options",
+        "p": "Ignore case treats Apple and apple as the same line, keeping the first spelling. Trim removes leading and trailing whitespace before comparing, and the output is trimmed too. Both default to off, so plain dedup never touches your original text."
+      },
+      {
+        "h": "Stated limits",
+        "p": "Whole-line comparison only, no semantics: fullwidth and halfwidth forms, or simplified and traditional variants, count as different lines. Everything runs locally in your browser, nothing is uploaded."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Does it change the order?",
+        "a": "No. Only later duplicates are removed; first-occurrence positions and order are fully preserved, never sorted."
+      },
+      {
+        "q": "Is my text uploaded?",
+        "a": "No. Everything runs locally in your browser with fixed rules."
+      }
+    ]
+  },
   "blank-id": {
     "nameZh": "空白ID產生器",
     "nameEn": "Invisible Name Generator",
