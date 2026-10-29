@@ -90,6 +90,18 @@
       {
         "h": "開團小編專用：導購促銷開頭三件套",
         "p": "團購文的開頭不是介紹商品，而是給「立刻下單」的理由：①倒數製造急迫（最後倒數 6 小時）②算帳證明划算（算給你看為什麼一定要跟）③社群限定製造稀缺（獨家社群限定價）。把商品名＋優惠貼進主題欄，選「導購促銷」分類，產生的開頭可直接用在 LINE 群、IG 限動和 Threads 開團文。"
+      },
+      {
+        "h": "同一主題一次出 16 句：先篩分類，再挑一句貼",
+        "p": "本工具是 4 個分類各 4 種句式，同一主題一次共 16 句。先點分類按鈕只看一類：乾貨教學看「好奇反常識」、討論串看「觀點思考」、深夜療癒文看「共鳴情感」、開團文看「導購促銷」。一次只挑一句貼出去，剩下的先留著——同一主題換開頭重發測試時，那些就是現成的對照組，不用每次重想。"
+      },
+      {
+        "h": "工具只產第一句：勾子後面第一句要立刻給料",
+        "p": "勾子只是讓人停下來，正文第一句才是讓人留下來。貼上開頭後，下一句立刻給證據、故事或數字：例如開頭是「改了 5 版草稿之後，我終於悟出了一個道理」，下一句就寫第一版錯在哪、改了什麼。只貼勾子、正文卻繞圈子，讀者點開又滑走，下次看到你的開頭就不會再停。"
+      },
+      {
+        "h": "同一篇正文換 2 到 3 個開頭測試，數字別亂寫",
+        "p": "同一篇正文可以換開頭分開發測試，但不要連續洗版，隔幾天再發一次，留互動最好的那句當固定範本。數字型勾子要特別小心：工具裡有「90% 的人都不知道」這類句式，沒有真實數據支撐就不要照貼，改成自己的經驗數字，例如「我改了 5 版草稿之後」——真實的數字比誇大的比例更有說服力，也不會踩誤導的線。"
       }
     ],
     "faqZh": [
@@ -108,6 +120,22 @@
       {
         "q": "同一個開頭可以用在 IG、Threads 和小紅書嗎？",
         "a": "公式可以共用，但語氣要調：Threads 適合口語、有立場的觀點句；IG 適合短、美、有懸念的文案開頭；小紅書則吃「標題黨＋乾貨承諾」的組合（例如保母級教程、避雷）。本工具產生的開頭是通用模板，貼上前按平台微調第一句的語氣即可。"
+      },
+      {
+        "q": "產生的開頭可以直接複製貼上嗎？",
+        "a": "可以，點「一鍵複製」就能直接貼到 Threads、IG 或小紅書。但建議先檢查一句：主題是不是你自己的真實經驗或數字。模板給的是骨架，正文還是要自己接著寫，勾子加正文合起來才是完整貼文。"
+      },
+      {
+        "q": "主題欄不知道要寫什麼，怎麼辦？",
+        "a": "不用寫完整文案，只要一句核心主張或經驗就好。越具體、工具產出的開頭越像你的話，例如預設範例「把心態放慢之後，工作效率反而變高了」。只寫「工作」「生活」這種大詞，產出的開頭也會跟著空泛。"
+      },
+      {
+        "q": "開頭加正文合起來超過 Threads 500 字怎麼辦？",
+        "a": "Threads 是一則貼文最多 500 字元，勾子本身不長，超標通常是正文太長。先用本站的字數計數器檢查全文，超了先砍正文的贅字和重複句，不要砍勾子——勾子被砍掉，整篇的停留效果就沒了。"
+      },
+      {
+        "q": "「90% 的人都不知道」這種句子可以直接用嗎？",
+        "a": "沒有真實數據支撐就不要照貼。絕對比例聽起來有力，但讀者一追問數據來源就穿幫，還有誤導的風險。改成自己的經驗數字，例如「我改了 5 版草稿之後才發現」，真實、可驗證，效果往往更好。"
       }
     ],
     "guideEn": [
@@ -122,6 +150,18 @@
       {
         "h": "Threads vs Instagram vs Xiaohongshu: adapt the tone",
         "p": "The formulas travel, the tone doesn't. Threads rewards conversational, opinionated openers. Instagram wants short, aesthetic, suspenseful first lines. Xiaohongshu responds to bold tutorial-style promises (\"nanny-level guide\", \"avoid these pitfalls\"). Generate a hook here, then tune the tone for the platform before posting."
+      },
+      {
+        "h": "One topic, 16 lines: filter by category, then pick one",
+        "p": "This tool gives 16 lines per topic: 4 categories with 4 phrasings each. Filter to one category first: curiosity for how-tos, perspective for discussion threads, empathy for late-night reflective posts, and sales for group-buy posts. Post only one line at a time and keep the rest — they become ready-made variants when you test a different hook on the same body later."
+      },
+      {
+        "h": "The tool only writes the first line: follow it with substance immediately",
+        "p": "A hook only stops the scroll; the next sentence is what keeps the reader. After pasting the hook, follow it at once with evidence, a story, or a number: if the hook says you rewrote a draft five times, the next sentence should say what was wrong with the first version. A hook followed by filler teaches readers to skip your hooks next time."
+      },
+      {
+        "h": "Test 2 to 3 hooks on the same post — and do not invent numbers",
+        "p": "You can repost the same body with a different hook a few days apart, but do not flood the feed back-to-back; keep whichever hook earned the best response as your template. Be careful with number hooks: phrasings like \"90% of people don't know\" need real data behind them. Without it, swap in your own experience — \"after rewriting the draft 5 times\" — which is verifiable and usually more persuasive."
       }
     ],
     "faqEn": [
@@ -140,6 +180,22 @@
       {
         "q": "How many hashtags can I use on Instagram?",
         "a": "Instagram Help now says up to 5 hashtags per post. Put them at the end of the caption or in a comment — never in the first 125 characters, where they would crowd out your hook."
+      },
+      {
+        "q": "Can I paste a generated hook as-is?",
+        "a": "Yes, the copy button pastes it straight into Threads, Instagram, or Xiaohongshu. Still, check one thing first: is the topic your own real experience or number? The template is a frame; you still need to write the body that follows it."
+      },
+      {
+        "q": "What should I type in the topic field?",
+        "a": "You do not need a full draft — one core claim or experience is enough. The more specific it is, the more the hook sounds like you. A vague word like \"work\" produces a vague hook; a concrete sentence like \"slowing down made me more productive\" gives the templates something real to work with."
+      },
+      {
+        "q": "What if the hook plus body exceeds the Threads 500-character limit?",
+        "a": "Threads counts the whole post, and the hook itself is short — overruns usually come from the body. Check the full text with this site's character counter first, then trim filler from the body rather than cutting the hook; without the hook, the post loses its stopping power."
+      },
+      {
+        "q": "Can I use a line like \"90% of people don't know\"?",
+        "a": "Not without real data behind it. Absolute percentages sound strong, but they fall apart the moment a reader asks for the source, and they risk misleading people. Use your own experience instead — \"after rewriting the draft 5 times\" — which is verifiable and often more convincing."
       }
     ]
   },
