@@ -18,6 +18,18 @@
       {
         "h": "去 AI 味三招：餵範本、鎖禁止詞、自己改最後一句",
         "p": "AI 文案最大的毛病是翻譯腔與罐頭連接詞，例如「在這個快節奏的時代」「讓我們一起探索」。三招破解：①餵一篇自己寫過、互動最好的貼文當風格範本，讓 AI 模仿你的斷句與語氣；②在想法裡寫明禁止詞，例如不要「極致體驗」「不容錯過」；③產出後自己改第一句和最後一句，換成你平常講話的口氣。最後務必核對價格、時間、地點等事實——AI 不會幫你查證。"
+      },
+      {
+        "h": "品牌聲線先設定一次：之後每篇貼文都自動帶你的口氣",
+        "p": "點「⚙️ 設定品牌聲線」，填品牌名稱、目標受眾與專屬結尾 Slogan，並把開關打開——三項缺一不可：開關沒開、或品牌名稱空白，產生時都不會帶入品牌設定。設定只存在目前瀏覽器，不會上傳。設好之後不用每篇重打受眾與語氣，AI 會自動把品牌調性套進鉤子與結尾；換品牌或換受眾時，改這裡一次就好，不用每篇在主題裡重複交代。"
+      },
+      {
+        "h": "生成後先看三個數字：IG 前 3 行、Threads 500 字、小紅書標題 20 字",
+        "p": "結果卡片下方會即時顯示三個提示：IG 前 3 行字數、Threads 總字數／500 字、小紅書標題字數／20 字（建議值）。IG 前 3 行決定讀者要不要點「更多」，所以把最關鍵的一句或畫面感放在前 3 行；Threads 超過 500 字要先刪到 500 字內再貼，否則貼上後會被截斷；小紅書標題超過 20 字仍可貼，但顯示可能被截斷，建議把關鍵字往前挪。先看數字再複製，比貼上後才發現超字數省事。"
+      },
+      {
+        "h": "一稿多用工作流：生成→強化→排版→再檢查用語",
+        "p": "不要生成完就直接貼。順序建議：①用 AI 產生貼文初稿；②用結果卡片下方的跨工具按鈕強化——加風格符號、轉花式字體、加顏文字、加熱門標籤；③按「送去排版換行」處理 IG／Threads 的換行，或按「切為 IG 輪播字卡」拆成字卡；④貼文若含促銷或敏感用詞，先丟本站「台灣用語與法規避雷器」掃一次支語與廣告高風險詞。同一篇初稿走完這四步，才能同時顧到排版、風格與用詞安全。"
       }
     ],
     "faqZh": [
@@ -36,6 +48,22 @@
       {
         "q": "我輸入的內容會被儲存或拿去訓練嗎？",
         "a": "本站不儲存你送出的內容。一般文字工具都在瀏覽器完成；只有 AI 貼文助手會把你送出的內容交由 Cloudflare Workers AI 處理，處理完不留存。最近使用與收藏只保存在目前瀏覽器，不會上傳。"
+      },
+      {
+        "q": "設定了品牌聲線，為什麼產出的文案看起來沒變？",
+        "a": "先檢查兩件事：①品牌聲線開關有沒有打開；②品牌名稱欄位有沒有填。兩者缺一，產生時都不會帶入品牌設定。另外要注意防重複機制：主題文字與風格都沒變時，再按產生會保留目前成果、不重新消耗額度——所以改完品牌設定後，要稍微改動主題文字或換一種風格再產生，才會看到新版本。"
+      },
+      {
+        "q": "免費 AI 額度用完或忙碌時會怎樣？會收費嗎？",
+        "a": "不會收費。免費 AI 暫時忙碌或今日額度已滿時，工具會自動改用本機產生器繼續產出，並提示你已切換。本機版是套版式產出（固定鉤子、銜接句與結尾組合），品質不如線上 AI 細緻，但可以直接用；等額度恢復後，換一點主題文字再產生一次，就能回到 AI 版本。"
+      },
+      {
+        "q": "連點「產生貼文」為什麼沒反應，還出現冷卻倒數？",
+        "a": "這是防連點與防重複機制：每次產生後有 3 秒冷卻，冷卻中按鈕會顯示倒數且無法重按；主題與風格完全沒變時再按，會直接保留目前成果並提示你，避免重複消耗免費額度。想換一版就改主題文字、換風格，或等冷卻結束後再按。"
+      },
+      {
+        "q": "小紅書標題「20 字（建議）」是硬性上限嗎？",
+        "a": "不是硬性上限，是建議值。結果卡片顯示的是第一行字數／20 字，提醒你標題太長在小紅書顯示時可能被截斷。超過 20 字仍可複製貼上，但建議把最吸引人的關鍵字往標題前面挪，讓讀者在被截斷前就看到重點；也可以把次要資訊移到內文第一段。"
       }
     ],
     "guideEn": [
@@ -50,6 +78,18 @@
       {
         "h": "De-AI your draft in three moves: feed a sample, ban clichés, rewrite the last line",
         "p": "AI copy's biggest flaw is translated-sounding filler, like “In this fast-paced era…” or “Let's explore together…”. Three fixes: ① feed it a post you wrote that performed well, as a style sample, so the AI mimics your sentence rhythm and tone; ② list banned phrases in your idea, e.g. no “ultimate experience” or “don't miss out”; ③ rewrite the first and last lines in your own speaking voice. Always verify facts — prices, times, places — the AI won't check them for you."
+      },
+      {
+        "h": "Set your brand voice once, and every post sounds like you",
+        "p": "Open “⚙️ Configure” under Brand Voice Persona and fill in your brand name, target audience, and custom closing slogan — then switch it on. All three matter: if the switch is off, or the brand name is blank, the setting is not included when generating. The setting lives only in your current browser and is never uploaded. Once set, you stop re-explaining your audience and tone in every prompt; the AI folds your brand voice into the hook and closing. Change brands or audiences by editing this one place."
+      },
+      {
+        "h": "Check three numbers after generating: IG first 3 lines, Threads 500, Redbook title 20",
+        "p": "Below the result card you get three live hints: characters in the first 3 lines for IG, total characters out of 500 for Threads, and first-line characters out of a suggested 20 for a Redbook title. The IG first 3 lines decide whether readers tap “more”, so put your strongest line or image up there. Over 500 characters for Threads must be trimmed before posting, or the paste will be cut off. Over 20 for a Redbook title still pastes, but the display may truncate it — move the keyword forward."
+      },
+      {
+        "h": "One draft, many uses: generate, enhance, reformat, then check wording",
+        "p": "Do not paste the first draft straight away. A better order: ① generate the draft with AI; ② enhance it with the buttons under the result card — add style symbols, convert to a fancy font, append a kaomoji, or add trending hashtags; ③ send it to the line-break layout tool for IG/Threads, or split it into IG carousel cards; ④ if the post contains promotions or sensitive wording, run it through this site's Taiwan Voice & Legal Sanitizer first for mainland phrasing and high-risk advertising terms. One draft through these four steps covers layout, style, and wording safety at once."
       }
     ],
     "faqEn": [
@@ -68,6 +108,22 @@
       {
         "q": "Is what I type stored or used for training?",
         "a": "This site does not store your submitted content. Regular text tools run entirely in your browser; only the AI Post Assistant sends your input to Cloudflare Workers AI for processing, and it is not retained. Recents and favorites stay in this browser and are never uploaded."
+      },
+      {
+        "q": "I set my brand voice, but the copy looks unchanged. Why?",
+        "a": "Check two things first: ① whether the brand voice switch is on, and ② whether the brand name field is filled in. If either is missing, the brand setting is not included when generating. Also note the duplicate guard: if the topic text and style are unchanged, pressing generate again keeps the current result instead of spending more free quota — so after changing your brand voice, tweak the topic text or switch styles before generating again."
+      },
+      {
+        "q": "What happens when the free AI quota is used up or busy? Is there a charge?",
+        "a": "There is no charge. When the free AI is busy or today's quota is full, the tool automatically falls back to the local generator and tells you it has switched. The local version is template-based (fixed hooks, bridges, and closings), so it is less nuanced than the online AI version, but it is usable right away; once the quota recovers, change the topic text slightly and generate again for the AI version."
+      },
+      {
+        "q": "Why does nothing happen when I click “Create post” repeatedly, and why is there a cooldown?",
+        "a": "That is the anti-double-click and duplicate guard: after each generation there is a 3-second cooldown, during which the button shows a countdown and cannot be pressed again. If the topic and style are completely unchanged, pressing again simply keeps the current result to avoid spending free quota twice. To get a new version, edit the topic text, change styles, or wait for the cooldown to end."
+      },
+      {
+        "q": "Is the Redbook title “20 characters (suggested)” a hard limit?",
+        "a": "No, it is a suggested value, not a hard limit. The result card shows the first line's character count against 20 to warn you that a long title may be truncated in Redbook's display. Longer titles still copy and paste fine, but move your most compelling keyword to the front of the title so readers see it before any truncation — or move secondary details into the first paragraph."
       }
     ]
   },
