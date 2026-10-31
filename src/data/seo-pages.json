@@ -274,6 +274,18 @@
       {
         "h": "貼到 IG 或遊戲變成方框？選相容性最高的三款",
         "p": "有些冷門裝飾字（例如奢華星光的組合字元）在舊款 Android 或部分遊戲暱稱欄位會缺字變成方框。最穩的三款是：【 】黑大括號、『 』角括號、[ ] 日系方括號——這幾個是 CJK 常用符號，幾乎所有裝置和平台都能正常顯示。要用的情境如果吃相容性（遊戲 ID、IG Bio、LINE 名稱），直接選這三款；IG 內文和 Threads 則 12 種全都可以用。"
+      },
+      {
+        "h": "12 款花邊怎麼挑？先看場合，再看標題長短",
+        "p": "12 款可以先分四組：可愛系是日系蝴蝶結、夢幻蕾絲、愛心對稱，適合穿搭、開箱、食記、寵物日常；俐落系是黑大括號、角括號、日系方括號、復古三點，適合工作週報、讀書心得、公告、課程大綱；華麗系是星閃雙邊、璀璨星光、雙星線條、奢華星光，適合節慶、抽獎、開團、活動宣傳；輕盈系是波浪紋，適合心情小記、短句、日記開頭。選好組別再看長短：標題 15 字以上選窄框（角括號、方括號、蝴蝶結），短標題才用寬框（星閃雙邊、雙星線條），避免手機上被切成兩行、框線看起來斷掉。"
+      },
+      {
+        "h": "長標題先算框的額度：框也是字數",
+        "p": "框的字元也要算進平台上限：星閃雙邊多 12 字、雙星線條多 16 字、角括號只多 4 字。Threads 一則 500 字、IG 貼文 2200 字、Bio 150 字，寫長文要先把框扣掉再寫正文，或貼到站內字數計數器對照 IG 列檢查。奢華星光含組合字元，在某些 App 會錯位、計數方式也可能不同，重要標題先用自己的手機貼一次確認再發。"
+      },
+      {
+        "h": "連載與系列貼文：固定一款框，讀者才認得你",
+        "p": "週更、連載、系列開箱不要每集換框：全系列鎖定同一款（例如每集都用黑大括號加上「第 X 集」），只換框內的文字；限動、精選封面、貼文分段標題沿用同一款，滑過去就知道是同一系列。框不能當成唯一資訊——系列名與關鍵字還是要用純文字寫在框裡，搜尋才抓得到，讀者用關鍵字也才找得到舊集數。"
       }
     ],
     "faqZh": [
@@ -292,6 +304,22 @@
       {
         "q": "用特殊符號裝飾標題，會影響 IG 搜尋或觸及嗎？",
         "a": "IG 搜尋主要看帳號名稱、Bio 關鍵字和貼文第一段的實際文字，裝飾符號本身不會被當成關鍵字，也不會降觸及。實務建議是：真正的關鍵字（例如「台北咖啡廳」）用純文字寫在花邊框裡面，這樣搜尋抓得到、視覺又好看，兩邊都顧到。"
+      },
+      {
+        "q": "12 款裡面，哪幾款最不容易變方框？",
+        "a": "常用標點款最穩：黑大括號、角括號、日系方括號、復古三點，幾乎所有裝置都有對應字形。日系蝴蝶結、夢幻蕾絲這類裝飾字在舊款 Android 或部分遊戲欄位可能缺字；奢華星光含組合字元，風險最高。重要場合先避開高風險款，或先貼到自己的手機測試一次再發。"
+      },
+      {
+        "q": "花邊框會吃掉多少字數？",
+        "a": "以字元數計：星閃雙邊多 12 字、雙星線條多 16 字、角括號只多 4 字。Threads 一則上限 500 字、IG 貼文 2200 字、Bio 150 字，都要先把框扣掉；組合字元與 emoji 在不同平台的計法可能不同，接近上限時先用站內字數計數器檢查一次。"
+      },
+      {
+        "q": "可以先套花式字體、再套花邊框嗎？",
+        "a": "可以，順序是先去花式字體工具把英文標題變形，再回來貼進標題框；中文不受花式字體影響，直接套框就好。提醒：變形字再加上奢華星光這類組合字元框，缺字風險會更高，正式發文前先在自己的手機貼一次確認顯示正常。"
+      },
+      {
+        "q": "貼到 LINE 名稱或遊戲暱稱要注意什麼？",
+        "a": "暱稱欄位比貼文內文嚴格：字數少、部分符號可能被擋或缺字。建議只用黑大括號、角括號、日系方括號這類窄框配短標題，先貼到遊戲聊天欄或 LINE 預覽看一次，確認顯示正常再設為正式名稱；IG 內文與 Threads 最寬鬆，12 款都能用。"
       }
     ],
     "guideEn": [
@@ -306,6 +334,18 @@
       {
         "h": "Boxes Instead of Symbols? Use the Three Most Compatible Frames",
         "p": "Some exotic decorative characters (like the composite glyphs in the luxury sparkle style) can render as boxes on older Android phones or in certain game nickname fields. The three safest frames are: 【 】 heavy brackets, 『 』 corner brackets, and [ ] square brackets — all common CJK punctuation supported by virtually every device and platform. For compatibility-sensitive spots (game IDs, Instagram bios, LINE display names), use these three; for Instagram captions and Threads, all 12 styles work fine."
+      },
+      {
+        "h": "Picking from the 12 Frames: Match the Occasion, Then the Title Length",
+        "p": "Start with four groups. Cute: the Japanese ribbon, dreamy lace, and heart symmetry suit outfits, hauls, food posts, and pet diaries. Clean: heavy brackets, corner brackets, square brackets, and retro dots suit work logs, reading notes, announcements, and course outlines. Glam: sparkle dividers, starlight, double-star lines, and luxury sparkle suit festivals, giveaways, group buys, and event promos. Light: the wave suits mood notes, short lines, and diary openers. Then check length: titles over 15 characters need narrow frames (corner brackets, square brackets, ribbon), while wide frames (sparkle dividers, double-star lines) belong on short titles, so the frame does not break across two lines on a phone screen."
+      },
+      {
+        "h": "Count the Frame: It Eats Characters Too",
+        "p": "The frame counts toward the platform limit: sparkle dividers add 12 characters, double-star lines add 16, and corner brackets add only 4. Threads caps a post at 500 characters, Instagram captions at 2,200, and bios at 150, so subtract the frame before writing the body, or check the result against the Instagram row in the site's character counter. Luxury sparkle uses combining characters, which can misalign or count differently in some apps — test important titles by pasting them on your own phone first."
+      },
+      {
+        "h": "Series Posts: One Frame, Every Episode",
+        "p": "For weekly series, serials, or haul series, do not change frames each episode: lock one frame for the whole series (for example, heavy brackets plus “Ep. X”) and change only the text inside. Reuse the same frame in Stories, Highlights, and caption section headers, so readers recognize the series at a glance. The frame is not the information itself — keep the series name and keywords as plain text inside it, so search can find them and readers can find older episodes by keyword."
       }
     ],
     "faqEn": [
@@ -324,6 +364,22 @@
       {
         "q": "Do decorative symbols hurt Instagram search or reach?",
         "a": "Instagram search keys off your account name, bio keywords, and the actual words in the first lines of captions — decorative symbols are not indexed as keywords and don't reduce reach. Best practice: put real keywords (e.g., \"Taipei cafes\") in plain text inside the frame, so search engines can read them while the visuals stay pretty."
+      },
+      {
+        "q": "Which of the 12 frames are least likely to turn into boxes?",
+        "a": "Everyday punctuation frames are the safest: heavy brackets, corner brackets, square brackets, and retro dots have glyphs on virtually every device. Ribbon and lace decorations can go missing on older Android phones or in some game name fields, and luxury sparkle, which uses combining characters, carries the highest risk. For important posts, avoid the risky styles or test them by pasting on your own phone first."
+      },
+      {
+        "q": "How many characters does a frame add?",
+        "a": "Counting characters: sparkle dividers add 12, double-star lines add 16, and corner brackets add only 4. Threads caps a post at 500 characters, Instagram captions at 2,200, and bios at 150 — subtract the frame first. Combining characters and emoji may count differently across platforms, so check with the site's character counter when you are near a limit."
+      },
+      {
+        "q": "Can I apply a fancy font first, then add a frame?",
+        "a": "Yes — stylize the English title in the fancy fonts tool first, then paste it into a title frame; Chinese text is unaffected by the fonts tool, so frame it directly. Note that combining a stylized font with a combining-character frame like luxury sparkle raises the missing-glyph risk, so preview the result on your own phone before publishing."
+      },
+      {
+        "q": "What should I watch for in a LINE name or game nickname?",
+        "a": "Nickname fields are stricter than captions: they allow fewer characters, and some symbols may be blocked or render as boxes. Stick to narrow frames — heavy brackets, corner brackets, or square brackets — with a short title, and test by pasting into the game's chat box or a LINE preview first. Instagram captions and Threads are the most forgiving, where all 12 frames work."
       }
     ]
   },
