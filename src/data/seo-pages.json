@@ -1394,6 +1394,18 @@
       {
         "h": "防客訴：下單須知先寫進文案，糾紛少一半",
         "p": "團購糾紛八成不是商品問題，是規則沒先講：截團後能不能取消、多久取貨、到貨日能不能保證、缺貨怎麼退。把這些寫進文案的「下單須知」，下單就等於同意規則，事後才有依據。注意：寫「售出概不退換」並不能排除瑕疵品依法該有的處理——有瑕疵、與描述不符，還是要處理。規則寫清楚、態度留彈性，才是長期開團的作法。"
+      },
+      {
+        "h": "免運門檻怎麼設：先算成本，再寫進文案",
+        "p": "工具的「滿額贈品與免運門檻」欄位只負責把你寫好的條件放進文案，不會幫你算成本，門檻數字要自己先算：門檻如果低於團友平均一單的金額，等於全單免運，運費就全由你吸收；贈品成本也要攤進團購價，否則賣越多虧越多。寫法上三項要寫齊：門檻金額、贈品內容與名額、截止條件——像工具預設的「全館滿 $1,500 即享免運，首日前 50 名下單加贈專用收納絨布袋」就是完整寫法，別只寫「滿額免運」四個字，團友不知道滿多少、送什麼，私訊問一輪就夠你回了。"
+      },
+      {
+        "h": "法規避雷掃描的邊界：沒跳紅字，不等於整篇安全",
+        "p": "本工具的法規掃描只看「商品名稱」和「必買亮點」兩個欄位，抓到高風險詞會跳紅字警示、附一鍵替換成合規詞，警示條寫的開罰風險是 NT$ 40,000 起；但你自己寫在限時用語、免運門檻欄位的詞不在掃描範圍，掃描沒跳紅字不代表整篇都安全。正確用法：先讓掃描抓一輪、按一鍵替換，再把整篇生成文案從頭讀一次，特別檢查自己手寫的那幾欄；工具是避雷輔助，不是法律保證，食品、藥粧、醫療效能類商品發文前最好再多查一次法規。"
+      },
+      {
+        "h": "結團後三件事：結單公告、缺貨先講、到貨提醒拆封錄影",
+        "p": "截團時間一到先發結單公告，明確說已結單、後面喊單不再受理，別讓團友繼續 +1 造成超收；接著對帳，缺貨要第一時間主動講：缺什麼、錢怎麼退、幾個工作天內到帳一次說清，不要等團友來問，也不要私下推替代品轉移話題，退款的確定性才是信任；到貨後再提醒一次拆封全程錄影、48 小時內聯繫——這正是工具防客訴勾選項裡的那條，結團時寫進文案、到貨時再提醒一次，瑕疵爭議才有依據可查。"
       }
     ],
     "faqZh": [
@@ -1412,6 +1424,22 @@
       {
         "q": "團友喊單後棄單、已讀不回怎麼辦？",
         "a": "事前防範勝於事後追討：文案裡先寫明棄單規則，例如結單後不接受取消、多次未取貨列入黑名單；催單則用本工具的 DM 私訊腳本——粉絲留言「+1」後先秒回優惠碼與連結，3 小時後再一則溫馨提醒（庫存倒數、截團時間），比在群組公開點名有效，也保留對話紀錄。"
+      },
+      {
+        "q": "免運門檻設多少才合理？",
+        "a": "門檻要高於團友平均一單的金額才有拉單效果：平均一單 800 元，門檻設 1,500 元會讓人想湊單；門檻設 500 元等於全單免運，運費全由你吸收。贈品成本也要先攤進團購價再開團，不要等結算才發現賣越多虧越多。工具只負責把你寫好的門檻放進文案，不幫你算成本，數字下筆前先自己算過。"
+      },
+      {
+        "q": "法規掃描沒跳紅字，文案就安全了嗎？",
+        "a": "沒有。掃描只看商品名稱與必買亮點兩欄，你自己寫在限時用語、免運門檻欄位的詞不在範圍內；而且一鍵替換只換掉抓到的詞，整句語意有沒有走樣要自己讀一次。把工具當第一道篩網，不是法律保證，食品、藥粧、醫療效能類商品發文前再多查一次法規。"
+      },
+      {
+        "q": "客人沒拆封錄影，瑕疵就不處理嗎？",
+        "a": "不是。拆封全程錄影、48 小時內聯繫是舉證輔助，幫雙方快速釐清是運送損傷還是使用問題；但商品有瑕疵、與描述不符，依法還是要處理，不能用「沒錄影就不處理」一句話擋掉。建議寫法：文案裡請客人拆封錄影、48 小時內聯繫，真的沒錄影就先看照片、依個案處理，規則寫清楚、態度留彈性。"
+      },
+      {
+        "q": "團購價填得比原價高，價格看板會怎樣？",
+        "a": "現省金額會歸零、折扣顯示 0% OFF，不會出現負數折扣，這表示兩個價格填反了。生成文案前先看價格看板三欄：市售原價、團購限定特價、現省金額（折扣）對不對，確認團購價低於原價再按複製，免得一篇「現省 $0」的文案直接貼到群組。"
       }
     ],
     "guideEn": [
@@ -1426,6 +1454,18 @@
       {
         "h": "Dispute-proof terms: put the ordering rules in the copy",
         "p": "Most group-buy disputes aren't about the product — they're about rules nobody stated upfront: can orders be cancelled after the deadline, how long to pick up, whether delivery dates are guaranteed, what happens on stockouts. Put these in the ordering-terms section so ordering counts as agreeing to them. One caution: writing \"no returns, no exceptions\" does not waive your handling of defective or misdescribed items. Clear rules plus a reasonable attitude keep a group-buy running long-term."
+      },
+      {
+        "h": "How to set a free-shipping threshold: cost first, copy second",
+        "p": "The tool's free-shipping / bonus field only places the terms you wrote into the copy — it does not calculate costs, so the threshold number is yours to work out. If the threshold sits below what members typically spend per order, you have effectively offered free shipping on everything and you absorb all delivery costs; gift costs must also be folded into the group price, or the more you sell the more you lose. Write all three parts: the threshold amount, the gift and its quota, and the cutoff — the tool's default (free shipping over $1,500, first 50 orders get a free storage pouch) is a complete example. Never write just \"free shipping over a minimum\" with no number: members will flood your inbox asking how much and what they get."
+      },
+      {
+        "h": "What the legal-risk scan does not cover: no red flag is not a clean bill",
+        "p": "This tool's legal scan only checks two fields — the product name and the selling points. When it finds a high-risk term it flags it in red and offers a one-tap replacement with a compliant term; its warning bar cites fines starting at NT$ 40,000. But terms you type yourself into the urgency or free-shipping fields are outside the scan, so a clean scan does not mean the whole post is safe. Use it correctly: let the scan catch one round, apply the replacements, then read the full generated copy once yourself, especially the fields you hand-wrote. The tool is a first screen, not a legal guarantee — double-check the rules before posting food, cosmetics, or health-effect products."
+      },
+      {
+        "h": "After the deadline: close-out announcement, stockout notice, unboxing reminder",
+        "p": "The moment the deadline passes, post a close-out announcement stating orders are closed and later \"+1\" comments will not be accepted — otherwise members keep claiming items and you oversell. Then reconcile: if anything is out of stock, say so first, all at once — what is missing, how refunds work, and within how many working days the money returns. Do not wait for members to ask, and do not privately push substitutes to change the subject; refund certainty is what keeps trust. When parcels arrive, remind buyers once more to film the full unboxing and contact you within 48 hours — exactly the term in the tool's dispute-proof checklist. Put it in the copy at launch and repeat it on arrival, so defect disputes have evidence to check."
       }
     ],
     "faqEn": [
@@ -1444,6 +1484,22 @@
       {
         "q": "What if a member claims an item and then ghosts?",
         "a": "Prevention beats chasing: state the no-show rule in the copy — for example, no cancellations after the deadline, repeat no-shows go on a blocklist. For nudges, use this tool's DM script: an instant DM with the discount code and link when someone comments \"+1\", then a friendly reminder about 3 hours later (stock countdown, deadline). It converts better than public callouts and keeps a message record."
+      },
+      {
+        "q": "What free-shipping threshold makes sense?",
+        "a": "Set it above what members typically spend per order, so it pulls orders up: if the average order is $800, a $1,500 threshold encourages add-ons, while a $500 threshold is effectively free shipping on everything with you absorbing delivery costs. Fold gift costs into the group price before launch — do not discover at settlement that selling more lost more money. The tool places the threshold you wrote into the copy; it does not cost it for you, so run the numbers before you write them down."
+      },
+      {
+        "q": "If the legal scan shows no red flags, is the copy safe?",
+        "a": "No. The scan only covers the product name and selling-points fields; terms you type into the urgency or free-shipping fields are out of scope, and one-tap replacements only swap the flagged words — you still need to read the sentence for sense. Treat the tool as a first screen, not a legal guarantee, and double-check the rules before posting food, cosmetics, or health-effect products."
+      },
+      {
+        "q": "If a buyer did not film the unboxing, can a defect claim be refused?",
+        "a": "No. Filming the full unboxing and contacting you within 48 hours is evidence support that helps both sides tell shipping damage from use damage quickly; but a defective item, or one that does not match its description, still has to be handled — \"no video, no help\" does not settle it. Recommended wording: ask buyers in the copy to film the unboxing and contact you within 48 hours, and if there is genuinely no video, start from photos and handle it case by case. Clear rules, flexible attitude."
+      },
+      {
+        "q": "What happens if I enter a group price higher than the retail price?",
+        "a": "Savings drop to zero and the discount shows 0% OFF — never a negative discount — which means the two prices are reversed. Before copying, check the price board's three figures: retail price, group price, and savings (discount). Confirm the group price is below retail first, or a \"you save $0\" post goes straight into the group."
       }
     ]
   },
