@@ -402,6 +402,18 @@
       {
         "h": "排版時空白字元怎麼用？",
         "p": "單純按 Enter 的空行有時會被平台吃掉。在需要強制留白的地方插入透明空白字元，換行就不會消失；空白字元可到本站「透明空白文字產生器」一鍵複製。"
+      },
+      {
+        "h": "先選對平台：Threads 500、IG 2200／125 摺疊、小紅書 1000、簡介 150",
+        "p": "排版前先在「目標平台與字數」選好平台，計數器會跟著換上限：Threads 500 字、IG 貼文 2200 字、小紅書 1000 字、IG 簡介 150 字。超過上限時計數會變紅字警告，先刪到上限內再複製，不要貼上去才發現被截斷。IG 貼文特別注意 125 字摺疊線：超過 125 字會出現「...更多」提示，開頭第一句要先講重點或放鉤子，摺疊後的內容是給點進來的人看的。簡介 150 字更要先算好，名字、主題、聯絡方式塞不下時，先砍形容詞、留聯絡方式。"
+      },
+      {
+        "h": "段落格式＋標題裝飾怎麼搭：舒展、緊湊、項目符號各有場合",
+        "p": "「段落格式」有三種：舒展留白把每段中間空一行，適合日常分享與長文；緊湊排列段落貼緊，適合公告與資訊量大的貼文；自動項目符號會在第二行起每行前加「・」，適合三件事清單、步驟、重點整理，第一行是標題不會被加點。標題裝飾有五款加無裝飾：星光 ✦ 配品牌公告最亮眼，柔和 ୨୧ 配日常與旅行，日系 『』 配書摘與語錄，極簡 ─── 配專業觀點，波浪 〰︎ 配輕鬆心情。先選範本（日常分享／Threads 觀點／品牌公告／旅行紀錄）再調格式，選完仍可自由改內文。"
+      },
+      {
+        "h": "空行怎麼撐住：工具用隱形空白，貼不上去再換可見字元",
+        "p": "貼文空行被吃掉，是因為那一行完全沒有內容、平台存檔時直接清掉。本工具的解法是：段落之間的空行放一個點字空白 U+2800，看起來是空行、實際有字元，IG／Threads 就不會清掉；預覽裡空行會顯示淡灰色「隱形空白 · 貼上後看不見」的提示，複製出去時那行提示不會出現。如果貼到某個 App 還是被吃掉，就不要再用隱形字元，改在空行手動打一個圓點 · 或一排分隔線 ──────────，可見字元一定留得住，只是版面會多一個符號。輸入時每段分行寫就好，選「舒展留白」工具會自動把段距拉開；你自己打的連續空行會被整理成一段間距，不會越空越大。"
       }
     ],
     "faqZh": [
@@ -420,6 +432,22 @@
       {
         "q": "可以排好直接發佈到 IG 嗎？",
         "a": "不行，本站是排版輔助工具。排好後一鍵複製，到 IG App 手動貼上發佈。"
+      },
+      {
+        "q": "選 IG 簡介 150 字，計數器是怎麼算的？",
+        "a": "按字元數即時計算，貼上文字後計數器立刻顯示目前字數／上限；超過上限計數會變紅字警告，要先刪到 150 字以內再複製。Emoji 在計數裡佔 2 字，不同平台計法可能差一點，簡介接近上限時留幾字緩衝最保險。"
+      },
+      {
+        "q": "自動項目符號會動到第一行嗎？",
+        "a": "不會。第一行被當成標題，不加符號；從第二行起每行前面加「・」。想讓第一行也變項目，就把標題另外寫一行，或改用舒展留白手動分行。"
+      },
+      {
+        "q": "中英混打看起來很擠，可以自動補空格嗎？",
+        "a": "可以，預設已開啟「自動補齊中英／Emoji 呼吸空格」，會在中文與英數字、Emoji 之間補一個半形空格；不喜歡這種留白可以取消勾選，排版結果會立刻跟著變。"
+      },
+      {
+        "q": "AI 貼文助手寫好的文案，可以直接送來排版嗎？",
+        "a": "可以。在 AI 社群貼文助手產出文案後，按「¶ 送去排版換行」按鈕，文字會自動帶到排版工具的輸入框，不用自己複製貼上；再選平台、段落格式與標題裝飾，一鍵複製就能發。"
       }
     ],
     "guideEn": [
@@ -430,6 +458,18 @@
       {
         "h": "How to format Threads posts?",
         "p": "Threads reads best with short paragraphs separated by blank lines: one idea per paragraph, with key lines accented by symbols or kaomoji. Use the preview here to avoid posting a cramped block of text."
+      },
+      {
+        "h": "Pick the platform first: Threads 500, IG 2200 with a 125-char fold, Xiaohongshu 1000, bio 150",
+        "p": "Choose the target platform before formatting and the counter switches limits: Threads 500 chars, Instagram posts 2200, Xiaohongshu 1000, IG bio 150. Over the limit, the counter turns red — trim before copying, not after pasting. Instagram's 125-char fold deserves special care: anything past 125 chars hides behind '...more', so put the hook or key point in the first line; the rest is for readers who tap through. Bios at 150 chars need the same discipline: cut adjectives first, keep contact info."
+      },
+      {
+        "h": "Three paragraph styles and five title decorations: match them to the post",
+        "p": "Paragraph spacing has three modes: Spacious puts a blank line between paragraphs for diaries and long posts; Compact keeps paragraphs tight for announcements and info-dense posts; Auto bullets adds '・' to every line from the second on, perfect for three-point lists, steps and takeaways — the first line stays a title and never gets a bullet. Title decorations come in five styles plus none: Sparkle ✦ for brand drops, Soft ୨୧ for daily life and travel, CJK Quotes 『』 for quotes and reading notes, Minimal ─── for professional takes, Wave 〰︎ for easy moods. Start from a template (Daily update / Threads take / Brand update / Travel diary) and keep editing after you pick one."
+      },
+      {
+        "h": "How blank lines survive: invisible blanks here, visible characters as fallback",
+        "p": "Blank lines disappear because the line is truly empty and the platform trims it on save. This tool fills each gap with a Braille blank U+2800: it looks empty but counts as a character, so Instagram and Threads keep it. In the preview, blank lines show a grey 'Invisible blank · hidden after pasting' hint that never makes it into your copied text. If some app still eats it, stop using invisible characters and type a visible dot · or a divider line ────────── on the empty line instead — visible characters always survive, at the cost of one extra mark. Just write one paragraph per line; Spacious mode stretches the gaps for you, and extra blank lines you typed collapse to a single gap instead of growing."
       }
     ],
     "faqEn": [
@@ -444,6 +484,22 @@
       {
         "q": "Is it free?",
         "a": "Yes. Free, no sign-up, everything runs in your browser."
+      },
+      {
+        "q": "How does the 150-char bio counter count?",
+        "a": "By characters, live as you type; over the limit the counter turns red, so trim to 150 before copying. Emoji count as 2 in the counter, and platforms may count slightly differently, so leave a few characters of slack when you are near the limit."
+      },
+      {
+        "q": "Does auto-bullet change the first line?",
+        "a": "No. The first line is treated as the title and gets no bullet; bullets start from the second line. If you want the first line bulleted too, write the title on its own line or switch to Spacious mode and break lines by hand."
+      },
+      {
+        "q": "Can I add breathing spaces between Chinese and English automatically?",
+        "a": "Yes, 'Auto-space CJK, English & Emoji' is on by default and inserts a half-width space between Chinese characters and Latin letters, digits or emoji. Uncheck it if you prefer tight text; the preview updates immediately."
+      },
+      {
+        "q": "Can a draft from the AI post assistant go straight to formatting?",
+        "a": "Yes. In the AI Social Post Assistant, press '¶ Send to layout' and the draft lands in this tool's input box automatically — no manual copy-paste. Then pick the platform, paragraph style and title decoration, and copy once to post."
       }
     ]
   },
