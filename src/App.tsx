@@ -81,7 +81,7 @@ function safeParse<T>(key: string, fallback: T): T {
 /** 安全寫 localStorage：隱私模式拋錯時靜默忽略 */
 function safeSet(key: string, value: string): void {
   try {
-    safeSet(key, value);
+    localStorage.setItem(key, value);
   } catch {
     // ignore
   }
@@ -3630,7 +3630,7 @@ export default function App() {
             {
               title: "實用輔助工具",
               titleEn: "UTILITY TOOLS",
-              ids: ["blank", "blank-id", "nickname", "bopomofo"] as ToolId[]
+              ids: ["blank", "blank-id", "nickname", "bopomofo", "counter", "horror", "limbs"] as ToolId[]
             }
           ].map((sec) => (
             <div key={sec.title}>
