@@ -1578,6 +1578,18 @@
       {
         "h": "發文前四問檢查清單：通過了再按發佈",
         "p": "貼上模板、替換完之後，發佈前先問自己四個問題：一，開頭三秒能不能看懂在講什麼？看不懂就砍掉第一段重寫開頭；二，結尾問句是不是真的想聽回答？敷衍的「你怎麼看」不如不問；三，文裡的數字、價格、名額是不是真的？假數字被抓包一次，帳號信任就歸零；四，還有沒有殘留的大括號佔位符（例如 {原價}）？全文搜尋一次「{」確認清乾淨。發佈後半小時內守著留言區，第一時間回覆每一則留言，互動熱度就是這樣燒起來的。"
+      },
+      {
+        "h": "5 篇模板速查：先看目的，再點分類",
+        "p": "文案庫目前只有 5 篇模板，別一篇一篇慢慢試：想衝互動，點「Threads 破萬讚」分類，只有兩篇——「反常識人生體悟」適合講觀點（開頭先丟一個違反直覺的道理，再列 3 點佐證、結尾留問句），「社畜優雅崩潰共鳴」適合講心情（開頭一句崩潰自嘲、結尾不用講道理，留一句下班快樂就好）；想賣貨點「團媽開團爆單」，兩篇分工見下一節；想養氛圍點「IG 氛圍生活」，只有一篇探店模板，改寫法見第三節。分類按鈕在工具上方，點分類會同步換成該分類的第一篇預覽，點卡片可以再換篇。"
+      },
+      {
+        "h": "團購兩篇怎麼接力：開團先算給你看，截單前再倒數",
+        "p": "兩篇團購模板不要同一天連發，要照開團時間接力：開團當天發「原價 vs 團購價極致對比」，把市售原價、團購價、現省金額與折扣一次算清楚，團友第一眼就知道跟團划不划算；截單前一天或最後 6 小時再發「限時結單緊急倒數」，提醒還能追加的最後時間與賣場連結。注意倒數篇預設寫「剩下最後個位數」「今晚 23:59 準時關閉」，這些數字與時間必須是你真的情況——沒有個位數庫存就改成實際數量或刪掉那句，截單時間改了也要同步改文案，假倒數被團友發現一次，下次真倒數也沒人信。"
+      },
+      {
+        "h": "只有一篇 IG 氛圍模板，怎麼換主題用：留骨架，換兩行細節",
+        "p": "「私藏好店探店提案」這篇的骨架是：一句氛圍開場（找一個下午、把靈魂留給這裡）＋兩個具體細節（品項＋座位／場景）＋一句留白收尾。換主題不用重寫整篇：開場那句留著或換成同類氛圍句；中間兩行細節換成你自己的——賣甜點就換成品項與口感、賣衣服就換成版型與穿搭場合、分享生活就換成當天做的兩件事；文末的分隔線與 hashtag 換成你自己的主題標籤，不要連「#日常美學 #探店提案」都原封不動留著。骨架一樣、細節是你的，讀起來就不像抄來的。"
       }
     ],
     "faqZh": [
@@ -1596,6 +1608,22 @@
       {
         "q": "模板裡的 {原價}、{商品品名} 這種大括號要刪掉嗎？",
         "a": "要，而且要全部替換成真實內容再發。大括號是佔位符，提醒你這裡要填自己的資訊；直接帶著大括號發出去，等於告訴所有人「這篇是抄來的」，還會讓團友搞不清楚價格。發佈前用一個小習慣收尾：全文搜尋一次「{」，確認沒有任何佔位符殘留，再按發佈。"
+      },
+      {
+        "q": "文案庫只有 5 篇模板，會不會很快就用完？",
+        "a": "不會用完，但要輪著用、不能同一篇連發。做法是：同一分類的兩篇輪流用（例如這週用反常識觀點篇，下週用社畜共鳴篇），每篇發之前都按指南換主詞、數字與結尾問句；同一篇模板隔一陣子再拿出來時，至少換掉開頭鉤子與結尾問句。真的寫不出新細節時，先去站內的爆款 Hook 產生器換一個開頭，再回來套模板，比硬發同一篇有效。"
+      },
+      {
+        "q": "團購開團當天和截單前，應該各發哪一篇？",
+        "a": "開團當天發「原價 vs 團購價極致對比」：團友要先看到價格算式才會決定跟不跟。截單前一天或最後幾小時發「限時結單緊急倒數」：這篇的任務是提醒還沒下單的人，不是再講一次商品多好。兩篇的佔位符（{原價}、{團購價}、{現省}、{商品品名}）都要先填真實數字再發，倒數時間與庫存也要寫真的。"
+      },
+      {
+        "q": "IG 氛圍模板是寫咖啡廳的，我賣衣服或甜點能用嗎？",
+        "a": "能用，骨架是通用的：氛圍開場一句＋兩個具體細節＋留白收尾。賣衣服就把中間兩行換成版型與穿搭場合，賣甜點就換成品項與口感，文末 hashtag 換成自己的主題標籤。不要留原模板的咖啡廳地點與品項，也不要留不相干的 hashtag，細節換成真的，整篇就是你的文。"
+      },
+      {
+        "q": "模板文末的 hashtag 要全部留著嗎？",
+        "a": "不用全留，留 3 到 4 個跟這篇真正相關的就好，刪掉不相干的再發。例如探店模板的 #日常美學 #探店提案，改成賣衣服就不合適；團購模板也沒有固定 hashtag，發之前自己補上商品或店名相關的標籤。Hashtag 是幫人找到這篇，不是湊數量，留錯標籤反而把不對的人引進來。"
       }
     ],
     "guideEn": [
@@ -1610,6 +1638,18 @@
       {
         "h": "The four-question pre-post checklist: pass it before you hit publish",
         "p": "After pasting a template and swapping in your details, ask four questions before publishing. One: can a stranger understand the point in the first three seconds? If not, rewrite the opening. Two: is the closing question one you actually want answered? A lazy 'what do you think?' is worse than no question. Three: are the numbers, prices, and stock counts real? One caught fake number costs you the account's trust. Four: are there any leftover brace placeholders like {original price}? Search the whole post for '{' to confirm. After publishing, stay in the comments for the first 30 minutes and reply to every comment — that is how early engagement gets built."
+      },
+      {
+        "h": "The 5-Template Map: Pick by Goal, Then by Category",
+        "p": "There are only five templates, so do not browse them one by one. For replies, open the 'Threads viral' category — just two templates. 'Counter-intuitive life lesson' suits an opinion post: lead with a counter-intuitive claim, back it with three points, and end with a question. 'Graceful burnout' suits a mood post: open with a self-deprecating line about work and close with an off-duty punchline, no lesson required. For sales, open 'group-buy bestsellers' — the two templates work as a sequence, covered in the next section. For vibe, 'IG cozy life' has a single cafe-visit template; the rewrite method is in the third section. The category buttons sit above the tool: picking a category also loads that category's first template into the preview, and clicking any card switches templates."
+      },
+      {
+        "h": "Group-Buy Sequence: Lead with the Price Math, Close with the Countdown",
+        "p": "Do not post the two group-buy templates on the same day — run them as a sequence. On launch day, post 'Original vs group price, worked out for you': show the original price, the group price, the amount saved, and the discount, so members can decide at a glance whether joining is worth it. A day before the deadline, or in the final 6 hours, post 'Last-call countdown': its job is to remind people who have not ordered yet, not to pitch the product again. Its default lines — 'only single-digit stock left' and 'closes tonight at 23:59' — must match reality: if stock is not single-digit, change the number or drop the line, and if the deadline moves, update the copy too. One fake countdown and the next real one will not be believed."
+      },
+      {
+        "h": "One IG Vibe Template, Many Topics: Keep the Skeleton, Swap Two Detail Lines",
+        "p": "The 'hidden cafe find' template is built as: one atmospheric opener (an afternoon, leaving your soul here) plus two concrete details (an item and a seat or scene) plus a quiet closing line. To reuse it for another topic, keep the skeleton and swap the middle: selling clothes, replace the two lines with fit and styling occasions; selling desserts, replace them with items and taste; sharing daily life, replace them with two things you actually did that day. Replace the closing divider's hashtags with your own topic tags — do not leave '#daily aesthetics #cafe hunt' on a clothing post. Same skeleton, your own details, and it no longer reads as copied."
       }
     ],
     "faqEn": [
@@ -1628,6 +1668,22 @@
       {
         "q": "Do I need to remove placeholders like {original price} from the templates?",
         "a": "Yes — replace every placeholder with your real information before posting. The braces mark spots where your own details go; publishing with them still in place tells everyone the post was copied, and leaves group members confused about the price. Finish with a small habit: search the whole post for '{' to confirm no placeholder remains, then hit publish."
+      },
+      {
+        "q": "There are only 5 templates — won't I run out quickly?",
+        "a": "Not if you rotate them instead of reposting the same one. Alternate the two templates in a category (an opinion post this week, a burnout post next week), and swap the subject, numbers, and closing question before every post. When you reuse a template after a break, change at least the opening hook and the closing question. If you are stuck for a new angle, grab a fresh opening from this site's viral hook generator first, then fit it to the template."
+      },
+      {
+        "q": "Which group-buy template goes on launch day, and which before the deadline?",
+        "a": "Launch day gets 'Original vs group price, worked out for you': members need the price math before deciding to join. The day before the deadline, or in the final hours, gets 'Last-call countdown': it reminds people who have not ordered yet. Fill every placeholder ({original price}, {group price}, {you save}, {product name}) with real numbers first, and make sure the countdown time and stock level are real."
+      },
+      {
+        "q": "The IG vibe template is about a cafe — can I use it for clothes or desserts?",
+        "a": "Yes, the skeleton is generic: one atmospheric opener, two concrete details, and a quiet closing line. For clothes, swap the middle lines for fit and styling occasions; for desserts, swap them for items and taste; and replace the hashtags with your own topic tags. Do not keep the cafe's location, its menu items, or unrelated hashtags — once the details are real, the post is yours."
+      },
+      {
+        "q": "Should I keep all the hashtags at the end of a template?",
+        "a": "No — keep just 3 or 4 that genuinely match the post and delete the rest. The cafe template's daily-aesthetics and cafe-hunt tags do not belong on a clothing post, and the group-buy templates carry no fixed hashtags, so add ones tied to your product or shop. Hashtags help the right people find the post; wrong tags just bring in the wrong audience."
       }
     ]
   },
