@@ -1706,6 +1706,18 @@
       {
         "h": "發文前 30 秒檢查流程：貼上→看儀表板→一鍵轉換→人工再讀一次",
         "p": "①貼上文案（ChatGPT 草稿、小紅書抄來的、團購文都行）；②看上方兩格儀表板：大陸用語幾處、違規風險幾處；③按一鍵轉換，複製合規文案；④人工再讀一次：工具只掃文字不掃圖片，圖上文字、限動字幕要另外檢查；同音異義與語境要自己判斷（例如「質量」在物理文章裡是正確用法）；保健食品、醫美這類高風險產品，正式投放前建議再給法務或專業人士看一次。"
+      },
+      {
+        "h": "AI 草稿先掃一次：支語最容易藏在四個位置",
+        "p": "ChatGPT 草稿、剪映字幕、小紅書爆款文貼進來時，支語最常藏在四個位置：標題與開頭第一句（視頻、質量一開頭就露餡）、產品賣點列點（軟件、硬件、高清、硬盤這類科技詞）、結尾 CTA（鏈接、立馬、親們）、口播字幕稿（信息、項目、立項這類商務詞）。掃法：整段貼進工具，看上方儀表板兩格數字——大陸用語幾處、違規風險幾處——再一鍵轉換；不要只貼一段就交稿，標題、正文、字幕稿要分段各掃一次，因為同一份稿子不同段落來源不同，漏掃一段就等於沒掃。"
+      },
+      {
+        "h": "法規詞換掉不等於寫好：替換後一定要順一次語意",
+        "p": "工具的替換是逐詞對應，不會幫你重寫句子。預設範例就能看出來：「保證見效還能排毒瘦身」一鍵轉換後變成「眾多好評熱烈推薦還能促進新陳代謝、排便順暢維持窈窕體態、促進代謝」——詞都合法了，句子卻變拗口。正確流程是：轉換後把長串拆句重寫，例如拆成「眾多好評熱烈推薦，幫助維持窈窕體態、促進新陳代謝」；再檢查一次：有沒有把不該換的詞換掉（例如物理文章裡的「質量」）、有沒有留下「絕頂」「第一」這類不在 11 詞清單裡的絕對化用語。工具掃的是清單內的 11 個法規詞，清單外的誇大用語要自己把關。"
+      },
+      {
+        "h": "範例句實測：預設範例一鍵轉換前後對照",
+        "p": "工具預設帶一句示範文案：「這款質量極佳的視頻神器，立馬讓你的項目走心又給力！保證見效還能排毒瘦身，消炎效果絕頂，鏈接在下方！」按一鍵轉換後變成：「這款品質極佳的影片神器，立刻讓你的專案用心又罩！眾多好評熱烈推薦還能促進新陳代謝、排便順暢維持窈窕體態、促進代謝，舒緩修護、安撫敏弱效果絕頂，連結在下方！」對照著看就知道兩件事：第一，31 個支語與 11 個法規詞是一次換完的；第二，換完的句子要再潤一次（見上一節），工具負責「找出來＋換掉」，順不順由你最後定稿。"
       }
     ],
     "faqZh": [
@@ -1724,6 +1736,22 @@
       {
         "q": "大陸用語一定要改嗎？有些詞台灣人也常用。",
         "a": "看場景。對台灣受眾的公開文案、品牌帳號建議改——被留言糾正一次，信任就扣一次分；私人聊天、引用原文、討論用語本身時不用改。工具的角色是幫你「看見」文案裡有哪些大陸用語與風險詞，改不改由你決定，不是一律封殺。"
+      },
+      {
+        "q": "工具會不會把物理文章裡的「質量」也換掉？",
+        "a": "會。工具是字串比對，不看語境——只要出現「質量」就換成「品質」，不管它在物理公式裡是不是正確用法。同理「文件」「渲染」這類兩岸意思不同的詞也不在 31 詞清單的處理範圍內，要靠人工判斷。學術、技術文件建議分段貼：先掃行銷段落，專業段落自己逐句檢查，不要整篇一鍵轉換。"
+      },
+      {
+        "q": "為什麼「很給力」只算一處，不是兩處？",
+        "a": "因為工具會去重：當某個詞是另一個命中詞的子字串時，只計較長的那一個。「很給力」包含了「給力」，所以儀表板只算 1 處，轉換時也只換成「很罩」一次，不會換完又重換。數字是為了讓你快速掌握文案裡有幾類問題，不是逐字罰單。"
+      },
+      {
+        "q": "開團文案機也有法規掃描，和這支工具差在哪？",
+        "a": "同一組 11 個法規詞，但掃的範圍不同。開團文案機只掃產品名稱與賣點欄位，適合邊寫邊避雷；這支工具掃你貼進來的整段文案，外加 31 個大陸用語。建議流程：先用開團文案機生出文案，再整段貼到這裡掃一次支語＋法規，兩道檢查都過了再發。"
+      },
+      {
+        "q": "轉換後句子變拗口，可以只換一部分嗎？",
+        "a": "可以。工具輸出的是一鍵轉換的結果，你複製後可以自己再改——刪掉多餘的替換詞、拆句、換句型都行；也可以只貼有問題的段落進來掃，不要整篇貼。記住分工：工具負責找出 31 個支語與 11 個法規詞並給出合法替換，句子順不順、語氣像不像你，由你最後定稿。"
       }
     ],
     "guideEn": [
@@ -1738,6 +1766,18 @@
       {
         "h": "The 30-second pre-post check: paste, dashboard, convert, human re-read",
         "p": "① Paste your draft — a ChatGPT draft, borrowed Xiaohongshu copy, or group-buy post all work. ② Read the two dashboard tiles: how many mainland terms, how many legal risks. ③ Convert and copy the compliant version. ④ Re-read it once yourself: the tool scans text, not images, so check on-image text and Story subtitles separately; judge homonyms and context yourself (質量 is correct in a physics article); for high-risk categories like supplements or medical beauty, get a legal or professional review before paid placement."
+      },
+      {
+        "h": "AI drafts first: the four spots where mainland phrasing hides",
+        "p": "When copy comes from a ChatGPT draft, auto subtitles, or a viral Xiaohongshu post, mainland terms cluster in four spots: the headline and first line (視頻, 質量 give it away immediately), the selling-point bullets (tech words like 軟件, 硬件, 高清, 硬盤), the closing call to action (鏈接, 立馬, 親們), and the voiceover script (business words like 信息, 項目, 立項). Scan each part separately — headline, body, and subtitles — because different parts of one draft often come from different sources, and one unscanned section means the check is incomplete. Paste each part in, read the two dashboard counts (mainland terms, legal risks), then convert."
+      },
+      {
+        "h": "Swapped is not finished: re-read for sense after conversion",
+        "p": "Replacement is word-by-word; the tool does not rewrite your sentences. The built-in demo shows it: 保證見效還能排毒瘦身 becomes 眾多好評熱烈推薦還能促進新陳代謝、排便順暢維持窈窕體態、促進代謝 — every term is compliant, but the sentence turns clunky. The right flow is to split the long string back into readable sentences after converting, then check twice more: did anything get swapped that should not have been (質量 in a physics article, for example), and is any absolute claim left that is not in the 11-term list, like 絕頂 or 第一? The tool screens the 11 listed terms; anything outside the list is your call."
+      },
+      {
+        "h": "Worked example: the built-in demo sentence, before and after",
+        "p": "The tool ships with a demo sentence: 這款質量極佳的視頻神器，立馬讓你的項目走心又給力！保證見效還能排毒瘦身，消炎效果絕頂，鏈接在下方！ One-click conversion turns it into: 這款品質極佳的影片神器，立刻讓你的專案用心又罩！眾多好評熱烈推薦還能促進新陳代謝、排便順暢維持窈窕體態、促進代謝，舒緩修護、安撫敏弱效果絕頂，連結在下方！ Two lessons from the comparison: all 31 mainland terms and 11 legal terms are swapped in one pass, and the converted sentence still needs a human polish (see the previous section) — the tool finds and swaps, you decide the final wording."
       }
     ],
     "faqEn": [
@@ -1756,6 +1796,22 @@
       {
         "q": "Must every mainland term be changed? Some are common in Taiwan too.",
         "a": "It depends on context. For public copy aimed at a Taiwan audience, change them — one callout in the comments costs trust. In private chat, quoted sources, or when discussing the terms themselves, leave them. The tool shows you what is in your copy; you decide what to change."
+      },
+      {
+        "q": "Will the tool also swap 質量 in a physics article?",
+        "a": "Yes. It matches strings, not context — any 質量 becomes 品質, even where the original is correct in physics. Likewise, same-word-different-meaning terms like 文件 and 渲染 are outside the 31-term list and need human judgment. For academic or technical documents, paste in sections: scan the marketing parts, and check the specialist parts line by line instead of converting the whole document at once."
+      },
+      {
+        "q": "Why does 很給力 count as one hit, not two?",
+        "a": "Because the tool deduplicates: when one matched term is a substring of another, only the longer one counts. 很給力 contains 給力, so the dashboard shows 1 hit and conversion swaps it to 很罩 once, never twice. The counts tell you how many kinds of problems your copy has, not a per-character fine."
+      },
+      {
+        "q": "The group-buy copy tool also scans for legal risks — what is different here?",
+        "a": "Same 11 legal terms, different scope. The group-buy tool scans only the product name and selling-point fields, which suits writing-time checks. This tool scans any full text you paste, plus the 31 mainland terms. Recommended flow: draft with the group-buy tool, then paste the whole copy here for a full phrasing and legal pass before posting."
+      },
+      {
+        "q": "The converted sentence reads awkwardly — can I swap only part of it?",
+        "a": "Yes. The output is a one-click result; after copying you can edit freely — drop redundant replacements, split sentences, rephrase. You can also paste only the problematic paragraph instead of the whole draft. The split of labor is fixed: the tool finds the 31 mainland terms and 11 legal terms and offers compliant swaps; readability and tone are yours to finalize."
       }
     ]
   },
