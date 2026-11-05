@@ -1406,6 +1406,18 @@
       {
         "h": "U+3164 vs U+2800 vs U+200B: which blank character should I use?",
         "p": "U+3164 (Hangul filler) is nearly zero-width and the most universal pick — ideal for highlight names and game IDs where the blank sits inside a name. U+2800 (braille pattern blank) has a fixed width, better for paragraph spacing and bio centering on LINE or Threads. U+200B (zero-width space) is fully invisible, but a few platforms filter it out as empty — if it gets stripped, switch to U+3164 and try again."
+      },
+      {
+        "h": "How to make a blank game name?",
+        "p": "Many mobile games reject names made of ordinary spaces. Copy the Universal blank (U+3164) on this page and paste it into the game's nickname field — start with just a few characters, since name fields are short and this tool lets you copy anywhere from 1 to 30. If the game rejects it, try the Paragraph blank (U+2800) instead, or switch to this site's Invisible Name Generator, which mixes four blank characters for stricter filters. Test first in the paste-test box below: if the cursor moves and the character count rises, the characters are really there. Note that blank characters only change what the name looks like — if the game charges a rename card or item to change names, that cost still applies."
+      },
+      {
+        "h": "LINE and Threads line breaks: stop the app from eating your blank lines",
+        "p": "A normal space typed on an empty line is often stripped when you send a post. Instead, copy the Paragraph blank (U+2800) here and paste one onto each empty line between your paragraphs, so the app sees real characters and keeps the spacing. Write the post first, then drop a paragraph blank onto every line you want to stay empty, and preview the result before sending. If a blank line still disappears, try the Universal blank (U+3164) — filters differ from app to app, so if one type fails, try another."
+      },
+      {
+        "h": "How to center an Instagram bio with blank characters",
+        "p": "Instagram's bio editor left-aligns everything — there is no center button. To fake a centered look, paste a few Braille Pattern Blanks (U+2800) in front of each line: each one has a fixed width, so it pushes the text right. Use the length presets (1, 3, 5, 10) or the stepper (1–30) to tune the offset line by line, and check the result on your phone, because character widths render differently across devices. Use a blank character instead of a normal space on empty lines too, or the app may collapse them when you save. Keep the whole bio within Instagram's 150-character limit — every blank character counts."
       }
     ],
     "faqEn": [
@@ -1428,6 +1440,18 @@
       {
         "q": "What's the difference between U+3164 and U+2800 on Instagram?",
         "a": "U+3164 is nearly zero-width, best for hiding inside names or IDs; U+2800 has a fixed width, better for paragraph spacing or centering your bio. Both are kept by Instagram — pick based on your use case."
+      },
+      {
+        "q": "Can I use invisible text for Discord or LINE names?",
+        "a": "For display names, yes: Discord display names and server nicknames, LINE display names, and Threads profiles all accept these Unicode blank characters — copy and paste is all it takes. One exception: a Discord account username itself has stricter rules (letters, numbers, underscores and periods only), so a fully blank account username will not work — use the display name or server nickname field instead. If one character type is rejected, try another."
+      },
+      {
+        "q": "Is copying invisible text free? Do I need an account?",
+        "a": "Completely free, no sign-up. Tap the copy button and the characters go straight to your clipboard; everything happens in your browser and nothing is uploaded."
+      },
+      {
+        "q": "Will a platform detect or ban invisible text?",
+        "a": "These are ordinary Unicode characters, not a hack or exploit. A small number of games or apps do filter out the zero-width character (U+200B) — if that happens, switch to U+3164 or U+2800, which usually gets through. Filters change over time, so re-test after an app update, and do not use blank characters to impersonate someone or dodge moderation: most platforms treat that as a rules violation."
       }
     ]
   },
