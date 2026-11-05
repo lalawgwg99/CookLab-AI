@@ -1979,6 +1979,74 @@
       }
     ]
   },
+  "deai": {
+    "nameZh": "去 AI 味檢查器",
+    "nameEn": "De-AI Writing Checker",
+    "titleZh": "去 AI 味檢查器｜掃出破折號濫用、罐頭連接詞與三連排比，逐處標註改寫建議｜字研所 TextLab",
+    "descriptionZh": "貼上 AI 生成的中文，規則式掃出破折號濫用、「不僅…更是…」、「值得一提的是」、「總而言之」、三連排比與「深入探討」等寫作壞習慣，逐處標註並給改寫建議。純前端檢查，文字不離開瀏覽器。",
+    "titleEn": "De-AI Writing Checker | Spot Em-Dash Overuse, Stock Phrases & Triple Parallelism | TextLab",
+    "descriptionEn": "Paste AI-generated Chinese text to flag em-dash overuse, stock phrases like “not only… but also…”, triple parallelism and other AI writing habits, with a rewrite suggestion for each hit. Runs entirely in your browser.",
+    "guideZh": [
+      {
+        "h": "什麼是「AI 味」",
+        "p": "AI 生成的中文常有一眼看穿的套式：破折號連發、「不僅…更是…」、「值得一提的是」、「總而言之」、三個排比句連發、「深入探討」「至關重要」這類評價空話。單看一句都沒問題，整段加起來就是「一看就知道是 AI 寫的」。"
+      },
+      {
+        "h": "檢查怎麼運作",
+        "p": "規則式比對：內建 14 條中文寫作規則，貼上文字就逐條掃描，命中的地方逐處標出原文與改寫建議，並依命中密度換算成 0–100 的 AI 味分數。破折號要出現 2 處以上才算濫用，單一破折號不會被標記。"
+      },
+      {
+        "h": "分數代表什麼",
+        "p": "0–20 輕微、21–50 明顯、51–80 濃厚、81–100 非常濃厚。分數只是提醒，不是判決：常見寫法也可能命中（例如「首先」「總之」），短文的分數波動也比較大，請以逐條建議為主、分數為輔。"
+      },
+      {
+        "h": "檢查後怎麼改",
+        "p": "先刪套話（「值得一提的是」「總而言之」「隨著…的發展」這類開場白刪掉不影響原意），再把評價空話換成具體事實（「深入探討」改成「比較了三種做法」）。按「套用建議改寫」只會處理可安全刪除的項目，其他命中請照建議手動改寫。"
+      }
+    ],
+    "faqZh": [
+      {
+        "q": "檢查結果準嗎？會不會誤判？",
+        "a": "規則式檢查一定有誤判：例如正常的「首先、其次」列舉也會被標記，「總之」在口語寫作裡也很常見。請把結果當提醒，不是定罪；改不改由你決定，建議優先處理「破折號濫用」與「不僅…更是…」這類一眼看穿的套式。"
+      },
+      {
+        "q": "我的文字會被上傳嗎？",
+        "a": "不會。檢查全部在你的瀏覽器完成，不經過伺服器、不接 AI API，我們不會儲存你的內容。"
+      },
+      {
+        "q": "可以檢查英文嗎？",
+        "a": "目前只針對繁體中文寫作習慣設計；英文 AI 寫作有另一套特徵（例如過度使用 em dash 與 delve into），不在本工具的檢查範圍。"
+      },
+      {
+        "q": "改完分數就會變 0 嗎？",
+        "a": "不一定，也不需要。目標是去掉一眼看穿的套式，不是把分數洗到 0；留一兩個「首先」或一個破折號完全沒問題，文章是寫給人看的，不是寫給檢查器看的。"
+      }
+    ],
+    "guideEn": [
+      {
+        "h": "What is “AI flavor”?",
+        "p": "AI-generated Chinese often shares visible habits: repeated em dashes, “not only… but also…” formulas, “worth mentioning” openers, “in conclusion” endings, triple parallelism, and empty praise like “crucially important”. One alone is fine; together they read as obviously AI-written."
+      },
+      {
+        "h": "How the check works",
+        "p": "Rule-based matching: 14 Chinese writing rules scan your text and flag each hit with a rewrite suggestion. Scores (0–100) are converted from hit density. A single em dash is never flagged; it takes two or more to count as overuse."
+      },
+      {
+        "h": "What the score means",
+        "p": "0–20 mild, 21–50 noticeable, 51–80 strong, 81–100 very strong. Treat the score as a hint, not a verdict: common phrasing can trigger rules, and short texts swing more. Read the per-hit suggestions first."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Is my text uploaded?",
+        "a": "No. Everything runs locally in your browser — no AI, no server."
+      },
+      {
+        "q": "Can it check English?",
+        "a": "Not yet. The rules target Traditional Chinese writing habits; English AI writing has its own patterns."
+      }
+    ]
+  },
   "transcript": {
     "nameZh": "逐字稿清理器",
     "nameEn": "Transcript Cleaner",

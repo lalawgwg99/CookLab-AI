@@ -7,12 +7,14 @@ import seoPages from "./data/seo-pages.json";
 import { bopomofoOf, BPMF_COUNT } from "./data/bopomofo";
 import { convertSubtitles, detectSubtitles } from "./lib/subtitleTw";
 import { fixTypesetting } from "./lib/typeset";
+import { analyzeDeai, scoreBand } from "./lib/deai";
 import { cleanTranscript } from "./lib/transcript";
 import { dedupLines } from "./lib/dedup";
 import AiPolish from "./components/AiPolish";
+import AffiliateShelf from "./components/AffiliateShelf";
 import FloatingAssistant from "./components/FloatingAssistant";
 
-type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "subtitle-tw" | "typeset" | "transcript" | "dedup" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "blank" | "blank-id" | "nickname" | "counter" | "horror" | "limbs";
+type ToolId = "layout" | "ai" | "deal" | "swipe" | "localize" | "subtitle-tw" | "typeset" | "deai" | "transcript" | "dedup" | "hook" | "title" | "bio" | "symbols" | "emoji" | "kaomoji" | "fonts" | "bopomofo" | "blank" | "blank-id" | "nickname" | "counter" | "horror" | "limbs";
 type Language = "zh-TW" | "en";
 type ThemeMode = "system" | "light" | "dark";
 
@@ -45,6 +47,7 @@ const tools: Tool[] = [
   { id: "localize", name: "台灣用語與法規避雷", nameEn: "Taiwan Voice Sanitizer", short: "去大陸支語・衛福部防罰", shortEn: "Localize phrasing & safety", icon: "🇹🇼" },
   { id: "subtitle-tw", name: "字幕台灣用語校正", nameEn: "Subtitle Taiwanizer", short: "剪映 SRT 轉台灣繁體＋用語", shortEn: "SRT to Taiwan Traditional", icon: "幕" },
   { id: "typeset", name: "中文排版自動校正", nameEn: "Chinese Typesetting Fixer", short: "中英空格・全形標點・清空白", shortEn: "CJK spacing & punctuation", icon: "排" },
+  { id: "deai", name: "去 AI 味檢查器", nameEn: "De-AI Writing Checker", short: "掃 AI 寫作壞習慣・逐處標註", shortEn: "Spot AI writing habits", icon: "味" },
   { id: "transcript", name: "逐字稿清理器", nameEn: "Transcript Cleaner", short: "去贅詞・分段・補標點", shortEn: "Remove fillers & reflow", icon: "稿" },
   { id: "dedup", name: "刪除重複行", nameEn: "Remove Duplicate Lines", short: "文字去重・一鍵刪重複行", shortEn: "Dedup lines, keep first occurrence", icon: "重" },
   { id: "deal", name: "電商開團爆單機", nameEn: "Group-Buy Deal Studio", short: "團購帶貨與防客訴規格", shortEn: "High-converting sales copy", icon: "🛒" },
@@ -483,7 +486,8 @@ const RELATED_TOOLS: Record<string, string[]> = {
   swipe: ["hook", "ai", "deal"],
   localize: ["ai", "layout", "subtitle-tw"],
   "subtitle-tw": ["localize", "typeset", "layout"],
-  typeset: ["layout", "subtitle-tw", "transcript"],
+  typeset: ["layout", "subtitle-tw", "transcript", "deai"],
+  deai: ["typeset", "localize", "layout"],
   transcript: ["subtitle-tw", "typeset", "counter"],
   dedup: ["typeset", "transcript", "counter"],
   deal: ["ai", "hook", "swipe"],
@@ -2490,6 +2494,177 @@ function TypesetTool({ copied, setCopied, language }: { copied: string; setCopie
           <p style={{ fontSize: "11px", color: "var(--muted)", marginTop: "10px", lineHeight: 1.6 }}>
             {t(language, "規則說明：句點只有在前文是中文時才轉「。」」，所以 3.14、example.com、英文句子裡的句點都不會動；冒號前文是數字（12:30）也不轉。程式碼請用反引號包住，或整行縮排四格以上，工具會跳過不處理。", "Rules: a period becomes 。 only after Chinese text, so 3.14, example.com and English sentences are safe. A colon after digits (12:30) is untouched. Wrap code in backticks or indent it 4+ spaces and it will be skipped.")}
           </p>
+          <AffiliateShelf toolId="typeset" language={language} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DeaiTool({ copied, setCopied, language }: { copied: string; setCopied: (v: string) => void; language: Language }) {
+  const [input, setInput] = useState("在當今數位化的時代，隨著人工智慧技術的發展，寫作方式正在發生深刻的變化。值得一提的是，AI 寫作不僅速度快，更是能夠在短時間內產出大量內容——而且品質穩定——讓許多寫作者感到驚訝。總而言之，深入探討 AI 寫作的影響是至關重要的：首先，它提高了效率；其次，它降低了門檻；最後，它改變了整個產業。毫無疑問，這是一個值得深入了解的課題。");
+  const [checkedText, setCheckedText] = useState("");
+  const [result, setResult] = useState<ReturnType<typeof analyzeDeai> | null>(null);
+  const [showCleaned, setShowCleaned] = useState(false);
+
+  const handleCheck = () => {
+    if (!input.trim()) {
+      setCheckedText("");
+      setResult(null);
+      setShowCleaned(false);
+      return;
+    }
+    setCheckedText(input);
+    setResult(analyzeDeai(input));
+    setShowCleaned(false);
+  };
+
+  // 逐處標註：把檢查當下的原文按命中位置切段，命中處用醒目底色標出
+  const renderHighlighted = () => {
+    if (!result) return null;
+    const segments: { text: string; hit: boolean }[] = [];
+    let cursor = 0;
+    for (const f of result.findings) {
+      if (f.start > cursor) segments.push({ text: checkedText.slice(cursor, f.start), hit: false });
+      segments.push({ text: checkedText.slice(f.start, f.end), hit: true });
+      cursor = f.end;
+    }
+    if (cursor < checkedText.length) segments.push({ text: checkedText.slice(cursor), hit: false });
+    return (
+      <p style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", fontSize: "13px", color: "var(--ink)", lineHeight: 1.8, margin: 0 }}>
+        {segments.map((s, i) =>
+          s.hit ? (
+            <mark key={i} style={{ background: "#fde68a", color: "var(--ink)", borderRadius: "3px", padding: "0 1px" }}>{s.text}</mark>
+          ) : (
+            <span key={i}>{s.text}</span>
+          ),
+        )}
+      </p>
+    );
+  };
+
+  const band = result ? scoreBand(result.score) : null;
+
+  return (
+    <div className="tool-card">
+      <div className="tool-header">
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span className="tool-icon">味</span>
+          <div>
+            <h2>{t(language, "去 AI 味檢查器", "De-AI Writing Checker")}</h2>
+            <p>{t(language, "貼上 AI 生成的中文，規則式掃出破折號濫用、「不僅…更是…」、「值得一提的是」、「總而言之」、三連排比與「深入探討」等寫作壞習慣，逐處標註並給改寫建議。處理都在你的瀏覽器完成。", "Paste AI-generated Chinese text to flag em-dash overuse, stock phrases, triple parallelism and other AI writing habits, with a rewrite suggestion for each hit. Runs entirely in your browser.")}</p>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ padding: "12px 14px", borderRadius: "10px", background: "#fef3c7", border: "1px solid var(--line)", margin: "14px 0" }}>
+        <span style={{ fontSize: "12px", color: "var(--ink)", lineHeight: 1.6 }}>
+          {t(language, "先說清楚：這是規則式檢查，不是 AI 偵測模型，一定有誤判（例如正常的「首先、其次」列舉也會被標記）。請把結果當提醒，不是定罪；改不改由你決定。", "Honest note: this is rule-based checking, not an AI detector — false positives happen (e.g. a normal “firstly, secondly” list gets flagged). Treat results as reminders, not verdicts.")}
+        </span>
+      </div>
+
+      <div style={{ marginBottom: "12px" }}>
+        <label style={{ fontSize: "12px", color: "var(--ink)", fontWeight: 600, display: "block", marginBottom: "6px" }}>
+          {t(language, "貼上要檢查的文字（AI 生成的報告、論文、部落格草稿都行）：", "Paste text to check (AI-generated reports, papers, blog drafts):")}
+        </label>
+        <textarea
+          rows={8}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder={t(language, "貼上文字…", "Paste text...")}
+          style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.6 }}
+        />
+      </div>
+
+      <button
+        onClick={handleCheck}
+        style={{ width: "100%", padding: "12px", borderRadius: "10px", background: "var(--purple)", color: "#fff", border: "none", fontSize: "14px", fontWeight: 650, cursor: "pointer", marginBottom: "16px" }}
+      >
+        {t(language, "開始檢查", "Check AI flavor")}
+      </button>
+
+      {!!result && (
+        <div style={{ padding: "14px", borderRadius: "12px", background: "var(--paper)", border: "1px solid var(--line)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", flexWrap: "wrap", gap: "6px" }}>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: result.score > 50 ? "#dc2626" : "#16a34a" }}>
+              {result.findings.length > 0
+                ? t(language, `AI 味分數 ${result.score} 分（${band?.zh}）・共命中 ${result.findings.length} 處`, `AI flavor score ${result.score} (${band?.en}) · ${result.findings.length} hits`)
+                : t(language, "沒有命中任何 AI 寫作壞習慣", "No AI writing habits found")}
+            </span>
+          </div>
+          <p style={{ fontSize: "11px", color: "var(--muted)", margin: "0 0 10px", lineHeight: 1.6 }}>
+            {t(language, "分數是命中密度換算，僅供參考；請以逐條建議為主、分數為輔。短文的分數波動比較大。", "The score is converted from hit density and is only a hint; read the per-hit suggestions first. Short texts swing more.")}
+          </p>
+          {result.perRule.length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "10px" }}>
+              {result.perRule.map((r) => (
+                <span key={r.ruleId} style={{ fontSize: "11px", padding: "3px 8px", borderRadius: "999px", background: "var(--canvas)", border: "1px solid var(--line)", color: "var(--ink)" }}>
+                  {language === "zh-TW" ? r.label : r.labelEn} ×{r.count}
+                </span>
+              ))}
+            </div>
+          )}
+          {result.findings.length > 0 && (
+            <div style={{ marginBottom: "12px" }}>
+              <div style={{ fontSize: "12px", fontWeight: 700, marginBottom: "6px" }}>{t(language, "逐處標註", "Highlighted hits")}</div>
+              {renderHighlighted()}
+            </div>
+          )}
+          {result.findings.length > 0 && (
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "12px" }}>
+              {result.findings.map((f, i) => (
+                <div key={`${f.ruleId}-${f.start}`} style={{ padding: "10px 12px", borderRadius: "8px", background: "var(--canvas)", border: "1px solid var(--line)" }}>
+                  <div style={{ fontSize: "12px", fontWeight: 700, marginBottom: "4px" }}>
+                    {i + 1}. {language === "zh-TW" ? f.label : f.labelEn}
+                  </div>
+                  <div style={{ fontSize: "12px", color: "var(--ink)", lineHeight: 1.6 }}>
+                    {t(language, "原文：", "Found: ")}「{f.text}」
+                  </div>
+                  <div style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.6 }}>
+                    {t(language, "建議：", "Suggestion: ")}{language === "zh-TW" ? f.suggestion : f.suggestionEn}
+                    {f.safeDelete ? t(language, "（可一鍵刪除）", " (one-click deletable)") : ""}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          {result.appliedDeletions > 0 && !showCleaned && (
+            <button
+              onClick={() => setShowCleaned(true)}
+              style={{ width: "100%", padding: "10px", borderRadius: "10px", background: "var(--canvas)", color: "var(--ink)", border: "1px solid var(--line)", fontSize: "13px", fontWeight: 650, cursor: "pointer", marginBottom: "10px" }}
+            >
+              {t(language, `套用建議改寫（僅刪除 ${result.appliedDeletions} 處可安全刪除的套話）`, `Apply safe rewrites (delete ${result.appliedDeletions} removable phrases)`)}
+            </button>
+          )}
+          {showCleaned && result.cleaned !== checkedText && (
+            <div style={{ marginBottom: "10px" }}>
+              <div style={{ fontSize: "12px", fontWeight: 700, marginBottom: "6px" }}>{t(language, "套用建議改寫後（請再人工校對一次）", "After applying safe rewrites (please proofread once more)")}</div>
+              <textarea
+                readOnly
+                rows={8}
+                value={result.cleaned}
+                style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", fontSize: "13px", color: "var(--ink)", lineHeight: 1.6 }}
+              />
+              <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", marginTop: "10px", flexWrap: "wrap" }}>
+                <button
+                  onClick={() => downloadTextFile("deai.txt", result.cleaned)}
+                  style={{ padding: "8px 18px", borderRadius: "8px", border: "1px solid var(--line)", background: "var(--canvas)", color: "var(--ink)", fontSize: "13px", fontWeight: 650, cursor: "pointer" }}
+                >
+                  {t(language, "下載 .txt", "Download .txt")}
+                </button>
+                <button
+                  onClick={() => copyText(result.cleaned, setCopied, "deai")}
+                  style={{ padding: "8px 18px", borderRadius: "8px", border: "none", background: "var(--purple)", color: "#fff", fontSize: "13px", fontWeight: 650, cursor: "pointer" }}
+                >
+                  {copied === result.cleaned ? t(language, "已複製 ✓", "Copied ✓") : t(language, "複製結果", "Copy result")}
+                </button>
+              </div>
+            </div>
+          )}
+          <p style={{ fontSize: "11px", color: "var(--muted)", marginTop: "10px", lineHeight: 1.6 }}>
+            {t(language, "提醒：破折號要出現 2 處以上才算濫用；「套用建議改寫」只處理可安全刪除的開場套話，其他命中請照建議手動改寫。改完可以再檢查一次。", "Note: em dashes count as overuse only with 2+ occurrences. “Apply safe rewrites” only removes deletable openers; rewrite other hits manually, then check again.")}
+          </p>
+          <AffiliateShelf toolId="deai" language={language} />
         </div>
       )}
     </div>
@@ -3615,7 +3790,7 @@ export default function App() {
             {
               title: "常用排版與文案",
               titleEn: "LAYOUT & COPYWRITING",
-              ids: ["layout", "swipe", "localize", "subtitle-tw", "typeset", "transcript", "dedup", "deal"] as ToolId[]
+              ids: ["layout", "swipe", "localize", "subtitle-tw", "typeset", "deai", "transcript", "dedup", "deal"] as ToolId[]
             },
             {
               title: "社群創作靈感",
@@ -3680,6 +3855,7 @@ export default function App() {
           {active === "localize" && <LocalizeTool {...toolProps} />}
           {active === "subtitle-tw" && <SubtitleTwTool {...toolProps} />}
           {active === "typeset" && <TypesetTool {...toolProps} />}
+          {active === "deai" && <DeaiTool {...toolProps} />}
           {active === "transcript" && <TranscriptTool {...toolProps} />}
           {active === "dedup" && <DedupTool {...toolProps} />}
           {active === "deal" && <DealTool {...toolProps} />}

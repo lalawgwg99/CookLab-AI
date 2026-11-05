@@ -98,3 +98,58 @@ function recordLocalMetric(type: "pv" | "copy", toolId: string) {
     localStorage.setItem("textlab.telemetry", JSON.stringify(data));
   } catch {}
 }
+
+// Affiliate shelf telemetry (local-only on purpose):
+// /api/track counts every event into the daily PV bucket, so sending
+// impressions there would inflate pageviews. Affiliate impressions/clicks
+// are kept in localStorage (same pattern as recordLocalMetric) plus a
+// GA4 event when gtag exists. When affiliate links go live, clicks are
+// already wired through trackAffiliateClick.
+export interface AffiliateStatsData {
+  date: string;
+  impressions: Record<string, number>;
+  clicks: Record<string, number>;
+}
+
+export function trackAffiliateImpression(toolId: string) {
+  recordAffiliateMetric("impression", toolId);
+  try {
+    const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+    if (typeof w.gtag === "function") {
+      w.gtag("event", "affiliate_impression", {
+        event_category: "affiliate",
+        event_label: toolId
+      });
+    }
+  } catch {}
+}
+
+export function trackAffiliateClick(toolId: string, slotId: string) {
+  recordAffiliateMetric("click", `${toolId}:${slotId}`);
+  try {
+    const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+    if (typeof w.gtag === "function") {
+      w.gtag("event", "affiliate_click", {
+        event_category: "affiliate",
+        event_label: `${toolId}:${slotId}`
+      });
+    }
+  } catch {}
+}
+
+function recordAffiliateMetric(type: "impression" | "click", key: string) {
+  try {
+    const today = new Date().toISOString().slice(0, 10);
+    const raw = localStorage.getItem("textlab.affiliate");
+    let data: AffiliateStatsData = raw
+      ? JSON.parse(raw)
+      : { date: today, impressions: {}, clicks: {} };
+    if (data.date !== today) data = { date: today, impressions: {}, clicks: {} };
+    if (type === "impression") {
+      data.impressions[key] = (data.impressions[key] || 0) + 1;
+    } else {
+      data.clicks[key] = (data.clicks[key] || 0) + 1;
+    }
+    localStorage.setItem("textlab.affiliate", JSON.stringify(data));
+  } catch {}
+}
