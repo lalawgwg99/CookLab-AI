@@ -982,6 +982,18 @@
       {
         "h": "Save Frequently Used Kaomoji as Keyboard Shortcuts",
         "p": "Heavy users don't need to copy every time: on iOS go to Settings > General > Keyboard > Text Replacement and map a short code like kk or cry to your favorite kaomoji; on Android add shortcuts in Gboard's personal dictionary. Once set, typing the shortcut expands to the kaomoji in LINE, Instagram, Threads, or any app."
+      },
+      {
+        "h": "Find the right kaomoji by mood — or just search for it",
+        "p": "The library is sorted into 20 categories — Happy, Shy, Cats, Dogs, Christmas, Food & Eating, Magic & Fantasy and more — with about 130 faces in total. Type an English keyword like happy, cry, hug or cat into the search box, or browse a category when you want to discover something new. Not sure which face fits the moment? The “Pick by situation” cards at the top match six everyday moments — greeting, thanks, sorry, happy, sad and cheer up — to a ready-to-copy kaomoji."
+      },
+      {
+        "h": "Build your own kaomoji with the DIY builder",
+        "p": "Nothing in the library feels quite right? Use the DIY builder under the search box: pick a left arm (8 options, from plain brackets to raised arms like ٩( and ʕ), pick eyes (10 options, from (◕‿◕) sparkle eyes to (¬_¬) side-eye), then pick a right arm (8 options). The preview updates as you tap, and one button copies your custom face. Short builds survive chat wrapping best — a long face can split across lines in a small bubble."
+      },
+      {
+        "h": "Save favorites so your go-to faces are always one tap away",
+        "p": "Tap the heart on any kaomoji to save it. Your favorites appear in their own row at the top of the page, so the three or four faces you actually use are never more than one tap away. Favorites are stored in this browser only — no account, no sign-up — so they will not follow you to another phone or computer; just tap the heart again there."
       }
     ],
     "faqEn": [
@@ -1004,6 +1016,18 @@
       {
         "q": "Why do some kaomoji show as boxes on Android?",
         "a": "A box means the current font is missing that character, not that the kaomoji is broken. Switching fonts usually fixes it; otherwise choose kaomoji made of common punctuation, which every device supports."
+      },
+      {
+        "q": "Can I use kaomoji in my Discord nickname or username?",
+        "a": "In a server nickname or your display name, yes — kaomoji are plain text, so they paste in just like letters. Discord account usernames are stricter and only allow letters, numbers, underscores and periods, so a kaomoji username will be rejected; use your display name for the face instead."
+      },
+      {
+        "q": "Can I make my own kaomoji instead of copying one?",
+        "a": "Yes. Use the DIY builder on this page: choose a left arm, eyes and a right arm, check the live preview, then copy your custom face with one tap. Keep it short — long faces can wrap awkwardly in small chat bubbles."
+      },
+      {
+        "q": "Will my saved favorites sync to my other devices?",
+        "a": "No. Favorites are stored only in the browser you saved them in, with no account involved. On another phone or computer, tap the heart on your favorite kaomoji again to rebuild the list there."
       }
     ]
   },
