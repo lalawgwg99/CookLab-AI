@@ -1110,6 +1110,18 @@
       {
         "h": "Upside-Down Text: Flip a Sentence in One Click",
         "p": "Choose the 🙃 Upside Down style and your English text flips vertically (hello becomes ɥǝllo) — perfect for comments, stories, or a Threads opener. It only converts Latin letters; if an old device can't render it, switch to bold or fullwidth."
+      },
+      {
+        "h": "Decorative Frames: Sparkle, Bow, and Starlight Titles in One Tap",
+        "p": "Three of the 19 styles are frames, not fonts: they wrap your words in decorations instead of changing the letters. Sparkle Frame turns \"hello\" into \"✦ ─── hello ─── ✦\", Bow Frame into \"౨ৎ  hello  ౨ৎ\", and Starlight Frame into \"⋆⋅☆⋅⋆  hello  ⋆⋅☆⋅⋆\". They work best on short titles — the first line of an IG bio, a Threads opener, or a LINE group announcement. Because the frame itself eats characters, keep the text inside to a few words; a long sentence inside a frame looks cluttered and burns through the 150-character bio limit fast."
+      },
+      {
+        "h": "Gothic, Double-Struck, and Script: Pick a Style That Won't Turn Into Boxes",
+        "p": "Compatibility runs from safest to riskiest roughly like this: fullwidth, bold, italic, circled, and strikethrough work on almost every device, while script, Gothic, and double-struck depend on newer fonts and can show as empty boxes on older Android phones or some desktop fonts. If your text will be read by a lot of strangers — a shop bio, a public post, a group announcement — pick from the safe end. Save the fancy end for places where you can check the result first: paste it, then open the same page on a second phone before you leave it up."
+      },
+      {
+        "h": "Discord, TikTok, and WhatsApp: Where Fancy Fonts Work Beyond Instagram",
+        "p": "Styled text works anywhere plain text is accepted, and Discord is the biggest win after Instagram: display names and server nicknames accept fancy characters with no Nitro, because Markdown does not apply to names — pasted characters are the only way to style them. TikTok display names work the same way. The hard limit everywhere is the @username or handle, which only allows plain letters, numbers, underscores, and periods, so keep your handle plain and style the display name instead. One more trap: do not style hashtags — a styled tag drops out of the hashtag feed, so nobody searching that tag will find your post."
       }
     ],
     "faqEn": [
@@ -1132,6 +1144,18 @@
       {
         "q": "Is there a character limit?",
         "a": "The input box accepts up to 80 characters, enough for bios, headlines, and short phrases. Convert long copy in sections and join the results."
+      },
+      {
+        "q": "Can fancy fonts convert Chinese characters?",
+        "a": "No. Fancy fonts only convert Latin letters and numbers; Chinese characters pass through unchanged. To decorate Chinese text, use this site's Japanese-style title builder or the special symbols tool instead."
+      },
+      {
+        "q": "Can I use fancy fonts in my Threads display name and posts?",
+        "a": "Yes. Threads accepts the same plain-text characters as Instagram, so a styled display name or post pastes in fine. Keep the name searchable, though: style one or two words instead of the whole name, and remember Threads posts cap at 500 characters, so a short styled opener works better than a fully styled paragraph."
+      },
+      {
+        "q": "Do fancy fonts work with screen readers?",
+        "a": "They display, but they do not read well. A screen reader may announce each styled letter by its Unicode name — for example, \"mathematical bold capital A\" — so a fully styled bio becomes very hard to listen to. Keep decorative text to a word or two, and leave your plain name, contact details, and anything people need to read in normal text."
       }
     ]
   },
