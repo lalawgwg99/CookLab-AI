@@ -2218,6 +2218,18 @@
       {
         "h": "Stated limits",
         "p": "Whole-line comparison only, no semantics: fullwidth and halfwidth forms, or simplified and traditional variants, count as different lines. Everything runs locally in your browser, nothing is uploaded."
+      },
+      {
+        "h": "Blank lines and line endings: what the tool does with them",
+        "p": "Blank lines are treated as ordinary lines: several blank lines in a row collapse to one, and a single blank line is kept, so the tool never wipes out all the spacing in your text. Line endings are normalized to a single newline character, so a list copied from Windows, macOS, or a spreadsheet behaves the same way. Whether your input ends with a newline is preserved in the output, so the result pastes cleanly back into the same app."
+      },
+      {
+        "h": "Everyday uses: email lists, URLs, and keyword lists",
+        "p": "The most common jobs are cleaning a mailing list before import (so nobody gets the same email twice), deduping a list of URLs or usernames, and tidying keyword or hashtag lists for SEO and ad campaigns. It also works on server logs and survey exports. The rule is the same every time: one item per line. If your items are separated by commas instead, convert the commas to line breaks in your editor first — a line reading 'apple, banana, apple' stays untouched, because the tool only compares whole lines."
+      },
+      {
+        "h": "Read the count before you copy",
+        "p": "After you run it, the tool reports the original line count, the remaining count, and how many lines were removed — read that before copying. If it removed 0 lines when you expected duplicates, the usual causes are trailing spaces (the Trim option is off by default), a case difference (Apple vs apple needs Ignore case), or a fullwidth/halfwidth or simplified/traditional difference, which always counts as a different line. When in doubt, paste a small sample first and check the count before running the whole list."
       }
     ],
     "faqEn": [
@@ -2228,6 +2240,18 @@
       {
         "q": "Is my text uploaded?",
         "a": "No. Everything runs locally in your browser with fixed rules."
+      },
+      {
+        "q": "Why did it remove nothing? I can see duplicates.",
+        "a": "The usual causes are invisible differences. Trailing spaces make two lines different — turn on Trim each line. A case difference does the same — turn on Ignore case so Apple and apple match. Fullwidth and halfwidth characters (Ａ vs A) and simplified vs traditional characters always count as different lines, and there is no option to merge those. Both options are off by default, so plain dedup is the safest first try."
+      },
+      {
+        "q": "Does it remove duplicate words inside a line?",
+        "a": "No. The tool compares whole lines only: 'apple banana apple' on a single line is one line and stays exactly as it is. To dedupe words, split them first so each word sits on its own line, run the tool, and join the result back if you need a single line again."
+      },
+      {
+        "q": "Can I download the cleaned list as a file?",
+        "a": "Yes. After the result appears, the Download .txt button saves it as dedup-clean.txt, with the same line breaks as the on-screen result. Copy result works the same way if you would rather paste it straight into a spreadsheet, a mailing tool, or a document."
       }
     ]
   },
