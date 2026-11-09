@@ -2150,6 +2150,18 @@
       {
         "h": "Stated limits",
         "p": "Rule-based means no semantics: homophone errors stay, some breaks will be wrong, names and numbers can't be verified. It takes a raw transcript from unreadable to proofread-able — important documents still need a human pass."
+      },
+      {
+        "h": "What it actually removes: the full filler list",
+        "p": "The cleaner works from a fixed list, and every item is position-gated — it is only removed when it sits next to punctuation. The list is: 嗯 and 呃 as standalone hesitation sounds; 就是說 at the start of a sentence or beside a comma; 那個 when it stutters (那個那個) or sits beside a comma as a stalling pause; 啊 only when a comma traps it on both sides; and repeated words collapsed to one, so 對對對 becomes 對, 好好好 becomes 好, 是是是 becomes 是, 嗯嗯嗯 becomes 嗯. It also removes the spaces speech-to-text engines insert between Chinese characters, but only when both sides are Chinese characters or fullwidth punctuation — spaces inside English words and numbers are never touched."
+      },
+      {
+        "h": "How paragraphs and commas are decided",
+        "p": "Blank lines in your input are kept as paragraph boundaries, so paste in sections if you want to control the structure. Inside a section, sentences accumulate into a paragraph until it reaches about 60 characters; a new paragraph starts when adding the next sentence would pass 150 characters, or when a sentence opens with a turn word — 然後, 所以, 不過, 接著, 後來, 再來 or 最後 — and the paragraph is already 60 characters long. A clause longer than 30 characters with no comma gets at most one comma, placed before a conjunction such as 但是, 可是, 因為 or 結果, and only if that conjunction sits at least 10 characters in. If a paragraph ends without a full stop, a 。 is added. These are fixed thresholds, so the same input always produces the same output."
+      },
+      {
+        "h": "The right workflow: what to do before you paste",
+        "p": "Paste plain text only. This tool does not parse SRT, VTT or caption files, and it does not strip timestamps or speaker labels — remove those first, or they will be glued into the sentences. It is built for Mandarin transcripts from YouTube auto-captions, Whisper, or meeting recorders; English fillers such as um and uh are not in its list and pass through unchanged, so use a dedicated English transcript cleaner for English audio. For a long recording, paste it in chunks separated by blank lines: the tool keeps your chunk boundaries, and the result shows how many of each filler was removed and how many punctuation marks were added, so you can audit the cleanup against the original before you publish."
       }
     ],
     "faqEn": [
@@ -2160,6 +2172,18 @@
       {
         "q": "Is my text uploaded?",
         "a": "No. Everything runs locally in your browser with fixed rules."
+      },
+      {
+        "q": "Can it clean an English transcript?",
+        "a": "No. The filler list is Chinese (嗯, 呃, 就是說, 那個, 啊) and the punctuation rules use 。！？ and ，. English text passes through unchanged — um and uh stay in place. Use it for Mandarin transcripts; for English audio, use a cleaner built for English fillers."
+      },
+      {
+        "q": "Does it remove timestamps or speaker labels?",
+        "a": "No. It does not parse SRT or VTT files, timestamp lines, or labels such as SPEAKER 01:. Strip those before pasting and feed it plain text only, otherwise the timestamps end up inside your sentences."
+      },
+      {
+        "q": "Why did a filler survive the cleanup?",
+        "a": "The rules are deliberately conservative: a filler is only removed when it sits next to punctuation. 那個 followed by a noun (那個報告) is kept, a sentence-final 啊 is kept, and 就是說 with a subject (我就是說你錯了) is kept. A filler in the middle of a sentence with no adjacent punctuation is left alone rather than risk deleting meaning. Check the per-filler removal counts in the result to see exactly what was taken out."
       }
     ]
   },
