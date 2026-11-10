@@ -2014,6 +2014,18 @@
       {
         "h": "Code and URL protection",
         "p": "Inline code in backticks, lines indented 4+ spaces, and ``` fenced blocks are skipped entirely. URLs need no protection: their dots and colons follow Latin letters, which never trigger conversion."
+      },
+      {
+        "h": "Numbers, units and ordinals: what happens to 100元 and 第3名",
+        "p": "Pangu spacing adds a space at every Chinese–Latin or Chinese–digit boundary, in both directions — so 100元 becomes “100 元” and 第3名 becomes “第 3 名”. That is the standard pangu behavior, not a bug: the boundary rule does not know what a unit or an ordinal is. Decimals and times are untouched because the punctuation rule is context-gated: 3.14 keeps its dot, 12:30 keeps its colon, and example.com keeps its dots. If your style guide rejects spaced ordinals, fix the text first, then search for “第 ” and remove only the spaces you do not want."
+      },
+      {
+        "h": "Ellipsis, quotes and brackets: ... becomes …… and \" \" becomes 「」",
+        "p": "Three dots after Chinese text become the full-width ellipsis ……; double quotes become 「」 when the quoted text or its neighbors contain Chinese, and single quotes become 『』 when the quoted text contains Chinese. Parentheses become （） when Chinese sits inside or beside them. Pure English quotes, decimals and domains are left alone, because every rule checks its neighbors before converting — a quote with no Chinese anywhere near it is never touched."
+      },
+      {
+        "h": "A 30-second pre-publish checklist",
+        "p": "Paste the whole draft: fenced ``` blocks, lines indented by four or more spaces, and `backticked` inline code are skipped, so code stays exactly as written. After fixing, read the three change counts — CJK–Latin spacing, punctuation conversion, and whitespace cleanup — to see what actually changed. Then do two quick scans: search for “第 ” if your style guide rejects spaced ordinals, and check any code you pasted without backticks or fences, since an unmarked snippet whose commas sit next to Chinese text can still be converted. Then copy and paste."
       }
     ],
     "faqEn": [
@@ -2024,6 +2036,18 @@
       {
         "q": "Is my text uploaded?",
         "a": "No. All rules run locally in your browser — no AI, no server."
+      },
+      {
+        "q": "Will 第3名 become 第 3 名?",
+        "a": "Yes. Pangu spacing puts a space at every Chinese–digit boundary, so 第3名 becomes 第 3 名 and 100元 becomes 100 元. That is the standard behavior, not a mistake. If your style guide does not want spaced ordinals, fix the text first, then search for “第 ” and remove the spaces you do not want."
+      },
+      {
+        "q": "What happens to ... and \"quotes\" in my text?",
+        "a": "Three dots after Chinese text become the full-width ellipsis …… Double quotes become 「」 when the quoted text or its neighbors contain Chinese, and single quotes become 『』 when the quoted text contains Chinese. Pure English quotes and decimals like 3.14 are left alone."
+      },
+      {
+        "q": "Can I paste a whole Markdown file at once?",
+        "a": "Yes. Fenced ``` blocks, lines indented by four or more spaces, and `backticked` inline code are all skipped, so your code stays exactly as written. Just wrap any code you paste in fences or backticks first — an unmarked snippet whose commas sit next to Chinese text can still be converted."
       }
     ]
   },
