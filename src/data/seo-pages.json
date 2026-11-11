@@ -2106,6 +2106,18 @@
       {
         "h": "What the score means",
         "p": "0–20 mild, 21–50 noticeable, 51–80 strong, 81–100 very strong. Treat the score as a hint, not a verdict: common phrasing can trigger rules, and short texts swing more. Read the per-hit suggestions first."
+      },
+      {
+        "h": "What one click actually fixes: the 8 safe-delete phrases",
+        "p": "The “Apply safe rewrites” button only deletes hits from 8 rules that are safe to remove outright: 「值得一提的是」, 「總而言之/綜上所述/總的來說/總之」, 「隨著…的發展/到來/推進/普及」, 「在當今/這個/如今…時代」, 「毫無疑問/不可否認的是/毋庸置疑」, 「換句話說/從某種意義上說/某種程度上」, 「讓我們一起…」 and 「本文將/會…探討/分析/介紹/討論」. It also clears a trailing 、 or ， left behind, so the sentence stays clean. Everything else — em dashes, 「不僅…更是…」, triple parallelism, 「深入探討」, 「至關重要」 and 「首先…其次…最後」 — needs a manual rewrite, because deleting it would break the sentence. So the workflow is: click apply first, then work through the remaining hits by hand."
+      },
+      {
+        "h": "How the 0–100 score is actually calculated",
+        "p": "The score is weighted hit density, not a percentage of AI-written text: each hit counts 1 point, but em dashes, 「不僅…更是…」, 「值得一提的是」 and triple parallelism count double. That total is scaled per 1,000 characters and multiplied by 4, capped at 100. The character count has a 300-character floor, so a 60-character post with one hit does not explode to a high score — but short texts still swing more than long ones. If two rules match the same span, only the first (longest) hit is shown, so the count is never inflated by overlaps. Read the per-hit list first and the number second."
+      },
+      {
+        "h": "Fix your worst habit first: read the per-rule counts",
+        "p": "The result includes a per-rule breakdown sorted by count — that is your editing order. If 「值得一提的是」 appears 6 times, that is the habit to kill first; deleting all of them moves the score more than fixing five different one-off hits. A good pass looks like this: paste your draft, click “Apply safe rewrites”, rewrite the top two rules by hand (usually the em dashes and the 「不僅…更是…」 formulas), then paste the revised text in and check again. Do not chase 0: the goal is to remove the tells a reader would spot at a glance, not to make the checker happy — keeping one 「首先」 or a single em dash is perfectly fine."
       }
     ],
     "faqEn": [
@@ -2116,6 +2128,18 @@
       {
         "q": "Can it check English?",
         "a": "Not yet. The rules target Traditional Chinese writing habits; English AI writing has its own patterns."
+      },
+      {
+        "q": "Why does one em dash pass but two get flagged?",
+        "a": "A single em dash is normal punctuation, so the rule only fires at 2 or more occurrences — that is the point where it becomes a habit rather than a choice. Each dash also counts double in the score (weight 2), because repeated dashes are one of the most visible AI tells in Chinese writing. If you only need one, keep it."
+      },
+      {
+        "q": "I applied the safe rewrites but my score barely moved. Why?",
+        "a": "“Apply safe rewrites” only deletes the 8 removable openers. The heavy hits — em dashes, 「不僅…更是…」 and triple parallelism — count double and need manual rewrites, so the score will not move until you fix those. The score is also density-based: removing a few phrases from a 2,000-character article moves it slowly. Rewrite the top rules by hand, then paste the text in again to see the new score."
+      },
+      {
+        "q": "I write Chinese as a second language. Is this checker for me?",
+        "a": "Yes — it checks Traditional Chinese text no matter who wrote it. It is useful before posting AI-drafted Chinese to Instagram, Threads or LINE, and for students, marketers and overseas Chinese writing for a Taiwan audience. It does not check English: English AI writing has its own patterns (such as em-dash overuse and “delve into”), which are outside this tool's 14 Chinese rules."
       }
     ]
   },
