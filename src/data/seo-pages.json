@@ -2446,6 +2446,18 @@
       {
         "h": "Renames can cost money: test free before you confirm",
         "p": "Many games charge a rename card or in-game currency for a name change, and there is no undo. The safe flow is: paste into the generator's paste-test box first and check the character count, then paste into the game's rename field and look at the preview — only confirm when the preview looks blank. If the preview shows boxes or gets rejected, go back and try another recipe instead of spending the rename card. Also prepare a normal backup name first, so you can switch back quickly if the platform ever cleans up invisible characters."
+      },
+      {
+        "h": "Half-blank names: three ways to mix invisible and visible text",
+        "p": "Don't want a fully blank name? Keep half of it visible. Three patterns work well: word first, blanks after — for example \"Night\" plus 4 Universal blanks, so the name looks like a single word; blanks first, word after — the leading blank pushes the name to the right in lists; or a word sandwiched in blanks — two words with 2 Braille Blanks between them, a gap a normal space can't make. The generator only outputs pure blank characters, so paste the blanks first and then type the visible text — and note that some games trim leading blanks automatically, so always check the preview. Character counts still apply: visible letters plus invisible characters together must fit your game's name limit, so paste the mix into the paste-test box below and check the total before you copy."
+      },
+      {
+        "h": "Three tests before you spend a rename card: chat box, a friend's view, the length cap",
+        "p": "A rename card usually costs in-game currency or real money, and one bad paste wastes it — so run three tests first. Test one: paste the invisible name into the game's chat box or a friend's note and see whether it shows as blank, as a box, or gets eaten entirely. Test two: ask a friend to look at your name from their device — the same characters can render differently across phones and fonts, so a name that looks blank on yours may show as a box on theirs. Test three: check the length cap — Free Fire names, for example, cap at 12 characters, and anything over the cap is rejected outright. Pass all three tests, then rename."
+      },
+      {
+        "h": "The Mixed recipe and U+2060: the last resort when every single recipe is blocked",
+        "p": "When Universal, Paragraph and Zero-width are all blocked, switch to the Mixed recipe. It interleaves U+3164, U+2800 and U+200B with U+2060 (WORD JOINER) — a zero-width, invisible connector character that still counts as one character and glues its neighbours together to stop line breaks. Some filters only block single characters and can't catch an interleaved combination. Press \"Regenerate\" to reshuffle the arrangement — sometimes a different arrangement passes where the last one failed. The code-point preview under the result lists every character (for example U+3164 · U+2800), so you can see exactly what the name is made of. The suggested order is Universal → Paragraph → Zero-width → Mixed, re-running the paste test each time you switch."
       }
     ],
     "faqEn": [
@@ -2476,6 +2488,22 @@
       {
         "q": "Can I mix a blank name with visible text?",
         "a": "Yes, in two steps: the generator only outputs pure blank characters, so paste those into the game field first, then type the text you want to show after them for a blank-then-text effect. Note that some games trim leading blanks automatically, so always check the preview after pasting — if the blank got trimmed, put it after the text or use a pure blank name instead."
+      },
+      {
+        "q": "Can I change my blank name back to a normal name later?",
+        "a": "Yes. An invisible name is just a string of special characters, so you can rename back to normal text any time — but most games charge another rename card or in-game currency for every change. So confirm the display in the chat box and the paste-test box first, and only spend the card once you're sure you like it. If you just want to try the effect, test it on a Discord or LINE display name first — those are free to change as often as you like."
+      },
+      {
+        "q": "Why does the same blank name work in one game but get blocked in another?",
+        "a": "Every game writes its own name filter; there is no shared allowlist. Some games block only U+200B, others blacklist whole ranges of blank characters, and players have reported Garena blocking U+3164 for a period. A name that passes in one game and gets rejected in another is completely normal. Don't keep retrying the same string — switch recipes, adjust the length, and try the Mixed recipe; one of the combinations usually passes in the game you're playing."
+      },
+      {
+        "q": "What is U+2060 in the Mixed recipe, and when should I use it?",
+        "a": "U+2060 is WORD JOINER, a zero-width character that takes up one character slot without showing anything. Its job is to glue the characters around it together and stop line breaks, and some filters treat it as an ordinary character and let it through. This site's Mixed recipe interleaves U+2060 with U+3164, U+2800 and U+200B, and it's meant for when all three single recipes are blocked. If Mixed is blocked too, press Regenerate for a different arrangement, or fall back to visible text with a small amount of blank characters mixed in."
+      },
+      {
+        "q": "Can I use a blank name as my Discord or LINE display name?",
+        "a": "Yes, but the rules differ from games. Discord display names accept special characters and emoji, allow 1–32 characters, and are free to change as often as you like — the easiest place to try a blank name. But a Discord username (the @handle) only accepts letters, numbers, underscores and periods, so blank characters get rejected there. LINE display names also accept blank characters, though the other person's phone font may show a box if it lacks the glyph. Try social platforms first, then spend a game rename card — it's the cheapest way to test."
       }
     ]
   },
