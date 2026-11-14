@@ -1910,6 +1910,18 @@
       {
         "h": "轉完請檢查這三類",
         "p": "第一，人名與專有名詞：一簡多繁採最常見對應，人名用字可能不同。第二，「質量」在物理語境（質量與能量）是台灣正確用法，科普類字幕請改回。第三，中國網路流行語（如「種草」）已對應台灣說法，但語氣是否符合你的頻道風格，還是要自己讀過一次。"
+      },
+      {
+        "h": "從剪映把 SRT 匯出來的完整流程",
+        "p": "先確認一個前提：只有「自動字幕」辨識產生的字幕才能匯出，手動一字一句打上去的文字不行。電腦版在匯出視窗選「字幕匯出」而不是「影片匯出」，格式選 SRT；手機版則取消勾選影片匯出、只勾選字幕匯出，格式同樣是 SRT 或 TXT。匯出失敗最常見的三個原因：檔案編碼不是 UTF-8 無 BOM、儲存路徑含有非英文字元、App 版本太舊——改成英文路徑、更新到最新版通常就解決了。拿到 SRT 後貼到本站校正，轉完再匯回剪映。"
+      },
+      {
+        "h": "轉完的 SRT 怎麼上傳到 YouTube",
+        "p": "進 YouTube Studio，左側選「字幕」，點進影片後按「新增語言」，選「中文（繁體）」；再按「新增字幕」→「上傳檔案」→「有時間碼的檔案」，選你下載好的 .srt。YouTube 會按時間碼自動對齊，上傳後先預覽幾段、確認文字與時間都對，再按「發佈」，觀眾就能在播放器的 CC 按鈕選到這條字幕軌。注意兩件事：SRT 必須是純 UTF-8 文字，YouTube 只支援基本格式、不認樣式標記；如果你本來就有 YouTube 自動生成的字幕軌，上傳後可以把它刪掉，避免觀眾選到舊的簡體軌。"
+      },
+      {
+        "h": "先看修正統計，再決定要不要匯出",
+        "p": "按「開始校正」後，結果列會先報三個數字：用語修正幾處、簡轉繁幾字、時間碼幾行原樣保留；下方還有一排命中標籤，例如「視頻 → 影片 ×3」，按次數由多到少排。匯出之前先掃這排標籤：出現「質量」先想一下是不是物理語境（質量與能量），是的話要改回來；人名與專有名詞也在這裡快速對一次。用語命中是 0、但簡體字很多，代表你的字幕只有單字層的簡體、沒有中國用語詞組——轉換本身沒問題，不用重貼。"
       }
     ],
     "faqZh": [
@@ -1928,6 +1940,22 @@
       {
         "q": "字幕內容會被上傳嗎？",
         "a": "不會。轉換全部在你的瀏覽器裡完成，字幕文字不離開你的裝置。"
+      },
+      {
+        "q": "剪映找不到匯出 SRT 的按鈕，怎麼辦？",
+        "a": "先看你的字幕是不是自動辨識產生的——手動新增的文字沒有匯出選項。電腦版在匯出視窗選「字幕匯出」而不是「影片匯出」；手機版要取消勾選影片匯出、只勾選字幕匯出。如果還是沒有，更新剪映到最新版，或改用電腦版／網頁版操作。"
+      },
+      {
+        "q": "轉完的字幕丟回剪映，時間對不上，是工具改壞了嗎？",
+        "a": "不是。時間碼行與序號行是逐行原樣保留的，轉換不會動到時間。最常見的原因是匯出 SRT 之後又在剪映改過剪輯點，導致字幕檔對應的是舊版時間軸；或是匯入時選錯檔案。確認 SRT 與影片是同一版剪輯再匯入。匯回要用電腦版或網頁版的「字幕」→「新增字幕」選 .srt，手機 App 不能直接匯入外部字幕檔。"
+      },
+      {
+        "q": "上傳到 YouTube 後，觀眾還是看到簡體字幕？",
+        "a": "先檢查你上傳到哪一條語言軌：新增語言時要選「中文（繁體）」，上傳時選「有時間碼的檔案」。如果不小心上傳到自動字幕軌、或是選成簡體中文，觀眾看到的仍是舊軌。發佈前在預覽裡點幾段確認是繁體，舊的自動字幕軌可以刪掉，避免觀眾選錯。"
+      },
+      {
+        "q": "可以一次處理很多個 SRT 檔案嗎？",
+        "a": "目前一次處理一個檔案：貼上一份 SRT／文字，或開啟一個 .srt／.txt 檔。有多支影片的字幕要校正，請逐檔貼上轉換、下載。轉換全程在瀏覽器本機完成，不上傳，逐檔處理也不會留下任何紀錄。"
       }
     ],
     "guideEn": [
@@ -1942,6 +1970,18 @@
       {
         "h": "Plain text mode",
         "p": "If the input has no timecodes, the tool switches to plain-text mode automatically and exports .txt — handy for cleaning a script before it ever becomes subtitles."
+      },
+      {
+        "h": "Exporting SRT from CapCut, step by step",
+        "p": "One condition first: only captions made by CapCut's auto-caption recognition can be exported — text you typed in by hand cannot. On desktop, pick \"Subtitle export\" in the export window (not \"Video export\") and choose SRT. On mobile, uncheck video export and check subtitle export only; the format is SRT or TXT either way. The three most common export failures are a file encoding that is not UTF-8 without BOM, a save path containing non-ASCII characters, and an outdated app version — switch to an English path and update the app, and it usually works. Paste the exported SRT here to clean it up, then import it back."
+      },
+      {
+        "h": "Uploading the fixed SRT to YouTube",
+        "p": "In YouTube Studio, open Subtitles in the left menu, pick the video, click \"Add language\" and choose \"Chinese (Traditional)\". Then click \"Add\" under Subtitles → \"Upload file\" → \"With timing\" and select the .srt you downloaded. YouTube aligns it by timecode automatically — preview a few cues, check the text and timing, then hit \"Publish\" and viewers can pick the track from the CC button. Two things to watch: the SRT must be plain UTF-8 text, and YouTube only supports the basic format with no style markup. If YouTube already made an auto-caption track for the video, delete it after uploading so viewers do not pick the old Simplified track by mistake."
+      },
+      {
+        "h": "Read the fix report before you export",
+        "p": "After you press Convert, the result line reports three numbers: how many term fixes, how many characters converted, and how many timecode lines were kept untouched. Below it, a row of hit chips — for example \"視頻 → 影片 ×3\" — lists every swap sorted by count. Scan those chips before downloading: if 質量 shows up, ask whether it is a physics context (mass and energy), where the Taiwanese usage is 質量 itself, and change it back if so; names and proper nouns deserve one quick pass here too. Zero term hits with many Simplified characters just means your subtitles had single-character conversions only and no mainland phrases — the conversion itself is fine, no need to re-paste."
       }
     ],
     "faqEn": [
@@ -1956,6 +1996,22 @@
       {
         "q": "Is my subtitle text uploaded anywhere?",
         "a": "No. All conversion runs locally in your browser."
+      },
+      {
+        "q": "CapCut shows no SRT export button. What do I do?",
+        "a": "First check whether your captions came from auto-caption recognition — manually typed text has no export option. On desktop, choose \"Subtitle export\" rather than \"Video export\" in the export window; on mobile, uncheck video export and check subtitle export only. If it is still missing, update CapCut to the latest version or switch to the desktop or web version."
+      },
+      {
+        "q": "After importing the fixed SRT back into CapCut, the timing is off. Did the tool break it?",
+        "a": "No. Timecode and index lines are preserved verbatim, line by line, so conversion cannot shift timing. The usual cause is editing the timeline in CapCut after exporting the SRT, so the subtitle file matches an older cut — or importing the wrong file. Make sure the SRT and the video are the same edit, then import again. Importing works on desktop or web via Subtitles → Add subtitles and selecting the .srt; the mobile app cannot import external subtitle files."
+      },
+      {
+        "q": "Viewers still see Simplified Chinese after I upload to YouTube?",
+        "a": "Check which language track you uploaded to: add the language as \"Chinese (Traditional)\" and choose \"With timing\" when uploading. If the file went onto the auto-caption track or a Simplified Chinese track, viewers still see the old one. Preview a few cues before publishing to confirm they are Traditional, and delete the old auto-caption track so viewers cannot pick it by mistake."
+      },
+      {
+        "q": "Can I process many SRT files at once?",
+        "a": "One file at a time: paste one SRT or text, or open one .srt / .txt file. For several videos, convert and download them one by one. Everything runs locally in your browser with no upload, so batch-by-batch processing leaves no record behind."
       }
     ]
   },
